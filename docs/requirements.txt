@@ -1,0 +1,8 @@
+sphinx-autodoc-annotation
+rst2pdf
+sphinx-rtd-theme
+sphinxcontrib-spelling
+sphinx-autodoc-typehints
+myst-parser
+sphinx-tabs
+readthedocs-sphinx-search

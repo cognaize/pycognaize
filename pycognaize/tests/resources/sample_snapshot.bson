@@ -1,0 +1,18 @@
+{
+    "_id": {
+        "$oid": "5eff2fc4a113f40019d3ef2d"
+    },
+    "collections": [{
+        "$oid": "5defa051f91e70001dfdcb31"
+    }],
+    "type": "snapshot",
+    "name": "test_snapshot",
+    "startDate": null,
+    "endDate": null,
+    "dataRecipeId": {
+        "$oid": "5ef46ee978839b001912dcf9"
+    },
+    "__v": {
+        "$numberInt": "0"
+    }
+}

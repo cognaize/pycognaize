@@ -1,0 +1,6 @@
+[run]
+source = pycognaize
+omit =
+    pycognaize/tests/*
+    pycognaize/temp/*
+    .tox/*

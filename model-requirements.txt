@@ -1,0 +1,7 @@
+-r requirements.txt
+-r docs/requirements.txt
+opencv-python~=4.6.0.66
+matplotlib
+dataclasses; python_version <= '3.6'
+seaborn
+

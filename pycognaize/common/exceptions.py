@@ -1,0 +1,2 @@
+class DrawOnShellException(Exception):
+    pass

@@ -1,0 +1,267 @@
+{
+    "_id": {
+        "$oid": "5ef46ee978839b001912dcf9"
+    },
+    "name": "test_document_dataclass",
+    "templates": [{
+        "_id": {
+            "$oid": "5ef46ee978839b001912dd0c"
+        },
+        "template": {
+            "$oid": "5e8c462939fad10043bbaf7f"
+        },
+        "fields": [{
+            "rawFieldType": true,
+            "fieldType": "extraction",
+            "dataType": "table",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd0d"
+            },
+            "fieldId": {
+                "$oid": "5ed66c00d389ad0019eac7e4"
+            },
+            "pythonName": "table",
+            "name": "table",
+            "group": "",
+            "groupKey": ""
+        }]
+    }, {
+        "_id": {
+            "$oid": "5ef46ee978839b001912dd07"
+        },
+        "template": {
+            "$oid": "5dda9bad75ada90028f85d25"
+        },
+        "fields": [{
+            "rawFieldType": false,
+            "fieldType": "extraction",
+            "dataType": "text",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd0b"
+            },
+            "fieldId": {
+                "$oid": "5dda9bad75ada90028f85d29"
+            },
+            "pythonName": "bank_statement_description",
+            "name": "Description",
+            "group": "Transaction",
+            "groupKey": "f17869f1-61a4-4845-8d77-b7dfdbc58e56"
+        }, {
+            "rawFieldType": true,
+            "fieldType": "extraction",
+            "dataType": "date",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd0a"
+            },
+            "fieldId": {
+                "$oid": "5dda9bad75ada90028f85d28"
+            },
+            "pythonName": "bank_statement_date",
+            "name": "Date",
+            "group": "Transaction",
+            "groupKey": "f17869f1-61a4-4845-8d77-b7dfdbc58e56"
+        }, {
+            "rawFieldType": false,
+            "fieldType": "extraction",
+            "dataType": "number",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd09"
+            },
+            "fieldId": {
+                "$oid": "5dda9bad75ada90028f85d27"
+            },
+            "pythonName": "bank_statement_amount",
+            "name": "Amount",
+            "group": "Transaction",
+            "groupKey": "f17869f1-61a4-4845-8d77-b7dfdbc58e56"
+        }, {
+            "rawFieldType": true,
+            "fieldType": "extraction",
+            "dataType": "text",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd08"
+            },
+            "fieldId": {
+                "$oid": "5dda9bad75ada90028f85d26"
+            },
+            "pythonName": "bank_statement_class",
+            "name": "Classification",
+            "group": "Transaction",
+            "groupKey": "f17869f1-61a4-4845-8d77-b7dfdbc58e56"
+        }]
+    }, {
+        "_id": {
+            "$oid": "5ef46ee978839b001912dd01"
+        },
+        "template": {
+            "$oid": "5e419ed1f4b20400137938d3"
+        },
+        "fields": [{
+            "rawFieldType": true,
+            "fieldType": "extraction",
+            "dataType": "text",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd06"
+            },
+            "fieldId": {
+                "$oid": "5e42b2fd68a6ba00123722dd"
+            },
+            "pythonName": "page_list",
+            "name": "List",
+            "group": "",
+            "groupKey": ""
+        }, {
+            "rawFieldType": false,
+            "fieldType": "extraction",
+            "dataType": "area",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd05"
+            },
+            "fieldId": {
+                "$oid": "5e41a093f4b20400137938d9"
+            },
+            "pythonName": "page_table",
+            "name": "Table",
+            "group": "",
+            "groupKey": ""
+        }, {
+            "rawFieldType": false,
+            "fieldType": "extraction",
+            "dataType": "area",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd04"
+            },
+            "fieldId": {
+                "$oid": "5e41a086f4b20400137938d8"
+            },
+            "pythonName": "page_figure",
+            "name": "Figure",
+            "group": "",
+            "groupKey": ""
+        }, {
+            "rawFieldType": true,
+            "fieldType": "extraction",
+            "dataType": "text",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd03"
+            },
+            "fieldId": {
+                "$oid": "5e419fd0f4b20400137938d5"
+            },
+            "pythonName": "page_title",
+            "name": "Title",
+            "group": "",
+            "groupKey": ""
+        }, {
+            "rawFieldType": false,
+            "fieldType": "extraction",
+            "dataType": "text",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd02"
+            },
+            "fieldId": {
+                "$oid": "5e419fb5f4b20400137938d4"
+            },
+            "pythonName": "page_text",
+            "name": "Textblock",
+            "group": "",
+            "groupKey": ""
+        }]
+    }, {
+        "_id": {
+            "$oid": "5ef46ee978839b001912dcfa"
+        },
+        "template": {
+            "$oid": "5e709e7f7935816d396775f8"
+        },
+        "fields": [{
+            "rawFieldType": false,
+            "fieldType": "extraction",
+            "dataType": "text",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dd00"
+            },
+            "fieldId": {
+                "$oid": "5e709e7fd27c1995f79c6861"
+            },
+            "pythonName": "total_assets_tr",
+            "name": "Text representation",
+            "group": "Total Assets",
+            "groupKey": "642cd4f2-6835-11ea-ae70-0242ac130007"
+        }, {
+            "rawFieldType": false,
+            "fieldType": "extraction",
+            "dataType": "number",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dcff"
+            },
+            "fieldId": {
+                "$oid": "5e709e7fd27c1995f79c685f"
+            },
+            "pythonName": "total_assets_current_value",
+            "name": "Current value",
+            "group": "Total Assets",
+            "groupKey": "642cd4f2-6835-11ea-ae70-0242ac130007"
+        }, {
+            "rawFieldType": false,
+            "fieldType": "extraction",
+            "dataType": "number",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dcfe"
+            },
+            "fieldId": {
+                "$oid": "5e709e7fd27c1995f79c6860"
+            },
+            "pythonName": "total_assets_previous_value",
+            "name": "Previous value",
+            "group": "Total Assets",
+            "groupKey": "642cd4f2-6835-11ea-ae70-0242ac130007"
+        }, {
+            "rawFieldType": true,
+            "fieldType": "extraction",
+            "dataType": "number",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dcfd"
+            },
+            "fieldId": {
+                "$oid": "5e709e7fd27c1995f79c6865"
+            },
+            "pythonName": "cash_tr",
+            "name": "Current value",
+            "group": "Cash",
+            "groupKey": "642e0da4-6835-11ea-ae70-0242ac130007"
+        }, {
+            "rawFieldType": true,
+            "fieldType": "extraction",
+            "dataType": "number",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dcfc"
+            },
+            "fieldId": {
+                "$oid": "5e709e7fd27c1995f79c6866"
+            },
+            "pythonName": "cash_current_value",
+            "name": "Previous value",
+            "group": "Cash",
+            "groupKey": "642e0da4-6835-11ea-ae70-0242ac130007"
+        }, {
+            "rawFieldType": true,
+            "fieldType": "extraction",
+            "dataType": "text",
+            "_id": {
+                "$oid": "5ef46ee978839b001912dcfb"
+            },
+            "fieldId": {
+                "$oid": "5e709e7fd27c1995f79c6867"
+            },
+            "pythonName": "cash_previous_value",
+            "name": "Text representation",
+            "group": "Cash",
+            "groupKey": "642e0da4-6835-11ea-ae70-0242ac130007"
+        }]
+    }],
+    "user": {
+        "$oid": "5eb0083538efe2025da3a959"
+    },
+    "__v": 0
+}

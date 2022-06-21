@@ -1,0 +1,6 @@
+-r requirements.txt
+-r docs/requirements.txt
+coverage
+pytest
+pyyaml
+virtualenv

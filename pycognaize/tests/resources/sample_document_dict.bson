@@ -1,0 +1,2554 @@
+{
+    "input_fields": {
+        "bank_statement_description": [
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f21f"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.505452674897118%",
+                        "top": "64.8801%",
+                        "height": "1.427899999999994%",
+                        "width": "16.57901234567901%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5dda9bad75ada90028f85d29",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f220"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.599%",
+                        "top": "66.6276%",
+                        "height": "1.3484749801429672%",
+                        "width": "16.8853%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07ae1ddb7690012a16850",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f221"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.5802%",
+                        "top": "68.0807%",
+                        "height": "1.1896187450357445%",
+                        "width": "12.660200000000001%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07e3bddb7690012a1686a",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f222"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.4774%",
+                        "top": "69.3444%",
+                        "height": "1.4279030976965856%",
+                        "width": "17.2898%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07e6fddb7690012a1687e",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f223"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.4774%",
+                        "top": "70.8463%",
+                        "height": "1.4279030976965856%",
+                        "width": "17.1869%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07ec3ddb7690012a16892",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f224"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.4774%",
+                        "top": "72.4276%",
+                        "height": "1.1896187450357445%",
+                        "width": "16.8783%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07f14ddb7690012a168a6",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f225"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.4774%",
+                        "top": "73.6118%",
+                        "height": "1.507331215250204%",
+                        "width": "17.1869%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07f43ddb7690012a168bb",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f226"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.4774%",
+                        "top": "75.1715%",
+                        "height": "1.4279030976965856%",
+                        "width": "16.8783%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07f8cddb7690012a168cf",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f227"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.4774%",
+                        "top": "76.6734%",
+                        "height": "1.269046862589363%",
+                        "width": "18.1129%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07fb5ddb7690012a168e6",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f228"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.4774%",
+                        "top": "78.0165%",
+                        "height": "1.507331215250204%",
+                        "width": "18.2157%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07fd7ddb7690012a168fa",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f229"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "13.4774%",
+                        "top": "79.6772%",
+                        "height": "1.1896187450357445%",
+                        "width": "19.0388%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df0802cddb7690012a1690e",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f22a"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.8148%",
+                        "top": "15.3405%",
+                        "height": "2.8576099999999993%",
+                        "width": "34.08034979423869%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a306ddb7690012a17694",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f22b"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.9177%",
+                        "top": "18.4237%",
+                        "height": "2.460468625893565%",
+                        "width": "30.870100000000004%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a3f6ddb7690012a177a3",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f22c"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.9177%",
+                        "top": "20.9582%",
+                        "height": "1.6661874503574268%",
+                        "width": "28.092300000000005%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a66bddb7690012a178c9",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f22d"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.7119%",
+                        "top": "22.6984%",
+                        "height": "2.619324861000795%",
+                        "width": "32.3104%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a6cdddb7690012a178fd",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f22e"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.7119%",
+                        "top": "25.3701%",
+                        "height": "2.857609213661636%",
+                        "width": "34.8824%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a6f1ddb7690012a17911",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f22f"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.6091%",
+                        "top": "28.3811%",
+                        "height": "2.857609213661636%",
+                        "width": "35.0882%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a722ddb7690012a17925",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f230"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.7119%",
+                        "top": "31.3922%",
+                        "height": "2.7781810961080247%",
+                        "width": "35.191%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a753ddb7690012a17939",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f231"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.8148%",
+                        "top": "34.2443%",
+                        "height": "2.778181096108021%",
+                        "width": "34.9853%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a7a4ddb7690012a1794d",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f232"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.8148%",
+                        "top": "37.1038%",
+                        "height": "1.4279030976965856%",
+                        "width": "34.1622%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a7d7ddb7690012a17961",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f233"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.618415637860082%",
+                        "top": "38.61016679904686%",
+                        "height": "1.26905%",
+                        "width": "31.0758%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a815ddb7690012a17979",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Description",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f234"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "14.8148%",
+                        "top": "40.122%",
+                        "height": "1.5867593328038154%",
+                        "width": "29.326900000000002%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a83eddb7690012a1798e",
+                "value": "nEQDw",
+                "dataType": "text"
+            }
+        ],
+        "bank_statement_amount": [
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f235"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.4897%",
+                        "top": "64.77633042096902%",
+                        "height": "1.5858538522636962%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5dda9bad75ada90028f85d27",
+                "value": 200000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f236"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.1272633744856%",
+                        "top": "66.5084%",
+                        "height": "1.348470000000006%",
+                        "width": "10.404938271604934%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07ae1ddb7690012a16852",
+                "value": 50000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f237"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "52.4691%",
+                        "top": "67.4056%",
+                        "height": "2.2221842732327275%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07e3bddb7690012a1686c",
+                "value": 690000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f238"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.284%",
+                        "top": "69.2252%",
+                        "height": "1.6661874503574268%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07e6fddb7690012a16880",
+                "value": 597500.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f239"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "52.6749%",
+                        "top": "70.4888%",
+                        "height": "1.8250436854646495%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07ec3ddb7690012a16894",
+                "value": 10000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f23a"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "52.6749%",
+                        "top": "72.3879%",
+                        "height": "1.3484749801429672%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07f14ddb7690012a168a8",
+                "value": 212180.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f23b"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.4897%",
+                        "top": "73.4927%",
+                        "height": "1.6661874503574268%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07f43ddb7690012a168bd",
+                "value": 212180.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f23c"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "52.4691%",
+                        "top": "75.1318%",
+                        "height": "1.507331215250204%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07f8cddb7690012a168d1",
+                "value": 50000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f23d"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.284%",
+                        "top": "76.7131%",
+                        "height": "1.269046862589363%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07fb5ddb7690012a168e8",
+                "value": 430.56,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f23e"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.3868%",
+                        "top": "78.1356%",
+                        "height": "1.1896187450357445%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df07fd7ddb7690012a168fc",
+                "value": 39315.46,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f23f"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.3868%",
+                        "top": "79.3992%",
+                        "height": "1.6661874503574268%",
+                        "width": "10.2881%",
+                        "page": 1
+                    }
+                ],
+                "_id": "5df0802cddb7690012a16910",
+                "value": 116666.67,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f240"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.0782%",
+                        "top": "15.3802%",
+                        "height": "1.4279030976965839%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a306ddb7690012a17696",
+                "value": 200000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f241"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.52366255144032%",
+                        "top": "17.822557585385226%",
+                        "height": "2.0633300000000006%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a3f6ddb7690012a177a5",
+                "value": 50000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f242"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "52.94845679012346%",
+                        "top": "20.748768864177915%",
+                        "height": "2.3810399999999987%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a66bddb7690012a178cb",
+                "value": 690000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f243"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.4897%",
+                        "top": "22.0233%",
+                        "height": "2.301612390786339%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a6cdddb7690012a178ff",
+                "value": 597500.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f244"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "52.9835%",
+                        "top": "25.0126%",
+                        "height": "2.301612390786339%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a6f1ddb7690012a17913",
+                "value": 10000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f245"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "52.6749%",
+                        "top": "27.8648%",
+                        "height": "2.222184273232724%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a722ddb7690012a17927",
+                "value": 212180.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f246"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.1811%",
+                        "top": "30.6376%",
+                        "height": "2.142756155679109%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a753ddb7690012a1793b",
+                "value": 212180.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f247"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "52.8807%",
+                        "top": "33.9664%",
+                        "height": "2.2221842732327275%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a7a4ddb7690012a1794f",
+                "value": 50000.0,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f248"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "70.56213991769548%",
+                        "top": "36.96656076250993%",
+                        "height": "1.4269999999999996%",
+                        "width": "7.2109999999999985%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a7d7ddb7690012a17963",
+                "value": 430.56,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f249"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.5926%",
+                        "top": "38.501%",
+                        "height": "1.507331215250197%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a815ddb7690012a1797b",
+                "value": 39315.46,
+                "dataType": "number"
+            },
+            {
+                "name": "Amount",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f24a"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "67.5926%",
+                        "top": "40.1617%",
+                        "height": "1.5867593328038154%",
+                        "width": "10.2881%",
+                        "page": 2
+                    }
+                ],
+                "_id": "5df0a83eddb7690012a17990",
+                "value": 116666.67,
+                "dataType": "number"
+            }
+        ],
+        "page_table": [],
+        "page_figure": [],
+        "page_text": [],
+        "total_assets_tr": [],
+        "total_assets_current_value": [],
+        "total_assets_previous_value": []
+    },
+    "output_fields": {
+        "table": [
+            {
+                "name": "table",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f24b"
+                        },
+                        "table": {
+                            "_id": {
+                                "$oid": "5ffc1ab38c7f5752d1d8f24c"
+                            },
+                            "cells": {
+                                "_id": {
+                                    "$oid": "5ffc1ab38c7f5752d1d8f24d"
+                                },
+                                "data": [
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f24e"
+                                            },
+                                            "key": "1-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 62.20482569785178,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f24f"
+                                            },
+                                            "key": "1-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 62.20482569785178,
+                                            "width": 30.202140309155766,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f250"
+                                            },
+                                            "key": "1-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 62.20482569785178,
+                                            "width": 22.116527942925096,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f251"
+                                            },
+                                            "key": "1-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 62.20482569785178,
+                                            "width": 14.506539833531505,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f252"
+                                            },
+                                            "key": "1-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 62.20482569785178,
+                                            "width": 12.722948870392386,
+                                            "height": 1.1944796662807562
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f253"
+                                            },
+                                            "key": "2-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 63.583071466637264,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f254"
+                                            },
+                                            "key": "2-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 63.583071466637264,
+                                            "width": 30.202140309155766,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f255"
+                                            },
+                                            "key": "2-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 63.583071466637264,
+                                            "width": 22.116527942925096,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f256"
+                                            },
+                                            "key": "2-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 63.583071466637264,
+                                            "width": 14.506539833531505,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f257"
+                                            },
+                                            "key": "2-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 63.583071466637264,
+                                            "width": 12.722948870392386,
+                                            "height": 1.2863627175331231
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f258"
+                                            },
+                                            "key": "3-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 65.05320028667512,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.0107135637760223
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f259"
+                                            },
+                                            "key": "3-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 65.05320028667512,
+                                            "width": 30.202140309155766,
+                                            "height": 1.0107135637760223
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f25a"
+                                            },
+                                            "key": "3-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 65.05320028667512,
+                                            "width": 22.116527942925096,
+                                            "height": 1.0107135637760223
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f25b"
+                                            },
+                                            "key": "3-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 65.05320028667512,
+                                            "width": 14.506539833531505,
+                                            "height": 1.0107135637760223
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f25c"
+                                            },
+                                            "key": "3-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 65.05320028667512,
+                                            "width": 12.722948870392386,
+                                            "height": 1.0107135637760223
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f25d"
+                                            },
+                                            "key": "4-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 66.24767995295588,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.470128820037857
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f25e"
+                                            },
+                                            "key": "4-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 66.24767995295588,
+                                            "width": 30.202140309155766,
+                                            "height": 1.470128820037857
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f25f"
+                                            },
+                                            "key": "4-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 66.24767995295588,
+                                            "width": 22.116527942925096,
+                                            "height": 1.470128820037857
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f260"
+                                            },
+                                            "key": "4-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 66.24767995295588,
+                                            "width": 14.506539833531505,
+                                            "height": 1.470128820037857
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f261"
+                                            },
+                                            "key": "4-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 66.24767995295588,
+                                            "width": 12.722948870392386,
+                                            "height": 1.470128820037857
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f262"
+                                            },
+                                            "key": "5-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 67.90157487549847,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f263"
+                                            },
+                                            "key": "5-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 67.90157487549847,
+                                            "width": 30.202140309155766,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f264"
+                                            },
+                                            "key": "5-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 67.90157487549847,
+                                            "width": 22.116527942925096,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f265"
+                                            },
+                                            "key": "5-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 67.90157487549847,
+                                            "width": 14.506539833531505,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f266"
+                                            },
+                                            "key": "5-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 67.90157487549847,
+                                            "width": 12.722948870392386,
+                                            "height": 1.1944796662807562
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f267"
+                                            },
+                                            "key": "6-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 69.27982064428396,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f268"
+                                            },
+                                            "key": "6-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 69.27982064428396,
+                                            "width": 30.202140309155766,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f269"
+                                            },
+                                            "key": "6-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 69.27982064428396,
+                                            "width": 22.116527942925096,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f26a"
+                                            },
+                                            "key": "6-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 69.27982064428396,
+                                            "width": 14.506539833531505,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f26b"
+                                            },
+                                            "key": "6-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 69.27982064428396,
+                                            "width": 12.722948870392386,
+                                            "height": 1.1944796662807562
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f26c"
+                                            },
+                                            "key": "7-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 70.65806641306945,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f26d"
+                                            },
+                                            "key": "7-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 70.65806641306945,
+                                            "width": 30.202140309155766,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f26e"
+                                            },
+                                            "key": "7-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 70.65806641306945,
+                                            "width": 22.116527942925096,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f26f"
+                                            },
+                                            "key": "7-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 70.65806641306945,
+                                            "width": 14.506539833531505,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f270"
+                                            },
+                                            "key": "7-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 70.65806641306945,
+                                            "width": 12.722948870392386,
+                                            "height": 1.37824576878549
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f271"
+                                            },
+                                            "key": "8-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 72.22007828435967,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f272"
+                                            },
+                                            "key": "8-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 72.22007828435967,
+                                            "width": 30.202140309155766,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f273"
+                                            },
+                                            "key": "8-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 72.22007828435967,
+                                            "width": 22.116527942925096,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f274"
+                                            },
+                                            "key": "8-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 72.22007828435967,
+                                            "width": 14.506539833531505,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f275"
+                                            },
+                                            "key": "8-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 72.22007828435967,
+                                            "width": 12.722948870392386,
+                                            "height": 1.37824576878549
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f276"
+                                            },
+                                            "key": "9-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 73.7820901556499,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f277"
+                                            },
+                                            "key": "9-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 73.7820901556499,
+                                            "width": 30.202140309155766,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f278"
+                                            },
+                                            "key": "9-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 73.7820901556499,
+                                            "width": 22.116527942925096,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f279"
+                                            },
+                                            "key": "9-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 73.7820901556499,
+                                            "width": 14.506539833531505,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f27a"
+                                            },
+                                            "key": "9-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 73.7820901556499,
+                                            "width": 12.722948870392386,
+                                            "height": 1.2863627175331231
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f27b"
+                                            },
+                                            "key": "10-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 75.25221897568774,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f27c"
+                                            },
+                                            "key": "10-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 75.25221897568774,
+                                            "width": 30.202140309155766,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f27d"
+                                            },
+                                            "key": "10-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 75.25221897568774,
+                                            "width": 22.116527942925096,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f27e"
+                                            },
+                                            "key": "10-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 75.25221897568774,
+                                            "width": 14.506539833531505,
+                                            "height": 1.37824576878549
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f27f"
+                                            },
+                                            "key": "10-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 75.25221897568774,
+                                            "width": 12.722948870392386,
+                                            "height": 1.37824576878549
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f280"
+                                            },
+                                            "key": "11-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 76.81423084697798,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.0107135637760223
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f281"
+                                            },
+                                            "key": "11-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 76.81423084697798,
+                                            "width": 30.202140309155766,
+                                            "height": 1.0107135637760223
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f282"
+                                            },
+                                            "key": "11-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 76.81423084697798,
+                                            "width": 22.116527942925096,
+                                            "height": 1.0107135637760223
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f283"
+                                            },
+                                            "key": "11-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 76.81423084697798,
+                                            "width": 14.506539833531505,
+                                            "height": 1.0107135637760223
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f284"
+                                            },
+                                            "key": "11-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 76.81423084697798,
+                                            "width": 12.722948870392386,
+                                            "height": 1.0107135637760223
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f285"
+                                            },
+                                            "key": "12-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 78.00871051325873,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f286"
+                                            },
+                                            "key": "12-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 78.00871051325873,
+                                            "width": 30.202140309155766,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f287"
+                                            },
+                                            "key": "12-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 78.00871051325873,
+                                            "width": 22.116527942925096,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f288"
+                                            },
+                                            "key": "12-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 78.00871051325873,
+                                            "width": 14.506539833531505,
+                                            "height": 1.1944796662807562
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f289"
+                                            },
+                                            "key": "12-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 78.00871051325873,
+                                            "width": 12.722948870392386,
+                                            "height": 1.1944796662807562
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f28a"
+                                            },
+                                            "key": "13-1",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 6.064209274673008,
+                                            "y_left_top": 79.38695628204422,
+                                            "width": 5.9453032104637344,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f28b"
+                                            },
+                                            "key": "13-2",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 12.247324613555291,
+                                            "y_left_top": 79.38695628204422,
+                                            "width": 30.202140309155766,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f28c"
+                                            },
+                                            "key": "13-3",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 42.687277051129605,
+                                            "y_left_top": 79.38695628204422,
+                                            "width": 22.116527942925096,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f28d"
+                                            },
+                                            "key": "13-4",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 65.04161712247326,
+                                            "y_left_top": 79.38695628204422,
+                                            "width": 14.506539833531505,
+                                            "height": 1.2863627175331231
+                                        },
+                                        {
+                                            "_id": {
+                                                "$oid": "5ffc1ab38c7f5752d1d8f28e"
+                                            },
+                                            "key": "13-5",
+                                            "col_span": 1,
+                                            "row_span": 1,
+                                            "text": "xfimS",
+                                            "x_left_top": 79.7859690844233,
+                                            "y_left_top": 79.38695628204422,
+                                            "width": 12.722948870392386,
+                                            "height": 1.2863627175331231
+                                        }
+                                    ]
+                                ],
+                                "y_left_top": 62.20482569785178,
+                                "x_left_top": 6.064209274673008,
+                                "width": 86.68252080856124,
+                                "height": 18.744142455482667
+                            },
+                            "horizontal_dividers": [
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f28f"
+                                    },
+                                    "y_offset": 7.352941176470588,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f290"
+                                    },
+                                    "y_offset": 15.196078431372513,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f291"
+                                    },
+                                    "y_offset": 21.568627450980426,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f292"
+                                    },
+                                    "y_offset": 30.39215686274507,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f293"
+                                    },
+                                    "y_offset": 37.745098039215655,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f294"
+                                    },
+                                    "y_offset": 45.09803921568624,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f295"
+                                    },
+                                    "y_offset": 53.431372549019585,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f296"
+                                    },
+                                    "y_offset": 61.76470588235293,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f297"
+                                    },
+                                    "y_offset": 69.60784313725489,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f298"
+                                    },
+                                    "y_offset": 77.94117647058823,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f299"
+                                    },
+                                    "y_offset": 84.31372549019606,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f29a"
+                                    },
+                                    "y_offset": 91.66666666666666,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f29b"
+                                    },
+                                    "y_offset": 99.50980392156862,
+                                    "interruptions": []
+                                }
+                            ],
+                            "vertical_dividers": [
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f29c"
+                                    },
+                                    "x_offset": 7.133058984910837,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f29d"
+                                    },
+                                    "x_offset": 42.24965706447187,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f29e"
+                                    },
+                                    "x_offset": 68.03840877914953,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f29f"
+                                    },
+                                    "x_offset": 85.04801097393691,
+                                    "interruptions": []
+                                },
+                                {
+                                    "_id": {
+                                        "$oid": "5ffc1ab38c7f5752d1d8f2a0"
+                                    },
+                                    "x_offset": 100.0,
+                                    "interruptions": []
+                                }
+                            ],
+                            "x_left_top": 6.064209274673008,
+                            "y_left_top": 62.20482569785178,
+                            "height": 18.744142455482667,
+                            "width": 86.68252080856124
+                        },
+                        "top": "62.20482569785178%",
+                        "left": "6.064209274673008%",
+                        "page": 1,
+                        "width": "86.68252080856124%",
+                        "height": "18.744142455482667%",
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "isTable": true,
+                        "hasValidValue": true,
+                        "hasValidOcrValue": true
+                    }
+                ],
+                "_id": "5ed66c00d389ad0019eac7e4",
+                "dataType": "table"
+            }
+        ],
+        "bank_statement_date": [
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2a1"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.0874999999999995%",
+                        "top": "64.97307386814931%",
+                        "height": "1.426090000000002%",
+                        "width": "6.600730000000001%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5dda9bad75ada90028f85d28",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2a2"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.071131687242799%",
+                        "top": "66.5445%",
+                        "height": "1.348470000000006%",
+                        "width": "6.590226337448559%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df07ae1ddb7690012a16854",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2a3"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "5.96825%",
+                        "top": "68.0609%",
+                        "height": "1.269046862589363%",
+                        "width": "6.590229999999999%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df07e3bddb7690012a1686e",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2a4"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.071131687242799%",
+                        "top": "69.4834%",
+                        "height": "1.189620000000005%",
+                        "width": "6.2815843621399186%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df07e6fddb7690012a16882",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2a5"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "5.659609053497943%",
+                        "top": "70.8264%",
+                        "height": "1.269049999999993%",
+                        "width": "6.898868312757201%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df07ec3ddb7690012a16896",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2a6"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "5.56024%",
+                        "top": "72.1523%",
+                        "height": "1.5867593328038083%",
+                        "width": "6.79599%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df07f14ddb7690012a168aa",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2a7"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "5.659609053497943%",
+                        "top": "73.7508%",
+                        "height": "1.427899999999994%",
+                        "width": "6.693106995884773%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df07f43ddb7690012a168bf",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2a8"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "5.45385%",
+                        "top": "75.2311%",
+                        "height": "1.2681400000000025%",
+                        "width": "6.700102880658437%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df07f8cddb7690012a168d3",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2a9"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "5.659609053497943%",
+                        "top": "76.6536%",
+                        "height": "1.348470000000006%",
+                        "width": "6.487345679012345%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df07fb5ddb7690012a168ea",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2aa"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "5.350967078189301%",
+                        "top": "78.076%",
+                        "height": "1.269049999999993%",
+                        "width": "6.693106995884774%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df07fd7ddb7690012a168fe",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2ab"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "5.65961%",
+                        "top": "79.4191%",
+                        "height": "1.6661874503574268%",
+                        "width": "6.281579999999999%",
+                        "page": 1
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0802cddb7690012a16912",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2ac"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.6954320987654325%",
+                        "top": "15.233915806195393%",
+                        "height": "1.8250399999999996%",
+                        "width": "5.6643%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a306ddb7690012a17698",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2ad"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.3797736625514405%",
+                        "top": "17.7468%",
+                        "height": "2.2221800000000016%",
+                        "width": "5.6643004115226345%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a3f6ddb7690012a177a7",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2ae"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.276893004115227%",
+                        "top": "20.9383%",
+                        "height": "1.6661900000000003%",
+                        "width": "5.870061728395061%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a66bddb7690012a178cd",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2af"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.0699588477366255%",
+                        "top": "22.6785%",
+                        "height": "1.5867599999999982%",
+                        "width": "5.767181069958848%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a6cdddb7690012a17901",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2b0"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.071131687242799%",
+                        "top": "25.0325%",
+                        "height": "2.3810399999999987%",
+                        "width": "6.4873456790123445%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a6f1ddb7690012a17915",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2b1"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "5.968251028806585%",
+                        "top": "27.7258%",
+                        "height": "2.3810399999999987%",
+                        "width": "6.487345679012345%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a722ddb7690012a17929",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2b2"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.174012345679013%",
+                        "top": "30.9752%",
+                        "height": "2.1427600000000027%",
+                        "width": "6.487345679012345%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a753ddb7690012a1793d",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2b3"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.07113%",
+                        "top": "33.7479%",
+                        "height": "2.301612390786339%",
+                        "width": "6.487349999999999%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a7a4ddb7690012a17951",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2b4"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.68842%",
+                        "top": "36.8456%",
+                        "height": "1.6652819698173147%",
+                        "width": "5.87006%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a7d7ddb7690012a17965",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2b5"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.3797736625514405%",
+                        "top": "38.6797%",
+                        "height": "1.26905%",
+                        "width": "5.972942386831275%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a815ddb7690012a1797d",
+                "dataType": "date"
+            },
+            {
+                "name": "Date",
+                "tags": [
+                    {
+                        "_id": {
+                            "$oid": "5ffc1ab38c7f5752d1d8f2b6"
+                        },
+                        "ocrValue": "lFkmP",
+                        "value": "nEQDw",
+                        "left": "6.585534979423867%",
+                        "top": "40.1022%",
+                        "height": "1.6661900000000003%",
+                        "width": "5.767181069958847%",
+                        "page": 2
+                    }
+                ],
+                "value": "nEQDw",
+                "_id": "5df0a83eddb7690012a17992",
+                "dataType": "date"
+            }
+        ],
+        "bank_statement_class": [
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5dda9bad75ada90028f85d26",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df07ae1ddb7690012a16856",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df07e3bddb7690012a16870",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df07ec3ddb7690012a16898",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df07f43ddb7690012a168c1",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df07f14ddb7690012a168ac",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df07f8cddb7690012a168d5",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df07fb5ddb7690012a168ec",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df07fd7ddb7690012a16900",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0802cddb7690012a16914",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a3f6ddb7690012a177a9",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a306ddb7690012a1769a",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a66bddb7690012a178cf",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a6f1ddb7690012a17917",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a6cdddb7690012a17903",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a722ddb7690012a1792b",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a753ddb7690012a1793f",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a7a4ddb7690012a17953",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a815ddb7690012a1797f",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a83eddb7690012a17994",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df07e6fddb7690012a16884",
+                "value": "nEQDw",
+                "dataType": "text"
+            },
+            {
+                "name": "Classification",
+                "tags": [],
+                "_id": "5df0a7d7ddb7690012a17967",
+                "value": "nEQDw",
+                "dataType": "text"
+            }
+        ],
+        "page_list": [],
+        "page_title": [],
+        "cash_tr": [],
+        "cash_current_value": [],
+        "cash_previous_value": []
+    },
+    "pages": {
+        "1": "sample_snapshot_1/5defa06ff91e70001dfdcb3b",
+        "2": "sample_snapshot_1/5defa06ff91e70001dfdcb3b"
+    },
+    "metadata": {
+        "document_id": {
+            "$oid": "5defa06ff91e70001dfdcb3b"
+        },
+        "src": "d1a066db3c8202db928c6c03d81ba6ca4d929a936af48f08f0362142ef24b9a7"
+    }
+}
