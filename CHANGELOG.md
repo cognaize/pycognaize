@@ -2,6 +2,9 @@
 
 ## [0.3]
 
+### [0.3.59]
+- Remove opencv and seaborn from setup.cfg requirements
+
 ### [0.3.58] - 2022-06-20
 - Deprecation decorator chooses version automatically
 
