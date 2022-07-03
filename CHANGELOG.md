@@ -2,6 +2,9 @@
 
 ## [0.3]
 
+### [0.3.60]
+- Fix seaborn issue
+
 ### [0.3.59]
 - Remove opencv and seaborn from setup.cfg requirements
 
