@@ -10,8 +10,6 @@ from typing import Union, List, Optional
 from bson.json_util import loads as bson_loads
 
 import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from pycognaize.common.enums import PythonShellEnum
 from pycognaize.common.decorators import soon_be_deprecated
@@ -258,6 +256,7 @@ def preview_img(img: np.ndarray, size: int = 1000):
     :param img: Original image as numpy array
     :param size: Resize the window to the given resolution before viewing
     """
+    import matplotlib.pyplot as plt
     plt.imshow(img)
     fig = plt.figure(num=1)
     fig.set_dpi(size)
@@ -560,6 +559,9 @@ class ConfusionMatrix:
                                   group_counts,
                                   group_percentages)]
         labels = np.asarray(labels).reshape(2, 2)
+        import seaborn as sns
+        import matplotlib.pyplot as plt
+
         plt.figure(figsize=(12, 7))
         plt.title(title, fontsize=20)
         sns.heatmap(
