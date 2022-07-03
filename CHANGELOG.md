@@ -2,6 +2,10 @@
 
 ## [0.3]
 
+### [0.3.59]
+- Remove opencv and seaborn from setup.cfg requirements
+- Update pymupdf version to >=1.19.4
+
 ### [0.3.58] - 2022-06-20
 - Deprecation decorator chooses version automatically
 
