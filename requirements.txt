@@ -5,4 +5,4 @@ requests
 cloudstorageio
 simplejson
 pillow
-pymupdf>=1.19.4
+pymupdf==1.19.4
