@@ -116,7 +116,6 @@ class Page:
                 page_data = json.loads(f.read())
                 self._image_height = page_data['image']['height']
                 self._image_width = page_data['image']['width']
-            return page_data
         except FileNotFoundError as e:
             raise FileNotFoundError(f"Unable to get the data for page "
                                     f"{self.page_number}: {e}")
