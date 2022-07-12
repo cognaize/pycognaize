@@ -528,10 +528,3 @@ def create_dummy_page(page_n: int = 1, path: str = '/DUMMY/PATH'):
     """Used in test classes"""
     return Page(page_number=page_n, document_id='DUMMY_ID', path=path)
 
-
-if __name__ == "__main__":
-    page = Page(page_number=1, document_id="62a0aa404235c00012e085f0",
-                path=r"C:\Users\Armen DELL\Desktop\Cognaize\LBBW"
-                     r"\german_data_snapshots\62a0aa404235c00012e085f0")
-    print(page.image_height)
-    print("Finished")
