@@ -527,4 +527,3 @@ class Page:
 def create_dummy_page(page_n: int = 1, path: str = '/DUMMY/PATH'):
     """Used in test classes"""
     return Page(page_number=page_n, document_id='DUMMY_ID', path=path)
-
