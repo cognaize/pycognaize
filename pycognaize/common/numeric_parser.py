@@ -13,7 +13,7 @@ class NumericParser:
     numeric = (r"(^0+$|^[\\[\\(+-]*(([1-9][0-9]{0,2}([.,][0-9]{3})*)|[0-9]"
                r"|[1-9][0-9]+)([,.][0-9]*)?[\]\)]*$)")
     delimiters = r"[.,]"
-    REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
+    REGEX_NO_ALPHANUM_CHARS = re.compile('[^a-zA-Z0-9)\[\](-.,]')
 
     brackets = r"[\[\]\(\)]"
     # match a pattern with whitespace followed by either a single comma
@@ -96,10 +96,24 @@ class NumericParser:
             return self.parsed
         except Exception:
             pass
+
+        # noinspection PyBroadException
+        try:
+            if self.raw.strip().startswith('0'):
+                # try parsing like a regular float number after replacing commas
+                # if it doesn't work use more complicated logic
+                if self.removed_sign:
+                    self.parsed = float(self.raw.strip().replace(',', '.')) * self.sign
+                else:
+                    self.parsed = float(self.raw.strip().replace(',', '.'))
+
+                return self.parsed
+        except Exception:
+            pass
+
         if not self.is_numeric():
             return float('nan')
 
-        # noinspection PyBroadException
         try:
             self.__get_separated_digits_and_separators()
 

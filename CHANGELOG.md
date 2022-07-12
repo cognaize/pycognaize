@@ -2,6 +2,9 @@
 
 ## [0.3]
 
+### [0.3.61]
+- Enhance numeric parser to handle strings like 0.01, add unittest
+
 ### [0.3.60]
 - Fix seaborn issue
 
