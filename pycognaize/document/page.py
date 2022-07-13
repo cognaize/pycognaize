@@ -119,7 +119,8 @@ class Page:
 
         except FileNotFoundError as e:
             logging.debug(
-                f"Unable to get the json data for page {self.page_number}: {e}")
+                f"Unable to get the json data for page "
+                f"{self.page_number}: {e}")
             self._image_width = 1
             self._image_height = 1
 
