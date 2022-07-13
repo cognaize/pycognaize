@@ -71,7 +71,6 @@ TableTag objects can be extracted from ``document``.
     >>> table_1_tags
     <TableTag: left: 8.6, right: 92.69999999999999, top: 12.0, bottom: 64.0998>
 
-
 One of the most useful properties of ``TableTag`` class is ``TableTag.df`` method.
 This property returns the table annotation in a ``pandas.DataFrame`` format and afterwards we
 can use the standard pandas functionality.
