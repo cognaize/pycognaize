@@ -2,6 +2,9 @@
 
 ## [0.3]
 
+### [0.3.61] - 2022-07-13
+- Read image width and height from document.json instead of loading actual images for that
+
 ### [0.3.60]
 - Fix seaborn issue
 
