@@ -118,8 +118,10 @@ class Page:
                 self._image_width = int(page_data['image']['width'])
 
         except FileNotFoundError as e:
-            raise FileNotFoundError(f"Unable to get the data for page "
-                                    f"{self.page_number}: {e}")
+            logging.debug(
+                f"Unable to get the json data for page {self.page_number}: {e}")
+            self._image_width = 1
+            self._image_height = 1
 
     @property
     def image_height(self) -> int:
