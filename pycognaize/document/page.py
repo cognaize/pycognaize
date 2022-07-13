@@ -114,8 +114,9 @@ class Page:
         try:
             with self.ci.open(uri, 'r') as f:
                 page_data = json.loads(f.read())
-                self._image_height = page_data['image']['height']
-                self._image_width = page_data['image']['width']
+                self._image_height = int(page_data['image']['height'])
+                self._image_width = int(page_data['image']['width'])
+
         except FileNotFoundError as e:
             raise FileNotFoundError(f"Unable to get the data for page "
                                     f"{self.page_number}: {e}")
