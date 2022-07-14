@@ -132,7 +132,7 @@ we need the height and width of the image.
     ...                                         raw_value=coords['ocr_text'],
     ...                                         raw_ocr_value=coords['ocr_text'])
     >>> name_type_tags
-    {'matched_unaudited': <ExtractionTag: left: 76.41176470588236, right: 78.70588235294119, top: 50.272727272727266, bottom: 51.590909090909086>, 'matched_name': <ExtractionTag: left: 76.17647058823529, right: 78.76470588235294, top: 53.090909090909086, bottom: 54.45454545454545>}
+    {'matched_unaudited': <ExtractionTag: left: 55.58408215661104, right: 57.25288831835687, top: 33.45432546884452, bottom: 34.33151845130066>, 'matched_name': <ExtractionTag: left: 55.41292255027813, right: 57.29567821994009, top: 35.329703569268, bottom: 36.23714458560194>}
 
 Using extraction tags that we have just created, we can create two ``TextFields`` and add them
 to ``document.y`` (``document.x`` and``document.y`` are part of :term:`AI Interface`).
