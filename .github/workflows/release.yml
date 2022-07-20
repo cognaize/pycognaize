@@ -33,12 +33,16 @@ jobs:
       run: |
         chmod +x setup.sh
         ./setup.sh
+    - name: Create Docs
+      run: |
+        rm -rf API/_autosummary && make clean && make doctest && make html
     - name: Configure AWS credentials from Test account
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::111111111111:role/my-github-actions-role-prod
-        aws-region: us-east-1
+        args: --acl public-read --follow-symlinks --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        SOURCE_DIR: 'docs/build/html'
 
-    - name: Copy files to the test website with the AWS CLI
-      run: |
-        aws s3 sync build/html/ s3://pycognaize-docs.com/ --delete
