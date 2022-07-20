@@ -2,7 +2,7 @@
 
 ## [0.3]
 
-### [0.3.61] - 2022-07-20
+### [0.3.62] - 2022-07-20
 - Update github workflow to publish documentation on release
 
 
