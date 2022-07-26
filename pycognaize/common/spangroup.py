@@ -1,6 +1,6 @@
 
 class TextSpan:
-    """Represents a text slice in document.json"""
+    """Represents a slice of SpanGroup object"""
 
     def __init__(self, text_value, x_coordinate, y_coordinate):
         self.__text_value = text_value
@@ -26,18 +26,24 @@ class TextSpan:
         """Returns slice of the span object"""
         return TextSpan(self.__text_value[val], self.__x_coordinate, self.__y_coordinate)
 
+    def __repr__(self):
+        return f"TextSpan(text_value={self.__text_value}, x_coordinate={self.__x_coordinate}," \
+               f" y_coordinate={self.__y_coordinate})"
 
-class DocumentText:
-    """Represents all texts that are located in document.json"""
+
+class SpanGroup:
+    """Represents a collection of text span objects created from
+    texts in document.json"""
 
     def __init__(self):
         self.text_spans = []
         self.iterate_document()
 
-    def create_spans(self,
-                     text_value: str,
-                     x_coordinate: float,
-                     y_coordinate: float) -> TextSpan:
+    @staticmethod
+    def create_span(text_value: str,
+                    x_coordinate: float,
+                    y_coordinate: float) -> TextSpan:
+        """Creates text span object from texts in documents.json"""
         span = TextSpan(text_value, x_coordinate, y_coordinate)
         return span
 
