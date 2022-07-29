@@ -5,6 +5,7 @@ if TYPE_CHECKING:
 
 from pycognaize.common.decorators import module_not_found
 
+
 class SpanTag(Tag):
 
     def __init__(self, left, right, top, bottom,
@@ -27,3 +28,9 @@ class SpanTag(Tag):
         import spacy
         nlp = spacy.blank("en")
         self._spacy_doc = nlp(self.raw_value)
+
+    def __getitem__(self, val):
+        """Returns slice of the span object"""
+        return SpanTag(self._left, self._right, self._top,
+                       self._bottom, self._page, self.raw_value[val])
+

@@ -63,6 +63,10 @@ class SpanField(Field):
         field_dict[IqFieldKeyEnum.value.value] = ''
         return field_dict
 
+    def order_tags(self):
+        """Order tags by pdf data"""
+        ...
+
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.name}>"
 
