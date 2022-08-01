@@ -41,7 +41,8 @@ class Character(pydantic.BaseModel):
             values["left"] = min(max(0, left), 100)
         if not 0 <= right <= 100:
             logging.debug(
-                f"The right coordinate should be in range 0 to 100, got {right}")
+                f"The right coordinate should be in range 0 to 100,"
+                f" got {right}")
             values["right"] = min(max(0, right), 100)
         if not 0 <= top <= 100:
             logging.debug(
