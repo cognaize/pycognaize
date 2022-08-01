@@ -24,7 +24,6 @@ class SpanTag(Tag):
     def construct_lines(self, metadata: dict) -> Line:
         ...
 
-
     @module_not_found
     def __create_spacy_doc(self):
         """Creates spacy nlp object from raw value"""
@@ -36,4 +35,3 @@ class SpanTag(Tag):
         """Returns slice of the span object"""
         return SpanTag(self._left, self._right, self._top,
                        self._bottom, self._page, self.raw_value[val])
-

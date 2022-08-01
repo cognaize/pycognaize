@@ -1,8 +1,5 @@
-import itertools
 from typing import Optional, Dict, List, Type
-
 import logging
-
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
