@@ -3,6 +3,7 @@ in the snapshot
 """
 
 import logging
+from collections import defaultdict
 from typing import Optional
 
 from bson import json_util
@@ -41,6 +42,44 @@ class LazyDocumentDict(Mapping):
     def __getitem__(self, doc_id) -> Optional[Document]:
         """The Document object, retrieved from provided path
 
+        Note: Path can be both local and remote
+        """
+        try:
+            path = os.path.join(self.doc_path, doc_id,
+                                f"{self.document_filename}")
+            if self.CI.is_local_path(path):
+                with open(path, 'r', encoding='utf8') as f:
+                    doc_dict = json_util.loads(f.read())
+            else:
+                with self.CI.open(path, 'r') as f:
+                    doc_dict = json_util.loads(f.read())
+            return Document.from_dict(raw=doc_dict,
+                                      data_path=os.path.join(self.data_path,
+                                                             doc_id))
+        except Exception as e:
+            logging.error(f'Failed reading document {doc_id}: {e}')
+
+    def __iter__(self):
+        return iter(self._ids)
+
+    def __len__(self):
+        return len(self._ids)
+
+
+class LazyGroupDict(Mapping):
+    """Contains groups included in the document"""
+    def __init__(self, document_y: dict):
+        self.__groups = defaultdict(list)
+        self.create_groups(document_y)
+
+    def create_groups(self, document_y: dict):
+        """Add fields to group """
+        for field_name, fields in document_y.items():
+            for field in fields:
+                self.__groups[field_name].append(field)
+
+    def __getitem__(self, doc_id) -> Optional[Document]:
+        """The Document object, retrieved from provided path
         Note: Path can be both local and remote
         """
         try:
