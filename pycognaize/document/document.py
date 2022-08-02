@@ -13,6 +13,7 @@ from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
 from pycognaize.common.enums import IqDocumentKeysEnum
+from pycognaize.common.lazy_dict import LazyGroupDict
 from pycognaize.document.field import FieldMapping
 from pycognaize.document.field.field import Field
 from pycognaize.document.page import Page
@@ -34,8 +35,7 @@ class Document:
         self._pages: Dict[int, Page] = pages
         self._x: OrderedDict[str, List[Field]] = input_fields
         self._y: OrderedDict[str, List[Field]] = output_fields
-        self._fields_by_type: Dict[str, List[Field]] = defaultdict(list)
-        self._fields_by_group_key: Dict[str, List[Field]] = defaultdict(list)
+        self._groups = LazyGroupDict(self.y)
 
     @property
     def x(self) -> 'OrderedDict[str, List[Field]]':
@@ -110,27 +110,6 @@ class Document:
                 else:
                     intersection.append((tag, ttag, cell, iou))
         return intersection
-
-    def get_groups(self, name, group_by):
-        """Retrun groups selected by key or name"""
-        if group_by == 'type':
-            if self._fields_by_type is None:
-                self.create_groups(name, group_by)
-
-            return self._fields_by_type.get(name, self._fields_by_type)
-        if group_by == 'key':
-            if self._fields_by_group_key is None:
-                self.create_groups(name, group_by)
-
-            return self._fields_by_group_key.get(name, self._fields_by_group_key)
-
-    def create_groups(self, field_name, group_by):
-        """Returns a set of fields, grouped by type or key"""
-        for field_name, fields in self.y.items():
-            for field in fields:
-                if group_by == 'type':
-                    self.fields_by_type[field_name].append(field)
-        ...
 
     def get_table_cell_overlap(
             self, source_field: str,
