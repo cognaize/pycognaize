@@ -17,4 +17,3 @@ class FieldCollection(OrderedDict):
         """Returns fields that are contained in group with the
         given group name"""
         return LazyGroupDict(self)[name]
-

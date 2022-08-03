@@ -33,8 +33,8 @@ class TableField(Field):
                  confidence: Optional[float] = -1.0
                  ):
         tags = [] if tag is None else [tag]
-        super().__init__(name=name, tags=tags, group_key=group_key,  group_name=group_name,
-                         confidence=confidence)
+        super().__init__(name=name, tags=tags, group_key=group_key,
+                         group_name=group_name, confidence=confidence)
         self._field_id = field_id
 
     def get_table_title(self, n_lines_above=8, margin=10) -> str:

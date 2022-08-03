@@ -37,13 +37,13 @@ class Document:
         self._y: FieldCollection[str, List[Field]] = output_fields
 
     @property
-    def x(self) -> 'OrderedDict[str, List[Field]]':
+    def x(self) -> 'FieldCollection[str, List[Field]]':
         """Returns a dictionary, where keys are input field names
         and values are list of Field objects"""
         return self._x
 
     @property
-    def y(self) -> 'OrderedDict[str, List[Field]]':
+    def y(self) -> 'FieldCollection[str, List[Field]]':
         """Returns a dictionary, where keys are output field names
         and values are list of Field objects"""
         return self._y

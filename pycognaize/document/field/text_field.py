@@ -48,8 +48,8 @@ class TextField(Field):
         :param tags: List of tag objects
         :param field_id: The id of the field
         """
-        super().__init__(name=name, tags=tags, group_key=group_key,  group_name=group_name,
-                         confidence=confidence)
+        super().__init__(name=name, tags=tags, group_key=group_key,
+                         group_name=group_name, confidence=confidence)
         self._field_id = field_id
         self._raw_value = value
         self._value = '; '.join([i.raw_value

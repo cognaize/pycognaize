@@ -26,8 +26,8 @@ class DateField(Field):
                  group_name: str = None,
                  confidence: Optional[float] = -1.0
                  ):
-        super().__init__(name=name, tags=tags, group_key=group_key, group_name=group_name,
-                         confidence=confidence)
+        super().__init__(name=name, tags=tags, group_key=group_key,
+                         group_name=group_name, confidence=confidence)
         self._field_id = field_id
         self._value = '; '.join([i.raw_value
                                  for i in self.tags]) if self.tags else value
