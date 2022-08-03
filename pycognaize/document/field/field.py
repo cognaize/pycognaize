@@ -13,12 +13,16 @@ class Field(metaclass=abc.ABCMeta):
 
     def __init__(self, name: str, tags: Optional[List[Tag]] = None,
                  group_key: Optional[str] = None,
+                 group_name: Optional[str] = None,
                  confidence: Optional[float] = -1.0
                  ):
         self._confidence = confidence
         if group_key is None:
             group_key = ''
         self._group_key = group_key
+        if group_name is None:
+            group_name = ''
+        self._group_name = group_name
         self._name = name
         if tags is None:
             self._tags = []
@@ -36,6 +40,10 @@ class Field(metaclass=abc.ABCMeta):
     @property
     def group_key(self):
         return self._group_key
+
+    @property
+    def group_name(self):
+        return self._group_name
 
     @group_key.setter
     def group_key(self, value):

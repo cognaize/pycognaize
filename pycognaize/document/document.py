@@ -5,7 +5,7 @@ import copy
 import itertools
 import logging
 import os
-from collections import OrderedDict, defaultdict
+from collections import OrderedDict
 from typing import Dict, List, Tuple, Any, Optional
 
 import fitz
@@ -13,7 +13,7 @@ from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
 from pycognaize.common.enums import IqDocumentKeysEnum
-from pycognaize.common.lazy_dict import LazyGroupDict
+from pycognaize.common.lazy_group_dict import LazyGroupDict
 from pycognaize.document.field import FieldMapping
 from pycognaize.document.field.field import Field
 from pycognaize.document.page import Page
@@ -35,7 +35,7 @@ class Document:
         self._pages: Dict[int, Page] = pages
         self._x: OrderedDict[str, List[Field]] = input_fields
         self._y: OrderedDict[str, List[Field]] = output_fields
-        self._groups = LazyGroupDict(self.y)
+        self._groups = LazyGroupDict(self.x, self.y)
 
     @property
     def x(self) -> 'OrderedDict[str, List[Field]]':

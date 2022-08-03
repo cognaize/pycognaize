@@ -37,6 +37,7 @@ class TextField(Field):
                  tags: Optional[List[ExtractionTag]] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
+                 group_name: str = None,
                  confidence: Optional[float] = -1.0
                  ):
         """ Create a TextField object
@@ -47,7 +48,7 @@ class TextField(Field):
         :param tags: List of tag objects
         :param field_id: The id of the field
         """
-        super().__init__(name=name, tags=tags, group_key=group_key,
+        super().__init__(name=name, tags=tags, group_key=group_key,  group_name=group_name,
                          confidence=confidence)
         self._field_id = field_id
         self._raw_value = value
@@ -78,7 +79,8 @@ class TextField(Field):
                    value=raw[IqTagKeyEnum.value.value],
                    tags=tags,
                    field_id=str(raw[ID]),
-                   group_key=raw.get(IqFieldKeyEnum.group_key.value, '')
+                   group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
+                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
                    )
 
     def to_dict(self) -> dict:

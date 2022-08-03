@@ -29,10 +29,11 @@ class TableField(Field):
                  tag: Optional[TableTag] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
+                 group_name: str = None,
                  confidence: Optional[float] = -1.0
                  ):
         tags = [] if tag is None else [tag]
-        super().__init__(name=name, tags=tags, group_key=group_key,
+        super().__init__(name=name, tags=tags, group_key=group_key,  group_name=group_name,
                          confidence=confidence)
         self._field_id = field_id
 
@@ -74,7 +75,8 @@ class TableField(Field):
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    tag=tags[0] if tags else None,
                    field_id=str(raw[ID]),
-                   group_key=raw.get(IqFieldKeyEnum.group_key.value, '')
+                   group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
+                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
                    )
 
     def to_dict(self) -> dict:
