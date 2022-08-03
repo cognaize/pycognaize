@@ -13,7 +13,7 @@ from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
 from pycognaize.common.enums import IqDocumentKeysEnum
-from pycognaize.common.lazy_group_dict import LazyGroupDict
+from pycognaize.common.field_collection import FieldCollection
 from pycognaize.document.field import FieldMapping
 from pycognaize.document.field.field import Field
 from pycognaize.document.page import Page
@@ -27,15 +27,14 @@ class Document:
      depending on a given model"""
 
     def __init__(self,
-                 input_fields: 'OrderedDict[str, List[Field]]',
-                 output_fields: 'OrderedDict[str, List[Field]]',
+                 input_fields: 'FieldCollection[str, List[Field]]',
+                 output_fields: 'FieldCollection[str, List[Field]]',
                  pages: Dict[int, Page],
                  metadata: Dict[str, Any]):
         self._metadata = metadata
         self._pages: Dict[int, Page] = pages
-        self._x: OrderedDict[str, List[Field]] = input_fields
-        self._y: OrderedDict[str, List[Field]] = output_fields
-        self._groups = LazyGroupDict(self.x, self.y)
+        self._x: FieldCollection[str, List[Field]] = input_fields
+        self._y: FieldCollection[str, List[Field]] = output_fields
 
     @property
     def x(self) -> 'OrderedDict[str, List[Field]]':
@@ -177,14 +176,14 @@ class Document:
                                           path=data_path)
                              for page_n in range(
                 1, metadata['numberOfPages'] + 1)})
-        input_fields = OrderedDict(
+        input_fields = FieldCollection(
             {name: [
                 FieldMapping[
                     field[IqDocumentKeysEnum.data_type.value]
                 ].value.construct_from_raw(raw=field, pages=pages)
                 for field in fields]
              for name, fields in raw['input_fields'].items()})
-        output_fields = OrderedDict(
+        output_fields = FieldCollection(
             {name: [
                 FieldMapping[
                     field[IqDocumentKeysEnum.data_type.value]
