@@ -2,6 +2,13 @@
 
 ## [0.3]
 
+### [0.3.63] - 2022-08-04
+- Add grouping functionality for input and
+  output fields of document
+
+[0.3.62] - 2022-07-20
+- Update github workflow to publish documentation on release
+
 ### [0.3.61] - 2022-07-13
 - Read image width and height from document.json instead of loading actual images for that
 
