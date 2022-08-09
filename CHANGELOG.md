@@ -2,6 +2,9 @@
 
 ## [0.3]
 
+### [0.3.64] - 2022-08-09
+- Add span field and span tag 
+
 ### [0.3.63] - 2022-08-04
 - Add grouping functionality for input and
   output fields of document
@@ -12,10 +15,10 @@
 ### [0.3.61] - 2022-07-13
 - Read image width and height from document.json instead of loading actual images for that
 
-### [0.3.60]
+### [0.3.60] - 2022-07-03
 - Fix seaborn issue
 
-### [0.3.59]
+### [0.3.59] - 2022-07-03
 - Remove opencv and seaborn from setup.cfg requirements
 
 ### [0.3.58] - 2022-06-20
