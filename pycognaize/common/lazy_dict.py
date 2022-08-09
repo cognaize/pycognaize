@@ -1,6 +1,7 @@
 """Defines LazyDocumentDict, used for lazy loading the documents
 in the snapshot
 """
+import logging
 from typing import Optional
 
 from bson import json_util
@@ -41,20 +42,20 @@ class LazyDocumentDict(Mapping):
 
         Note: Path can be both local and remote
         """
-        # try:
-        path = os.path.join(self.doc_path, doc_id,
-                            f"{self.document_filename}")
-        if self.CI.is_local_path(path):
-            with open(path, 'r', encoding='utf8') as f:
-                doc_dict = json_util.loads(f.read())
-        else:
-            with self.CI.open(path, 'r') as f:
-                doc_dict = json_util.loads(f.read())
-        return Document.from_dict(raw=doc_dict,
-                                  data_path=os.path.join(self.data_path,
-                                                         doc_id))
-        # except Exception as e:
-        #     logging.error(f'Failed reading document {doc_id}: {e}')
+        try:
+            path = os.path.join(self.doc_path, doc_id,
+                                f"{self.document_filename}")
+            if self.CI.is_local_path(path):
+                with open(path, 'r', encoding='utf8') as f:
+                    doc_dict = json_util.loads(f.read())
+            else:
+                with self.CI.open(path, 'r') as f:
+                    doc_dict = json_util.loads(f.read())
+            return Document.from_dict(raw=doc_dict,
+                                      data_path=os.path.join(self.data_path,
+                                                             doc_id))
+        except Exception as e:
+            logging.error(f'Failed reading document {doc_id}: {e}')
 
     def __iter__(self):
         return iter(self._ids)

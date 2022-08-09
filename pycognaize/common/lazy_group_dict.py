@@ -38,7 +38,6 @@ class LazyGroupDict(Mapping):
         """The Document object, retrieved from provided path
         Note: Path can be both local and remote
         """
-        # return self._groups[group_name]
         return self.groups[group_name]
 
     def __iter__(self):
