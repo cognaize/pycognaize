@@ -13,8 +13,8 @@ class Field(metaclass=abc.ABCMeta):
 
     def __init__(self, name: str, tags: Optional[List[Tag]] = None,
                  group_key: Optional[str] = None,
-                 group_name: Optional[str] = None,
-                 confidence: Optional[float] = -1.0
+                 confidence: Optional[float] = -1.0,
+                 group_name: Optional[str] = None
                  ):
         self._confidence = confidence
         if group_key is None:
