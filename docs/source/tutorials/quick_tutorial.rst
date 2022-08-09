@@ -57,7 +57,7 @@ collection of multiple Document objects
 .. doctest::
 
     >>> snapshot.documents._ids
-    ['60215310dbf28200120e6afa', '60b76b3d6f3f980019105dac', '60f5260c7883ab0013d9c184', '60f53e967883ab0013d9c6f9', '60f554497883ab0013d9d906']
+    ['60215310dbf28200120e6afa', '60b76b3d6f3f980019105dac', '60f5260c7883ab0013d9c184', '60f53e967883ab0013d9c6f9', '60f554497883ab0013d9d906', '62eb8e6b28d7ca0012ec8288']
 
 
 As we can see our Snapshot consists of 5 documents,
@@ -116,7 +116,7 @@ objects as values. We can select all table fields using
 
     >>> fields = document.x
     >>> fields
-    OrderedDict([('table', [<TableField: table>])])
+    FieldCollection([('table', [<TableField: table>])])
 
     >>> table_field = document.x['table']
     >>> table_field
