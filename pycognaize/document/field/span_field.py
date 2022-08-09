@@ -41,10 +41,6 @@ class SpanField(Field):
                     raw=i, page=pages[i['page']]))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
-        if len(tags) > 1:
-            raise ValueError(
-                f"{cls.__name__} cannot have {len(tags)}"
-                f" {cls.tag_class.__name__}s")
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    tag=tags[0] if tags else None,
                    field_id=str(raw[ID]),

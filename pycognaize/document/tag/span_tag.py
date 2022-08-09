@@ -1,4 +1,5 @@
-from pycognaize.document.spanning.line import Line
+from pycognaize.common.enums import IqTableTagEnum, IqTagKeyEnum
+from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.tag import Tag
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -12,18 +13,28 @@ class SpanTag(Tag):
 
     def __init__(self, left, right, top, bottom,
                  page: 'Page',
-                 raw_value: str):
+                 raw_value: str, raw_ocr_value: str):
         super().__init__(left=left, right=right, top=top, bottom=bottom,
                          page=page)
-        self.line: Line
         self.raw_value = raw_value
+        self.raw_ocr_value = raw_ocr_value
         self._spacy_doc = None
 
+    @classmethod
     def construct_from_raw(cls, raw: dict, page: 'Page') -> 'SpanTag':
-        ...
+        """Create a SpanTag from a raw dictionary"""
+        left = convert_coord_to_num(raw['left'])
+        top = convert_coord_to_num(raw['top'])
+        height = convert_coord_to_num(raw['height'])
+        width = convert_coord_to_num(raw['width'])
+        right = left + width
+        bottom = top + height
+        raw_value = raw['value']
+        raw_ocr_value = raw['ocrValue']
+        tag = cls(left=left, right=right, top=top, bottom=bottom,
+                  page=page, raw_value=raw_value, raw_ocr_value=raw_ocr_value)
+        return tag
 
-    def construct_lines(self, metadata: dict) -> Line:
-        ...
 
     @module_not_found
     def __create_spacy_doc(self):
@@ -35,4 +46,4 @@ class SpanTag(Tag):
     def __getitem__(self, val):
         """Returns slice of the span object"""
         return SpanTag(self._left, self._right, self._top,
-                       self._bottom, self._page, self.raw_value[val])
+                       self._bottom, self._page, self.raw_value[val], self.raw_ocr_value[val])
