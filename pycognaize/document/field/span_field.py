@@ -60,7 +60,7 @@ class SpanField(Field):
 
     def order_tags(self):
         """Order tags by pdf data"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.name}>"
