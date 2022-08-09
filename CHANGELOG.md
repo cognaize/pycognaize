@@ -2,6 +2,9 @@
 
 ## [0.3]
 
+### [0.3.64] - 2022-08-09
+- Add span field and span tag
+
 ### [0.3.63] - 2022-08-04
 - Add grouping functionality for input and
   output fields of document

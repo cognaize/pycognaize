@@ -1,4 +1,3 @@
-from pycognaize.common.enums import IqTableTagEnum, IqTagKeyEnum
 from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.tag import Tag
 from typing import TYPE_CHECKING
@@ -46,4 +45,5 @@ class SpanTag(Tag):
     def __getitem__(self, val):
         """Returns slice of the span object"""
         return SpanTag(self._left, self._right, self._top,
-                       self._bottom, self._page, self.raw_value[val], self.raw_ocr_value[val])
+                       self._bottom, self._page, self.raw_value[val],
+                       self.raw_ocr_value[val])
