@@ -46,7 +46,7 @@ class SpanField(Field):
                    tag=tags[0] if tags else None,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
-                   group_name=raw.get(IqFieldKeyEnum.group_name.value, '')
+                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
                    )
 
     def to_dict(self) -> dict:
