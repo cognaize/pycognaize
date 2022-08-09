@@ -29,11 +29,12 @@ class TableField(Field):
                  tag: Optional[TableTag] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
-                 confidence: Optional[float] = -1.0
+                 confidence: Optional[float] = -1.0,
+                 group_name: str = None
                  ):
         tags = [] if tag is None else [tag]
         super().__init__(name=name, tags=tags, group_key=group_key,
-                         confidence=confidence)
+                         confidence=confidence, group_name=group_name)
         self._field_id = field_id
 
     def get_table_title(self, n_lines_above=8, margin=10) -> str:
@@ -74,7 +75,8 @@ class TableField(Field):
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    tag=tags[0] if tags else None,
                    field_id=str(raw[ID]),
-                   group_key=raw.get(IqFieldKeyEnum.group_key.value, '')
+                   group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
+                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
                    )
 
     def to_dict(self) -> dict:
