@@ -13,7 +13,7 @@ class NumericParser:
     numeric = (r"(^0+$|^[\\[\\(+-]*(([1-9][0-9]{0,2}([.,][0-9]{3})*)|[0-9]"
                r"|[1-9][0-9]+)([,.][0-9]*)?[\]\)]*$)")
     delimiters = r"[.,]"
-    REGEX_NO_ALPHANUM_CHARS = re.compile('[^a-zA-Z0-9)\[\](-.,]')
+    REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z0-9)\[\](-.,]')
 
     brackets = r"[\[\]\(\)]"
     # match a pattern with whitespace followed by either a single comma
@@ -75,15 +75,8 @@ class NumericParser:
         self.raw = self.raw.rstrip(')')
         self.removed_sign = True
 
-    def parse_numeric(self) -> Union[int, float]:
-        """
-        Parse the raw data, and return parsed numeric value
-        and get the numeric, separator and value type of the raw data
-
-        :return: Parsed float or int value
-        """
-        self.infer_sign()
-
+    def parse_regular_float(self):
+        """Parse Like a regular float number"""
         # noinspection PyBroadException
         try:
             # try parsing like a regular float number
@@ -95,21 +88,41 @@ class NumericParser:
 
             return self.parsed
         except Exception:
-            pass
+            return None
 
+    def parse_regular_float_with_semicolon(self):
+        """Parse Like a regular float number with semicolon"""
         # noinspection PyBroadException
         try:
             if self.raw.strip().startswith('0'):
-                # try parsing like a regular float number after replacing commas
-                # if it doesn't work use more complicated logic
+                # try parsing like a regular float number after replacing
+                # commas if it doesn't work use more complicated logic
                 if self.removed_sign:
-                    self.parsed = float(self.raw.strip().replace(',', '.')) * self.sign
+                    self.parsed = float(self.raw.strip().replace(',', '.')) \
+                                  * self.sign
                 else:
                     self.parsed = float(self.raw.strip().replace(',', '.'))
 
                 return self.parsed
         except Exception:
-            pass
+            return None
+
+    def parse_numeric(self) -> Union[int, float]:
+        """
+        Parse the raw data, and return parsed numeric value
+        and get the numeric, separator and value type of the raw data
+
+        :return: Parsed float or int value
+        """
+        self.infer_sign()
+
+        parse_float = self.parse_regular_float()
+        if parse_float is not None:
+            return parse_float
+        else:
+            parse_float_semicolon = self.parse_regular_float_with_semicolon()
+            if parse_float_semicolon is not None:
+                return parse_float_semicolon
 
         if not self.is_numeric():
             return float('nan')
