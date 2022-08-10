@@ -6,7 +6,6 @@ from typing import Optional, List, Iterable, Union
 import numpy as np
 from pycognaize.common.decorators import module_not_found
 
-
 from pycognaize.common.enums import (
     StorageEnum,
     OCR_DATA_EXTENSION,
@@ -106,18 +105,39 @@ class Page:
             self._image_arr = image_string_to_array(self.image_bytes)
         return self._image_arr
 
+    def get_page_data(self) -> None:
+        """Data of the page"""
+        if self.path is None:
+            raise ValueError("No path defined for getting the images")
+        uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
+                           f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
+        try:
+            with self.ci.open(uri, 'r') as f:
+                page_data = json.loads(f.read())
+                self._image_height = int(page_data['image']['height'])
+                self._image_width = int(page_data['image']['width'])
+
+        except FileNotFoundError as e:
+            logging.debug(
+                f"Unable to get the json data for page "
+                f"{self.page_number}: {e}")
+            self._image_width = 1
+            self._image_height = 1
+
     @property
     def image_height(self) -> int:
         """Height of the page image"""
         if self._image_height is None:
-            self._image_height = self.image_arr.shape[0]
+            self.get_page_data()
+
         return self._image_height
 
     @property
     def image_width(self) -> int:
         """Width of the page image"""
         if self._image_width is None:
-            self._image_width = self.image_arr.shape[1]
+            self.get_page_data()
+
         return self._image_width
 
     @property

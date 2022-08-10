@@ -1,7 +1,6 @@
 """Defines LazyDocumentDict, used for lazy loading the documents
 in the snapshot
 """
-
 import logging
 from typing import Optional
 
