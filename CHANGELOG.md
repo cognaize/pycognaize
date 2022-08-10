@@ -2,6 +2,9 @@
 
 ## [0.3]
 
+### [0.3.65] - 2022-08-10
+- Enhance numeric parser to handle strings like 0.01, add unittest
+
 ### [0.3.64] - 2022-08-09
 - Add span field and span tag 
 
@@ -9,7 +12,7 @@
 - Add grouping functionality for input and
   output fields of document
 
-[0.3.62] - 2022-07-20
+### [0.3.62] - 2022-07-20
 - Update github workflow to publish documentation on release
 
 ### [0.3.61] - 2022-07-13
