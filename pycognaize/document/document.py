@@ -6,18 +6,18 @@ import itertools
 import logging
 import os
 from collections import OrderedDict
-from typing import Dict, List, Tuple, Any, Optional
+from typing import Dict, List, Tuple, Any, Optional, Callable
 
 import fitz
 from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
-from pycognaize.common.enums import IqDocumentKeysEnum
+from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
-from pycognaize.document.field import FieldMapping
+from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field
 from pycognaize.document.page import Page
-from pycognaize.document.tag import TableTag
+from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
 from pycognaize.document.tag.tag import Tag
 
@@ -147,6 +147,86 @@ class Document:
                     tag=tag, table_tags=table_tags, one_to_one=one_to_one)
                 res.extend(intersection)
         return res
+
+    def get_tied_fields(self, tag: ExtractionTag,
+                        field_type: str = FieldTypeEnum.BOTH.value,
+                        threshold: float = 0.5,
+                        python_name_filter: Callable = lambda x: True):
+        """Given an `ExtractionTag`, return all the fields that contain
+           tags in the same physical location.
+
+        :param tag: Input `ExtractionTag`
+        :param document: The document containing the input `ExtractionTag`
+        :param field_type: Types of fields to consider {input/output/both}
+        :param threshold: The IoU threshold to consider the tags in the same
+            location
+        :param python_name_filter: If provided, only fields with
+            names passing the filter will be considered
+        :return: List of `Field` objects
+        """
+        tied_fields = []
+        if field_type == FieldTypeEnum.INPUT_FIELD.value:
+            scopes = (self.x,)
+        elif field_type == FieldTypeEnum.OUTPUT_FIELD.value:
+            scopes = (self.y,)
+        elif field_type == FieldTypeEnum.BOTH.value:
+            scopes = (self.x, self.y)
+        else:
+            raise ValueError(
+                f"'field_type' should be one of "
+                f"{tuple(i.value for i in FieldTypeEnum.__members__.values())}"
+                f" got {field_type}")
+        for scope in scopes:
+            for pname, fields in scope.items():
+                if not python_name_filter(pname):
+                    continue
+                tied_fields = [field for field in fields
+                               if not isinstance(field, TableField)
+                               for field_tag in field.tags
+                               if isinstance(field_tag, ExtractionTag)
+                               if (tag & field_tag)
+                               / min({tag.area, field_tag.area}) >= threshold]
+        return tied_fields
+
+    def get_tied_tags(self, tag: ExtractionTag,
+                      field_type: str = FieldTypeEnum.BOTH.value,
+                      threshold: float = 0.9,
+                      python_name_filter: Callable = lambda x: True
+                      ) -> List[ExtractionTag]:
+        """Given a single tag, return all other tags in the document that are
+            in the same physical location in the document
+
+        :param tag: Input `ExtractionTag`
+        :param document: The document containing the input `ExtractionTag`
+        :param field_type: Types of fields to consider {input/output/both}
+        :param threshold: The IoU threshold to consider the tags in the same
+            location
+        :param python_name_filter: If provided, only tags that are in fields
+            with names passing the filter will be considered
+        :return: List of `ExtractionTag` objects
+        """
+        tied_tags = []
+        if field_type == FieldTypeEnum.INPUT_FIELD.value:
+            scopes = (self.x,)
+        elif field_type == FieldTypeEnum.OUTPUT_FIELD.value:
+            scopes = (self.y,)
+        elif field_type == FieldTypeEnum.BOTH.value:
+            scopes = (self.x, self.y)
+        else:
+            raise ValueError(
+                f"'field_type' should be one of "
+                f"{tuple(i.value for i in FieldTypeEnum.__members__.values())}"
+                f" got {field_type}")
+        for scope in scopes:
+            for pname, fields in scope.items():
+                if not python_name_filter(pname):
+                    continue
+                tied_tags = [field_tag for field in fields
+                             if not isinstance(field, TableField)
+                             for field_tag in field.tags
+                             if isinstance(field_tag, ExtractionTag)
+                             if tag.iou(field_tag) >= threshold]
+        return tied_tags
 
     def to_dict(self) -> dict:
         """Converts Document object to dict"""
