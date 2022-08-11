@@ -9,6 +9,7 @@ from collections import OrderedDict
 from typing import Dict, List, Tuple, Any, Optional, Callable
 
 import fitz
+import pandas as pd
 from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
@@ -151,16 +152,15 @@ class Document:
     def get_tied_fields(self, tag: ExtractionTag,
                         field_type: str = FieldTypeEnum.BOTH.value,
                         threshold: float = 0.5,
-                        python_name_filter: Callable = lambda x: True):
+                        pn_filter: Callable = lambda x: True):
         """Given an `ExtractionTag`, return all the fields that contain
            tags in the same physical location.
 
         :param tag: Input `ExtractionTag`
-        :param document: The document containing the input `ExtractionTag`
         :param field_type: Types of fields to consider {input/output/both}
         :param threshold: The IoU threshold to consider the tags in the same
             location
-        :param python_name_filter: If provided, only fields with
+        :param pn_filter: If provided, only fields with
             names passing the filter will be considered
         :return: List of `Field` objects
         """
@@ -178,7 +178,7 @@ class Document:
                 f" got {field_type}")
         for scope in scopes:
             for pname, fields in scope.items():
-                if not python_name_filter(pname):
+                if not pn_filter(pname):
                     continue
                 tied_fields = [field for field in fields
                                if not isinstance(field, TableField)
@@ -191,17 +191,16 @@ class Document:
     def get_tied_tags(self, tag: ExtractionTag,
                       field_type: str = FieldTypeEnum.BOTH.value,
                       threshold: float = 0.9,
-                      python_name_filter: Callable = lambda x: True
+                      pn_filter: Callable = lambda x: True
                       ) -> List[ExtractionTag]:
         """Given a single tag, return all other tags in the document that are
             in the same physical location in the document
 
         :param tag: Input `ExtractionTag`
-        :param document: The document containing the input `ExtractionTag`
         :param field_type: Types of fields to consider {input/output/both}
         :param threshold: The IoU threshold to consider the tags in the same
             location
-        :param python_name_filter: If provided, only tags that are in fields
+        :param pn_filter: If provided, only tags that are in fields
             with names passing the filter will be considered
         :return: List of `ExtractionTag` objects
         """
@@ -219,7 +218,7 @@ class Document:
                 f" got {field_type}")
         for scope in scopes:
             for pname, fields in scope.items():
-                if not python_name_filter(pname):
+                if not pn_filter(pname):
                     continue
                 tied_tags = [field_tag for field in fields
                              if not isinstance(field, TableField)
@@ -229,34 +228,31 @@ class Document:
         return tied_tags
 
     def get_first_tied_field(self, tag: ExtractionTag,
-                             python_name_filter: Callable = lambda x: True
+                             pn_filter: Callable = lambda x: True
                              ) -> Optional[Field]:
         """Return the first field that is in the same location as the given tag
 
         :param tag: Input `ExtractionTag`
-        :param document: The document containing the input `ExtractionTag`
-        :param python_name_filter: If provided, only fields with
+        :param pn_filter: If provided, only fields with
             names passing the filter will be considered
         :return: If match found, return the matching `Field`,
             otherwise return `None`
         """
         res = None
         fields = self.get_tied_fields(tag=tag,
-                                      python_name_filter=python_name_filter)
+                                      pn_filter=pn_filter)
 
         res = fields[0] if fields else res
         return res
 
     def get_first_tied_field_value(self, tag: ExtractionTag,
-                                   python_name_filter: Callable =
+                                   pn_filter: Callable =
                                    lambda x: True):
         """Return the value of the first field that is in the
          same location as the given tag
 
         :param tag: Input `ExtractionTag`
-        :param document: The document containing the input
-            `ExtractionTag`
-        :param python_name_filter: If provided, only tags that are
+        :param pn_filter: If provided, only tags that are
             in fields with names passing the filter will be considered
         :return:
         """
@@ -264,7 +260,7 @@ class Document:
             val = ''
         else:
             matching_field = self.get_first_tied_field(
-                tag=tag, python_name_filter=python_name_filter)
+                tag=tag, pn_filter=pn_filter)
             if matching_field is None:
                 val = tag.raw_value
             else:
@@ -273,43 +269,58 @@ class Document:
         return val
 
     def get_first_tied_tag(self, tag: ExtractionTag,
-                           python_name_filter: Callable = lambda x: True
+                           pn_filter: Callable = lambda x: True
                            ) -> Optional[ExtractionTag]:
         """Return the first tag that is in the same location as the given tag
 
         :param tag: Input `ExtractionTag`
-        :param document: The document containing the input `ExtractionTag`
-        :param python_name_filter: If provided, only tags that
+        :param pn_filter: If provided, only tags that
             are in fields with names passing the filter will be considered
         :return: If match found, return the matching `ExtractionTag`,
             otherwise return `None`
         """
         res = None
         tags = self.get_tied_tags(tag=tag,
-                                  python_name_filter=python_name_filter)
+                                  pn_filter=pn_filter)
         res = tags[0] if tags else res
         return res
 
     def get_first_tied_tag_value(self, tag: ExtractionTag,
-                                 python_name_filter: Callable =
+                                 pn_filter: Callable =
                                  lambda x: True):
         """Return the value of the first tag that is in the same
             location as the given tag
 
         :param tag: Input `ExtractionTag`
-        :param document: The document containing the input `ExtractionTag`
-        :param python_name_filter: If provided, only tags that are in
+        :param pn_filter: If provided, only tags that are in
             fields with names passing the filter will be considered
         :return:
         """
         matching_tag = self.get_first_tied_tag(tag=tag,
-                                               python_name_filter=
-                                               python_name_filter)
+                                               pn_filter=pn_filter)
         if matching_tag is None:
             val = tag.raw_value
         else:
             val = matching_tag.value
         return val
+
+    def get_df_with_tied_field_values(self, table_tag: TableTag,
+                                      pn_filter: Callable =
+                                      lambda x: True
+                                      ) -> pd.DataFrame:
+        """Return the dataframe of the TableTag, where each cell
+           value is replaced with the values in the fields of
+           tied values (e.i. values that are in
+           the same physical location as the cell)
+
+        :param table_tag:
+        :param pn_filter:
+        :return:
+        """
+        return table_tag.raw_df.applymap(
+            lambda x: self.get_first_tied_field_value(
+                x,
+                pn_filter=pn_filter))
 
     def to_dict(self) -> dict:
         """Converts Document object to dict"""
