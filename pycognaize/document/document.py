@@ -228,6 +228,89 @@ class Document:
                              if tag.iou(field_tag) >= threshold]
         return tied_tags
 
+    def get_first_tied_field(self, tag: ExtractionTag,
+                             python_name_filter: Callable = lambda x: True
+                             ) -> Optional[Field]:
+        """Return the first field that is in the same location as the given tag
+
+        :param tag: Input `ExtractionTag`
+        :param document: The document containing the input `ExtractionTag`
+        :param python_name_filter: If provided, only fields with
+            names passing the filter will be considered
+        :return: If match found, return the matching `Field`,
+            otherwise return `None`
+        """
+        res = None
+        fields = self.get_tied_fields(tag=tag,
+                                      python_name_filter=python_name_filter)
+
+        res = fields[0] if fields else res
+        return res
+
+    def get_first_tied_field_value(self, tag: ExtractionTag,
+                                   python_name_filter: Callable =
+                                   lambda x: True):
+        """Return the value of the first field that is in the
+         same location as the given tag
+
+        :param tag: Input `ExtractionTag`
+        :param document: The document containing the input
+            `ExtractionTag`
+        :param python_name_filter: If provided, only tags that are
+            in fields with names passing the filter will be considered
+        :return:
+        """
+        if isinstance(tag, float):
+            val = ''
+        else:
+            matching_field = self.get_first_tied_field(
+                tag=tag, python_name_filter=python_name_filter)
+            if matching_field is None:
+                val = tag.raw_value
+            else:
+                # noinspection PyUnresolvedReferences
+                val = matching_field.value
+        return val
+
+    def get_first_tied_tag(self, tag: ExtractionTag,
+                           python_name_filter: Callable = lambda x: True
+                           ) -> Optional[ExtractionTag]:
+        """Return the first tag that is in the same location as the given tag
+
+        :param tag: Input `ExtractionTag`
+        :param document: The document containing the input `ExtractionTag`
+        :param python_name_filter: If provided, only tags that
+            are in fields with names passing the filter will be considered
+        :return: If match found, return the matching `ExtractionTag`,
+            otherwise return `None`
+        """
+        res = None
+        tags = self.get_tied_tags(tag=tag,
+                                  python_name_filter=python_name_filter)
+        res = tags[0] if tags else res
+        return res
+
+    def get_first_tied_tag_value(self, tag: ExtractionTag,
+                                 python_name_filter: Callable =
+                                 lambda x: True):
+        """Return the value of the first tag that is in the same
+            location as the given tag
+
+        :param tag: Input `ExtractionTag`
+        :param document: The document containing the input `ExtractionTag`
+        :param python_name_filter: If provided, only tags that are in
+            fields with names passing the filter will be considered
+        :return:
+        """
+        matching_tag = self.get_first_tied_tag(tag=tag,
+                                               python_name_filter=
+                                               python_name_filter)
+        if matching_tag is None:
+            val = tag.raw_value
+        else:
+            val = matching_tag.value
+        return val
+
     def to_dict(self) -> dict:
         """Converts Document object to dict"""
         input_fields = OrderedDict(
