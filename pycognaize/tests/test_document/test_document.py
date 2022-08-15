@@ -7,7 +7,7 @@ import uuid
 from collections import OrderedDict
 from copy import deepcopy
 
-from pycognaize.common.enums import EnvConfigEnum
+from pycognaize.common.enums import EnvConfigEnum, FieldTypeEnum
 from pycognaize.document import Page, Document
 from pycognaize.document.field.field import Field
 from pycognaize.tests.resources import RESOURCE_FOLDER
@@ -137,6 +137,31 @@ class TestDocument(unittest.TestCase):
             document.to_pdf(input_fields=input_fields, input_opacity=5)
         with self.assertRaises(TypeError):
             document.to_pdf(input_fields=input_fields, input_opacity='5')
+
+    def test_get_tief_fields(self):
+        tag = self.document.x['paragraph'][0].tags[0]
+        tied_field_real = self.document.x['ref'][0]
+        tied_field = self.document.get_tied_fields(tag)[0]
+        self.assertEqual(len(self.document.get_tied_fields(tag)), 1)
+        self.assertEqual(len(self.document.get_tied_fields(tag, field_type=FieldTypeEnum.OUTPUT_FIELD.value)), 0)
+        self.assertEqual(tied_field_real, tied_field)
+        self.assertEqual(self.document.get_first_tied_field(tag), tied_field)
+
+    def test_get_tied_tags(self):
+        # print(self.document.x['source_date'][0].tags[0])
+        tag = self.document.x['paragraph'][0].tags[0]
+        other_tag = self.document.x['ref'][0].tags[0]
+
+        # print(tag, other_tag, tag.iou(other_tag), sep='---------\n')
+
+        tied_tags = self.document.get_tied_tags(tag)
+        self.assertEqual(len(tied_tags), 0)
+        tied_tags = self.document.get_tied_tags(tag, threshold=0.002)[0]
+        self.assertEqual(tied_tags, other_tag)
+        first_tied_tag = self.document.get_first_tied_tag(tag)
+        self.assertEqual(first_tied_tag, None)
+
+        # self.assertEquals(tied_tags[0], tag)
 
     @classmethod
     def tearDownClass(cls) -> None:

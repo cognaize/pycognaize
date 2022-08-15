@@ -154,3 +154,10 @@ class PythonShellEnum(enum.Enum):
     terminal_interactive_shell = 'TerminalInteractiveShell'
     other_type_shell = 'OtherTypeShell'
     standard_python_interpreter = 'StandardPythonInterpreter'
+
+
+class FieldTypeEnum(enum.Enum):
+    """Enumeration of field types"""
+    INPUT_FIELD = 'input'
+    OUTPUT_FIELD = 'output'
+    BOTH = 'both'

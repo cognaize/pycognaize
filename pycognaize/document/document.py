@@ -6,18 +6,19 @@ import itertools
 import logging
 import os
 from collections import OrderedDict
-from typing import Dict, List, Tuple, Any, Optional
+from typing import Dict, List, Tuple, Any, Optional, Callable
 
 import fitz
+import pandas as pd
 from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
-from pycognaize.common.enums import IqDocumentKeysEnum
+from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
-from pycognaize.document.field import FieldMapping
+from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field
 from pycognaize.document.page import Page
-from pycognaize.document.tag import TableTag
+from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
 from pycognaize.document.tag.tag import Tag
 
@@ -147,6 +148,180 @@ class Document:
                     tag=tag, table_tags=table_tags, one_to_one=one_to_one)
                 res.extend(intersection)
         return res
+
+    def get_tied_fields(self, tag: ExtractionTag,
+                        field_type: str = FieldTypeEnum.BOTH.value,
+                        threshold: float = 0.5,
+                        pn_filter: Callable = lambda x: True):
+        """Given an `ExtractionTag`, return all the fields that contain
+           tags in the same physical location.
+
+        :param tag: Input `ExtractionTag`
+        :param field_type: Types of fields to consider {input/output/both}
+        :param threshold: The IoU threshold to consider the tags in the same
+            location
+        :param pn_filter: If provided, only fields with
+            names passing the filter will be considered
+        :return: List of `Field` objects
+        """
+        tied_fields = []
+        if field_type == FieldTypeEnum.INPUT_FIELD.value:
+            scopes = (self.x,)
+        elif field_type == FieldTypeEnum.OUTPUT_FIELD.value:
+            scopes = (self.y,)
+        elif field_type == FieldTypeEnum.BOTH.value:
+            scopes = (self.x, self.y)
+        else:
+            raise ValueError(
+                f"'field_type' should be one of "
+                f"{tuple(i.value for i in FieldTypeEnum.__members__.values())}"
+                f" got {field_type}")
+        for scope in scopes:
+            for pname, fields in scope.items():
+                if not pn_filter(pname):
+                    continue
+                tied_fields = [field for field in fields
+                               if not isinstance(field, TableField)
+                               for field_tag in field.tags
+                               if isinstance(field_tag, ExtractionTag)
+                               if (tag & field_tag)
+                               / min({tag.area, field_tag.area}) >= threshold]
+        return tied_fields
+
+    def get_tied_tags(self, tag: ExtractionTag,
+                      field_type: str = FieldTypeEnum.BOTH.value,
+                      threshold: float = 0.9,
+                      pn_filter: Callable = lambda x: True
+                      ) -> List[ExtractionTag]:
+        """Given a single tag, return all other tags in the document that are
+            in the same physical location in the document
+
+        :param tag: Input `ExtractionTag`
+        :param field_type: Types of fields to consider {input/output/both}
+        :param threshold: The IoU threshold to consider the tags in the same
+            location
+        :param pn_filter: If provided, only tags that are in fields
+            with names passing the filter will be considered
+        :return: List of `ExtractionTag` objects
+        """
+        tied_tags = []
+        if field_type == FieldTypeEnum.INPUT_FIELD.value:
+            scopes = (self.x,)
+        elif field_type == FieldTypeEnum.OUTPUT_FIELD.value:
+            scopes = (self.y,)
+        elif field_type == FieldTypeEnum.BOTH.value:
+            scopes = (self.x, self.y)
+        else:
+            raise ValueError(
+                f"'field_type' should be one of "
+                f"{tuple(i.value for i in FieldTypeEnum.__members__.values())}"
+                f" got {field_type}")
+        for scope in scopes:
+            for pname, fields in scope.items():
+                if not pn_filter(pname):
+                    continue
+                tied_tags = [field_tag for field in fields
+                             if not isinstance(field, TableField)
+                             for field_tag in field.tags
+                             if isinstance(field_tag, ExtractionTag)
+                             if tag.iou(field_tag) >= threshold]
+        return tied_tags
+
+    def get_first_tied_field(self, tag: ExtractionTag,
+                             pn_filter: Callable = lambda x: True
+                             ) -> Optional[Field]:
+        """Return the first field that is in the same location as the given tag
+
+        :param tag: Input `ExtractionTag`
+        :param pn_filter: If provided, only fields with
+            names passing the filter will be considered
+        :return: If match found, return the matching `Field`,
+            otherwise return `None`
+        """
+        res = None
+        fields = self.get_tied_fields(tag=tag,
+                                      pn_filter=pn_filter)
+
+        res = fields[0] if fields else res
+        return res
+
+    def get_first_tied_field_value(self, tag: ExtractionTag,
+                                   pn_filter: Callable =
+                                   lambda x: True):
+        """Return the value of the first field that is in the
+         same location as the given tag
+
+        :param tag: Input `ExtractionTag`
+        :param pn_filter: If provided, only tags that are
+            in fields with names passing the filter will be considered
+        :return:
+        """
+        if isinstance(tag, float):
+            val = ''
+        else:
+            matching_field = self.get_first_tied_field(
+                tag=tag, pn_filter=pn_filter)
+            if matching_field is None:
+                val = tag.raw_value
+            else:
+                # noinspection PyUnresolvedReferences
+                val = matching_field.value
+        return val
+
+    def get_first_tied_tag(self, tag: ExtractionTag,
+                           pn_filter: Callable = lambda x: True
+                           ) -> Optional[ExtractionTag]:
+        """Return the first tag that is in the same location as the given tag
+
+        :param tag: Input `ExtractionTag`
+        :param pn_filter: If provided, only tags that
+            are in fields with names passing the filter will be considered
+        :return: If match found, return the matching `ExtractionTag`,
+            otherwise return `None`
+        """
+        res = None
+        tags = self.get_tied_tags(tag=tag,
+                                  pn_filter=pn_filter)
+        res = tags[0] if tags else res
+        return res
+
+    def get_first_tied_tag_value(self, tag: ExtractionTag,
+                                 pn_filter: Callable =
+                                 lambda x: True):
+        """Return the value of the first tag that is in the same
+            location as the given tag
+
+        :param tag: Input `ExtractionTag`
+        :param pn_filter: If provided, only tags that are in
+            fields with names passing the filter will be considered
+        :return:
+        """
+        matching_tag = self.get_first_tied_tag(tag=tag,
+                                               pn_filter=pn_filter)
+        if matching_tag is None:
+            val = tag.raw_value
+        else:
+            val = matching_tag.value
+        return val
+
+    def get_df_with_tied_field_values(self, table_tag: TableTag,
+                                      pn_filter: Callable =
+                                      lambda x: True
+                                      ) -> pd.DataFrame:
+        """Return the dataframe of the TableTag, where each cell
+           value is replaced with the values in the fields of
+           tied values (e.i. values that are in
+           the same physical location as the cell)
+
+        :param table_tag: Input `TableTag`
+        :param pn_filter: : If provided, only fields with
+            names passing the filter will be considered
+        :return: Dataframe of the TableTag
+        """
+        return table_tag.raw_df.applymap(
+            lambda x: self.get_first_tied_field_value(
+                x,
+                pn_filter=pn_filter))
 
     def to_dict(self) -> dict:
         """Converts Document object to dict"""
