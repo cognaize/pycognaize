@@ -2,7 +2,7 @@
 
 ## [0.3]
 
-### [0.3.66] - 2022-08-10
+### [0.3.66] - 2022-08-15
 - Add tied_field and tied_tag functionality to document
 
 
