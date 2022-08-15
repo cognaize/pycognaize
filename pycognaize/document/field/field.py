@@ -11,10 +11,13 @@ class Field(metaclass=abc.ABCMeta):
     """Base class for all Field types"""
     tag_class: Type[Tag] = Tag
 
-    def __init__(self, name: str, tags: Optional[List[Tag]] = None,
+    def __init__(self, name: str,
+                 value: str = '',
+                 tags: Optional[List[Tag]] = None,
+                 field_id: Optional[str] = None,
                  group_key: Optional[str] = None,
                  confidence: Optional[float] = -1.0,
-                 group_name: Optional[str] = None
+                 group_name: Optional[str] = None,
                  ):
         self._confidence = confidence
         if group_key is None:
@@ -28,6 +31,8 @@ class Field(metaclass=abc.ABCMeta):
             self._tags = []
         else:
             self._tags = tags
+        self._value = value
+        self._field_id = field_id
 
     @property
     def name(self):
@@ -44,6 +49,14 @@ class Field(metaclass=abc.ABCMeta):
     @property
     def group_name(self):
         return self._group_name
+
+    @property
+    def value(self):
+        return self._value
+
+    @property
+    def field_id(self):
+        return self._field_id
 
     @group_key.setter
     def group_key(self, value):
