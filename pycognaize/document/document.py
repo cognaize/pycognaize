@@ -313,9 +313,10 @@ class Document:
            tied values (e.i. values that are in
            the same physical location as the cell)
 
-        :param table_tag:
-        :param pn_filter:
-        :return:
+        :param table_tag: Input `TableTag`
+        :param pn_filter: : If provided, only fields with
+            names passing the filter will be considered
+        :return: Dataframe of the TableTag
         """
         return table_tag.raw_df.applymap(
             lambda x: self.get_first_tied_field_value(
