@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0]
+
+### [1.0.0] - 2022-08-15
+- Update signature of base Field class
+- Update constructor of SpanField class
+
+
 ## [0.3]
 
 ### [0.3.66] - 2022-08-15
