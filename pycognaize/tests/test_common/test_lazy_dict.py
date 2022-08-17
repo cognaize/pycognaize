@@ -48,10 +48,7 @@ class TestLazyDict(unittest.TestCase):
         self.assertTrue(doc_from_getitem.id, self.document.id)
 
         # LazyDocumentDict with wrong Document path
-        incorrect_docs = RESOURCE_FOLDER + '/snapshots/62eb8e6b28d7ca0012ec8288_error'
-        docs = LazyDocumentDict(doc_path=incorrect_docs,
-                                data_path=self.snap_path)
-        self.assertEquals(self.docs.__getitem__('62eb8e6b28d7ca0012ec8288_error'), None)
+        self.assertEqual(self.docs.__getitem__('62eb8e6b28d7ca0012ec8288_error'), None)
 
     def test___iter__(self):
         doc_list = sorted(
