@@ -1,5 +1,6 @@
 pandas
 numpy
+pydantic
 pymongo
 requests
 cloudstorageio
