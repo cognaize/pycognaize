@@ -164,7 +164,7 @@ class Document:
             names passing the filter will be considered
         :return: List of `Field` objects
         """
-        tied_fields = []
+        all_tied_fields = []
         if field_type == FieldTypeEnum.INPUT_FIELD.value:
             scopes = (self.x,)
         elif field_type == FieldTypeEnum.OUTPUT_FIELD.value:
@@ -184,9 +184,12 @@ class Document:
                                if not isinstance(field, TableField)
                                for field_tag in field.tags
                                if isinstance(field_tag, ExtractionTag)
-                               if (tag & field_tag)
+                               and (tag & field_tag)
                                / min({tag.area, field_tag.area}) >= threshold]
-        return tied_fields
+                if tied_fields:
+                    for tied_field in tied_fields:
+                        all_tied_fields.append(tied_field)
+        return all_tied_fields
 
     def get_tied_tags(self, tag: ExtractionTag,
                       field_type: str = FieldTypeEnum.BOTH.value,
