@@ -187,8 +187,7 @@ class Document:
                                and (tag & field_tag)
                                / min({tag.area, field_tag.area}) >= threshold]
                 if tied_fields:
-                    for tied_field in tied_fields:
-                        all_tied_fields.append(tied_field)
+                    all_tied_fields.extend(tied_fields)
         return all_tied_fields
 
     def get_tied_tags(self, tag: ExtractionTag,
