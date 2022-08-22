@@ -1,34 +1,21 @@
-from typing import Optional, Dict, List, Type
 import logging
+from typing import Dict, List, Type
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     ID,
-    IqDataTypesEnum,
-    IqFieldKeyEnum
+    IqFieldKeyEnum,
+    IqDataTypesEnum
 )
-
-from pycognaize.document.field import Field
+from pycognaize.document import Page
+from pycognaize.document.field.field import Field
 from pycognaize.document.tag.span_tag import SpanTag
-from pycognaize.document.page import Page
 
 
 class SpanField(Field):
-    """Base class for all pycognaize table fields"""
-    tag_class: Type[SpanTag] = SpanTag
+    """Representing AreaField in pycognaize"""
 
-    def __init__(self,
-                 name: str,
-                 tags: Optional[SpanTag] = None,
-                 field_id: Optional[str] = None,
-                 group_key: str = None,
-                 confidence: Optional[float] = -1.0,
-                 group_name: str = None,
-                 ):
-        tags = [] if tags is None else tags
-        super().__init__(name=name, tags=tags, group_key=group_key,
-                         confidence=confidence, group_name=group_name)
-        self._field_id = field_id
+    _tag_class: Type[SpanTag] = SpanTag
 
     @classmethod
     def construct_from_raw(
@@ -38,7 +25,7 @@ class SpanField(Field):
         tags = []
         for i in tag_dicts:
             try:
-                tags.append(cls.tag_class.construct_from_raw(
+                tags.append(cls._tag_class.construct_from_raw(
                     raw=i, page=pages[i['page']]))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
@@ -52,7 +39,7 @@ class SpanField(Field):
     def to_dict(self) -> dict:
         """Converts TableField object to dictionary"""
         field_dict = super().to_dict()
-        field_dict[ID] = self._field_id
+        field_dict[ID] = self.field_id
         field_dict[
             IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.table.value
         field_dict[IqFieldKeyEnum.value.value] = ''

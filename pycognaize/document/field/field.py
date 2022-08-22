@@ -1,72 +1,53 @@
-import abc
+import sys
+from typing import Optional, List, Dict, Type
 
-from typing import List, Optional, Dict, Type
+from pydantic import BaseModel, validator
 
+from pycognaize.common.decorators import soon_be_deprecated
 from pycognaize.common.enums import IqFieldKeyEnum
-from pycognaize.document.page import Page
-from pycognaize.document.tag.tag import Tag
+from pycognaize.document import Page
+from pycognaize.document.tag import ExtractionTag
 
 
-class Field(metaclass=abc.ABCMeta):
-    """Base class for all Field types"""
-    tag_class: Type[Tag] = Tag
+class Field(BaseModel):
+    """Base class for all Field types in pycognaize"""
 
-    def __init__(self, name: str,
-                 value: str = '',
-                 tags: Optional[List[Tag]] = None,
-                 field_id: Optional[str] = None,
-                 group_key: Optional[str] = None,
-                 confidence: Optional[float] = -1.0,
-                 group_name: Optional[str] = None,
-                 ):
-        self._confidence = confidence
-        if group_key is None:
-            group_key = ''
-        self._group_key = group_key
-        if group_name is None:
-            group_name = ''
-        self._group_name = group_name
-        self._name = name
-        if tags is None:
-            self._tags = []
-        else:
-            self._tags = tags
-        self._value = value
-        self._field_id = field_id
+    class Config:
+        """Configuration for Field Pydantic model"""
+        arbitrary_types_allowed = True
+        validate_assignment = True
+        if sys.version_info < (3, 9):
+            kw_only = False
 
-    @property
-    def name(self):
-        return self._name
+    name: str
+    value: str = ''
+    tags: Optional[List[ExtractionTag]] = []
+    field_id: Optional[str] = None
+    group_key: Optional[str] = None
+    group_name: Optional[str] = None
+    confidence: Optional[float] = -1.0
+    @validator('tags')
+    def validate_tags(cls, v):
+        if v is None:
+            return []
+        return v
 
-    @property
-    def tags(self):
-        return self._tags
+    @classmethod
+    @soon_be_deprecated(version='1.2.0')
+    def construct_from_raw(cls, raw: dict, pages: Dict[int, Page]) -> 'Field':
+        """Use raw dictionary in order to recreate the Field python object"""
+        pass
 
-    @property
-    def group_key(self):
-        return self._group_key
-
-    @property
-    def group_name(self):
-        return self._group_name
-
-    @property
-    def value(self):
-        return self._value
-
-    @property
-    def field_id(self):
-        return self._field_id
-
-    @group_key.setter
-    def group_key(self, value):
-        if not isinstance(value, str):
-            raise TypeError(f"expected str, got {type(value)}")
-        self._group_key = value
-
-    @property
-    def confidence(self):
-        return self._confidence
+    @soon_be_deprecated(version='1.2.0')
+    def to_dict(self) -> dict:
+        """Return a dictionary representing the field object"""
+        field_dict = dict()
+        field_dict[IqFieldKeyEnum.name.value] = self.name
+        if self.group_key:
+            field_dict[IqFieldKeyEnum.group_key.value] = self.group_key
+        field_dict[IqFieldKeyEnum.tags.value] = [
+            i.to_dict() for i in self.tags]
+        return field_dict
 
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.name}>"
@@ -74,19 +55,7 @@ class Field(metaclass=abc.ABCMeta):
     def __str__(self):
         return f"{self.tags}"
 
-    @classmethod
-    @abc.abstractmethod
-    def construct_from_raw(cls, raw: dict, pages: Dict[int, Page]) -> 'Field':
-        """Use raw dictionary in order to recreate the Field python object"""
-        pass
 
-    @abc.abstractmethod
-    def to_dict(self) -> dict:
-        """Return a dictionary representing the field object"""
-        field_dict = dict()
-        field_dict[IqFieldKeyEnum.name.value] = self.name
-        if self._group_key:
-            field_dict[IqFieldKeyEnum.group_key.value] = self._group_key
-        field_dict[IqFieldKeyEnum.tags.value] = [
-            i.to_dict() for i in self.tags]
-        return field_dict
+if __name__ == '__main__':
+    a = Field(name='a', value='b')
+    print(a)

@@ -1,58 +1,48 @@
 import logging
-from typing import List, Optional, Dict, Type
+from typing import Type, Dict, List
 
+from pydantic import validator, root_validator
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
-    IqTagKeyEnum,
     ID,
     IqFieldKeyEnum,
-    IqDataTypesEnum
+    IqDataTypesEnum, IqTagKeyEnum
 )
-from pycognaize.document.page import Page
-from pycognaize.document.field import Field
+from pycognaize.document import Page
+
+from pycognaize.document.field.field import Field
 from pycognaize.document.tag import ExtractionTag
 
 
 class NumericField(Field):
-    """Base class for all pycognaize number fields"""
-    tag_class: Type[ExtractionTag] = ExtractionTag
 
-    def __init__(self,
-                 name: str,
-                 value: str = '',
-                 tags: Optional[List[ExtractionTag]] = None,
-                 field_id: Optional[str] = None,
-                 group_key: str = None,
-                 confidence: Optional[float] = -1.0,
-                 group_name: str = None
-                 ):
-        super().__init__(name=name, tags=tags, group_key=group_key,
-                         confidence=confidence, group_name=group_name)
-        self._field_id = field_id
-        self._value = self.convert_to_numeric(value)
-        self._raw_value = value
-        if self.tags:
-            self._value = sum([self.convert_to_numeric(i.raw_value)
-                               for i in self.tags])
+    _tag_class: Type[ExtractionTag] = ExtractionTag
 
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def value(self):
-        return self._value
-
-    @staticmethod
-    def convert_to_numeric(value):
+    @validator('value')
+    def convert_to_numeric(cls, value):
         """converts string value to numeric"""
-        # noinspection PyBroadException
         try:
             value = float(value)
         except Exception:
             value = float('nan')
         return value
+
+    @root_validator()
+    def validate_value(cls, values):
+        """Validate and create value from tags"""
+        tags = values['tags']
+        value = values['value']
+        if tags:
+            value = '; '.join([i.raw_value for i in tags])\
+                    if tags else value
+        else:
+            logging.warning(
+                f"Expected tags array, received {tags},"
+                f" setting value to empty string")
+            value = ''
+        values['value'] = value
+        return values
 
     @classmethod
     def construct_from_raw(
@@ -62,7 +52,7 @@ class NumericField(Field):
         tags = []
         for i in tag_dicts:
             try:
-                tags.append(cls.tag_class.construct_from_raw(
+                tags.append(cls._tag_class.construct_from_raw(
                     raw=i, page=pages[i['page']]))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
@@ -77,7 +67,7 @@ class NumericField(Field):
     def to_dict(self) -> dict:
         """Converts NumericField object to dictionary"""
         field_dict = super().to_dict()
-        field_dict[ID] = self._field_id
+        field_dict[ID] = self.field_id
         field_dict[IqFieldKeyEnum.value.value] = self.value
         field_dict[
             IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.number.value
