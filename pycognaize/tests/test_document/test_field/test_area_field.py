@@ -2,6 +2,7 @@ import json
 import unittest
 
 from copy import deepcopy
+from pydantic import ValidationError
 
 from pycognaize.common.enums import IqDocumentKeysEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field.area_field import AreaField
@@ -29,19 +30,18 @@ class TestAreaField(unittest.TestCase):
             name=self.raw_area_field_no_group_key[IqDocumentKeysEnum.name.value],
             value='sample_value')
 
-        self.area_field_with_invalid_value = AreaField(
-            name=self.raw_area_field_no_group_key[IqDocumentKeysEnum.name.value],
-            value=['Invalid Value Type'])
+        # self.area_field_with_invalid_value = AreaField(
+        #     name=self.raw_area_field_no_group_key[IqDocumentKeysEnum.name.value],
+        #     value=['Invalid Value Type'])
 
     def test_value(self):
-        self.assertIsInstance(self.area_field_without_tags._value, str)
-        self.assertEqual(self.area_field_with_invalid_value.value, '')
-        self.assertEqual(self.area_field_with_tags._value, 'selection on page 2')
-        self.assertEqual(self.area_field_without_tags._value, 'sample_value')
+        self.assertIsInstance(self.area_field_without_tags.value, str)
+        self.assertEqual(self.area_field_with_tags.value, 'selection on page 2')
+        self.assertEqual(self.area_field_without_tags.value, 'sample_value')
 
     def test__field_id(self):
-        self.assertEqual(self.area_field_with_tags._field_id, '5e41a093f4b20400137938d9')
-        self.assertIsNone(self.area_field_without_tags._field_id)
+        self.assertEqual(self.area_field_with_tags.field_id, '5e41a093f4b20400137938d9')
+        self.assertIsNone(self.area_field_without_tags.field_id)
 
     def test__construct_from_raw(self):
         self.assertAlmostEqual(self.area_field_with_tags.tags[0].left, 9.16577157178661)
@@ -90,11 +90,13 @@ class TestAreaField(unittest.TestCase):
         self.area_field_without_tags.group_key = 'ABCDEF'
         self.assertEqual(self.area_field_without_tags.group_key, 'ABCDEF')
 
-        with self.assertRaises(TypeError):
-            self.area_field_with_tags.group_key = 1
-        with self.assertRaises(TypeError):
-            self.area_field_with_tags.group_key = True
-        with self.assertRaises(TypeError):
+        self.area_field_with_tags.group_key = 1
+        self.assertEqual(self.area_field_with_tags.group_key, '1')
+
+        self.area_field_with_tags.group_key = True
+        self.assertEqual(self.area_field_with_tags.group_key, 'True')
+
+        with self.assertRaises(ValidationError):
             self.area_field_with_tags.group_key = ['abc']
 
     def test___repr__(self):
