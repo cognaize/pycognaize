@@ -138,11 +138,11 @@ class TestDocument(unittest.TestCase):
         with self.assertRaises(TypeError):
             document.to_pdf(input_fields=input_fields, input_opacity='5')
 
-    def test_get_tief_fields(self):
+    def test_get_tied_fields(self):
         tag = self.document.x['paragraph'][0].tags[0]
-        tied_field_real = self.document.x['ref'][0]
+        tied_field_real = self.document.x['paragraph'][0]
         tied_field = self.document.get_tied_fields(tag)[0]
-        self.assertEqual(len(self.document.get_tied_fields(tag)), 1)
+        self.assertEqual(len(self.document.get_tied_fields(tag)), 2)
         self.assertEqual(len(self.document.get_tied_fields(tag, field_type=FieldTypeEnum.OUTPUT_FIELD.value)), 0)
         self.assertEqual(tied_field_real, tied_field)
         self.assertEqual(self.document.get_first_tied_field(tag), tied_field)

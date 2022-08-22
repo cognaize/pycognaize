@@ -2,6 +2,9 @@
 
 ## [1.0]
 
+### [1.0.1] - 2022-08-22
+- Fix get_tied_field method
+
 ### [1.0.0] - 2022-08-15
 - Update signature of base Field class
 - Update constructor of SpanField class
