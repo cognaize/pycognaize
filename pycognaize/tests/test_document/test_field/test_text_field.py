@@ -39,8 +39,8 @@ class TestTextField(unittest.TestCase):
         self.assertEqual(repr(self.text_field_2), repr_str_2)
 
     def test__field_id(self):
-        self.assertEqual(self.text_field_1._field_id, '60251a61095a6400123b736d')
-        self.assertIsNone(self.text_field_3._field_id)
+        self.assertEqual(self.text_field_1.field_id, '60251a61095a6400123b736d')
+        self.assertIsNone(self.text_field_3.field_id)
 
     def test_value(self):
         self.assertIsInstance(self.text_field_1.value, str)
