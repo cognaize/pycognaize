@@ -2,6 +2,9 @@
 
 ## [1.0]
 
+### [1.0.2] - 2022-08-22
+- Fix get_tied_tags method
+
 ### [1.0.1] - 2022-08-22
 - Fix get_tied_field method
 
