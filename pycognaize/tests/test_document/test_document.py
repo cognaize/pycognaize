@@ -141,11 +141,13 @@ class TestDocument(unittest.TestCase):
     def test_get_tied_fields(self):
         tag = self.document.x['paragraph'][0].tags[0]
         tied_field_real = self.document.x['paragraph'][0]
-        tied_field = self.document.get_tied_fields(tag)[0]
+        tied_field = list(self.document.get_tied_fields(tag).values())[0][0]
+        pname_tied_field = list(self.document.get_tied_fields(tag).items())[0]
+        pname_tied_field = pname_tied_field[0], pname_tied_field[1][0]
         self.assertEqual(len(self.document.get_tied_fields(tag)), 2)
         self.assertEqual(len(self.document.get_tied_fields(tag, field_type=FieldTypeEnum.OUTPUT_FIELD.value)), 0)
         self.assertEqual(tied_field_real, tied_field)
-        self.assertEqual(self.document.get_first_tied_field(tag), tied_field)
+        self.assertEqual(self.document.get_first_tied_field(tag), pname_tied_field)
 
     def test_get_tied_tags(self):
         # print(self.document.x['source_date'][0].tags[0])
@@ -156,9 +158,10 @@ class TestDocument(unittest.TestCase):
 
         tied_tags = self.document.get_tied_tags(tag)
         self.assertEqual(len(tied_tags), 1)
-        tied_tags = self.document.get_tied_tags(tag, threshold=0.002)[0]
+        tied_tags = list(self.document.get_tied_tags(
+            tag, threshold=0.002).values())[0][0]
         self.assertEqual(tied_tags, tag)
-        first_tied_tag = self.document.get_first_tied_tag(tag)
+        first_tied_tag = self.document.get_first_tied_tag(tag)[1]
         self.assertEqual(first_tied_tag, tag)
 
         # self.assertEquals(tied_tags[0], tag)
