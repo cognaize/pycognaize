@@ -206,7 +206,7 @@ class Document:
             with names passing the filter will be considered
         :return: List of `ExtractionTag` objects
         """
-        tied_tags = []
+        all_tied_tags = []
         if field_type == FieldTypeEnum.INPUT_FIELD.value:
             scopes = (self.x,)
         elif field_type == FieldTypeEnum.OUTPUT_FIELD.value:
@@ -227,7 +227,9 @@ class Document:
                              for field_tag in field.tags
                              if isinstance(field_tag, ExtractionTag)
                              if tag.iou(field_tag) >= threshold]
-        return tied_tags
+                if tied_tags:
+                    all_tied_tags.extend(tied_tags)
+        return all_tied_tags
 
     def get_first_tied_field(self, tag: ExtractionTag,
                              pn_filter: Callable = lambda x: True

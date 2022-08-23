@@ -155,11 +155,11 @@ class TestDocument(unittest.TestCase):
         # print(tag, other_tag, tag.iou(other_tag), sep='---------\n')
 
         tied_tags = self.document.get_tied_tags(tag)
-        self.assertEqual(len(tied_tags), 0)
+        self.assertEqual(len(tied_tags), 1)
         tied_tags = self.document.get_tied_tags(tag, threshold=0.002)[0]
-        self.assertEqual(tied_tags, other_tag)
+        self.assertEqual(tied_tags, tag)
         first_tied_tag = self.document.get_first_tied_tag(tag)
-        self.assertEqual(first_tied_tag, None)
+        self.assertEqual(first_tied_tag, tag)
 
         # self.assertEquals(tied_tags[0], tag)
 
