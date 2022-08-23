@@ -209,7 +209,7 @@ class Document:
         :return: Dictionary where key is pname
             and value is List of `ExtractionTag` objects
         """
-        all_tied_tags: Dict[str, List[Field]] = OrderedDict()
+        all_tied_tags: Dict[str, List[ExtractionTag]] = OrderedDict()
         if field_type == FieldTypeEnum.INPUT_FIELD.value:
             scopes = (self.x,)
         elif field_type == FieldTypeEnum.OUTPUT_FIELD.value:
@@ -242,8 +242,8 @@ class Document:
         :param tag: Input `ExtractionTag`
         :param pn_filter: If provided, only fields with
             names passing the filter will be considered
-        :return: If match found, return Tuple of the matching pname and `Field`,
-            otherwise return `None`
+        :return: If match found, return Tuple of the matching pname
+            and `Field`, otherwise return `None`
         """
         res = None
         fields = self.get_tied_fields(tag=tag,
