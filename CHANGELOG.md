@@ -2,11 +2,17 @@
 
 ## [1.0]
 
-### [1.0.2] - 2022-08-22
+### [1.0.3] - 2022-08-23
+- Change get_tied_fields, get_tied_tags, 
+  get_first_tied_field, get_first_tied_tag methods to return also python names
+- Fix get_first_tied_field_value and get_first_tied_tag_value methods to work 
+  properly after changes
+
+### [1.0.2] - 2022-08-23
 - Fix get_tied_tags method
 
 ### [1.0.1] - 2022-08-22
-- Fix get_tied_field method
+- Fix get_tied_fields method
 
 ### [1.0.0] - 2022-08-15
 - Update signature of base Field class
