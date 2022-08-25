@@ -4,6 +4,7 @@ as well as the OCR data and page images of the document"""
 import copy
 import itertools
 import logging
+import multiprocessing
 import os
 from collections import OrderedDict
 from typing import Dict, List, Tuple, Any, Optional, Callable
@@ -337,6 +338,34 @@ class Document:
             lambda x: self.get_first_tied_field_value(
                 x,
                 pn_filter=pn_filter))
+
+    def load_page_images(self, page_filter: Callable = lambda x: True) -> None:
+        """Get all images of the pages in the document
+         (Using multiprocessing)"""
+        global _get_page
+
+        def _get_page(page, filter_pages: Callable = page_filter):
+            if filter_pages(page):
+                _ = page.image_bytes
+            return page
+
+        pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
+        pages = pool.map(_get_page, self.pages.values())
+        self._pages = OrderedDict({page.page_number: page for page in pages})
+
+    def load_page_ocr(self, page_filter: Callable = lambda x: True) -> None:
+        """Get all OCR of the pages in the document
+           (Using multiprocessing)"""
+        global _get_page
+
+        def _get_page(page, filter_pages: Callable = page_filter):
+            if filter_pages(page):
+                _ = page.ocr
+            return page
+
+        pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
+        pages = pool.map(_get_page, self.pages.values())
+        self._pages = OrderedDict({page.page_number: page for page in pages})
 
     def to_dict(self) -> dict:
         """Converts Document object to dict"""
