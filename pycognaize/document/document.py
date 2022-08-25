@@ -339,12 +339,12 @@ class Document:
                 x,
                 pn_filter=pn_filter))
 
-    def load_page_images(self, filter_pages: Callable = lambda x: True) -> None:
+    def load_page_images(self, page_filter: Callable = lambda x: True) -> None:
         """Get all images of the pages in the document
          (Using multiprocessing)"""
         global _get_page
 
-        def _get_page(page, filter_pages: Callable = filter_pages):
+        def _get_page(page, filter_pages: Callable = page_filter):
             if filter_pages(page):
                 _ = page.image_bytes
             return page
@@ -353,12 +353,12 @@ class Document:
         pages = pool.map(_get_page, self.pages.values())
         self._pages = OrderedDict({page.page_number: page for page in pages})
 
-    def load_page_ocr(self, filter_pages: Callable = lambda x: True) -> None:
+    def load_page_ocr(self, page_filter: Callable = lambda x: True) -> None:
         """Get all OCR of the pages in the document
            (Using multiprocessing)"""
         global _get_page
 
-        def _get_page(page, filter_pages: Callable = filter_pages):
+        def _get_page(page, filter_pages: Callable = page_filter):
             if filter_pages(page):
                 _ = page.ocr
             return page
