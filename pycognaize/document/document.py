@@ -31,7 +31,7 @@ class Document:
     def __init__(self,
                  input_fields: 'FieldCollection[str, List[Field]]',
                  output_fields: 'FieldCollection[str, List[Field]]',
-                 pages: OrderedDict[int, Page],
+                 pages: Dict[int, Page],
                  metadata: Dict[str, Any]):
         self._metadata = metadata
         self._pages: OrderedDict[int, Page] = pages
