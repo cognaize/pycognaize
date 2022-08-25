@@ -86,7 +86,18 @@ we need to get.
 Page object contains :term:`OCR` data and the image of the page. It also
 has a lot of useful functionality that you can learn more about
 :doc:`here <../API/_autosummary/pycognaize.document.page.Page>`.
-In particular, you can search for a text in page object
+THe page OCR and image data can be loaded using multiprocessing
+in order to speed up the process. To use this functionality functions
+``document.load_page_images()`` and ``document.load_page_ocr()`` are available.
+For example, to load all page images parallel, we can do
+
+.. code-block::
+
+    >>> doc.get_page_images()
+            for page in doc.pages.values():
+                ...
+
+Moreover in ``page`` objects, you can search for a text in page object
 and get its coordinates.
 
 .. doctest::
