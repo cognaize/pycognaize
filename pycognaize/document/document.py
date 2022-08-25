@@ -34,7 +34,7 @@ class Document:
                  pages: Dict[int, Page],
                  metadata: Dict[str, Any]):
         self._metadata = metadata
-        self._pages: OrderedDict[int, Page] = pages
+        self._pages: Dict[int, Page] = pages
         self._x: FieldCollection[str, List[Field]] = input_fields
         self._y: FieldCollection[str, List[Field]] = output_fields
 
@@ -66,7 +66,7 @@ class Document:
         return self.metadata['src']
 
     @property
-    def pages(self) -> OrderedDict[int, Page]:
+    def pages(self) -> Dict[int, Page]:
         """Returns a dictionary, where each key is the page number
         and values are Page objects"""
         return self._pages
