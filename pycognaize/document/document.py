@@ -31,10 +31,10 @@ class Document:
     def __init__(self,
                  input_fields: 'FieldCollection[str, List[Field]]',
                  output_fields: 'FieldCollection[str, List[Field]]',
-                 pages: Dict[int, Page],
+                 pages: OrderedDict[int, Page],
                  metadata: Dict[str, Any]):
         self._metadata = metadata
-        self._pages: Dict[int, Page] = pages
+        self._pages: OrderedDict[int, Page] = pages
         self._x: FieldCollection[str, List[Field]] = input_fields
         self._y: FieldCollection[str, List[Field]] = output_fields
 
@@ -66,7 +66,7 @@ class Document:
         return self.metadata['src']
 
     @property
-    def pages(self) -> Dict[int, Page]:
+    def pages(self) -> OrderedDict[int, Page]:
         """Returns a dictionary, where each key is the page number
         and values are Page objects"""
         return self._pages
@@ -347,11 +347,11 @@ class Document:
         def _get_page(page, filter_pages: Callable = filter_pages):
             if filter_pages(page):
                 _ = page.image_bytes
-                return page
+            return page
 
         pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
         pages = pool.map(_get_page, self.pages.values())
-        self._pages = dict({page.page_number: page for page in pages})
+        self._pages = OrderedDict({page.page_number: page for page in pages})
 
     def load_page_ocr(self, filter_pages: Callable = lambda x: True) -> None:
         """Get all OCR of the pages in the document
@@ -361,11 +361,11 @@ class Document:
         def _get_page(page, filter_pages: Callable = filter_pages):
             if filter_pages(page):
                 _ = page.ocr
-                return page
+            return page
 
         pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
         pages = pool.map(_get_page, self.pages.values())
-        self._pages = dict({page.page_number: page for page in pages})
+        self._pages = OrderedDict({page.page_number: page for page in pages})
 
     def to_dict(self) -> dict:
         """Converts Document object to dict"""
