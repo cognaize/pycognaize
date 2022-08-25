@@ -2,6 +2,10 @@
 
 ## [1.0]
 
+### [1.1.0] - 2022-08-25
+- Added multiprocessing download of images and 
+  ocr data
+
 ### [1.0.3] - 2022-08-23
 - Change get_tied_fields, get_tied_tags, 
   get_first_tied_field, get_first_tied_tag methods to return also python names
