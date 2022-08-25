@@ -340,28 +340,30 @@ class Document:
                 pn_filter=pn_filter))
 
     def get_page_images(self, filter_pages: Callable = lambda x: True):
-        """Get all images of the pages in the document (Using multiprocessing)"""
-        # filterer = filter_pages
+        """Get all images of the pages in the document
+         (Using multiprocessing)"""
         global get_page
+
         def get_page(page, filter_pages: Callable = filter_pages):
             if filter_pages(page):
                 _ = page.image_bytes
                 return page
 
-        pool = multiprocessing.Pool(processes=min(multiprocessing.cpu_count() * 2, 16))
+        pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
         pages = pool.map(get_page, self.pages.values())
         self._pages = dict({page.page_number: page for page in pages})
 
     def get_page_ocr(self, filter_pages: Callable = lambda x: True):
-        """Get all OCR of the pages in the document (Using multiprocessing)"""
-        # filterer = filter_pages
+        """Get all OCR of the pages in the document
+           (Using multiprocessing)"""
         global get_page
+
         def get_page(page, filter_pages: Callable = filter_pages):
             if filter_pages(page):
                 _ = page.ocr
                 return page
 
-        pool = multiprocessing.Pool(processes=min(multiprocessing.cpu_count() * 2, 16))
+        pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
         pages = pool.map(get_page, self.pages.values())
         self._pages = dict({page.page_number: page for page in pages})
 
