@@ -17,7 +17,7 @@ from pycognaize.document.tag import ExtractionTag
 
 class DateField(Field):
 
-    tag_class: Type[ExtractionTag] = ExtractionTag
+    _tag_class: Type[ExtractionTag] = ExtractionTag
 
     @root_validator()
     def validate_value(cls, values):
@@ -31,7 +31,6 @@ class DateField(Field):
             logging.warning(
                 f"Expected tags array, received {tags},"
                 f" setting value to empty string")
-            value = ''
         values['value'] = value
         return values
 
@@ -43,7 +42,7 @@ class DateField(Field):
         tags = []
         for i in tag_dicts:
             try:
-                tags.append(cls.tag_class.construct_from_raw(
+                tags.append(cls._tag_class.construct_from_raw(
                     raw=i, page=pages[i['page']]))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")

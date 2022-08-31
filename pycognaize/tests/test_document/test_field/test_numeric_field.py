@@ -2,6 +2,8 @@ import json
 import unittest
 from copy import deepcopy
 
+import pydantic
+
 from pycognaize.common.enums import IqDocumentKeysEnum, IqTagKeyEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field import NumericField
 from pycognaize.document.page import create_dummy_page
@@ -36,8 +38,8 @@ class TestNumericField(unittest.TestCase):
             self.assertNotEqual(float_nan, float_nan)
 
     def test__field_id(self):
-        self.assertEqual(self.num_field_2._field_id, '60f55629c23c8f0000e05d1e')
-        self.assertIsNone(self.num_field_3._field_id)
+        self.assertEqual(self.num_field_2.field_id, '60f55629c23c8f0000e05d1e')
+        self.assertIsNone(self.num_field_3.field_id)
 
     def test_name(self):
         self.assertIsInstance(self.num_field_1.name, str)
@@ -116,11 +118,11 @@ class TestNumericField(unittest.TestCase):
         self.num_field_1.group_key = 'ABCDEF'
         self.assertEqual(self.num_field_1.group_key, 'ABCDEF')
 
-        with self.assertRaises(TypeError):
-            self.num_field_1.group_key = 1
-        with self.assertRaises(TypeError):
-            self.num_field_1.group_key = True
-        with self.assertRaises(TypeError):
+        self.num_field_1.group_key = 1
+        self.assertEqual(self.num_field_1.group_key, '1')
+        self.num_field_1.group_key = True
+        self.assertEqual(self.num_field_1.group_key, 'True')
+        with self.assertRaises(pydantic.error_wrappers.ValidationError):
             self.num_field_1.group_key = ['abc']
 
     def check_keys(self, test_dict):

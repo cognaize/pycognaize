@@ -1,12 +1,12 @@
 import sys
-from typing import Optional, List, Dict, Type
+from typing import Optional, List, Dict, Type, Union
 
 from pydantic import BaseModel, validator
 
 from pycognaize.common.decorators import soon_be_deprecated
 from pycognaize.common.enums import IqFieldKeyEnum
 from pycognaize.document import Page
-from pycognaize.document.tag import ExtractionTag
+from pycognaize.document.tag import ExtractionTag, TableTag
 
 
 class Field(BaseModel):
@@ -21,11 +21,13 @@ class Field(BaseModel):
 
     name: str
     value: str = ''
-    tags: Optional[List[ExtractionTag]] = []
+    tags: Union[Optional[List[ExtractionTag]], Optional[List[TableTag]], List, None] = []
+    # tags: Union[ExtractionTag] = []
     field_id: Optional[str] = None
     group_key: Optional[str] = None
     group_name: Optional[str] = None
     confidence: Optional[float] = -1.0
+
     @validator('tags')
     def validate_tags(cls, v):
         if v is None:
@@ -54,8 +56,3 @@ class Field(BaseModel):
 
     def __str__(self):
         return f"{self.tags}"
-
-
-if __name__ == '__main__':
-    a = Field(name='a', value='b')
-    print(a)

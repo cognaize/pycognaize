@@ -19,28 +19,27 @@ class NumericField(Field):
 
     _tag_class: Type[ExtractionTag] = ExtractionTag
 
-    @validator('value')
-    def convert_to_numeric(cls, value):
-        """converts string value to numeric"""
+    def convert_to_numeric(value):
         try:
             value = float(value)
         except Exception:
             value = float('nan')
+
         return value
 
     @root_validator()
     def validate_value(cls, values):
         """Validate and create value from tags"""
         tags = values['tags']
-        value = values['value']
+        value = cls.convert_to_numeric(values['value'])
+
         if tags:
-            value = '; '.join([i.raw_value for i in tags])\
-                    if tags else value
+            value = sum([cls.convert_to_numeric(i.raw_value)
+                               for i in tags])
         else:
             logging.warning(
                 f"Expected tags array, received {tags},"
                 f" setting value to empty string")
-            value = ''
         values['value'] = value
         return values
 

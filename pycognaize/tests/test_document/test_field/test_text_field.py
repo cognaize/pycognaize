@@ -2,6 +2,8 @@ import json
 import unittest
 from copy import deepcopy
 
+import pydantic
+
 from pycognaize.common.enums import IqDocumentKeysEnum, IqTagKeyEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field import TextField
 from pycognaize.document.page import create_dummy_page
@@ -97,11 +99,11 @@ class TestTextField(unittest.TestCase):
         self.text_field_1.group_key = 'ABCDEF'
         self.assertEqual(self.text_field_1.group_key, 'ABCDEF')
 
-        with self.assertRaises(TypeError):
-            self.text_field_1.group_key = 1
-        with self.assertRaises(TypeError):
-            self.text_field_1.group_key = True
-        with self.assertRaises(TypeError):
+        self.text_field_1.group_key = 1
+        self.assertEqual(self.text_field_1.group_key, '1')
+        self.text_field_1.group_key = True
+        self.assertEqual(self.text_field_1.group_key, 'True')
+        with self.assertRaises(pydantic.error_wrappers.ValidationError):
             self.text_field_1.group_key = ['abc']
 
     def check_keys(self, test_dict):

@@ -6,6 +6,8 @@ import unittest
 import uuid
 from copy import deepcopy
 
+import pydantic
+
 from pycognaize.common.enums import StorageEnum, EnvConfigEnum, IqFieldKeyEnum, IqDocumentKeysEnum, ID
 from pycognaize.document.field import TableField
 from pycognaize.document.page import create_dummy_page
@@ -126,11 +128,11 @@ class TestTableField(unittest.TestCase):
         self.tbl_field.group_key = 'ABCDEF'
         self.assertEqual(self.tbl_field.group_key, 'ABCDEF')
 
-        with self.assertRaises(TypeError):
-            self.tbl_field.group_key = 1
-        with self.assertRaises(TypeError):
-            self.tbl_field.group_key = True
-        with self.assertRaises(TypeError):
+        self.tbl_field.group_key = 1
+        self.assertEqual(self.tbl_field.group_key, '1')
+        self.tbl_field.group_key = True
+        self.assertEqual(self.tbl_field.group_key, 'True')
+        with self.assertRaises(pydantic.error_wrappers.ValidationError):
             self.tbl_field.group_key = ['abc']
 
     @classmethod

@@ -1,6 +1,8 @@
 import itertools
 import logging
-from typing import Dict, List, Type
+from typing import Dict, List, Type, Optional
+
+from pydantic import validator, root_validator
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
@@ -19,7 +21,15 @@ from pycognaize.document.tag.tag import Tag
 class TableField(Field):
     """Representing AreaField in pycognaize"""
 
+    tags: Optional[TableTag] = None
+
     _tag_class: Type[Tag] = TableTag
+
+    @validator('tags')
+    def validate_tags(cls, v):
+        if v is None:
+            return []
+        return [v]
 
     def get_table_title(self, n_lines_above=8, margin=10) -> str:
         """Return the title of the table found on the pdf"""
@@ -56,6 +66,7 @@ class TableField(Field):
             raise ValueError(
                 f"{cls.__name__} cannot have {len(tags)}"
                 f" {cls._tag_class.__name__}s")
+        print(tags)
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    tags=tags[0] if tags else None,
                    field_id=str(raw[ID]),

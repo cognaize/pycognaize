@@ -2,6 +2,8 @@ import json
 import unittest
 from copy import deepcopy
 
+import pydantic
+
 from pycognaize.common.enums import IqDocumentKeysEnum, IqTagKeyEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field import DateField
 from pycognaize.document.page import create_dummy_page
@@ -103,11 +105,11 @@ class TestDateField(unittest.TestCase):
         self.date_field_1.group_key = 'ABCDEF'
         self.assertEqual(self.date_field_1.group_key, 'ABCDEF')
 
-        with self.assertRaises(TypeError):
-            self.date_field_1.group_key = 1
-        with self.assertRaises(TypeError):
-            self.date_field_1.group_key = True
-        with self.assertRaises(TypeError):
+        self.date_field_1.group_key = 1
+        self.assertEqual(self.date_field_1.group_key, '1')
+        self.date_field_1.group_key = True
+        self.assertEqual(self.date_field_1.group_key, 'True')
+        with self.assertRaises(pydantic.error_wrappers.ValidationError):
             self.date_field_1.group_key = ['abc']
 
     def check_keys(self, test_dict):

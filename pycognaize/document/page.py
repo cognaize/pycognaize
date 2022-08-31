@@ -39,7 +39,7 @@ class Page:
         """
         self._page_number = int(page_number)
         self._document_id = document_id
-        self.ci = CloudInterface()
+        self._ci = None
         self._path = path
         self._ocr_raw = None
         self._ocr = None
@@ -49,6 +49,12 @@ class Page:
         self._image_arr = None
         self._image_height = None
         self._image_width = None
+
+    @property
+    def ci(self):
+        if self._ci == None:
+            self._ci = CloudInterface()
+        return self._ci
 
     @property
     def page_number(self):
