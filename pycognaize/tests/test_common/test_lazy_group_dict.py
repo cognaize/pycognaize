@@ -55,4 +55,8 @@ class TestLazyDict(unittest.TestCase):
         # Check Structure
         self.assertIsInstance(self.groups.groups, defaultdict)
         # Test create groups by name empty input
-        self.assertEqual(self.groups[''], {})
+        with self.assertRaises(KeyError):
+            self.assertEqual(self.groups[''], {})
+
+        with self.assertRaises(KeyError):
+            self.groups['Non-Existent Group']
