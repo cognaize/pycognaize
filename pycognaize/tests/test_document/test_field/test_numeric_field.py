@@ -63,15 +63,15 @@ class TestNumericField(unittest.TestCase):
         invalid_raw_2 = deepcopy(self.raw_num_field_2)
         invalid_raw_2[IqDocumentKeysEnum.tags.value][0].pop(IqTagKeyEnum.page.value)
 
-        # with self.assertRaises(KeyError):
-        #     NumericField.construct_from_raw(raw=invalid_raw_1, pages=self.pages_1)
+        with self.assertRaises(KeyError):
+            NumericField.construct_from_raw(raw=invalid_raw_1, pages=self.pages_1)
         # with self.assertRaises(KeyError):
         #     NumericField.construct_from_raw(raw=invalid_raw_2, pages=self.pages_2)
         # with self.assertRaises(KeyError):
         #     # invalid page key
         #     NumericField.construct_from_raw(raw=self.raw_num_field_1,
         #                                     pages={4: create_dummy_page(page_n=1)})
-        #
+
         # with self.assertRaises(KeyError):
         #     # one page for 2 tags
         #     NumericField.construct_from_raw(self.raw_num_field_2, {3: create_dummy_page(page_n=1)})
@@ -107,7 +107,7 @@ class TestNumericField(unittest.TestCase):
         self.assertEqual(len(dict_2[IqDocumentKeysEnum.tags.value]), 1)
 
         invalid_field = deepcopy(self.num_field_1)
-        invalid_field.tags[0]._bottom = 'string'
+        invalid_field.tags[0].bottom = 'string'
         with self.assertRaises(TypeError):
             invalid_field.to_dict()
 

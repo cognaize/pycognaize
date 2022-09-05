@@ -94,7 +94,7 @@ class TestDateField(unittest.TestCase):
         self.assertEqual(len(dict_2[IqDocumentKeysEnum.tags.value]), 1)
 
         invalid_field = deepcopy(self.date_field_1)
-        invalid_field.tags[0]._left = '123'
+        invalid_field.tags[0].left = '123'
         with self.assertRaises(TypeError):
             invalid_field.to_dict()
 

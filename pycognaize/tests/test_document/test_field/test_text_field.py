@@ -88,7 +88,7 @@ class TestTextField(unittest.TestCase):
         self.assertEqual(len(dict_2[IqDocumentKeysEnum.tags.value]), 1)
 
         invalid_field = deepcopy(self.text_field_1)
-        invalid_field.tags[0]._right = 'string'
+        invalid_field.tags[0].right = 'string'
         with self.assertRaises(TypeError):
             invalid_field.to_dict()
 

@@ -1,6 +1,8 @@
 import unittest
 from copy import deepcopy
 
+from pydantic import ValidationError
+
 from pycognaize.document.page import create_dummy_page
 from pycognaize.document.tag import ExtractionTag
 
@@ -53,70 +55,52 @@ class TestTag(unittest.TestCase):
         self.invalid_bottom = deepcopy(self.invalid_tag_to_transform)
 
     def test__parse_coordinates(self):
-        self.invalid_tag_to_transform._left = 10
-        self.invalid_tag_to_transform._right = "18.9"
-        self.invalid_tag_to_transform._top = "10"
-        self.invalid_tag_to_transform._bottom = "-15"
-        self.invalid_tag_to_transform._parse_coordinates()
+        self.invalid_tag_to_transform.left = 10
+        self.invalid_tag_to_transform.right = "18.9"
+        self.invalid_tag_to_transform.top = "10"
+        self.invalid_tag_to_transform.bottom = "15"
         self.assertEqual(self.invalid_tag_to_transform.left, 10)
-        self.assertEqual(self.invalid_tag_to_transform._right, 18.9)
-        self.assertEqual(self.invalid_tag_to_transform._top, 10)
-        self.assertEqual(self.invalid_tag_to_transform._bottom, -15)
+        self.assertEqual(self.invalid_tag_to_transform.right, 18.9)
+        self.assertEqual(self.invalid_tag_to_transform.top, 10)
+        self.assertEqual(self.invalid_tag_to_transform.bottom, 15)
 
-        self.invalid_left._left = "10s"
         with self.assertRaises(ValueError):
-            self.invalid_left._parse_coordinates()
-        self.invalid_left._left = ["10s"]
-        with self.assertRaises(TypeError):
-            self.invalid_left._parse_coordinates()
-        self.invalid_right._right = "text"
-        with self.assertRaises(ValueError):
-            self.invalid_right._parse_coordinates()
-        self.invalid_right._right = ["text"]
-        with self.assertRaises(TypeError):
-            self.invalid_right._parse_coordinates()
-        self.invalid_top._top = "25.12.2020"
-        with self.assertRaises(ValueError):
-            self.invalid_top._parse_coordinates()
-        self.invalid_top._top = 7, 8
-        with self.assertRaises(TypeError):
-            self.invalid_top._parse_coordinates()
-        self.invalid_bottom._bottom = ""
-        with self.assertRaises(ValueError):
-            self.invalid_bottom._parse_coordinates()
-        self.invalid_bottom._bottom = (5, 4, 8)
-        with self.assertRaises(TypeError):
-            self.invalid_bottom._parse_coordinates()
+            self.invalid_tag_to_transform.bottom = "-15"
 
-    def test__validate_types (self):
-        # TODO: "left, right, top, bottom" coordinates are numbers (_parse_coordinates ensures it), it will be better to avoid double type checking
+        with self.assertRaises(ValidationError):
+            self.invalid_left.left = "10s"
+        with self.assertRaises(ValidationError):
+            self.invalid_right.right = "text"
 
-        self.invalid_left._left = ["10s"]
-        with self.assertRaises(TypeError):
-            self.invalid_left._validate_types ()
-        self.invalid_right._right = "text"
-        with self.assertRaises(TypeError):
-            self.invalid_right._validate_types ()
-        self.invalid_top._top = 7, 8
-        with self.assertRaises(TypeError):
-            self.invalid_top._validate_types()
-        self.invalid_bottom._bottom = (5, 4, 8)
-        with self.assertRaises(TypeError):
-            self.invalid_bottom._validate_types()
+        with self.assertRaises(ValidationError):
+            self.invalid_right.right = ["text"]
+
+
+        with self.assertRaises(ValidationError):
+            self.invalid_top.top = "25.12.2020"
+
+        with self.assertRaises(ValidationError):
+            self.invalid_top.top = 7, 8
+
+        with self.assertRaises(ValidationError):
+            self.invalid_bottom.bottom = ""
+
+        with self.assertRaises(ValidationError):
+            self.invalid_bottom.bottom = (5, 4, 8)
 
     def test__validate_coords(self):
-        self.invalid_right._right = 10
-        with self.assertRaises(ValueError):
-            self.invalid_right._validate_coords()
-        self.invalid_top._top = 14
-        with self.assertRaises(ValueError):
-            self.invalid_top._validate_coords()
-        self.invalid_right._left = self.invalid_right._right
-        with self.assertRaises(ValueError):
-            self.invalid_right._validate_coords()
-        self.invalid_top._bottom = self.invalid_top._top
-        with self.assertRaises(ValueError):
-            self.invalid_top._validate_coords()
+
+        with self.assertRaises(ValidationError):
+            self.invalid_right.right = 10
+
+        with self.assertRaises(ValidationError):
+            self.invalid_top.top = 14
+
+        with self.assertRaises(ValidationError):
+            self.invalid_right.left = self.invalid_right.right
+
+        with self.assertRaises(ValidationError):
+            self.invalid_top.bottom = self.invalid_top.top
 
     # def test__validate_ranges(self):
     #     self.invalid_left._left = -150

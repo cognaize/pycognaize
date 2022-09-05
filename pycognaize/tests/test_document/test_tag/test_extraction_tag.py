@@ -3,6 +3,8 @@ import json
 import unittest
 from copy import deepcopy
 
+from pydantic import ValidationError
+
 from pycognaize.document.page import create_dummy_page
 from pycognaize.document.tag import ExtractionTag
 from pycognaize.tests.resources import RESOURCE_FOLDER
@@ -165,9 +167,9 @@ class TestExtractionTag(unittest.TestCase):
         self.assertEqual(num_dict.keys(), date_dict.keys())
 
         invalid_field = deepcopy(self.ext_tag_1)
-        invalid_field._bottom = 'INVALID STRING TYPE'
-        with self.assertRaises(TypeError):
-            invalid_field.to_dict()
+
+        with self.assertRaises(ValidationError):
+            invalid_field.bottom = 'INVALID STRING TYPE'
 
     def test_hshift(self):
         self.assertAlmostEqual(self.ext_tag_1.hshift(0.1).left, 10.912746151092016)

@@ -1,8 +1,10 @@
+import pandas
 import bson
 import string
 
 import pandas as pd
 from typing import Optional, Tuple
+from pydantic import Field
 
 from pycognaize.common.enums import (
     IqCellKeyEnum,
@@ -20,53 +22,27 @@ if TYPE_CHECKING:
 
 
 class TableTag(Tag):
-    """Base class for all pycognaize table fields"""
+    cell_data: dict
+    _cells: dict = {}
+    _raw_df: pandas.DataFrame = None
+    df: pandas.DataFrame = Field(default_factory=_build_df)
 
-    def __init__(self, left, right, top, bottom,
-                 page: 'Page',
-                 cell_data: dict):
-        super().__init__(left=left, right=right, top=top, bottom=bottom,
-                         page=page)
-        self._cell_data = cell_data
-        self._cells = {}
+    def __init__(self, *a, **kw):
+        super().__init__(*a, **kw)
         self._populate_cells()
-        self._build_df()
-        self._raw_df = None
-        self._df = None
+        self._df = self._build_df()
 
     def __getitem__(self, val: Tuple[int, int]) -> Cell:
         """Gets the cell through index"""
         if len(val) == 2:
             if any([isinstance(i, slice) for i in val]):
                 raise NotImplementedError("Slice lookup not implemented")
-            elif val in self.cells.keys():
-                return self.cells[val]
+            elif val in self._cells.keys():
+                return self._cells[val]
             raise IndexError(
                 f"No cell with the following index in the table: {val}")
         else:
             raise ValueError(f"Invalid argument {val}")
-
-    @property
-    def cell_data(self) -> dict:
-        if not self._cell_data:
-            raise Exception('Cell data is empty')
-        return self._cell_data
-
-    @property
-    def cells(self) -> dict:
-        return self._cells
-
-    @property
-    def raw_df(self) -> pd.DataFrame:
-        if self._raw_df is None:
-            self._raw_df = self._build_df()
-        return self._raw_df
-
-    @property
-    def df(self) -> pd.DataFrame:
-        if self._df is None:
-            self._df = self.raw_df.applymap(lambda x: self._extract_raw_ocr(x))
-        return self._df
 
     @staticmethod
     def _extract_raw_ocr(x):
@@ -135,18 +111,18 @@ class TableTag(Tag):
                     f"Required key '{key.value}' not in cell: {cell_dict}")
 
         return Cell(
-            value=cell_dict[IqCellKeyEnum.text.value],
-            left_col=keys[0],
-            top_row=keys[1],
-            top=cell_dict[IqCellKeyEnum.top.value],
-            right=cell_dict[IqCellKeyEnum.left.value] + cell_dict[
-                IqCellKeyEnum.width.value],
-            bottom=cell_dict[IqCellKeyEnum.top.value] + cell_dict[
-                IqCellKeyEnum.height.value],
-            left=cell_dict[IqCellKeyEnum.left.value],
-            col_span=cell_dict[IqCellKeyEnum.col_span.value],
-            row_span=cell_dict[IqCellKeyEnum.row_span.value]
-        )
+                value=cell_dict[IqCellKeyEnum.text.value],
+                left_col=keys[0],
+                top_row=keys[1],
+                top=cell_dict[IqCellKeyEnum.top.value],
+                right=cell_dict[IqCellKeyEnum.left.value] + cell_dict[
+                    IqCellKeyEnum.width.value],
+                bottom=cell_dict[IqCellKeyEnum.top.value] + cell_dict[
+                    IqCellKeyEnum.height.value],
+                left=cell_dict[IqCellKeyEnum.left.value],
+                col_span=cell_dict[IqCellKeyEnum.col_span.value],
+                row_span=cell_dict[IqCellKeyEnum.row_span.value]
+            )
 
     def _build_df(self, use_ocr_text: bool = False) -> pd.DataFrame:
         """Build pandas data frame using `TableTag` Cells
@@ -165,7 +141,7 @@ class TableTag(Tag):
         if image_width > image_height:
             image_width, image_height = image_height, image_width
 
-        for cell_ in self.cells.values():
+        for cell_ in self._cells.values():
             cols.add(cell_.left)
             rows.add(cell_.top)
 
@@ -178,7 +154,7 @@ class TableTag(Tag):
         indices_df = list(range(len(rows)))
         df = pd.DataFrame(columns=headers_df, index=indices_df)
 
-        for cell_ in self.cells.values():
+        for cell_ in self._cells.values():
             text = cell_.value
             top_index = rows.index(cell_.top)
             left_index = cols.index(cell_.left)
@@ -232,3 +208,4 @@ class TableTag(Tag):
                     return letters, int(numbers)
                 else:
                     return
+

@@ -23,10 +23,13 @@ from pycognaize.common.utils import (
     image_string_to_array
 )
 from cloudstorageio import CloudInterface
+
+from pycognaize.document.page_typing import PageTyping
 from pycognaize.document.tag import ExtractionTag
 
 
-class Page:
+
+class Page(PageTyping):
     """Representing a page of a document in pycognaize"""
     REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
 

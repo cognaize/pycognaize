@@ -2,27 +2,24 @@ import math
 
 import bson
 from datetime import datetime
-from typing import Union
+from typing import Union, Optional
 
 from pycognaize.common.enums import IqTagKeyEnum, ID
-from pycognaize.document.tag.tag import Tag
 
 from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.cell import Cell
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from pycognaize.document.page import Page
+from pycognaize.document.tag.tag import Tag
 
 
 class ExtractionTag(Tag):
-    """Represents field's coordinate data on document"""
-
-    def __init__(self, left, right, top, bottom, page, raw_value,
-                 raw_ocr_value):
-        super().__init__(left=left, right=right, top=top, bottom=bottom,
-                         page=page)
-        self._raw_value = raw_value
-        self._raw_ocr_value = raw_ocr_value
+    raw_value: Optional[str]
+    raw_ocr_value: Optional[str]
+    _value = None
+    _has_value_exception = None
+    _value_exception_message = None
+    _ocr_value = None
+    _has_raw_value_exception = None
+    _raw_value_exception_message = None
 
     @classmethod
     def construct_from_raw(cls, raw: dict, page: 'Page') -> 'ExtractionTag':
@@ -89,47 +86,39 @@ class ExtractionTag(Tag):
         else:
             raise ValueError("Tags are not on the same page.")
 
-    @property
-    def raw_value(self):
-        return self._raw_value
-
-    @property
-    def raw_ocr_value(self):
-        return self._raw_ocr_value
-
     def _validate_numeric(self):
         """Validate numerica data"""
         try:
-            self.value = (float(self.raw_value) if self.raw_value is not None
+            self._value = (float(self.raw_value) if self.raw_value is not None
                           else math.nan)
-            self.has_value_exception = False
+            self._has_value_exception = False
         except Exception as ValueException:
-            self.has_value_exception = True
-            self.value_exception_message = str(ValueException)
+            self._has_value_exception = True
+            self._value_exception_message = str(ValueException)
 
         try:
-            self.ocr_value = (float(self.raw_ocr_value)
+            self._ocr_value = (float(self.raw_ocr_value)
                               if self.raw_ocr_value is not None else math.nan)
-            self.has_raw_value_exception = False
+            self._has_raw_value_exception = False
         except Exception as RawValueException:
-            self.has_raw_value_exception = True
-            self.raw_value_exception_message = str(RawValueException)
+            self._has_raw_value_exception = True
+            self._raw_value_exception_message = str(RawValueException)
 
     def _validate_date(self, date_format):
         """Validate date data"""
         try:
-            self.value = datetime.strptime(self.raw_value, date_format)
-            self.has_value_exception = False
+            self._value = datetime.strptime(self.raw_value, date_format)
+            self._has_value_exception = False
         except Exception as ValueException:
-            self.has_value_exception = True
-            self.value_exception_message = str(ValueException)
+            self._has_value_exception = True
+            self._value_exception_message = str(ValueException)
 
         try:
-            self.ocr_value = datetime.strptime(self.raw_ocr_value, date_format)
-            self.has_raw_value_exception = False
+            self._ocr_value = datetime.strptime(self.raw_ocr_value, date_format)
+            self._has_raw_value_exception = False
         except Exception as RawValueException:
-            self.has_raw_value_exception = True
-            self.raw_value_exception_message = str(RawValueException)
+            self._has_raw_value_exception = True
+            self._raw_value_exception_message = str(RawValueException)
 
     def to_dict(self) -> dict:
         """Converts extraction tag to dict"""
