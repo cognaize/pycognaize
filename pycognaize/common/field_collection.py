@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
 from pycognaize.common.lazy_group_dict import LazyGroupDict
+from pycognaize.document.field import Field
 
 
 class FieldCollection(OrderedDict):
@@ -24,3 +25,14 @@ class FieldCollection(OrderedDict):
             return self.groups[name]
         else:
             raise KeyError
+
+    def get_groups_by_field(self, field: Field) -> dict:
+        """Returns groups that contain the given field"""
+        try:
+            field_group_name = field.group_name
+            return self.groups_by_name(field_group_name)
+        except AttributeError:
+            field_group_id = field.group_key
+            for group_name, value in self.groups.items():
+                if field_group_id in value.keys():
+                    return {group_name: value}
