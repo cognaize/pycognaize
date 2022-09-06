@@ -20,4 +20,7 @@ class FieldCollection(OrderedDict):
     def groups_by_name(self, name: str) -> dict:
         """Returns fields that are contained in group with the
         given group name"""
-        return self.groups[name]
+        if name in self.groups.keys():
+            return self.groups[name]
+        else:
+            raise KeyError

@@ -1,3 +1,4 @@
+import unittest
 import json
 import os
 import shutil
@@ -7,12 +8,10 @@ import uuid
 from collections import defaultdict
 
 from pycognaize.common.enums import EnvConfigEnum
-from pycognaize.common.lazy_group_dict import LazyGroupDict
 from pycognaize.document import Document
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
-
-class TestLazyDict(unittest.TestCase):
+class TestFieldCollection(unittest.TestCase):
     ORIGINAL_SNAPSHOT_PATH = os.environ.get(EnvConfigEnum.SNAPSHOT_PATH.value)
     SNAPSHOT_PATH = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
 
@@ -35,7 +34,7 @@ class TestLazyDict(unittest.TestCase):
 
     def setUp(self) -> None:
         self.document = Document.from_dict(self.data, data_path=self.snap_path)
-        self.groups = LazyGroupDict(self.document.y)
+        self.doc_y = self.document.y
 
     def get_group(self, group_name: str) -> dict:
         """Get fields from document that the give group name"""
@@ -47,15 +46,15 @@ class TestLazyDict(unittest.TestCase):
                     groups[item.group_key].append(item)
         return groups
 
-    def test_create_groups(self):
+    def test_groups_by_name(self):
         # Test create groups by name
         total_assets = self.get_group('Total Assets')
-        self.assertDictEqual(self.groups.groups['Total Assets'], total_assets)
-        self.assertEqual(len(self.groups.groups['Total Assets']), 1)
+        self.assertDictEqual(self.doc_y.groups['Total Assets'], total_assets)
+        self.assertEqual(len(self.doc_y.groups['Total Assets']), 1)
         # Check Structure
-        self.assertIsInstance(self.groups.groups, defaultdict)
+        self.assertIsInstance(self.doc_y.groups, defaultdict)
         # Test create groups by name empty input
         with self.assertRaises(KeyError):
-            self.assertEqual(self.groups[''], {})
+            self.assertEqual(self.doc_y.groups_by_name(''), {})
         with self.assertRaises(KeyError):
-            self.assertEqual(self.groups['Non-Existent Group'], {})
+            self.assertEqual(self.doc_y.groups_by_name('Non-Existent Group'), {})
