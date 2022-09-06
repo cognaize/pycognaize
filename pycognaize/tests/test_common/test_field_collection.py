@@ -58,3 +58,18 @@ class TestFieldCollection(unittest.TestCase):
             self.assertEqual(self.doc_y.groups_by_name(''), {})
         with self.assertRaises(KeyError):
             self.assertEqual(self.doc_y.groups_by_name('Non-Existent Group'), {})
+
+    def test_groups_by_field(self):
+        # Test create groups by name
+        total_assets = self.get_group('Total Assets')
+        total_assets_field = total_assets['38e1ea2c-8882-11ea-b84a-0242ac130007'][0]
+        self.assertDictEqual(self.doc_y.groups_by_field(total_assets_field), total_assets)
+
+        # self.assertEqual(len(self.doc_y.groups['Total Assets']), 1)
+        # # Check Structure
+        # self.assertIsInstance(self.doc_y.groups, defaultdict)
+        # # Test create groups by name empty input
+        # with self.assertRaises(KeyError):
+        #     self.assertEqual(self.doc_y.groups_by_name(''), {})
+        # with self.assertRaises(KeyError):
+        #     self.assertEqual(self.doc_y.groups_by_name('Non-Existent Group'), {})
