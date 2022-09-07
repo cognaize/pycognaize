@@ -28,5 +28,4 @@ class FieldCollection(OrderedDict):
 
     def groups_by_field(self, field: Field) -> dict:
         """Returns groups that contain the given field"""
-        field_group_name = field.group_name
-        return self.groups_by_name(field_group_name)
+        return self.groups_by_name(field.group_name)
