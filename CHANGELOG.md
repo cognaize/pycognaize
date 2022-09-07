@@ -2,6 +2,10 @@
 
 ## [1.0]
 
+### [1.1.1] - 2022-09-05
+- Fix field grouping with non-existing key
+- Add field grouping with given ``Field`` object
+
 ### [1.1.0] - 2022-08-25
 - Added multiprocessing download of images and 
   ocr data
