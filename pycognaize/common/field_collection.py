@@ -31,7 +31,7 @@ class FieldCollection(OrderedDict):
         try:
             field_group_name = field.group_name
             return self.groups_by_name(field_group_name)
-        except AttributeError or KeyError:
+        except (AttributeError, KeyError):
             # Search with group_key if group_name is not available
             # or can not be found in groups
             field_group_id = field.group_key
