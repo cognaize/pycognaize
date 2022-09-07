@@ -28,13 +28,5 @@ class FieldCollection(OrderedDict):
 
     def groups_by_field(self, field: Field) -> dict:
         """Returns groups that contain the given field"""
-        try:
-            field_group_name = field.group_name
-            return self.groups_by_name(field_group_name)
-        except (AttributeError, KeyError):
-            # Search with group_key if group_name is not available
-            # or can not be found in groups
-            field_group_id = field.group_key
-            for group_name, value in self.groups.items():
-                if field_group_id in value.keys():
-                    return {group_name: value}
+        field_group_name = field.group_name
+        return self.groups_by_name(field_group_name)

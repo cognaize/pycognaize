@@ -38,7 +38,7 @@ class LazyGroupDict(Mapping):
         """The Document object, retrieved from provided path
         Note: Path can be both local and remote
         """
-        if group_name in self.groups.keys():
+        if group_name in self.groups:
             return self.groups[group_name]
         else:
             raise KeyError
