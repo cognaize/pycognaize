@@ -1,7 +1,6 @@
 """Defines NumericParser for parsing a number string into a float values"""
 import re
 from typing import Union
-import logging
 
 
 class NumericParser:
@@ -124,7 +123,7 @@ class NumericParser:
             if parse_float_semicolon is not None:
                 return parse_float_semicolon
 
-        if not self.is_numeric():
+        if '%' in self.raw:
             return float('nan')
 
         try:
@@ -133,7 +132,6 @@ class NumericParser:
             self.parsed = self.parse_raw_numeric()
             self.parsed = self.parsed * self.sign
         except Exception:
-            logging.warning(f'Couldnt parse numeric {self.raw}')
             return float('nan')
         return self.parsed
 
