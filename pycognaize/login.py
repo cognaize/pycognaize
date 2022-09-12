@@ -34,19 +34,20 @@ class login:
             credentials_file = self._create_aws_config_file()
             self._write_aws_config_file(user_credentials, credentials_file)
         elif user_credentials_response.status_code == 403:
-            logging.info(f'You are not allowed to download data')
+            logging.info('You are not allowed to download data')
             raise AWS_connection_exception
         elif user_credentials_response.status_code == 401:
-            logging.info(f'Invalid Username or Password')
+            logging.info('Invalid Username or Password')
             raise AWS_connection_exception
         else:
-            logging.info(f'Failed to login: {user_credentials}')
+            logging.info('Failed to login: {user_credentials}')
             raise AWS_connection_exception
 
     @staticmethod
     def _create_aws_config_file() -> tempfile.NamedTemporaryFile:
         # Creates AWS config file in /tmp directory
-        temp = tempfile.NamedTemporaryFile(prefix='cognaize_aws_access', suffix='.json', delete=False)
+        temp = tempfile.NamedTemporaryFile(prefix='cognaize_aws_access',
+                                           suffix='.json', delete=False)
         return temp
 
     @staticmethod
