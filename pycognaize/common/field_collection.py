@@ -27,11 +27,11 @@ class FieldCollection(OrderedDict):
         else:
             raise KeyError
 
-    def groups_by_field(self, field: Field) -> dict:
+    def groups_by_field(self, field: Field) -> list:
         """Returns groups that contain the given field"""
         name_group = self.groups_by_name(field.group_name)
         if field.group_key in name_group:
             return name_group[field.group_key]
         else:
             logging.warning(f"Field {field} is not in any group")
-            return {}
+            return []

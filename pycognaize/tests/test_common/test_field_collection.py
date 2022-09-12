@@ -63,4 +63,4 @@ class TestFieldCollection(unittest.TestCase):
         # Test create groups by name
         total_assets = self.get_group('Total Assets')
         total_assets_field = total_assets['38e1ea2c-8882-11ea-b84a-0242ac130007'][0]
-        self.assertDictEqual(self.doc_y.groups_by_field(total_assets_field), total_assets)
+        self.assertEqual(self.doc_y.groups_by_field(total_assets_field), total_assets['38e1ea2c-8882-11ea-b84a-0242ac130007'])
