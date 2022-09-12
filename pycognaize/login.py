@@ -1,5 +1,8 @@
 import json
 import logging
+import os
+from glob import glob
+
 import requests
 import tempfile
 
@@ -46,7 +49,11 @@ class login:
     @staticmethod
     def _create_aws_config_file() -> tempfile.NamedTemporaryFile:
         # Creates AWS config file in /tmp directory
-        temp = tempfile.NamedTemporaryFile(prefix='cognaize_aws_access',
+        AWS_credentials_files = glob("/tmp/cognaize_aws_access_*.json")
+        if AWS_credentials_files:
+            for file in AWS_credentials_files:
+                os.remove(file)
+        temp = tempfile.NamedTemporaryFile(prefix='cognaize_aws_access_',
                                            suffix='.json', delete=False)
         return temp
 
