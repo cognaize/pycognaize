@@ -2,6 +2,9 @@
 
 ## [1.0]
 
+### [1.1.2] - 2022-09-12
+- Add minor improvement for NumericParser
+
 ### [1.1.0] - 2022-08-25
 - Added multiprocessing download of images and 
   ocr data
