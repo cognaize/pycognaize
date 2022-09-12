@@ -33,6 +33,13 @@ class TestNumericParser(unittest.TestCase):
         '-140.753,24': -140753.24,
         '-140.753.154,24': -140753154.24,
         '30,456 .67': 30456.67,
+        '3,08,520.01': 308520.01,
+        'A 13': float('nan'),
+        'A13': float('nan'),
+        'A,13': float('nan'),
+        'A, 13': float('nan'),
+        '^, 13': float('nan'),
+        '., 13': float('nan'),
     }
 
     def test_parse_numeric(self):

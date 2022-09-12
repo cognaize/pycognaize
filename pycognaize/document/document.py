@@ -183,14 +183,14 @@ class Document:
             for pname, fields in scope.items():
                 if not pn_filter(pname):
                     continue
-                tied_fields = [field for field in fields
+                tied_fields = {field for field in fields
                                if not isinstance(field, TableField)
                                for field_tag in field.tags
                                if isinstance(field_tag, ExtractionTag)
                                and (tag & field_tag)
-                               / min({tag.area, field_tag.area}) >= threshold]
+                               / min({tag.area, field_tag.area}) >= threshold}
                 if tied_fields:
-                    all_tied_fields[pname] = tied_fields
+                    all_tied_fields[pname] = list(tied_fields)
         return all_tied_fields
 
     def get_tied_tags(self, tag: ExtractionTag,
@@ -226,13 +226,13 @@ class Document:
             for pname, fields in scope.items():
                 if not pn_filter(pname):
                     continue
-                tied_tags = [field_tag for field in fields
+                tied_tags = {field_tag for field in fields
                              if not isinstance(field, TableField)
                              for field_tag in field.tags
                              if isinstance(field_tag, ExtractionTag)
-                             if tag.iou(field_tag) >= threshold]
+                             if tag.iou(field_tag) >= threshold}
                 if tied_tags:
-                    all_tied_tags[pname] = tied_tags
+                    all_tied_tags[pname] = list(tied_tags)
         return all_tied_tags
 
     def get_first_tied_field(self, tag: ExtractionTag,
