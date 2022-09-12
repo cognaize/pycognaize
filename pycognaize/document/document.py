@@ -190,7 +190,7 @@ class Document:
                                and (tag & field_tag)
                                / min({tag.area, field_tag.area}) >= threshold]
                 if tied_fields:
-                    all_tied_fields[pname] = tied_fields
+                    all_tied_fields[pname] = list(set(tied_fields))
         return all_tied_fields
 
     def get_tied_tags(self, tag: ExtractionTag,
@@ -232,7 +232,7 @@ class Document:
                              if isinstance(field_tag, ExtractionTag)
                              if tag.iou(field_tag) >= threshold]
                 if tied_tags:
-                    all_tied_tags[pname] = tied_tags
+                    all_tied_tags[pname] = list(set(tied_tags))
         return all_tied_tags
 
     def get_first_tied_field(self, tag: ExtractionTag,
