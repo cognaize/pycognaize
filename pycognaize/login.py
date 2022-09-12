@@ -7,11 +7,13 @@ from pycognaize.common.exceptions import AWS_connection_exception
 
 
 class login:
+    """Allows to access the AWS S3 bucket using cognaize credentials"""
 
     def __init__(self, username, password):
         self._login(username, password)
 
     def _login(self, username: str = '', password: str = ''):
+        """Get AWS access credentials and store in file"""
         # url = CFG.host + CFG.API_ENDPOINT
         url = "http://0.0.0.0:5002/api/v1/integration/storage/token"
 
