@@ -47,13 +47,9 @@ class login:
             logging.info('Failed to login: {user_credentials}')
             raise AWS_connection_exception("server error")
 
-    @staticmethod
-    def _create_aws_config_file() -> tempfile.NamedTemporaryFile:
+    def _create_aws_config_file(self) -> tempfile.NamedTemporaryFile:
         # Creates AWS config file in /tmp directory
-        AWS_credentials_files = glob("/tmp/cognaize_aws_access_*.json")
-        if AWS_credentials_files:
-            for file in AWS_credentials_files:
-                os.remove(file)
+        self.remove_aws_config_file()
         temp = tempfile.NamedTemporaryFile(prefix='cognaize_aws_access_',
                                            suffix='.json', delete=False)
         return temp
@@ -65,6 +61,18 @@ class login:
         file.flush()
         return file.name
 
+    def logout(self):
+        """Logout from AWS"""
+        self.remove_aws_config_file()
+        os.environ['AWS_ACCESS_KEY'] = ''
+        os.environ['AWS_SECRET_ACCESS_KEY'] = ''
+        os.environ['AWS_SESSION_TOKEN'] = ''
+        # os.environ.clear()
 
-if __name__ == '__main__':
-    login("hovhannes.zohrabyan@cognaize.com", "Format/Cognaize_dat")
+    @staticmethod
+    def remove_aws_config_file():
+        """Delete AWS credentials file"""
+        AWS_credentials_files = glob("/tmp/cognaize_aws_access_*.json")
+        if AWS_credentials_files:
+            for file in AWS_credentials_files:
+                os.remove(file)
