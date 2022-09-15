@@ -27,8 +27,9 @@ class Snapshot:
         AWS_credentials_files = glob("/tmp/cognaize_aws_access_*.json")
         if AWS_credentials_files:
             credentials_file = json.load(open(AWS_credentials_files[0]))
-            AWS_credentials = credentials_file['credentials']
-            snapshot_path = credentials_file['path']
+            set_credentials(credentials_file['credentials'])
+            snapshot_dir = credentials_file['snapshotRoot']
+            snapshot_path = os.path.join(snapshot_dir, os.environ[EnvConfigEnum.SNAPSHOT_ID.value])
         else:
             snapshot_dir = os.environ[EnvConfigEnum.SNAPSHOT_PATH.value]
             snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
@@ -39,3 +40,10 @@ class Snapshot:
     def get(cls) -> 'Snapshot':
         """Read the snapshot object from local storage and return it"""
         return cls(path=cls._snapshot_path())
+
+
+def set_credentials(credentials):
+    """Set AWS credentials as ENV variables"""
+    os.environ['AWS_ACCESS_KEY'] = credentials['AccessKeyId']
+    os.environ['AWS_SECRET_ACCESS_KEY'] = credentials['SecretAccessKey']
+    os.environ['AWS_SESSION_TOKEN'] = credentials['SessionToken']
