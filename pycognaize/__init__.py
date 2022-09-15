@@ -4,10 +4,11 @@
 
 __version__ = "1.1.1"
 
-__all__ = ['Model', 'Snapshot']
+__all__ = ['login', 'Model', 'Snapshot']
 
 import os
 from .model import Model
+from .login import login
 from .document import Snapshot
 
 name = os.path.basename(os.path.dirname(__file__))
