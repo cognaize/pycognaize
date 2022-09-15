@@ -29,7 +29,8 @@ class Snapshot:
             credentials_file = json.load(open(AWS_credentials_files[0]))
             set_credentials(credentials_file['credentials'])
             snapshot_dir = credentials_file['snapshotRoot']
-            snapshot_path = os.path.join(snapshot_dir, os.environ[EnvConfigEnum.SNAPSHOT_ID.value])
+            snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
+            snapshot_path = os.path.join(snapshot_dir, snapshot_id)
         else:
             snapshot_dir = os.environ[EnvConfigEnum.SNAPSHOT_PATH.value]
             snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
