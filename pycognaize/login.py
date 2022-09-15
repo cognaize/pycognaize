@@ -15,12 +15,13 @@ class login:
     def __init__(self, username, password):
         self._login(username, password)
 
-    def _login(self, username: str = '', password: str = ''):
+    def _login(self, email: str = '', password: str = ''):
         """Get AWS access credentials and store in file"""
         # url = CFG.host + CFG.API_ENDPOINT
-        url = "http://0.0.0.0:5002/api/v1/integration/storage/token"
+        HOST = os.environ.get('HOST')
+        url = f"{HOST}/api/v1/integration/storage/token"
 
-        authentication = {'username': username,
+        authentication = {'email': email,
                           'password': password}
 
         try:
@@ -38,13 +39,13 @@ class login:
             self._write_aws_config_file(user_credentials, credentials_file)
         elif user_credentials_response.status_code == 403:
             logging.info('You are not allowed to download data')
-            raise AWS_connection_exception
+            raise AWS_connection_exception("data download permission error")
         elif user_credentials_response.status_code == 401:
-            logging.info('Invalid Username or Password')
-            raise AWS_connection_exception
+            logging.info('Invalid email or Password')
+            raise AWS_connection_exception("wrong email or password")
         else:
             logging.info('Failed to login: {user_credentials}')
-            raise AWS_connection_exception
+            raise AWS_connection_exception("server error")
 
     @staticmethod
     def _create_aws_config_file() -> tempfile.NamedTemporaryFile:
@@ -60,6 +61,10 @@ class login:
     @staticmethod
     def _write_aws_config_file(credentials, file) -> str:
         """Writes AWS credentials to a file and returns files name"""
-        json.dump(credentials, file)
+        file.write(json.dumps(credentials).encode())
         file.flush()
         return file.name
+
+
+if __name__ == '__main__':
+    login("hovhannes.zohrabyan@cognaize.com", "Format/Cognaize_dat")
