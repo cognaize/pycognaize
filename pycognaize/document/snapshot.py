@@ -1,7 +1,5 @@
-import json
 import os
 from typing import Mapping
-from glob import glob
 
 from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.common.lazy_dict import LazyDocumentDict
@@ -41,9 +39,9 @@ class Snapshot:
         """Read the snapshot object from local storage and return it"""
         if login_instance:
             remote_snapshot_root = login_instance.snapshot_root
-            return cls(path=cls._snapshot_path(remote_snapshot_root=remote_snapshot_root),
+            return cls(path=cls._snapshot_path(
+                       remote_snapshot_root=remote_snapshot_root),
                        login_instance=login_instance)
 
         else:
             return cls(path=cls._snapshot_path())
-

@@ -24,7 +24,6 @@ from pycognaize.common.utils import (
     preview_img,
     image_string_to_array, cloud_interface_login
 )
-from cloudstorageio import CloudInterface
 from pycognaize.document.tag import ExtractionTag
 
 
@@ -32,7 +31,10 @@ class Page:
     """Representing a page of a document in pycognaize"""
     REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
 
-    def __init__(self, page_number: int, document_id: str, path: str, login_instance: login = None):
+    def __init__(self, page_number: int,
+                 document_id: str,
+                 path: str,
+                 login_instance: login = None):
         """
 
         :param page_number: The number of the page (1-based index)

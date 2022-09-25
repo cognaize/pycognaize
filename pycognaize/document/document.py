@@ -11,12 +11,12 @@ from typing import Dict, List, Tuple, Any, Optional, Callable
 
 import fitz
 import pandas as pd
-from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
 from pycognaize import login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
+from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field
 from pycognaize.document.page import Page
@@ -384,10 +384,13 @@ class Document:
         return data
 
     @classmethod
-    def from_dict(cls, raw: dict, data_path: str, login_instance: login = None) -> 'Document':
+    def from_dict(cls, raw: dict,
+                  data_path: str,
+                  login_instance: login = None) -> 'Document':
         """Document object created from data of dict
         :param raw: document dictionary
         :param data_path: path to the documents OCR and page images
+        :param login_instance: login instance of pycognaize
         """
         if not isinstance(raw, dict):
             raise TypeError(
@@ -413,8 +416,10 @@ class Document:
                 ].value.construct_from_raw(raw=field, pages=pages)
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
-        return cls(input_fields=input_fields, output_fields=output_fields,
-                   pages=pages, metadata=metadata, login_instance=login_instance)
+        return cls(input_fields=input_fields,
+                   output_fields=output_fields,
+                   pages=pages, metadata=metadata,
+                   login_instance=login_instance)
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],

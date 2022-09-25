@@ -8,8 +8,6 @@ from bson import json_util
 import os
 from collections.abc import Mapping
 
-from cloudstorageio import CloudInterface
-
 from pycognaize import login
 from pycognaize.common.enums import StorageEnum
 from pycognaize.common.utils import cloud_interface_login
@@ -20,7 +18,9 @@ class LazyDocumentDict(Mapping):
     """Contains documents included in the snapshot"""
     document_filename = StorageEnum.doc_file.value
 
-    def __init__(self, doc_path: str, data_path: str, login_instance: login = None):
+    def __init__(self, doc_path: str,
+                 data_path: str,
+                 login_instance: login = None):
         self._login_instance = login_instance
         self.ci = cloud_interface_login(login_instance)
         self._doc_path = doc_path
@@ -28,7 +28,7 @@ class LazyDocumentDict(Mapping):
         self._ids = sorted([os.path.basename(os.path.dirname(i))
                            for i in self.ci.listdir(doc_path)
                            if self.ci.isfile(os.path.join(doc_path,
-                                                          i, self.document_filename))])
+                            i, self.document_filename))])
 
     @property
     def doc_path(self) -> str:
