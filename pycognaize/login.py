@@ -14,11 +14,31 @@ class login:
 
     def __init__(self, username, password):
         self._login(username, password)
+        self._aws_access_key = ''
+        self._aws_secret_access_key = ''
+        self._aws_session_token = ''
+        self._snapshot_root = ''
+
+    @property
+    def aws_access_key(self) -> str:
+        return self._aws_access_key
+
+    @property
+    def aws_secret_access_key(self) -> str:
+        return self._aws_secret_access_key
+
+    @property
+    def aws_session_token(self) -> str:
+        return self._aws_session_token
+
+    @property
+    def snapshot_root(self) -> str:
+        return self._snapshot_root
 
     def _login(self, email: str = '', password: str = ''):
         """Get AWS access credentials and store in file"""
-        # url = CFG.host + CFG.API_ENDPOINT
-        HOST = os.environ.get('HOST')
+        HOST = os.environ.get('COGNAIZE_HOST')
+        HOST = "https://elements-uat-api.cognaize.com"
         url = f"{HOST}/api/v1/integration/storage/token"
 
         authentication = {'email': email,
@@ -35,17 +55,19 @@ class login:
 
         user_credentials = user_credentials_response.json()
         if user_credentials_response.status_code == 200:
-            credentials_file = self._create_aws_config_file()
-            self._write_aws_config_file(user_credentials, credentials_file)
+            self._aws_access_key = user_credentials['credentials']['AccessKeyId']
+            self._aws_secret_access_key = user_credentials['credentials']['SecretAccessKey']
+            self._aws_session_token = user_credentials['credentials']['SessionToken']
+            self._snapshot_root = user_credentials['snapshotRoot']
         elif user_credentials_response.status_code == 403:
-            logging.info('You are not allowed to download data')
-            raise AWS_connection_exception("data download permission error")
+            raise AWS_connection_exception("data download permission error. "
+                                           "Please make sure you have access to Snapshots")
         elif user_credentials_response.status_code == 401:
-            logging.info('Invalid email or Password')
-            raise AWS_connection_exception("wrong email or password")
+            raise AWS_connection_exception("wrong email or password. "
+                                           "Please make sure you entered the correct credentials")
         else:
-            logging.info('Failed to login: {user_credentials}')
-            raise AWS_connection_exception("server error")
+            raise AWS_connection_exception("server error. There was a problem with the server,"
+                                           " we are fixing it")
 
     def _create_aws_config_file(self) -> tempfile.NamedTemporaryFile:
         # Creates AWS config file in /tmp directory
@@ -76,3 +98,7 @@ class login:
         if AWS_credentials_files:
             for file in AWS_credentials_files:
                 os.remove(file)
+
+
+if __name__ == '__main__':
+    login('hovhannes.zohrabyan@cognaize.com', 'Format/Cognaize_dat')

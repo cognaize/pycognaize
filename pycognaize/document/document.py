@@ -14,6 +14,7 @@ import pandas as pd
 from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
+from pycognaize import login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
 from pycognaize.document.field import FieldMapping, TableField
@@ -32,7 +33,9 @@ class Document:
                  input_fields: 'FieldCollection[str, List[Field]]',
                  output_fields: 'FieldCollection[str, List[Field]]',
                  pages: Dict[int, Page],
-                 metadata: Dict[str, Any]):
+                 metadata: Dict[str, Any],
+                 login_instance: login = None):
+        self._login_instance = login_instance
         self._metadata = metadata
         self._pages: Dict[int, Page] = pages
         self._x: FieldCollection[str, List[Field]] = input_fields
@@ -381,7 +384,7 @@ class Document:
         return data
 
     @classmethod
-    def from_dict(cls, raw: dict, data_path: str) -> 'Document':
+    def from_dict(cls, raw: dict, data_path: str, login_instance: login = None) -> 'Document':
         """Document object created from data of dict
         :param raw: document dictionary
         :param data_path: path to the documents OCR and page images
@@ -392,7 +395,8 @@ class Document:
         metadata = raw['metadata']
         pages = OrderedDict({page_n: Page(page_number=page_n,
                                           document_id=metadata['document_id'],
-                                          path=data_path)
+                                          path=data_path,
+                                          login_instance=login_instance)
                              for page_n in range(
                 1, metadata['numberOfPages'] + 1)})
         input_fields = FieldCollection(
@@ -410,7 +414,7 @@ class Document:
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields, output_fields=output_fields,
-                   pages=pages, metadata=metadata)
+                   pages=pages, metadata=metadata, login_instance=login_instance)
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],
@@ -464,7 +468,7 @@ class Document:
         :return: bytes object of the pdf
         """
 
-        ci = CloudInterface()
+        ci = cloud_interface_login(self._login_instance)
         pdf_path = os.path.join(self.pages[1].path, self.document_src) + '.pdf'
 
         with ci.open(pdf_path, 'rb') as f:

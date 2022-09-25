@@ -5,13 +5,15 @@ from glob import glob
 
 from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.common.lazy_dict import LazyDocumentDict
+from pycognaize import login
 
 
 class Snapshot:
     """A snapshot of annotated documents from one or more collections"""
 
-    def __init__(self, path: str):
+    def __init__(self, path: str, login_instance: login = None):
         self._path = path
+        self._login = login_instance
         self._documents = LazyDocumentDict(doc_path=path, data_path=path)
 
     @property
@@ -22,13 +24,10 @@ class Snapshot:
         return self._documents
 
     @classmethod
-    def _snapshot_path(cls) -> str:
+    def _snapshot_path(cls, remote_snapshot_root: str = None) -> str:
         """Identify and return the snapshot path"""
-        AWS_credentials_files = glob("/tmp/cognaize_aws_access_*.json")
-        if AWS_credentials_files:
-            credentials_file = json.load(open(AWS_credentials_files[0]))
-            set_credentials(credentials_file['credentials'])
-            snapshot_dir = credentials_file['snapshotRoot']
+        if remote_snapshot_root:
+            snapshot_dir = remote_snapshot_root
             snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
             snapshot_path = os.path.join(snapshot_dir, snapshot_id)
         else:
@@ -38,13 +37,13 @@ class Snapshot:
         return snapshot_path
 
     @classmethod
-    def get(cls) -> 'Snapshot':
+    def get(cls, login_instance) -> 'Snapshot':
         """Read the snapshot object from local storage and return it"""
-        return cls(path=cls._snapshot_path())
+        if login_instance:
+            remote_snapshot_root = login_instance.snapshot_root
+            return cls(path=cls._snapshot_path(remote_snapshot_root=remote_snapshot_root),
+                       login_instance=login_instance)
 
+        else:
+            return cls(path=cls._snapshot_path())
 
-def set_credentials(credentials):
-    """Set AWS credentials as ENV variables"""
-    os.environ['AWS_ACCESS_KEY'] = credentials['AccessKeyId']
-    os.environ['AWS_SECRET_ACCESS_KEY'] = credentials['SecretAccessKey']
-    os.environ['AWS_SESSION_TOKEN'] = credentials['SessionToken']
