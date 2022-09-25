@@ -35,7 +35,7 @@ class Snapshot:
         return snapshot_path
 
     @classmethod
-    def get(cls, login_instance) -> 'Snapshot':
+    def get(cls, login_instance: login = None) -> 'Snapshot':
         """Read the snapshot object from local storage and return it"""
         if login_instance:
             remote_snapshot_root = login_instance.snapshot_root
