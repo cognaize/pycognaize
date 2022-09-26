@@ -4,7 +4,7 @@ import requests
 from pycognaize.common.exceptions import server_api_exception
 
 
-class login:
+class Login:
     """Allows to access the AWS S3 bucket using cognaize credentials"""
 
     def __init__(self, username, password):
