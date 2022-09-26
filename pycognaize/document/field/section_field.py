@@ -4,7 +4,6 @@ from typing import List, Optional, Dict, Type
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
-    IqTagKeyEnum,
     ID,
     IqFieldKeyEnum,
     IqDataTypesEnum
@@ -20,7 +19,6 @@ class SectionField(Field):
 
     def __init__(self,
                  name: str,
-                 value: str = '',
                  tags: Optional[List[SectionTag]] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
@@ -38,17 +36,6 @@ class SectionField(Field):
         super().__init__(name=name, tags=tags, group_key=group_key,
                          confidence=confidence,  group_name=group_name)
         self._field_id = field_id
-        self._raw_value = value
-        self._value = '; '.join([i.raw_value
-                                 for i in self.tags]) if self.tags else value
-
-    @property
-    def raw_value(self):
-        return self._raw_value
-
-    @property
-    def value(self):
-        return self._value
 
     @classmethod
     def construct_from_raw(
@@ -63,7 +50,6 @@ class SectionField(Field):
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
         return cls(name=raw[IqDocumentKeysEnum.name.value],
-                   value=raw[IqTagKeyEnum.value.value],
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
