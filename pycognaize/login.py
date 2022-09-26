@@ -1,8 +1,7 @@
-import logging
 import os
 import requests
 
-from pycognaize.common.exceptions import AWS_connection_exception
+from pycognaize.common.exceptions import server_api_exception
 
 
 class login:
@@ -38,7 +37,6 @@ class login:
     def _login(self, email: str = '', password: str = ''):
         """Get AWS access credentials and stores in the instance"""
         host = os.environ.get('COGNAIZE_HOST')
-        host = 'https://elements-uat-api.cognaize.com'
         url = f"{host}/api/v1/integration/storage/token"
 
         authentication = {'email': email,
@@ -47,9 +45,9 @@ class login:
         try:
             user_credentials_response = requests.post(url, json=authentication)
         except requests.exceptions.ConnectionError:
-            raise AWS_connection_exception(f'Failed connecting to url: {url}')
+            raise server_api_exception(f'Failed connecting to url: {url}')
         except requests.exceptions.Timeout:
-            raise AWS_connection_exception(f'Connection timed out: {url}')
+            raise server_api_exception(f'Connection timed out: {url}')
 
         user_credentials = user_credentials_response.json()
         if user_credentials_response.status_code == 200:
@@ -60,13 +58,13 @@ class login:
                 user_credentials['credentials']['SessionToken']
             self._snapshot_root = user_credentials['snapshotRoot']
         elif user_credentials_response.status_code == 403:
-            raise AWS_connection_exception("data download permission error. "
+            raise server_api_exception("data download permission error. "
                                            "Please make sure you have access"
                                            " to Snapshots")
         elif user_credentials_response.status_code == 401:
-            raise AWS_connection_exception("wrong email or password. "
+            raise server_api_exception("wrong email or password. "
                                            "Please make sure you entered the "
                                            "correct credentials")
         else:
-            raise AWS_connection_exception("server error. There was a problem "
+            raise server_api_exception("server error. There was a problem "
                                            "with the serve")
