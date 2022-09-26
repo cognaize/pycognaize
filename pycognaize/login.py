@@ -38,6 +38,7 @@ class login:
     def _login(self, email: str = '', password: str = ''):
         """Get AWS access credentials and stores in the instance"""
         host = os.environ.get('COGNAIZE_HOST')
+        host = 'https://elements-uat-api.cognaize.com'
         url = f"{host}/api/v1/integration/storage/token"
 
         authentication = {'email': email,
@@ -46,11 +47,9 @@ class login:
         try:
             user_credentials_response = requests.post(url, json=authentication)
         except requests.exceptions.ConnectionError:
-            logging.info(f'Failed connecting to url: {url}')
-            raise AWS_connection_exception
+            raise AWS_connection_exception(f'Failed connecting to url: {url}')
         except requests.exceptions.Timeout:
-            logging.info(f'Connection timed out: {url}')
-            raise AWS_connection_exception
+            raise AWS_connection_exception(f'Connection timed out: {url}')
 
         user_credentials = user_credentials_response.json()
         if user_credentials_response.status_code == 200:
