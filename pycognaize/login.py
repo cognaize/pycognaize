@@ -4,15 +4,23 @@ import requests
 from pycognaize.common.exceptions import server_api_exception
 
 
-class Login:
+class Login(object):
     """Allows to access the AWS S3 bucket using cognaize credentials"""
 
-    def __init__(self, username, password):
-        self._login(username, password)
-        self._access_key = ''
-        self._secret_access_key = ''
-        self._session_token = ''
-        self._snapshot_root = ''
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(Login, cls).__new__(cls)
+        cls._access_key = ''
+        cls._secret_access_key = ''
+        cls._session_token = ''
+        cls._snapshot_root = ''
+        cls._logged_in = False
+        return cls.instance
+
+    @property
+    def logged_in(self) -> bool:
+        """Access key for AWS"""
+        return self._logged_in
 
     @property
     def aws_access_key(self) -> str:
@@ -34,9 +42,10 @@ class Login:
         """Root path for snapshots"""
         return self._snapshot_root
 
-    def _login(self, email: str = '', password: str = ''):
+    def login(self, email: str = '', password: str = ''):
         """Get AWS access credentials and stores in the instance"""
         host = os.environ.get('COGNAIZE_HOST')
+        host = 'https://uat-api.cognaize.com'
         url = f"{host}/api/v1/integration/storage/token"
 
         authentication = {'email': email,

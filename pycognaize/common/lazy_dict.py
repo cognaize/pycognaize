@@ -19,10 +19,9 @@ class LazyDocumentDict(Mapping):
     document_filename = StorageEnum.doc_file.value
 
     def __init__(self, doc_path: str,
-                 data_path: str,
-                 login_instance: Login = None):
-        self._login_instance = login_instance
-        self.ci = cloud_interface_login(login_instance)
+                 data_path: str):
+        self._login_instance = Login()
+        self.ci = cloud_interface_login(self._login_instance)
         self._doc_path = doc_path
         self._data_path = data_path
         self._ids = sorted([os.path.basename(os.path.dirname(i))
@@ -56,8 +55,7 @@ class LazyDocumentDict(Mapping):
                     doc_dict = json_util.loads(f.read())
             return Document.from_dict(raw=doc_dict,
                                       data_path=os.path.join(self.data_path,
-                                                             doc_id),
-                                      login_instance=self._login_instance)
+                                                             doc_id))
         except Exception as e:
             logging.error(f'Failed reading document {doc_id}: {e}')
 

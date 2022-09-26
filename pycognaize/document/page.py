@@ -33,8 +33,7 @@ class Page:
 
     def __init__(self, page_number: int,
                  document_id: str,
-                 path: str,
-                 login_instance: Login = None):
+                 path: str):
         """
 
         :param page_number: The number of the page (1-based index)
@@ -43,7 +42,8 @@ class Page:
         """
         self._page_number = int(page_number)
         self._document_id = document_id
-        self.ci = cloud_interface_login(login_instance)
+        self._login_instance = Login()
+        self.ci = cloud_interface_login(self._login_instance)
         self._path = path
         self._ocr_raw = None
         self._ocr = None
