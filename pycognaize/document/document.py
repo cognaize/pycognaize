@@ -13,7 +13,7 @@ import fitz
 import pandas as pd
 from fitz.utils import getColor, getColorList
 
-from pycognaize import login
+from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
 from pycognaize.common.utils import cloud_interface_login
@@ -34,7 +34,7 @@ class Document:
                  output_fields: 'FieldCollection[str, List[Field]]',
                  pages: Dict[int, Page],
                  metadata: Dict[str, Any],
-                 login_instance: login = None):
+                 login_instance: Login = None):
         self._login_instance = login_instance
         self._metadata = metadata
         self._pages: Dict[int, Page] = pages
@@ -386,7 +386,7 @@ class Document:
     @classmethod
     def from_dict(cls, raw: dict,
                   data_path: str,
-                  login_instance: login = None) -> 'Document':
+                  login_instance: Login = None) -> 'Document':
         """Document object created from data of dict
         :param raw: document dictionary
         :param data_path: path to the documents OCR and page images

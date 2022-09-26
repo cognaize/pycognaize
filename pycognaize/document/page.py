@@ -5,7 +5,7 @@ import re
 from typing import Optional, List, Iterable, Union
 import numpy as np
 
-from pycognaize import login
+from pycognaize.login import Login
 from pycognaize.common.decorators import module_not_found
 
 from pycognaize.common.enums import (
@@ -34,7 +34,7 @@ class Page:
     def __init__(self, page_number: int,
                  document_id: str,
                  path: str,
-                 login_instance: login = None):
+                 login_instance: Login = None):
         """
 
         :param page_number: The number of the page (1-based index)

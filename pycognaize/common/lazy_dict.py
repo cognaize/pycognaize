@@ -8,7 +8,7 @@ from bson import json_util
 import os
 from collections.abc import Mapping
 
-from pycognaize import login
+from pycognaize.login import Login
 from pycognaize.common.enums import StorageEnum
 from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document import Document
@@ -20,7 +20,7 @@ class LazyDocumentDict(Mapping):
 
     def __init__(self, doc_path: str,
                  data_path: str,
-                 login_instance: login = None):
+                 login_instance: Login = None):
         self._login_instance = login_instance
         self.ci = cloud_interface_login(login_instance)
         self._doc_path = doc_path
