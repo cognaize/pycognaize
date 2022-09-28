@@ -25,7 +25,7 @@ class SectionField(Field):
                  confidence: Optional[float] = -1.0,
                  group_name: str = None
                  ):
-        """ Create a TextField object
+        """ Create a SectionField object
 
         :param name: Name of the field
         :param value: Value of the field
@@ -41,14 +41,15 @@ class SectionField(Field):
     def construct_from_raw(
             cls, raw: dict, pages: Dict[int, Page]) -> 'SectionField':
         """Create SectionField object from dictionary"""
-        tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
+        section_dict: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
-        for i in tag_dicts:
-            try:
-                tags.append(cls.tag_class.construct_from_raw(
-                    raw=i, page=pages[i['page']]))
-            except Exception as e:
-                logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
+        for i in section_dict:
+            for tag_type, tag_data in i[IqDocumentKeysEnum.section.value].items():
+                try:
+                    tags.append(cls.tag_class.construct_from_raw(
+                                raw=tag_data, pages=pages, tag_type=tag_type))
+                except Exception as e:
+                    logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    tags=tags,
                    field_id=str(raw[ID]),
@@ -65,8 +66,7 @@ class SectionField(Field):
         return field_dict
 
     def __repr__(self):
-        return (f"<{self.__class__.__name__}: {self.name}:"
-                f" {'|'.join([i.raw_value for i in self.tags])}>")
+        return (f"<{self.__class__.__name__}: {self.name}")
 
     def __str__(self):
-        return f"{'|'.join([i.raw_value for i in self.tags])}"
+        return (f"<{self.__class__.__name__}: {self.name}")

@@ -1,5 +1,5 @@
 import bson
-from typing import Union
+from typing import Union, Dict
 
 from pycognaize.common.enums import IqTagKeyEnum, ID
 from pycognaize.document.tag.tag import Tag
@@ -14,18 +14,24 @@ if TYPE_CHECKING:
 class SectionTag(Tag):
     """Represents field's coordinate data on document"""
 
-    def __init__(self, left, right, top, bottom, page):
+    def __init__(self, left, right, top, bottom, page, tag_type):
         super().__init__(left=left, right=right, top=top, bottom=bottom,
                          page=page)
+        self._type = tag_type
+
+    @property
+    def type(self):
+        return self._type
 
     @classmethod
-    def construct_from_raw(cls, raw: dict, page: 'Page') -> 'SectionTag':
+    def construct_from_raw(cls, raw: dict, pages, tag_type: str) -> 'SectionTag':
         """Builds Tag object from pycognaize raw data
 
         :param raw: pycognaize field's tag info
         :param page: `Page` to which the tag belongs
         :return:
         """
+        page_number = raw['page']
         left = convert_coord_to_num(raw['left'])
         top = convert_coord_to_num(raw['top'])
         height = convert_coord_to_num(raw['height'])
@@ -33,7 +39,7 @@ class SectionTag(Tag):
         right = left + width
         bottom = top + height
         tag = cls(left=left, right=right, top=top, bottom=bottom,
-                  page=page)
+                  page=pages[page_number], tag_type=tag_type)
         return tag
 
     def hshift(self, by) -> 'SectionTag':

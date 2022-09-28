@@ -60,6 +60,7 @@ class IqDocumentKeysEnum(enum.Enum):
     tags = 'tags'
     pages = 'pages'
     name = 'name'
+    section = 'section'
     field_type = 'fieldType'
     field_id = '_id'
     src_field_id = "srcFieldId"
