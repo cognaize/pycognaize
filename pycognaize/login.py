@@ -6,15 +6,15 @@ from pycognaize.common.exceptions import server_api_exception
 
 class Login(object):
     """Allows to access the AWS S3 bucket using cognaize credentials"""
+    _access_key = ''
+    _secret_access_key = ''
+    _session_token = ''
+    _snapshot_root = ''
+    _logged_in = False
 
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(Login, cls).__new__(cls)
-        cls._access_key = ''
-        cls._secret_access_key = ''
-        cls._session_token = ''
-        cls._snapshot_root = ''
-        cls._logged_in = False
         return cls.instance
 
     @property
@@ -42,10 +42,9 @@ class Login(object):
         """Root path for snapshots"""
         return self._snapshot_root
 
-    def login(self, email: str = '', password: str = ''):
+    def login(self, email: str, password: str):
         """Get AWS access credentials and stores in the instance"""
         host = os.environ.get('COGNAIZE_HOST')
-        host = 'https://uat-api.cognaize.com'
         url = f"{host}/api/v1/integration/storage/token"
 
         authentication = {'email': email,
@@ -60,6 +59,7 @@ class Login(object):
 
         user_credentials = user_credentials_response.json()
         if user_credentials_response.status_code == 200:
+            self._logged_in = True
             self._access_key = user_credentials['credentials']['AccessKeyId']
             self._secret_access_key = \
                 user_credentials['credentials']['SecretAccessKey']
@@ -67,13 +67,13 @@ class Login(object):
                 user_credentials['credentials']['SessionToken']
             self._snapshot_root = user_credentials['snapshotRoot']
         elif user_credentials_response.status_code == 403:
-            raise server_api_exception("data download permission error. "
+            raise server_api_exception("Data download permission error. "
                                        "Please make sure you have access"
                                        " to Snapshots")
         elif user_credentials_response.status_code == 401:
-            raise server_api_exception("wrong email or password. "
+            raise server_api_exception("Wrong email or password. "
                                        "Please make sure you entered the "
                                        "correct credentials")
         else:
-            raise server_api_exception("server error. There was a problem "
+            raise server_api_exception("Server error. There was a problem "
                                        "with the serve")
