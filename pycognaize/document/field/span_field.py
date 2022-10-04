@@ -9,17 +9,17 @@ from pycognaize.common.enums import (
 )
 
 from pycognaize.document.field import Field
-from pycognaize.document.tag.span_tag import SpanTag
+from pycognaize.document.tag.span_tag import SpanBoxTag
 from pycognaize.document.page import Page
 
 
 class SpanField(Field):
     """Base class for all pycognaize table fields"""
-    tag_class: Type[SpanTag] = SpanTag
+    tag_class: Type[SpanBoxTag] = SpanBoxTag
 
     def __init__(self,
                  name: str,
-                 tags: Optional[SpanTag] = None,
+                 tags: Optional[SpanBoxTag] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,

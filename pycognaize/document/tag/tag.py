@@ -12,6 +12,17 @@ if TYPE_CHECKING:
 
 
 class Tag(metaclass=abc.ABCMeta):
+
+    @classmethod
+    @abc.abstractmethod
+    def construct_from_raw(cls, *args, **kwargs) -> 'Tag':
+        ...
+
+    def to_dict(self) -> dict:
+        ...
+
+
+class BoxTag(Tag, metaclass=abc.ABCMeta):
     """Represents field's coordinate data on document"""
 
     def __init__(self,
@@ -38,7 +49,7 @@ class Tag(metaclass=abc.ABCMeta):
 
     @classmethod
     @abc.abstractmethod
-    def construct_from_raw(cls, raw: dict, page: 'Page') -> 'Tag':
+    def construct_from_raw(cls, raw: dict, page: 'Page') -> 'BoxTag':
         ...
 
     def __repr__(self):
@@ -190,12 +201,12 @@ class Tag(metaclass=abc.ABCMeta):
             self._center = (self.xcenter, self.ycenter)
         return self._center
 
-    def intersects(self, other: Union['Tag', Cell]) -> bool:
+    def intersects(self, other: Union['BoxTag', Cell]) -> bool:
         """Checks id there is an intersection between this and other rectangle
 
         :param other: Rectangle object
         """
-        if isinstance(other, (Tag, Cell)):
+        if isinstance(other, (BoxTag, Cell)):
             if (self.left < other.right and self.right > other.left
                 and self.top < other.bottom and self.bottom > other.top) and \
                     self.page.page_number == other.page.page_number:
@@ -205,7 +216,7 @@ class Tag(metaclass=abc.ABCMeta):
             raise NotImplementedError(
                 f"Not implemented for item of type {type(other)}")
 
-    def hshift(self, by) -> 'Tag':
+    def hshift(self, by) -> 'BoxTag':
         """Shifts rectangle horizontally
 
         :param by: the amount by which the tag should be horizontally shifted
@@ -215,7 +226,7 @@ class Tag(metaclass=abc.ABCMeta):
                               top=self.top, bottom=self.bottom,
                               page=self.page)
 
-    def vshift(self, by) -> 'Tag':
+    def vshift(self, by) -> 'BoxTag':
         """Shifts rectangle vertically
 
         :param by: the amount by which the tag should be vertically shifted
@@ -225,7 +236,7 @@ class Tag(metaclass=abc.ABCMeta):
                               top=self.top + by, bottom=self.bottom + by,
                               page=self.page)
 
-    def shift(self, horizontal, vertical) -> 'Tag':
+    def shift(self, horizontal, vertical) -> 'BoxTag':
         """Shifts rectangle by 2 axes simultaneously
 
         :param horizontal:
@@ -234,12 +245,12 @@ class Tag(metaclass=abc.ABCMeta):
         """
         return self.hshift(horizontal).vshift(vertical)
 
-    def __contains__(self, item: 'Tag') -> bool:
+    def __contains__(self, item: 'BoxTag') -> bool:
         """Checks if the item is in the rectangle
 
         :param item: The item to check
         """
-        if isinstance(item, Tag):
+        if isinstance(item, BoxTag):
             if (self.left <= item.left <= self.right and
                 self.left <= item.right <= self.right and
                 self.top <= item.top <= self.bottom and
@@ -251,9 +262,9 @@ class Tag(metaclass=abc.ABCMeta):
             raise NotImplementedError(
                 f"Not implemented for item of type {type(item)}")
 
-    def __and__(self, other: Union['Tag', Cell]) -> Union[int, float]:
+    def __and__(self, other: Union['BoxTag', Cell]) -> Union[int, float]:
         """The area of intersection of given rectangles"""
-        if isinstance(other, (Tag, Cell)):
+        if isinstance(other, (BoxTag, Cell)):
             if self.intersects(other):
                 left = max([self.left, other.left])
                 top = max([self.top, other.top])
@@ -269,7 +280,7 @@ class Tag(metaclass=abc.ABCMeta):
 
     def __or__(self, other) -> Union[int, float]:
         """The area of union of given rectangles"""
-        if isinstance(other, (Tag, Cell)):
+        if isinstance(other, (BoxTag, Cell)):
             if self.page.page_number == other.page.page_number:
                 return self.area + other.area - self.__and__(other)
             else:
@@ -280,7 +291,7 @@ class Tag(metaclass=abc.ABCMeta):
 
     def iou(self, other) -> Union[int, float]:
         """Calculate Intersection over Union for given rectangles"""
-        if isinstance(other, (Tag, Cell)):
+        if isinstance(other, (BoxTag, Cell)):
             if self.page.page_number == other.page.page_number:
                 return (self & other) / (self | other)
             else:
@@ -289,19 +300,19 @@ class Tag(metaclass=abc.ABCMeta):
             raise NotImplementedError(
                 f"Not implemented for item of type {type(other)}")
 
-    def __add__(self, other: Union['Tag', Cell]) -> 'Tag':
+    def __add__(self, other: Union['BoxTag', Cell]) -> 'BoxTag':
         """Merge two rectangles into one"""
         if self.page.page_number == other.page.page_number:
             left = min(self.left, other.left)
             right = max(self.right, other.right)
             top = min(self.top, other.top)
             bottom = max(self.bottom, other.bottom)
-            return Tag(left=left, right=right, top=top, bottom=bottom,
-                       page=self.page)
+            return BoxTag(left=left, right=right, top=top, bottom=bottom,
+                          page=self.page)
         else:
             raise ValueError("Tags are not on the same page")
 
-    def __radd__(self, other) -> 'Tag':
+    def __radd__(self, other) -> 'BoxTag':
         """Merge two rectangles into one,
             required for using sum(<list of rectangles>)
 
@@ -313,7 +324,7 @@ class Tag(metaclass=abc.ABCMeta):
         else:
             return self.__add__(other)
 
-    def is_in_rectangle(self, other: "Tag", thresh: float) -> bool:
+    def is_in_rectangle(self, other: "BoxTag", thresh: float) -> bool:
         """Check if the rectangle is in the other rectangle
 
         :param other: Another rectangle object
@@ -325,7 +336,7 @@ class Tag(metaclass=abc.ABCMeta):
         if thresh < 0 or thresh > 1:
             raise ValueError(
                 "Threshold should be a float number between 0 to 1")
-        if isinstance(other, Tag):
+        if isinstance(other, BoxTag):
             if self.page.page_number == other.page.page_number:
                 return ((self & other) / self.area) >= thresh
             else:
@@ -345,7 +356,7 @@ class Tag(metaclass=abc.ABCMeta):
         """Return a dictionary representing the tag object"""
         pass
 
-    def distance(self, other: 'Tag') -> Union[int, float]:
+    def distance(self, other: 'BoxTag') -> Union[int, float]:
         """Return the Euclidean distance of two tag centers"""
         if self.page.page_number == other.page.page_number:
             dist = math.sqrt(
@@ -355,3 +366,41 @@ class Tag(metaclass=abc.ABCMeta):
             raise ValueError(
                 "Can't compute distance between tags in different pages")
         return dist
+
+
+class LineTag(Tag, metaclass=abc.ABCMeta):
+    """Represents field's coordinate data on document"""
+
+    def __init__(self,
+                 top: Union[int, float],
+                 page: 'Page',
+                 tag_type: str):
+        """Creates and validates coordinate data"""
+
+        self._top = top
+        self._page = page
+        self._type = tag_type
+
+    @property
+    def top(self) -> Union[int, float]:
+        return self._top
+
+    @property
+    def page(self) -> 'Page':
+        return self._page
+
+    @property
+    def type(self) -> str:
+        return self._type
+
+    @classmethod
+    @abc.abstractmethod
+    def construct_from_raw(cls, raw: dict,
+                           page: 'Page',
+                           tag_type: str) -> 'LineTag':
+        ...
+
+    @abc.abstractmethod
+    def to_dict(self) -> dict:
+        """Return a dictionary representing the tag object"""
+        pass

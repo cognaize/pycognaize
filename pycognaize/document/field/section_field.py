@@ -44,12 +44,16 @@ class SectionField(Field):
         section_dict: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in section_dict:
-            for tag_type, tag_data in i[IqDocumentKeysEnum.section.value].items():
+            for tag_type, tag_data in i[IqDocumentKeysEnum.
+                                        section.value].items():
                 try:
                     tags.append(cls.tag_class.construct_from_raw(
-                                raw=tag_data, pages=pages, tag_type=tag_type))
+                                raw=tag_data,
+                                pages=pages,
+                                tag_type=tag_type))
                 except Exception as e:
-                    logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
+                    logging.debug(f"Failed creating tag"
+                                  f" for field {raw[ID]}: {e}")
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    tags=tags,
                    field_id=str(raw[ID]),
