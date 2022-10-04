@@ -1,4 +1,5 @@
 -r requirements.txt
+-r model-requirements.txt
 -r docs/requirements.txt
 coverage
 pytest
