@@ -600,8 +600,7 @@ def cloud_interface_login(login_instance: Login) -> CloudInterface:
     if login_instance.logged_in:
         ci_instance = CloudInterface(aws_access_key_id=login_instance.aws_access_key,
                                      aws_secret_access_key=login_instance.aws_secret_access_key,
-                                     aws_session_token=login_instance.aws_session_token,
-                                     aws_region_name='us-east-1')
+                                     aws_session_token=login_instance.aws_session_token)
     else:
         ci_instance = CloudInterface()
     return ci_instance
