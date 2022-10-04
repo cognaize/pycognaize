@@ -25,7 +25,7 @@ class LazyDocumentDict(Mapping):
         self._doc_path = doc_path
         self._data_path = data_path
         self._ids = sorted([os.path.basename(os.path.dirname(i))
-                           for i in self.ci.listdir(doc_path)
+                           for i in self.ci.listdir(doc_path, include_files=False)
                            if self.ci.isfile(os.path.join(doc_path,
                             i, self.document_filename))])
 
