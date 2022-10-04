@@ -47,4 +47,4 @@ class TestIndex(unittest.TestCase):
         mock_post.return_value.status_code = 500
         self.assertRaises(server_api_exception, instance.login, 'test@gmail.com', 'test_password')
 
-
+        instance.destroy()

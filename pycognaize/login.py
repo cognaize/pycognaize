@@ -77,3 +77,7 @@ class Login(object):
         else:
             raise server_api_exception("Server error. There was a problem "
                                        "with the serve")
+
+    @classmethod
+    def destroy(cls):
+        del cls.instance
