@@ -1,9 +1,9 @@
 import os
 from typing import Mapping
 
-
 from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.common.lazy_dict import LazyDocumentDict
+from pycognaize.login import Login
 
 
 class Snapshot:
@@ -21,14 +21,26 @@ class Snapshot:
         return self._documents
 
     @classmethod
-    def _snapshot_path(cls) -> str:
+    def _snapshot_path(cls, remote_snapshot_root: str = None) -> str:
         """Identify and return the snapshot path"""
-        snapshot_dir = os.environ[EnvConfigEnum.SNAPSHOT_PATH.value]
-        snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
-        snapshot_path = os.path.join(snapshot_dir, snapshot_id)
+        if remote_snapshot_root:
+            snapshot_dir = remote_snapshot_root
+            snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
+            snapshot_path = os.path.join(snapshot_dir, snapshot_id)
+        else:
+            snapshot_dir = os.environ[EnvConfigEnum.SNAPSHOT_PATH.value]
+            snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
+            snapshot_path = os.path.join(snapshot_dir, snapshot_id)
         return snapshot_path
 
     @classmethod
     def get(cls) -> 'Snapshot':
         """Read the snapshot object from local storage and return it"""
-        return cls(path=cls._snapshot_path())
+        login_instance = Login()
+        if login_instance.logged_in:
+            remote_snapshot_root = login_instance.snapshot_root
+            return cls(path=cls._snapshot_path(
+                       remote_snapshot_root=remote_snapshot_root))
+
+        else:
+            return cls(path=cls._snapshot_path())
