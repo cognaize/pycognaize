@@ -1,11 +1,13 @@
 import bson
-from typing import Union, List
+from typing import Union, Dict, TYPE_CHECKING
 
 from pycognaize.common.enums import IqTagKeyEnum, ID
 from pycognaize.document.tag.tag import LineTag
 
 from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.cell import Cell
+if TYPE_CHECKING:
+    from pycognaize.document.page import Page
 
 
 class SectionTag(LineTag):
@@ -19,7 +21,7 @@ class SectionTag(LineTag):
 
     @classmethod
     def construct_from_raw(cls, raw: dict,
-                           pages: List,
+                           pages: Dict[int, 'Page'],
                            tag_type: str) -> 'SectionTag':
         """Builds Tag object from pycognaize raw data
 
