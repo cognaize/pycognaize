@@ -68,15 +68,15 @@ class Login(object):
             self._snapshot_root = user_credentials['snapshotRoot']
         elif user_credentials_response.status_code == 403:
             raise ServerAPIException("Data download permission error. "
-                                       "Please make sure you have access"
-                                       " to Snapshots")
+                                     "Please make sure you have access"
+                                     " to Snapshots")
         elif user_credentials_response.status_code == 401:
             raise ServerAPIException("Wrong email or password. "
-                                       "Please make sure you entered the "
-                                       "correct credentials")
+                                     "Please make sure you entered the "
+                                     "correct credentials")
         else:
             raise ServerAPIException("Server error. There was a problem "
-                                       "with the serve")
+                                     "with the serve")
 
     @classmethod
     def destroy(cls):
