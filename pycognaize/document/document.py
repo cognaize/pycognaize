@@ -7,7 +7,7 @@ import logging
 import multiprocessing
 import os
 from collections import OrderedDict
-from typing import Dict, List, Tuple, Any, Optional, Callable
+from typing import Dict, List, Tuple, Any, Optional, Callable, Union
 
 import fitz
 import pandas as pd
@@ -415,7 +415,7 @@ class Document:
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],
                                      is_input_field: bool = True)\
-            -> List[BoxTag | LineTag]:
+            -> List[Union[BoxTag, LineTag]]:
         """Collect all tags of given field names from either input or output
             fields
 
