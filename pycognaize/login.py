@@ -1,7 +1,7 @@
 import os
 import requests
 
-from pycognaize.common.exceptions import server_api_exception
+from pycognaize.common.exceptions import ServerAPIException
 
 
 class Login(object):
@@ -53,9 +53,9 @@ class Login(object):
         try:
             user_credentials_response = requests.post(url, json=authentication)
         except requests.exceptions.ConnectionError:
-            raise server_api_exception(f'Failed connecting to url: {url}')
+            raise ServerAPIException(f'Failed connecting to url: {url}')
         except requests.exceptions.Timeout:
-            raise server_api_exception(f'Connection timed out: {url}')
+            raise ServerAPIException(f'Connection timed out: {url}')
 
         user_credentials = user_credentials_response.json()
         if user_credentials_response.status_code == 200:
@@ -67,15 +67,15 @@ class Login(object):
                 user_credentials['credentials']['SessionToken']
             self._snapshot_root = user_credentials['snapshotRoot']
         elif user_credentials_response.status_code == 403:
-            raise server_api_exception("Data download permission error. "
+            raise ServerAPIException("Data download permission error. "
                                        "Please make sure you have access"
                                        " to Snapshots")
         elif user_credentials_response.status_code == 401:
-            raise server_api_exception("Wrong email or password. "
+            raise ServerAPIException("Wrong email or password. "
                                        "Please make sure you entered the "
                                        "correct credentials")
         else:
-            raise server_api_exception("Server error. There was a problem "
+            raise ServerAPIException("Server error. There was a problem "
                                        "with the serve")
 
     @classmethod

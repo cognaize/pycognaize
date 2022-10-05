@@ -22,7 +22,8 @@ from pycognaize.common.utils import (
     compute_intersection_area,
     stick_word_boxes,
     preview_img,
-    image_string_to_array, cloud_interface_login
+    image_string_to_array,
+    cloud_interface_login
 )
 from pycognaize.document.tag import ExtractionTag
 
