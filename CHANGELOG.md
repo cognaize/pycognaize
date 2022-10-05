@@ -3,7 +3,7 @@
 ## [1.0]
 
 ### [1.1.3] - 2022-09-12
-- Add remote snapshot functionality and login functionality
+- Add login functionality to pycognaize
 
 ### [1.1.2] - 2022-09-12
 - group_by_field returns list of fields with group_key
