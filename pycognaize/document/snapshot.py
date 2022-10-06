@@ -1,6 +1,7 @@
 import os
 from typing import Mapping
 
+from pycognaize.common import utils
 from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.common.lazy_dict import LazyDocumentDict
 from pycognaize.login import Login
@@ -19,6 +20,16 @@ class Snapshot:
         :return Mapping:  LazyDocumentDict Object
         """
         return self._documents
+    @staticmethod
+    def download(destination_dir: str):
+        """Downloads snapshot to specified destination"""
+        login_instance = Login()
+        snapshot_dir = login_instance.snapshot_root
+        snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
+        snapshot_path = os.path.join(snapshot_dir, snapshot_id)
+
+        ci = utils.cloud_interface_login(login_instance)
+        ci.copy_dir(snapshot_path, destination_dir)
 
     @classmethod
     def _snapshot_path(cls, remote_snapshot_root: str = None) -> str:

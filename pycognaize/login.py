@@ -1,6 +1,7 @@
 import os
 import requests
 
+from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.common.exceptions import ServerAPIException
 
 
@@ -44,7 +45,7 @@ class Login(object):
 
     def login(self, email: str, password: str):
         """Get AWS access credentials and stores in the instance"""
-        host = os.environ.get('COGNAIZE_HOST')
+        host = os.environ.get(EnvConfigEnum.HOST.value)
         url = f"{host}/api/v1/integration/storage/token"
 
         authentication = {'email': email,
