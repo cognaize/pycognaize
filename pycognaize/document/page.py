@@ -4,6 +4,8 @@ import os
 import re
 from typing import Optional, List, Iterable, Union
 import numpy as np
+
+from pycognaize.login import Login
 from pycognaize.common.decorators import module_not_found
 
 from pycognaize.common.enums import (
@@ -20,9 +22,9 @@ from pycognaize.common.utils import (
     compute_intersection_area,
     stick_word_boxes,
     preview_img,
-    image_string_to_array
+    image_string_to_array,
+    cloud_interface_login
 )
-from cloudstorageio import CloudInterface
 from pycognaize.document.tag import ExtractionTag
 
 
@@ -30,7 +32,9 @@ class Page:
     """Representing a page of a document in pycognaize"""
     REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
 
-    def __init__(self, page_number: int, document_id: str, path: str):
+    def __init__(self, page_number: int,
+                 document_id: str,
+                 path: str):
         """
 
         :param page_number: The number of the page (1-based index)
@@ -39,7 +43,8 @@ class Page:
         """
         self._page_number = int(page_number)
         self._document_id = document_id
-        self.ci = CloudInterface()
+        self._login_instance = Login()
+        self.ci = cloud_interface_login(self._login_instance)
         self._path = path
         self._ocr_raw = None
         self._ocr = None

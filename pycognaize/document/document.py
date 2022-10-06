@@ -11,11 +11,12 @@ from typing import Dict, List, Tuple, Any, Optional, Callable, Union
 
 import fitz
 import pandas as pd
-from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
+from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
+from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field
 from pycognaize.document.page import Page
@@ -33,6 +34,7 @@ class Document:
                  output_fields: 'FieldCollection[str, List[Field]]',
                  pages: Dict[int, Page],
                  metadata: Dict[str, Any]):
+        self._login_instance = Login()
         self._metadata = metadata
         self._pages: Dict[int, Page] = pages
         self._x: FieldCollection[str, List[Field]] = input_fields
@@ -381,10 +383,12 @@ class Document:
         return data
 
     @classmethod
-    def from_dict(cls, raw: dict, data_path: str) -> 'Document':
+    def from_dict(cls, raw: dict,
+                  data_path: str) -> 'Document':
         """Document object created from data of dict
         :param raw: document dictionary
         :param data_path: path to the documents OCR and page images
+        :param login_instance: login instance of pycognaize
         """
         if not isinstance(raw, dict):
             raise TypeError(
@@ -409,7 +413,8 @@ class Document:
                 ].value.construct_from_raw(raw=field, pages=pages)
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
-        return cls(input_fields=input_fields, output_fields=output_fields,
+        return cls(input_fields=input_fields,
+                   output_fields=output_fields,
                    pages=pages, metadata=metadata)
 
     def _collect_all_tags_for_fields(self,
@@ -465,7 +470,7 @@ class Document:
         :return: bytes object of the pdf
         """
 
-        ci = CloudInterface()
+        ci = cloud_interface_login(self._login_instance)
         pdf_path = os.path.join(self.pages[1].path, self.document_src) + '.pdf'
 
         with ci.open(pdf_path, 'rb') as f:

@@ -51,6 +51,23 @@ Alternatively, ``Snapshot`` can be initialized with the corresponding parameters
 
         snapshot = Snapshot(data_path=..., doc_path=...)
 
+Cognaize SDK supports logging using Cognaize account, to access snapshots
+from the cloud. To use this feature, you need to login using your Cognaize account.
+
+    .. code:: python
+
+        from pycognaize.login import Login
+
+        login_instance = Login()
+        login_instance.login(username=..., password=...)
+
+    .. note::
+
+        ``login`` function will give you access to snapshots assigned to your account.
+        You only need to login once, and the login information will be available until
+        end of runtime
+
+
 :doc:`Snapshot <../API/_autosummary/pycognaize.document.snapshot.Snapshot>` is a
 collection of multiple Document objects
 
