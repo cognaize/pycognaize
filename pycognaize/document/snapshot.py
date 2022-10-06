@@ -21,22 +21,19 @@ class Snapshot:
         """
         return self._documents
 
-    @staticmethod
-    def download(destination_dir: str):
+    @classmethod
+    def download(cls, destination_dir: str):
         """Downloads snapshot to specified destination"""
         login_instance = Login()
-        snapshot_dir = login_instance.snapshot_root
-        snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
-        snapshot_path = os.path.join(snapshot_dir, snapshot_id)
-
         ci = utils.cloud_interface_login(login_instance)
-        ci.copy_dir(snapshot_path, destination_dir)
+        ci.copy_dir(cls._snapshot_path(), destination_dir)
 
     @classmethod
-    def _snapshot_path(cls, remote_snapshot_root: str = None) -> str:
+    def _snapshot_path(cls) -> str:
         """Identify and return the snapshot path"""
-        if remote_snapshot_root:
-            snapshot_dir = remote_snapshot_root
+        login_instance = Login()
+        if login_instance.logged_in:
+            snapshot_dir = login_instance.snapshot_root
             snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
             snapshot_path = os.path.join(snapshot_dir, snapshot_id)
         else:
@@ -48,11 +45,4 @@ class Snapshot:
     @classmethod
     def get(cls) -> 'Snapshot':
         """Read the snapshot object from local storage and return it"""
-        login_instance = Login()
-        if login_instance.logged_in:
-            remote_snapshot_root = login_instance.snapshot_root
-            return cls(path=cls._snapshot_path(
-                       remote_snapshot_root=remote_snapshot_root))
-
-        else:
-            return cls(path=cls._snapshot_path())
+        return cls(path=cls._snapshot_path())
