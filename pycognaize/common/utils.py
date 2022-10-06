@@ -11,6 +11,10 @@ from bson.json_util import loads as bson_loads
 
 import numpy as np
 from dataclasses import dataclass
+
+from cloudstorageio import CloudInterface
+
+from pycognaize.login import Login
 from pycognaize.common.enums import PythonShellEnum
 from pycognaize.common.decorators import soon_be_deprecated
 
@@ -588,3 +592,16 @@ def convert_tag_coords_to_percentages(tag, w, h) -> dict:
                 right=tag.right * w / 100,
                 top=tag.top * h / 100,
                 bottom=tag.bottom * h / 100)
+
+
+def cloud_interface_login(login_instance: Login) -> CloudInterface:
+    """Logs in to cloud interface"""
+
+    if login_instance.logged_in:
+        ci_instance = CloudInterface(
+            aws_access_key_id=login_instance.aws_access_key,
+            aws_secret_access_key=login_instance.aws_secret_access_key,
+            aws_session_token=login_instance.aws_session_token)
+    else:
+        ci_instance = CloudInterface()
+    return ci_instance
