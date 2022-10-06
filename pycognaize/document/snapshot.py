@@ -20,6 +20,7 @@ class Snapshot:
         :return Mapping:  LazyDocumentDict Object
         """
         return self._documents
+
     @staticmethod
     def download(destination_dir: str):
         """Downloads snapshot to specified destination"""
