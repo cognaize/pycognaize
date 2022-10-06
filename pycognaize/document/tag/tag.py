@@ -23,7 +23,7 @@ class Tag(metaclass=abc.ABCMeta):
 
 
 class BoxTag(Tag, metaclass=abc.ABCMeta):
-    """Represents field's coordinate data on document"""
+    """Represents a tag that has a varying width and height"""
 
     def __init__(self,
                  left: Union[int, float],
@@ -369,7 +369,8 @@ class BoxTag(Tag, metaclass=abc.ABCMeta):
 
 
 class LineTag(Tag, metaclass=abc.ABCMeta):
-    """Represents field's coordinate data on document"""
+    """Represents a tag that does not have height,
+     and width is always 100%, hence a line"""
 
     def __init__(self,
                  top: Union[int, float],
