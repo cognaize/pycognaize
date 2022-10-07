@@ -10,5 +10,5 @@ class ServerAPIException(Exception):
 
 class AuthenthicationError(Exception):
     def __init__(self):
-        message = f"Please login to access a remote Snapshot"
+        message = "Please login to access a remote Snapshot"
         super().__init__(message)

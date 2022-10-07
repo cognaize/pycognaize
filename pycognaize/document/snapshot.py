@@ -28,7 +28,8 @@ class Snapshot:
         login_instance = Login()
 
         if login_instance.logged_in:
-            snapshot_path = os.path.join(login_instance.snapshot_root, snapshot_id)
+            snapshot_path = os.path.join(login_instance.snapshot_root,
+                                         snapshot_id)
             ci = utils.cloud_interface_login(login_instance)
             ci.copy_dir(snapshot_path, destination_dir)
         else:
