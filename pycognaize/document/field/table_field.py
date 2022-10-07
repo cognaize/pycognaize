@@ -16,13 +16,13 @@ from pycognaize.common.utils import (
 )
 from pycognaize.document.field import Field
 from pycognaize.document.tag import TableTag
-from pycognaize.document.tag.tag import Tag
+from pycognaize.document.tag.tag import BoxTag
 from pycognaize.document.page import Page
 
 
 class TableField(Field):
     """Base class for all pycognaize table fields"""
-    tag_class: Type[Tag] = TableTag
+    tag_class: Type[BoxTag] = TableTag
 
     def __init__(self,
                  name: str,

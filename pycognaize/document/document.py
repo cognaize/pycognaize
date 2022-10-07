@@ -7,7 +7,7 @@ import logging
 import multiprocessing
 import os
 from collections import OrderedDict
-from typing import Dict, List, Tuple, Any, Optional, Callable
+from typing import Dict, List, Tuple, Any, Optional, Callable, Union
 
 import fitz
 import pandas as pd
@@ -22,7 +22,7 @@ from pycognaize.document.field.field import Field
 from pycognaize.document.page import Page
 from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
-from pycognaize.document.tag.tag import Tag
+from pycognaize.document.tag.tag import BoxTag, LineTag
 
 
 class Document:
@@ -75,10 +75,10 @@ class Document:
 
     @staticmethod
     def get_matching_table_cells_for_tag(
-            tag: Tag,
+            tag: BoxTag,
             table_tags: List[TableTag],
             one_to_one: bool
-    ) -> List[Tuple[Tag, TableTag, Cell, float]]:
+    ) -> List[Tuple[BoxTag, TableTag, Cell, float]]:
         """Create a list which includes the original extraction tag,
            the corresponding table tag and Cell objects
            and the IOU of the intersection
@@ -116,7 +116,7 @@ class Document:
 
     def get_table_cell_overlap(
             self, source_field: str,
-            one_to_one: bool) -> List[Tuple[Tag, TableTag, Cell, float]]:
+            one_to_one: bool) -> List[Tuple[BoxTag, TableTag, Cell, float]]:
         """Create a list which includes the original extraction tag,
            the corresponding table tag and Cell objects
            and the IOU of the intersection
@@ -419,7 +419,8 @@ class Document:
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],
-                                     is_input_field: bool = True) -> List[Tag]:
+                                     is_input_field: bool = True)\
+            -> List[Union[BoxTag, LineTag]]:
         """Collect all tags of given field names from either input or output
             fields
 
@@ -498,7 +499,7 @@ class Document:
 
 
 def annotate_pdf(doc: fitz.Document,
-                 tag: Tag,
+                 tag: BoxTag,
                  color: str,
                  opacity: float = 0.3) -> bytes:
     """An annotated Document pdf in bytes"""

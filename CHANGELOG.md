@@ -2,7 +2,12 @@
 
 ## [1.0]
 
-### [1.1.3] - 2022-09-12
+### [1.1.4] - 2022-10-06
+- Add snapshot download to specified directory
+  functionality
+- Add Page Section tag and field functionalities
+
+### [1.1.3] - 2022-10-05
 - Add login functionality to pycognaize
 
 ### [1.1.2] - 2022-09-12
