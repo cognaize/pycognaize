@@ -12,7 +12,6 @@ import fitz
 import pandas as pd
 from fitz.utils import getColor, getColorList
 
-from pycognaize.common.table_utils import assign_indices_to_tables
 from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
