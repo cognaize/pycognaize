@@ -15,7 +15,6 @@ from fitz.utils import getColor, getColorList
 from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
-from pycognaize.common.table_utils import assign_indices_to_tables
 from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field

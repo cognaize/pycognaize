@@ -1,6 +1,5 @@
 import logging
 from itertools import groupby
-from typing import List
 
 
 def filter_out_invalid_tables(tables):
