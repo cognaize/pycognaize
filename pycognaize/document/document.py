@@ -3,7 +3,6 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
-import logging
 import multiprocessing
 import os
 from collections import OrderedDict
@@ -16,6 +15,7 @@ from fitz.utils import getColor, getColorList
 from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
+from pycognaize.common.table_utils import assign_indices_to_tables
 from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field
@@ -519,36 +519,3 @@ def annotate_pdf(doc: fitz.Document,
     annot.set_opacity(opacity)
     annot.update()
     return doc.write()
-
-
-def filter_out_invalid_tables(tables):
-    valid_tables = []
-    for table in tables:
-        if not table.tags:
-            logging.warning('removing table with no tags')
-            continue
-
-        valid_tables.append(table)
-    return valid_tables
-
-
-def assign_indices_to_tables(tables: List['Field']):
-    tables_dict = {}
-    valid_tables = filter_out_invalid_tables(tables)
-    tables = sorted(valid_tables, key=lambda x: (
-        x.tags[0].page.page_number, x.tags[0].top, x.tags[0].left))
-
-    for table in tables:
-        page_number = table.tags[0].page.page_number
-        try:
-            # find all tables in the current page
-            # and get the index for next table
-            table_last_index = [
-                current_index
-                for (table_page_number, current_index) in tables_dict.keys()
-                if page_number == table_page_number
-            ][-1] + 1
-        except IndexError:
-            table_last_index = 0
-        tables_dict[(page_number, table_last_index)] = table
-    return tables_dict
