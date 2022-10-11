@@ -8,7 +8,6 @@ def filter_out_invalid_tables(tables):
         if not table.tags:
             logging.warning('removing table with no tags')
             continue
-
         valid_tables.append(table)
     return valid_tables
 
