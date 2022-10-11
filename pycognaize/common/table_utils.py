@@ -59,7 +59,7 @@ def assign_indices_to_tables(tables, threshold: float = 0.4):
         sorted_page_tables = sorted(page_tables,
                                     key=lambda x: x.tags[0].left)
         final_ordered_tables = _sort_table_horizontally(sorted_page_tables,
-                                                       threshold=threshold)
+                                                        threshold=threshold)
         tables_dict.update({(page, idx): table
                             for idx, table in
                             enumerate(final_ordered_tables)})
