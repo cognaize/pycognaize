@@ -12,6 +12,7 @@ import fitz
 import pandas as pd
 from fitz.utils import getColor, getColorList
 
+from pycognaize.common.table_utils import assign_indices_to_tables
 from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
@@ -518,3 +519,16 @@ def annotate_pdf(doc: fitz.Document,
     annot.set_opacity(opacity)
     annot.update()
     return doc.write()
+
+
+if __name__ == "__main__":
+    from pycognaize import Snapshot
+    SNAPSHOT_PATH = '/home/cognaize/Desktop/cognaize/pycognaize/temp/gulfim'
+    snap = Snapshot(SNAPSHOT_PATH)
+    ids = ['6337fdc35f57da00191cd9ea',
+           '6337f1a3831107001b933b03']
+    for id in ids:
+        doc = snap.documents[id]
+        tables = doc.y['table']
+        table_indices = assign_indices_to_tables(tables=tables)
+        print(table_indices)

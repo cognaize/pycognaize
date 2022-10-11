@@ -13,7 +13,7 @@ def filter_out_invalid_tables(tables):
     return valid_tables
 
 
-def sort_table_horizontally(tables, threshold: float):
+def _sort_table_horizontally(tables, threshold: float):
     groups = []
     for table in tables:
         if not groups:
@@ -42,6 +42,13 @@ def sort_table_horizontally(tables, threshold: float):
 
 
 def assign_indices_to_tables(tables, threshold: float = 0.4):
+    """
+    Given tables are grouped by pages,
+        then for each page, tables are left sorted then
+            ordered horizontally and vertically.
+    Return dict where keys are indices based above-mentioned ordering
+        and values are corresponding tables.
+    """
     tables_dict = {}
     valid_tables = filter_out_invalid_tables(tables)
     sorted_tables = sorted(valid_tables,
@@ -50,9 +57,11 @@ def assign_indices_to_tables(tables, threshold: float = 0.4):
                       groupby(sorted_tables,
                               key=lambda x: x.tags[0].page.page_number)}
     for page, page_tables in grouped_tables.items():
-        sorted_page_tables = sorted(page_tables, key=lambda x: x.tags[0].left)
-        final_ordered_tables = sort_table_horizontally(sorted_page_tables,
+        sorted_page_tables = sorted(page_tables,
+                                    key=lambda x: x.tags[0].left)
+        final_ordered_tables = _sort_table_horizontally(sorted_page_tables,
                                                        threshold=threshold)
         tables_dict.update({(page, idx): table
-                            for idx, table in enumerate(final_ordered_tables)})
+                            for idx, table in
+                            enumerate(final_ordered_tables)})
     return tables_dict
