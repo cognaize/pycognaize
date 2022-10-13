@@ -3,6 +3,9 @@ from itertools import groupby
 
 
 def filter_out_invalid_tables(tables):
+    """
+    Filters tables that have tag.
+    """
     valid_tables = []
     for table in tables:
         if not table.tags:
@@ -13,6 +16,9 @@ def filter_out_invalid_tables(tables):
 
 
 def _sort_table_horizontally(tables, threshold: float):
+    """
+    Given tables are sorted first horizontally, then vertically.
+    """
     groups = []
     for table in tables:
         if not groups:
