@@ -1,6 +1,8 @@
 # Changelog
 
 ## [1.0]
+### [1.2.0] - 2022-10-11
+- Modify assign indices functionality to correctly index tables located side by side
 
 ### [1.1.4] - 2022-10-06
 - Add snapshot download to specified directory
