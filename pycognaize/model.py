@@ -103,6 +103,20 @@ class Model(metaclass=abc.ABCMeta):
         return self._post_response(doc=doc, session=session, url=url,
                                    task_id=task_id)
 
+    def _execute_bulk(self, dataset_id: str, token: str, url: str
+                      ) -> List[requests.Response]:
+        """Execute model on multiple documents in a loop, given a dataset ID"""
+        responses: List[requests.Response] = []
+        session = requests.Session()
+        session.headers = {'x-auth': token}
+        get_response: requests.Response = session.get(
+            url + '/model/' + dataset_id, verify=False)
+        task_ids: List[str] = get_response.json()
+        for task_id in task_ids:
+            responses.append(self.execute_genie(task_id=task_id, token=token,
+                                                url=url))
+        return responses
+
     def eval_tag_level(self, act_document: Document,
                        pred_document: Document, only_content=False) -> dict:
         """ Evaluation on tag level.
