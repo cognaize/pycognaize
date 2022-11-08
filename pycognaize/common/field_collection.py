@@ -11,6 +11,7 @@ class FieldCollection(OrderedDict):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._groups = None
+        self._groups_by_key = None
 
     @property
     def groups(self) -> dict:
@@ -18,6 +19,20 @@ class FieldCollection(OrderedDict):
         if self._groups is None:
             self._groups = LazyGroupDict(self).groups
         return self._groups
+
+    @property
+    def key_groups(self) -> dict:
+        """Return Groups"""
+        if self._groups_by_key is None:
+            self._groups_by_key = LazyGroupDict(self).groups_by_key
+        return self._groups_by_key
+
+    def groups_by_key(self, group_key: str) -> dict:
+        """Returns groups that contain the given group_key"""
+        if group_key in self.key_groups.keys():
+            return self.key_groups[group_key]
+        else:
+            raise KeyError
 
     def groups_by_name(self, name: str) -> dict:
         """Returns fields that are contained in group with the
