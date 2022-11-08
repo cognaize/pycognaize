@@ -46,6 +46,16 @@ class TestFieldCollection(unittest.TestCase):
                     groups[item.group_key].append(item)
         return groups
 
+    def get_group_by_keys(self, group_key: str) -> dict:
+        """Get fields from document that the give group name"""
+        groups = defaultdict(list)
+        for field_name in self.document.y.keys():
+            for item in self.document.y[field_name]:
+                if item.group_key == group_key:
+                    groups[item.group_key].append((field_name, item))
+        return groups
+
+
     def test_groups_by_name(self):
         # Test create groups by name
         total_assets = self.get_group('Total Assets')
@@ -58,6 +68,21 @@ class TestFieldCollection(unittest.TestCase):
             self.assertEqual(self.doc_y.groups_by_name(''), {})
         with self.assertRaises(KeyError):
             self.assertEqual(self.doc_y.groups_by_name('Non-Existent Group'), {})
+
+    def test_groups_by_key(self):
+        # Test create groups by name
+        total_assets = self.get_group_by_keys('38e1ea2c-8882-11ea-b84a-0242ac130007')
+        self.assertEqual(self.doc_y.key_groups['38e1ea2c-8882-11ea-b84a-0242ac130007'], total_assets['38e1ea2c-8882-11ea-b84a-0242ac130007'])
+        self.assertEqual(len(self.doc_y.key_groups['38e1ea2c-8882-11ea-b84a-0242ac130007']), 3)
+        # Check Structure
+        self.assertIsInstance(self.doc_y.groups, defaultdict)
+
+        self.doc_y.groups_by_key('38e1ea2c-8882-11ea-b84a-0242ac130007')
+        # Test create groups by name empty input
+        with self.assertRaises(KeyError):
+            self.assertEqual(self.doc_y.groups_by_key(''), {})
+        with self.assertRaises(KeyError):
+            self.assertEqual(self.doc_y.groups_by_key('Non-Existent Group Key'), {})
 
     def test_groups_by_field(self):
         # Test create groups by name
