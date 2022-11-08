@@ -6,3 +6,4 @@ cloudstorageio >= 1.2.7
 simplejson
 pillow
 pymupdf==1.19.4
+urllib3

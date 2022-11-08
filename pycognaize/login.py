@@ -1,5 +1,7 @@
 import os
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.common.exceptions import ServerAPIException
@@ -45,6 +47,16 @@ class Login(object):
 
     def login(self, email: str, password: str):
         """Get AWS access credentials and stores in the instance"""
+        retry_strategy = Retry(
+            total=3,
+            status_forcelist=[500, 502, 503, 504, 404],
+            allowed_methods=["POST"]
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        http = requests.Session()
+        http.mount("http://", adapter)
+        http.mount("https://", adapter)
+
         host = os.environ.get(EnvConfigEnum.HOST.value)
         url = f"{host}/api/v1/integration/storage/token"
 
@@ -52,12 +64,13 @@ class Login(object):
                           'password': password}
 
         try:
-            user_credentials_response = requests.post(url, json=authentication)
+            user_credentials_response = http.post(url, json=authentication, timeout=10)
         except requests.exceptions.ConnectionError:
             raise ServerAPIException(f'Failed connecting to url: {url}')
         except requests.exceptions.Timeout:
             raise ServerAPIException(f'Connection timed out: {url}')
 
+        print(user_credentials_response)
         user_credentials = user_credentials_response.json()
         if user_credentials_response.status_code == 200:
             self._logged_in = True

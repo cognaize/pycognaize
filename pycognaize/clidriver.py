@@ -14,7 +14,9 @@ parser.add_argument('--model_version', type=str)
 parser.add_argument('-bulk', '--bulk',  action='store_true')
 parser.add_argument('-based_on_match', '--based_on_match', action='store_true')
 
+
 def main():
+    """Argparser for pycognaize"""
     args = parser.parse_args()
 
     action = args.action
