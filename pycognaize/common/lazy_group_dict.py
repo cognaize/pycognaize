@@ -22,7 +22,6 @@ class LazyGroupDict(Mapping):
             self.__create_groups(self._document_fields)
         return self._groups
 
-
     def __create_groups(self, document_fields: dict):
         """Add fields to group """
         groups = defaultdict(dict)
