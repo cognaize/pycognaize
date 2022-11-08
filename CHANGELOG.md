@@ -1,6 +1,10 @@
 # Changelog
 
 ## [1.0]
+### [1.2.1] - 2022-11-08
+- Add functionality for grouping fields by key
+
+
 ### [1.2.0] - 2022-10-11
 - Modify assign indices functionality to correctly index tables located side by side
 
