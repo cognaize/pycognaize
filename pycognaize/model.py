@@ -60,6 +60,7 @@ class Model(metaclass=abc.ABCMeta):
         post_response: requests.Response = session.post(
             url + '/' + task_id, data=output_document_json, verify=False,
             timeout=timeout)
+        post_response.raise_for_status()
         return post_response
 
     def execute_based_on_match(self, task_id: str, base_doc_task_id: str,
@@ -72,6 +73,7 @@ class Model(metaclass=abc.ABCMeta):
         get_response: requests.Response = \
             session.get(url + '/' + task_id, verify=False,
                         timeout=self.DEFAULT_TIMEOUT)
+        get_response.raise_for_status()
         get_response_dict: dict = get_response.json()
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
@@ -81,6 +83,7 @@ class Model(metaclass=abc.ABCMeta):
         base_doc_get_response: requests.Response = session.get(
             url + '/' + base_doc_task_id, verify=False,
             timeout=self.DEFAULT_TIMEOUT)
+        base_doc_get_response.raise_for_status()
         base_doc_get_response_dict: dict = base_doc_get_response.json()
         base_doc_data_path: str = base_doc_get_response_dict[
             'documentRootPath']
@@ -108,6 +111,7 @@ class Model(metaclass=abc.ABCMeta):
         get_response: requests.Response =\
             session.get(url + '/' + task_id, verify=False,
                         timeout=self.DEFAULT_TIMEOUT)
+        get_response.raise_for_status()
         get_response_dict: dict = get_response.json()
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
