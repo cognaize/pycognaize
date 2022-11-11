@@ -58,7 +58,8 @@ class Model(metaclass=abc.ABCMeta):
                                           ignore_nan=True)
         session.headers.update({"Content-Type": "application/json"})
         post_response: requests.Response = session.post(
-            url + '/' + task_id, data=output_document_json, verify=False)
+            url + '/' + task_id, data=output_document_json, verify=False,
+            timeout=10)
         return post_response
 
     def execute_based_on_match(self, task_id: str, base_doc_task_id: str,
@@ -69,7 +70,8 @@ class Model(metaclass=abc.ABCMeta):
         session.headers = {'x-auth': token}
 
         get_response: requests.Response = session.get(url + '/' + task_id,
-                                                      verify=False)
+                                                      verify=False,
+                                                      timeout=10)
         get_response_dict: dict = get_response.json()
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
@@ -77,7 +79,8 @@ class Model(metaclass=abc.ABCMeta):
                                            data_path=doc_data_path)
 
         base_doc_get_response: requests.Response = session.get(
-            url + '/' + base_doc_task_id, verify=False)
+            url + '/' + base_doc_task_id, verify=False,
+            timeout=10)
         base_doc_get_response_dict: dict = base_doc_get_response.json()
         base_doc_data_path: str = base_doc_get_response_dict[
             'documentRootPath']
@@ -102,7 +105,8 @@ class Model(metaclass=abc.ABCMeta):
         session.mount('https://', HTTPAdapter(max_retries=self.retries))
         session.headers = {'x-auth': token}
         get_response: requests.Response = session.get(url + '/' + task_id,
-                                                      verify=False)
+                                                      verify=False,
+                                                      timeout=10)
         get_response_dict: dict = get_response.json()
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
@@ -382,14 +386,16 @@ class Model(metaclass=abc.ABCMeta):
 
         ground_truth_ids = session.get(
             url=f'{url}/groundtruths/{model_version}',
-            verify=False
+            verify=False,
+            timeout=10
         ).json()
 
         post_responses = []
         for gt_id in ground_truth_ids:
             ground_truth_model_task = session.get(
                 url=f'{url}/evaluations/{model_version}/{gt_id}',
-                verify=False
+                verify=False,
+                timeout=10
             ).json()
 
             act_doc, pred_doc = self._get_doc_pair(ground_truth_model_task)
@@ -436,5 +442,6 @@ class Model(metaclass=abc.ABCMeta):
         session.headers.update({"Content-Type": "application/json"})
         post_response = session.post(endpoint,
                                      data=json.dumps(data, ignore_nan=True),
-                                     verify=False)
+                                     verify=False,
+                                     timeout=10)
         return post_response
