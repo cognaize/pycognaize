@@ -64,7 +64,9 @@ class Login(object):
                           'password': password}
 
         try:
-            user_credentials_response = http.post(url, json=authentication, timeout=10)
+            user_credentials_response = http.post(url,
+                                                  json=authentication,
+                                                  timeout=10)
         except requests.exceptions.ConnectionError:
             raise ServerAPIException(f'Failed connecting to url: {url}')
         except requests.exceptions.Timeout:

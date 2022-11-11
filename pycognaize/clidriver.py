@@ -2,9 +2,11 @@ import argparse
 
 from src.model import CurrentModel as GenieModel
 
-parser = argparse.ArgumentParser(description='Execute and evaluate genie models')
+parser = argparse.ArgumentParser(description='Execute and'
+                                 ' evaluate genie models')
 parser.add_argument('action', metavar='action', type=str,
-                    help='an action to be run on the task [execute | evaluate]')
+                    help='an action to be run on the task'
+                         ' [execute | evaluate]')
 parser.add_argument('--task_id', type=str, required=True, nargs='*')
 parser.add_argument('--base_doc_task_id', type=str)
 parser.add_argument('--token', type=str, required=True)
@@ -38,8 +40,11 @@ def run_model(task_ids, token, url, base_doc_task_id, based_on_match):
     for task_id in task_ids:
         if based_on_match:
             if base_doc_task_id is None:
-                raise ValueError('base_doc_task_id is required when based_on_match is True')
-            GenieModel().execute_based_on_match(task_id, base_doc_task_id, token, url)
+                raise ValueError('base_doc_task_id is required when'
+                                 ' based_on_match is True')
+            GenieModel().execute_based_on_match(task_id,
+                                                base_doc_task_id,
+                                                token, url)
         else:
             GenieModel().execute_genie_v2(task_id, token, url)
 
