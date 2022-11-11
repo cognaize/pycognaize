@@ -1,6 +1,9 @@
 # Changelog
 
 ## [1.0]
+### [1.2.2] - 2022-11-11
+- Add HTTP request timeout for genie model run
+
 ### [1.2.1] - 2022-11-08
 - Add functionality for grouping fields by key
 
