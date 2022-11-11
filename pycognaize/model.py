@@ -5,6 +5,8 @@ from typing import Tuple, List
 import requests
 import simplejson as json
 from cloudstorageio import CloudInterface
+from requests.adapters import HTTPAdapter
+from urllib3 import Retry
 
 from pycognaize.common.utils import (
     replace_object_ids_with_string,
@@ -25,6 +27,9 @@ class Model(metaclass=abc.ABCMeta):
     The model inputs and outputs are available from the document attribute.
     """
     CI = CloudInterface()
+    retries = Retry(total=3,
+                    backoff_factor=0.1,
+                    status_forcelist=[500, 502, 503, 504])
 
     @abc.abstractmethod
     def predict(self, document: Document) -> Document:
@@ -59,6 +64,8 @@ class Model(metaclass=abc.ABCMeta):
     def execute_based_on_match(self, task_id: str, base_doc_task_id: str,
                                token: str, url: str) -> requests.Response:
         session = requests.Session()
+        session.mount('http://', HTTPAdapter(max_retries=self.retries))
+        session.mount('https://', HTTPAdapter(max_retries=self.retries))
         session.headers = {'x-auth': token}
 
         get_response: requests.Response = session.get(url + '/' + task_id,
@@ -91,6 +98,8 @@ class Model(metaclass=abc.ABCMeta):
                          url: str) -> requests.Response:
         """Execute genie for a given task_id"""
         session = requests.Session()
+        session.mount('http://', HTTPAdapter(max_retries=self.retries))
+        session.mount('https://', HTTPAdapter(max_retries=self.retries))
         session.headers = {'x-auth': token}
         get_response: requests.Response = session.get(url + '/' + task_id,
                                                       verify=False)
@@ -367,6 +376,8 @@ class Model(metaclass=abc.ABCMeta):
                      ) -> List[requests.Response]:
         """ Execute evaluation for a given model_version """
         session = requests.Session()
+        session.mount('http://', HTTPAdapter(max_retries=self.retries))
+        session.mount('https://', HTTPAdapter(max_retries=self.retries))
         session.headers = {'x-auth': token}
 
         ground_truth_ids = session.get(
