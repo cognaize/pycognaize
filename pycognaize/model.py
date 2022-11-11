@@ -27,8 +27,8 @@ class Model(metaclass=abc.ABCMeta):
     The model inputs and outputs are available from the document attribute.
     """
     CI = CloudInterface()
-    retries = Retry(total=3,
-                    backoff_factor=0.1,
+    RETRIES = Retry(total=3,
+                    backoff_factor=10,
                     status_forcelist=[500, 502, 503, 504])
 
     @abc.abstractmethod
@@ -59,19 +59,19 @@ class Model(metaclass=abc.ABCMeta):
         session.headers.update({"Content-Type": "application/json"})
         post_response: requests.Response = session.post(
             url + '/' + task_id, data=output_document_json, verify=False,
-            timeout=10)
+            timeout=600)
         return post_response
 
     def execute_based_on_match(self, task_id: str, base_doc_task_id: str,
                                token: str, url: str) -> requests.Response:
         session = requests.Session()
-        session.mount('http://', HTTPAdapter(max_retries=self.retries))
-        session.mount('https://', HTTPAdapter(max_retries=self.retries))
+        session.mount('http://', HTTPAdapter(max_retries=self.RETRIES))
+        session.mount('https://', HTTPAdapter(max_retries=self.RETRIES))
         session.headers = {'x-auth': token}
 
         get_response: requests.Response = session.get(url + '/' + task_id,
                                                       verify=False,
-                                                      timeout=10)
+                                                      timeout=600)
         get_response_dict: dict = get_response.json()
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
@@ -80,7 +80,7 @@ class Model(metaclass=abc.ABCMeta):
 
         base_doc_get_response: requests.Response = session.get(
             url + '/' + base_doc_task_id, verify=False,
-            timeout=10)
+            timeout=600)
         base_doc_get_response_dict: dict = base_doc_get_response.json()
         base_doc_data_path: str = base_doc_get_response_dict[
             'documentRootPath']
@@ -101,12 +101,12 @@ class Model(metaclass=abc.ABCMeta):
                          url: str) -> requests.Response:
         """Execute genie for a given task_id"""
         session = requests.Session()
-        session.mount('http://', HTTPAdapter(max_retries=self.retries))
-        session.mount('https://', HTTPAdapter(max_retries=self.retries))
+        session.mount('http://', HTTPAdapter(max_retries=self.RETRIES))
+        session.mount('https://', HTTPAdapter(max_retries=self.RETRIES))
         session.headers = {'x-auth': token}
         get_response: requests.Response = session.get(url + '/' + task_id,
                                                       verify=False,
-                                                      timeout=10)
+                                                      timeout=600)
         get_response_dict: dict = get_response.json()
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
@@ -380,14 +380,14 @@ class Model(metaclass=abc.ABCMeta):
                      ) -> List[requests.Response]:
         """ Execute evaluation for a given model_version """
         session = requests.Session()
-        session.mount('http://', HTTPAdapter(max_retries=self.retries))
-        session.mount('https://', HTTPAdapter(max_retries=self.retries))
+        session.mount('http://', HTTPAdapter(max_retries=self.RETRIES))
+        session.mount('https://', HTTPAdapter(max_retries=self.RETRIES))
         session.headers = {'x-auth': token}
 
         ground_truth_ids = session.get(
             url=f'{url}/groundtruths/{model_version}',
             verify=False,
-            timeout=10
+            timeout=600
         ).json()
 
         post_responses = []
@@ -395,7 +395,7 @@ class Model(metaclass=abc.ABCMeta):
             ground_truth_model_task = session.get(
                 url=f'{url}/evaluations/{model_version}/{gt_id}',
                 verify=False,
-                timeout=10
+                timeout=600
             ).json()
 
             act_doc, pred_doc = self._get_doc_pair(ground_truth_model_task)
@@ -443,5 +443,5 @@ class Model(metaclass=abc.ABCMeta):
         post_response = session.post(endpoint,
                                      data=json.dumps(data, ignore_nan=True),
                                      verify=False,
-                                     timeout=10)
+                                     timeout=600)
         return post_response

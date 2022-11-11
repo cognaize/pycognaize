@@ -135,7 +135,7 @@ class TestModel(unittest.TestCase):
 
             self.assertEqual(response.status_code, 200)
             self.session_mock.get.assert_called_with(urljoin(self.url, self.task_id),
-                                                     verify=False, timeout=10)
+                                                     verify=False, timeout=600)
             self.get_response_mock.json.assert_called_once()
             self.session_mock.post.assert_called_once()
 
