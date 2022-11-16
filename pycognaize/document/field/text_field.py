@@ -54,7 +54,6 @@ class TextField(Field):
         self._value = '; '.join([i.raw_value
                                  for i in self.tags]) if self.tags else value
 
-
     @property
     def value(self):
         return self._value
