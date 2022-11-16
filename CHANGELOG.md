@@ -1,6 +1,9 @@
 # Changelog
 
 ## [1.0]
+### [1.2.3] - 2022-11-16
+- Field object raw_value contains fields value
+
 ### [1.2.2] - 2022-11-11
 - Add HTTP request timeout for genie model run
 

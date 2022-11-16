@@ -19,6 +19,7 @@ class Field(metaclass=abc.ABCMeta):
                  confidence: Optional[float] = -1.0,
                  group_name: Optional[str] = None,
                  ):
+        self._raw_value = value
         self._confidence = confidence
         if group_key is None:
             group_key = ''
@@ -33,6 +34,10 @@ class Field(metaclass=abc.ABCMeta):
             self._tags = tags
         self._value = value
         self._field_id = field_id
+
+    @property
+    def raw_value(self):
+        return self._raw_value
 
     @property
     def name(self):

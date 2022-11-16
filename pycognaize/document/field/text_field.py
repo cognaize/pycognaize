@@ -51,13 +51,8 @@ class TextField(Field):
         super().__init__(name=name, tags=tags, group_key=group_key,
                          confidence=confidence,  group_name=group_name)
         self._field_id = field_id
-        self._raw_value = value
         self._value = '; '.join([i.raw_value
                                  for i in self.tags]) if self.tags else value
-
-    @property
-    def raw_value(self):
-        return self._raw_value
 
     @property
     def value(self):
