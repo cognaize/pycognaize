@@ -26,8 +26,9 @@ class SpanField(Field):
                  group_name: str = None,
                  ):
         tags = [] if tags is None else tags
-        super().__init__(name=name, tags=tags, group_key=group_key,
-                         confidence=confidence, group_name=group_name)
+        super().__init__(name=name, tags=tags,
+                         group_key=group_key, confidence=confidence,
+                         group_name=group_name)
         self._field_id = field_id
 
     @classmethod
