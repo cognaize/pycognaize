@@ -1,6 +1,9 @@
 # Changelog
 
-## [1.0]
+## [1.2]
+### [1.2.3] - 2022-11-16
+- Field object raw_value bug fix
+
 ### [1.2.3] - 2022-11-16
 - Field object raw_value contains fields value
 
@@ -14,6 +17,7 @@
 ### [1.2.0] - 2022-10-11
 - Modify assign indices functionality to correctly index tables located side by side
 
+## [1.1]
 ### [1.1.4] - 2022-10-06
 - Add snapshot download to specified directory
   functionality
@@ -35,6 +39,7 @@
 - Added multiprocessing download of images and 
   ocr data
 
+## [1.0]
 ### [1.0.3] - 2022-08-23
 - Change get_tied_fields, get_tied_tags, 
   get_first_tied_field, get_first_tied_tag methods to return also python names
