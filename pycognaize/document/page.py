@@ -43,6 +43,8 @@ class Page:
         :param page_number: The number of the page (1-based index)
         :param document_id: The unique id of the document
         :param path:
+        :param image_width: Page image width
+        :param image_height: Page image height
         """
         self._page_number = int(page_number)
         self._document_id = document_id
