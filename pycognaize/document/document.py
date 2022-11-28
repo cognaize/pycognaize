@@ -393,11 +393,24 @@ class Document:
             raise TypeError(
                 f"Expected dict for 'raw' argument got {type(raw)} instead")
         metadata = raw['metadata']
-        pages = OrderedDict({page_n: Page(page_number=page_n,
-                                          document_id=metadata['document_id'],
-                                          path=data_path)
-                             for page_n in range(
-                1, metadata['numberOfPages'] + 1)})
+        pages = OrderedDict()
+        for page_n in range(1, metadata['numberOfPages'] + 1):
+            if (
+                    'pages' in raw
+                    and str(page_n) in raw['pages']
+                    and 'width' in raw['pages'][str(page_n)]
+                    and 'height' in raw['pages'][str(page_n)]
+            ):
+                image_width = raw['pages'][str(page_n)]['width']
+                image_height = raw['pages'][str(page_n)]['height']
+            else:
+                image_width = None
+                image_height = None
+            pages[page_n] = Page(page_number=page_n,
+                                 document_id=metadata['document_id'],
+                                 path=data_path,
+                                 image_width=image_width,
+                                 image_height=image_height)
         input_fields = FieldCollection(
             {name: [
                 FieldMapping[
