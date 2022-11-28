@@ -1,6 +1,9 @@
 # Changelog
 
 ## [1.2]
+### [1.2.4] - 2022-11-28
+- Field object raw_value bug fix
+
 ### [1.2.3] - 2022-11-16
 - Field object raw_value bug fix
 
