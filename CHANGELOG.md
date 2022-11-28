@@ -1,6 +1,10 @@
 # Changelog
 
 ## [1.2]
+### [1.2.5] - 2022-11-28
+- Read page image height/width from document.json
+- Field raw value bug fix
+
 ### [1.2.4] - 2022-11-28
 - Field object raw_value bug fix
 
