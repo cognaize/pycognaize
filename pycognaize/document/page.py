@@ -34,12 +34,17 @@ class Page:
 
     def __init__(self, page_number: int,
                  document_id: str,
-                 path: str):
+                 path: str,
+                 image_height: int = None,
+                 image_width: int = None
+                 ):
         """
 
         :param page_number: The number of the page (1-based index)
         :param document_id: The unique id of the document
         :param path:
+        :param image_width: Page image width
+        :param image_height: Page image height
         """
         self._page_number = int(page_number)
         self._document_id = document_id
@@ -52,8 +57,8 @@ class Page:
         self._row_word_groups = None
         self._image_bytes = None
         self._image_arr = None
-        self._image_height = None
-        self._image_width = None
+        self._image_height = image_height
+        self._image_width = image_width
 
     @property
     def page_number(self):
@@ -118,6 +123,7 @@ class Page:
                            f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
         try:
             with self.ci.open(uri, 'r') as f:
+                # Using loads instead of load as a workaround for CI
                 page_data = json.loads(f.read())
                 self._image_height = int(page_data['image']['height'])
                 self._image_width = int(page_data['image']['width'])
