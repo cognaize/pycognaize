@@ -157,7 +157,7 @@ class NumericParser:
             return int(''.join(self._separated_digits))
 
     @staticmethod
-    def strip_value(text: strapproved):
+    def strip_value(text: str):
         """Strip non-numeric characters from a string representing a number
 
         :param str text: Input string representing a number
