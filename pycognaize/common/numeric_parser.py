@@ -13,6 +13,7 @@ class NumericParser:
                r"|[1-9][0-9]+)([,.][0-9]*)?[\]\)]*$)")
     delimiters = r"[.,]"
     REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z0-9)\[\](-.,]')
+    REGEX_NO_NUMERIC_CHARS = re.compile(r'\D+')
 
     brackets = r"[\[\]\(\)]"
     # match a pattern with whitespace followed by either a single comma
@@ -82,6 +83,8 @@ class NumericParser:
             # if it doesn't work use more complicated logic
             if self.removed_sign:
                 self.parsed = float(self.raw.strip()) * self.sign
+            if self.REGEX_NO_NUMERIC_CHARS.split(self.raw)[-1] > 2:
+                return None
             else:
                 self.parsed = float(self.raw.strip())
 
@@ -145,8 +148,8 @@ class NumericParser:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
             return int_part + dec_part
-        elif len(self._separators
-                 ) > 1 and self._separators[0] != self._separators[-1]:
+        elif len(self._separators) > 1 and self._separators[0] != \
+                self._separators[-1] and len(self._separated_digits[-1]) != 3:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
             return int_part + dec_part
@@ -156,7 +159,6 @@ class NumericParser:
     @staticmethod
     def strip_value(text: str):
         """Strip non-numeric characters from a string representing a number
-
         :param str text: Input string representing a number
         :return: String with stripped non-numeric characters
         :rtype str:
