@@ -3,25 +3,25 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
-import logging
 import multiprocessing
 import os
 from collections import OrderedDict
-from typing import Dict, List, Tuple, Any, Optional, Callable
+from typing import Dict, List, Tuple, Any, Optional, Callable, Union
 
 import fitz
 import pandas as pd
-from cloudstorageio import CloudInterface
 from fitz.utils import getColor, getColorList
 
+from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
+from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field
 from pycognaize.document.page import Page
 from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
-from pycognaize.document.tag.tag import Tag
+from pycognaize.document.tag.tag import BoxTag, LineTag
 
 
 class Document:
@@ -33,6 +33,7 @@ class Document:
                  output_fields: 'FieldCollection[str, List[Field]]',
                  pages: Dict[int, Page],
                  metadata: Dict[str, Any]):
+        self._login_instance = Login()
         self._metadata = metadata
         self._pages: Dict[int, Page] = pages
         self._x: FieldCollection[str, List[Field]] = input_fields
@@ -73,10 +74,10 @@ class Document:
 
     @staticmethod
     def get_matching_table_cells_for_tag(
-            tag: Tag,
+            tag: BoxTag,
             table_tags: List[TableTag],
             one_to_one: bool
-    ) -> List[Tuple[Tag, TableTag, Cell, float]]:
+    ) -> List[Tuple[BoxTag, TableTag, Cell, float]]:
         """Create a list which includes the original extraction tag,
            the corresponding table tag and Cell objects
            and the IOU of the intersection
@@ -114,7 +115,7 @@ class Document:
 
     def get_table_cell_overlap(
             self, source_field: str,
-            one_to_one: bool) -> List[Tuple[Tag, TableTag, Cell, float]]:
+            one_to_one: bool) -> List[Tuple[BoxTag, TableTag, Cell, float]]:
         """Create a list which includes the original extraction tag,
            the corresponding table tag and Cell objects
            and the IOU of the intersection
@@ -381,20 +382,35 @@ class Document:
         return data
 
     @classmethod
-    def from_dict(cls, raw: dict, data_path: str) -> 'Document':
+    def from_dict(cls, raw: dict,
+                  data_path: str) -> 'Document':
         """Document object created from data of dict
         :param raw: document dictionary
         :param data_path: path to the documents OCR and page images
+        :param login_instance: login instance of pycognaize
         """
         if not isinstance(raw, dict):
             raise TypeError(
                 f"Expected dict for 'raw' argument got {type(raw)} instead")
         metadata = raw['metadata']
-        pages = OrderedDict({page_n: Page(page_number=page_n,
-                                          document_id=metadata['document_id'],
-                                          path=data_path)
-                             for page_n in range(
-                1, metadata['numberOfPages'] + 1)})
+        pages = OrderedDict()
+        for page_n in range(1, metadata['numberOfPages'] + 1):
+            if (
+                    'pages' in raw
+                    and str(page_n) in raw['pages']
+                    and 'width' in raw['pages'][str(page_n)]
+                    and 'height' in raw['pages'][str(page_n)]
+            ):
+                image_width = raw['pages'][str(page_n)]['width']
+                image_height = raw['pages'][str(page_n)]['height']
+            else:
+                image_width = None
+                image_height = None
+            pages[page_n] = Page(page_number=page_n,
+                                 document_id=metadata['document_id'],
+                                 path=data_path,
+                                 image_width=image_width,
+                                 image_height=image_height)
         input_fields = FieldCollection(
             {name: [
                 FieldMapping[
@@ -409,12 +425,14 @@ class Document:
                 ].value.construct_from_raw(raw=field, pages=pages)
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
-        return cls(input_fields=input_fields, output_fields=output_fields,
+        return cls(input_fields=input_fields,
+                   output_fields=output_fields,
                    pages=pages, metadata=metadata)
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],
-                                     is_input_field: bool = True) -> List[Tag]:
+                                     is_input_field: bool = True)\
+            -> List[Union[BoxTag, LineTag]]:
         """Collect all tags of given field names from either input or output
             fields
 
@@ -464,7 +482,7 @@ class Document:
         :return: bytes object of the pdf
         """
 
-        ci = CloudInterface()
+        ci = cloud_interface_login(self._login_instance)
         pdf_path = os.path.join(self.pages[1].path, self.document_src) + '.pdf'
 
         with ci.open(pdf_path, 'rb') as f:
@@ -493,7 +511,7 @@ class Document:
 
 
 def annotate_pdf(doc: fitz.Document,
-                 tag: Tag,
+                 tag: BoxTag,
                  color: str,
                  opacity: float = 0.3) -> bytes:
     """An annotated Document pdf in bytes"""
@@ -513,36 +531,3 @@ def annotate_pdf(doc: fitz.Document,
     annot.set_opacity(opacity)
     annot.update()
     return doc.write()
-
-
-def filter_out_invalid_tables(tables):
-    valid_tables = []
-    for table in tables:
-        if not table.tags:
-            logging.warning('removing table with no tags')
-            continue
-
-        valid_tables.append(table)
-    return valid_tables
-
-
-def assign_indices_to_tables(tables: List['Field']):
-    tables_dict = {}
-    valid_tables = filter_out_invalid_tables(tables)
-    tables = sorted(valid_tables, key=lambda x: (
-        x.tags[0].page.page_number, x.tags[0].top, x.tags[0].left))
-
-    for table in tables:
-        page_number = table.tags[0].page.page_number
-        try:
-            # find all tables in the current page
-            # and get the index for next table
-            table_last_index = [
-                current_index
-                for (table_page_number, current_index) in tables_dict.keys()
-                if page_number == table_page_number
-            ][-1] + 1
-        except IndexError:
-            table_last_index = 0
-        tables_dict[(page_number, table_last_index)] = table
-    return tables_dict

@@ -51,13 +51,30 @@ Alternatively, ``Snapshot`` can be initialized with the corresponding parameters
 
         snapshot = Snapshot(data_path=..., doc_path=...)
 
+Cognaize SDK supports logging using Cognaize account, to access snapshots
+from the cloud. To use this feature, you need to login using your Cognaize account.
+
+    .. code:: python
+
+        from pycognaize.login import Login
+
+        login_instance = Login()
+        login_instance.login(username=..., password=...)
+
+    .. note::
+
+        ``login`` function will give you access to snapshots assigned to your account.
+        You only need to login once, and the login information will be available until
+        end of runtime
+
+
 :doc:`Snapshot <../API/_autosummary/pycognaize.document.snapshot.Snapshot>` is a
 collection of multiple Document objects
 
 .. doctest::
 
-    >>> snapshot.documents._ids
-    ['60215310dbf28200120e6afa', '60b76b3d6f3f980019105dac', '60f5260c7883ab0013d9c184', '60f53e967883ab0013d9c6f9', '60f554497883ab0013d9d906', '62eb8e6b28d7ca0012ec8288', '62eb8e6b28d7ca0012ec8288_error']
+    >>> snapshot.documents._ids[:4]
+    ['60215310dbf28200120e6afa', '60b76b3d6f3f980019105dac', '60f5260c7883ab0013d9c184', '60f53e967883ab0013d9c6f9']
 
 As we can see our Snapshot consists of 5 documents,
 let's choose one them and have a look at documents structure

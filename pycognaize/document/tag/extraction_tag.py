@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Union
 
 from pycognaize.common.enums import IqTagKeyEnum, ID
-from pycognaize.document.tag.tag import Tag
+from pycognaize.document.tag.tag import BoxTag
 
 from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.cell import Cell
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from pycognaize.document.page import Page
 
 
-class ExtractionTag(Tag):
+class ExtractionTag(BoxTag):
     """Represents field's coordinate data on document"""
 
     def __init__(self, left, right, top, bottom, page, raw_value,
@@ -72,7 +72,7 @@ class ExtractionTag(Tag):
     def vertical_shift(self, by):
         return self.vshift(by)
 
-    def __add__(self, other: Union['Tag', Cell]) -> 'ExtractionTag':
+    def __add__(self, other: Union['BoxTag', Cell]) -> 'ExtractionTag':
         """Merge two rectangles into one"""
         if self.page.page_number == other.page.page_number:
             left = min(self.left, other.left)

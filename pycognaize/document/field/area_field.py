@@ -26,8 +26,9 @@ class AreaField(Field):
                  confidence: Optional[float] = -1.0,
                  group_name: str = None
                  ):
-        super().__init__(name=name, tags=tags, group_key=group_key,
-                         confidence=confidence, group_name=group_name)
+        super().__init__(name=name, value=value, tags=tags,
+                         group_key=group_key, confidence=confidence,
+                         group_name=group_name)
         self._field_id = field_id
         if self.tags:
             self._value = '; '.join([i.raw_value for i in self.tags])

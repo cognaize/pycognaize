@@ -8,6 +8,13 @@ class LazyGroupDict(Mapping):
     def __init__(self, document_fields: dict):
         self._document_fields = document_fields
         self._groups = None
+        self._groups_by_key = None
+
+    @property
+    def groups_by_key(self) -> dict:
+        if self._groups_by_key is None:
+            self.__create_groups_by_key(self._document_fields)
+        return self._groups_by_key
 
     @property
     def groups(self) -> dict:
@@ -33,6 +40,15 @@ class LazyGroupDict(Mapping):
                         groups[group_name][item.group_key].append(item)
 
         self._groups = groups
+
+    def __create_groups_by_key(self, document_fields: dict):
+        """Add fields to group """
+        groups_by_key = defaultdict(list)
+        for field_name in document_fields.keys():
+            for item in document_fields[field_name]:
+                groups_by_key[item.group_key].append((field_name, item))
+
+        self._groups_by_key = groups_by_key
 
     def __getitem__(self, group_name) -> dict:
         """The Document object, retrieved from provided path

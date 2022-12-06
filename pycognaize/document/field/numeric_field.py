@@ -27,11 +27,11 @@ class NumericField(Field):
                  confidence: Optional[float] = -1.0,
                  group_name: str = None
                  ):
-        super().__init__(name=name, tags=tags, group_key=group_key,
-                         confidence=confidence, group_name=group_name)
+        super().__init__(name=name, tags=tags, value=value,
+                         group_key=group_key, confidence=confidence,
+                         group_name=group_name)
         self._field_id = field_id
         self._value = self.convert_to_numeric(value)
-        self._raw_value = value
         if self.tags:
             self._value = sum([self.convert_to_numeric(i.raw_value)
                                for i in self.tags])

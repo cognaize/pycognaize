@@ -4,6 +4,8 @@ import os
 import re
 from typing import Optional, List, Iterable, Union
 import numpy as np
+
+from pycognaize.login import Login
 from pycognaize.common.decorators import module_not_found
 
 from pycognaize.common.enums import (
@@ -20,9 +22,9 @@ from pycognaize.common.utils import (
     compute_intersection_area,
     stick_word_boxes,
     preview_img,
-    image_string_to_array
+    image_string_to_array,
+    cloud_interface_login
 )
-from cloudstorageio import CloudInterface
 from pycognaize.document.tag import ExtractionTag
 
 
@@ -30,16 +32,24 @@ class Page:
     """Representing a page of a document in pycognaize"""
     REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
 
-    def __init__(self, page_number: int, document_id: str, path: str):
+    def __init__(self, page_number: int,
+                 document_id: str,
+                 path: str,
+                 image_height: int = None,
+                 image_width: int = None
+                 ):
         """
 
         :param page_number: The number of the page (1-based index)
         :param document_id: The unique id of the document
         :param path:
+        :param image_width: Page image width
+        :param image_height: Page image height
         """
         self._page_number = int(page_number)
         self._document_id = document_id
-        self.ci = CloudInterface()
+        self._login_instance = Login()
+        self.ci = cloud_interface_login(self._login_instance)
         self._path = path
         self._ocr_raw = None
         self._ocr = None
@@ -47,8 +57,8 @@ class Page:
         self._row_word_groups = None
         self._image_bytes = None
         self._image_arr = None
-        self._image_height = None
-        self._image_width = None
+        self._image_height = image_height
+        self._image_width = image_width
 
     @property
     def page_number(self):
@@ -113,6 +123,7 @@ class Page:
                            f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
         try:
             with self.ci.open(uri, 'r') as f:
+                # Using loads instead of load as a workaround for CI
                 page_data = json.loads(f.read())
                 self._image_height = int(page_data['image']['height'])
                 self._image_width = int(page_data['image']['width'])

@@ -1,0 +1,151 @@
+{
+    "input_fields": {
+        "section": [
+            {
+                "_id": "6315e0cbdcbc3e484997c09c",
+                "name": "Section",
+                "value": "BS",
+                "tags": [
+                    {
+                        "_id": "632c6da6833c7f0000fc4f57",
+                        "value": "",
+                        "ocrValue": "",
+                        "section": {
+                            "start": {
+                                "_id": "632c6d9a833c7f0000fc4f55",
+                                "page": 1,
+                                "left": "0%",
+                                "top": "9.150914913083255%",
+                                "height": "0.15%",
+                                "width": "100%"
+                            },
+                            "end": {
+                                "_id": "632c6da6833c7f0000fc4f58",
+                                "page": 1,
+                                "left": "0%",
+                                "top": "15.873376029277221%",
+                                "height": "0.15%",
+                                "width": "100%"
+                            }
+                        }
+                    }
+                ],
+                "dataType": "section",
+                "group": "",
+                "groupKey": ""
+            },
+            {
+                "_id": "632c6d75833c7f0000fc4f4e",
+                "name": "Section",
+                "value": "IS",
+                "tags": [
+                    {
+                        "_id": "632c6d84833c7f0000fc4f52",
+                        "value": "",
+                        "ocrValue": "",
+                        "section": {
+                            "start": {
+                                "_id": "632c6d80833c7f0000fc4f50",
+                                "page": 1,
+                                "left": "0%",
+                                "top": "32.566585402668444%",
+                                "height": "0.15%",
+                                "width": "100%"
+                            },
+                            "end": {
+                                "_id": "632c6d84833c7f0000fc4f53",
+                                "page": 1,
+                                "left": "0%",
+                                "top": "41.02840885701348%",
+                                "height": "0.15%",
+                                "width": "100%"
+                            }
+                        }
+                    }
+                ],
+                "dataType": "section",
+                "group": "",
+                "groupKey": ""
+            },
+            {
+                "_id": "632d70d7d682ad000020d056",
+                "name": "Section",
+                "value": "CF",
+                "tags": [
+                    {
+                        "_id": "632d7122d682ad000020d05a",
+                        "value": "",
+                        "ocrValue": "",
+                        "section": {
+                            "start": {
+                                "_id": "632d711ed682ad000020d058",
+                                "page": 2,
+                                "left": "-0.02567313713212273%",
+                                "top": "15.763715529753267%",
+                                "height": "0.15%",
+                                "width": "100%"
+                            },
+                            "end": {
+                                "_id": "632d7122d682ad000020d05b",
+                                "page": 2,
+                                "left": "-0.02567313713212273%",
+                                "top": "28.680212868892117%",
+                                "height": "0.15%",
+                                "width": "100%"
+                            }
+                        }
+                    }
+                ],
+                "dataType": "section",
+                "group": "",
+                "groupKey": ""
+            },
+            {
+                "_id": "632da2f3aaaa500000bea9ed",
+                "name": "Section",
+                "value": "BS",
+                "tags": [
+                    {
+                        "_id": "632da30aaaaa500000bea9f1",
+                        "value": "",
+                        "ocrValue": "",
+                        "section": {
+                            "start": {
+                                "_id": "632da304aaaa500000bea9ef",
+                                "page": 2,
+                                "left": "0.03526093088857546%",
+                                "top": "39.634569247546345%",
+                                "height": "0.15%",
+                                "width": "100%"
+                            },
+                            "end": {
+                                "_id": "632da30aaaaa500000bea9f2",
+                                "page": 2,
+                                "left": "0.03526093088857546%",
+                                "top": "49.9974372955289%",
+                                "height": "0.15%",
+                                "width": "100%"
+                            }
+                        }
+                    }
+                ],
+                "dataType": "section",
+                "group": "",
+                "groupKey": ""
+            }
+        ]
+    },
+    "output_fields": {},
+    "metadata": {
+        "src": "8f8ca6ebbc0d6d1e86149c2351d938722601618278b9d860b5e02201f7e5c15f",
+        "document_id": "632c61fc86d52800197d03f3",
+        "recipeId": "6332e270fd7681001310de71",
+        "documentName": "horizon.pdf",
+        "numberOfPages": 2,
+        "ocr": "tesseract_ocr",
+        "decimalPoint": ".",
+        "thousandsSeparator": ",",
+        "negativeSign": "-"
+    },
+    "version": "4"
+}

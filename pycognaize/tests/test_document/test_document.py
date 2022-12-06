@@ -154,8 +154,6 @@ class TestDocument(unittest.TestCase):
         tag = self.document.x['paragraph'][0].tags[0]
         other_tag = self.document.x['ref'][0].tags[0]
 
-        # print(tag, other_tag, tag.iou(other_tag), sep='---------\n')
-
         tied_tags = self.document.get_tied_tags(tag)
         self.assertEqual(len(tied_tags), 1)
         tied_tags = list(self.document.get_tied_tags(
@@ -163,8 +161,6 @@ class TestDocument(unittest.TestCase):
         self.assertEqual(tied_tags, tag)
         first_tied_tag = self.document.get_first_tied_tag(tag)[1]
         self.assertEqual(first_tied_tag, tag)
-
-        # self.assertEquals(tied_tags[0], tag)
 
     @classmethod
     def tearDownClass(cls) -> None:

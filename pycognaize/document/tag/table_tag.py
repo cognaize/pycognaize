@@ -11,7 +11,7 @@ from pycognaize.common.enums import (
     ID
 )
 from pycognaize.document.tag import ExtractionTag
-from pycognaize.document.tag.tag import Tag
+from pycognaize.document.tag.tag import BoxTag
 from pycognaize.document.tag.cell import Cell
 from pycognaize.common.utils import convert_coord_to_num
 from typing import TYPE_CHECKING
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from pycognaize.document.page import Page
 
 
-class TableTag(Tag):
+class TableTag(BoxTag):
     """Base class for all pycognaize table fields"""
 
     def __init__(self, left, right, top, bottom,

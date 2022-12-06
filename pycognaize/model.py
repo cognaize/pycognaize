@@ -5,6 +5,7 @@ from typing import Tuple, List
 import requests
 import simplejson as json
 from cloudstorageio import CloudInterface
+from requests.adapters import HTTPAdapter, Retry
 
 from pycognaize.common.utils import (
     replace_object_ids_with_string,
@@ -25,6 +26,10 @@ class Model(metaclass=abc.ABCMeta):
     The model inputs and outputs are available from the document attribute.
     """
     CI = CloudInterface()
+    DEFAULT_TIMEOUT = 600
+    RETRIES = Retry(total=3,
+                    backoff_factor=10,
+                    status_forcelist=[500, 502, 503, 504])
 
     @abc.abstractmethod
     def predict(self, document: Document) -> Document:
@@ -45,7 +50,7 @@ class Model(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @staticmethod
-    def _post_response(doc, session, url, task_id):
+    def _post_response(doc, session, url, task_id, timeout):
         output_document_bson: dict = doc.to_dict()
         output_document_dict = replace_object_ids_with_string(
             output_document_bson)
@@ -53,16 +58,22 @@ class Model(metaclass=abc.ABCMeta):
                                           ignore_nan=True)
         session.headers.update({"Content-Type": "application/json"})
         post_response: requests.Response = session.post(
-            url + '/' + task_id, data=output_document_json, verify=False)
+            url + '/' + task_id, data=output_document_json, verify=False,
+            timeout=timeout)
+        post_response.raise_for_status()
         return post_response
 
     def execute_based_on_match(self, task_id: str, base_doc_task_id: str,
                                token: str, url: str) -> requests.Response:
         session = requests.Session()
+        session.mount('http://', HTTPAdapter(max_retries=self.RETRIES))
+        session.mount('https://', HTTPAdapter(max_retries=self.RETRIES))
         session.headers = {'x-auth': token}
 
-        get_response: requests.Response = session.get(url + '/' + task_id,
-                                                      verify=False)
+        get_response: requests.Response = \
+            session.get(url + '/' + task_id, verify=False,
+                        timeout=self.DEFAULT_TIMEOUT)
+        get_response.raise_for_status()
         get_response_dict: dict = get_response.json()
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
@@ -70,7 +81,9 @@ class Model(metaclass=abc.ABCMeta):
                                            data_path=doc_data_path)
 
         base_doc_get_response: requests.Response = session.get(
-            url + '/' + base_doc_task_id, verify=False)
+            url + '/' + base_doc_task_id, verify=False,
+            timeout=self.DEFAULT_TIMEOUT)
+        base_doc_get_response.raise_for_status()
         base_doc_get_response_dict: dict = base_doc_get_response.json()
         base_doc_data_path: str = base_doc_get_response_dict[
             'documentRootPath']
@@ -80,7 +93,8 @@ class Model(metaclass=abc.ABCMeta):
 
         doc = self.copy(document=doc, base_document=base_doc)
         return self._post_response(doc=doc, session=session, url=url,
-                                   task_id=task_id)
+                                   task_id=task_id,
+                                   timeout=self.DEFAULT_TIMEOUT)
 
     def execute_genie(
             self, task_id: str, token: str, url: str) -> requests.Response:
@@ -91,9 +105,13 @@ class Model(metaclass=abc.ABCMeta):
                          url: str) -> requests.Response:
         """Execute genie for a given task_id"""
         session = requests.Session()
+        session.mount('http://', HTTPAdapter(max_retries=self.RETRIES))
+        session.mount('https://', HTTPAdapter(max_retries=self.RETRIES))
         session.headers = {'x-auth': token}
-        get_response: requests.Response = session.get(url + '/' + task_id,
-                                                      verify=False)
+        get_response: requests.Response =\
+            session.get(url + '/' + task_id, verify=False,
+                        timeout=self.DEFAULT_TIMEOUT)
+        get_response.raise_for_status()
         get_response_dict: dict = get_response.json()
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
@@ -101,7 +119,8 @@ class Model(metaclass=abc.ABCMeta):
                                            data_path=doc_data_path)
         doc = self.predict(doc)
         return self._post_response(doc=doc, session=session, url=url,
-                                   task_id=task_id)
+                                   task_id=task_id,
+                                   timeout=self.DEFAULT_TIMEOUT)
 
     def eval_tag_level(self, act_document: Document,
                        pred_document: Document, only_content=False) -> dict:
@@ -367,18 +386,22 @@ class Model(metaclass=abc.ABCMeta):
                      ) -> List[requests.Response]:
         """ Execute evaluation for a given model_version """
         session = requests.Session()
+        session.mount('http://', HTTPAdapter(max_retries=self.RETRIES))
+        session.mount('https://', HTTPAdapter(max_retries=self.RETRIES))
         session.headers = {'x-auth': token}
 
         ground_truth_ids = session.get(
             url=f'{url}/groundtruths/{model_version}',
-            verify=False
+            verify=False,
+            timeout=self.DEFAULT_TIMEOUT
         ).json()
 
         post_responses = []
         for gt_id in ground_truth_ids:
             ground_truth_model_task = session.get(
                 url=f'{url}/evaluations/{model_version}/{gt_id}',
-                verify=False
+                verify=False,
+                timeout=self.DEFAULT_TIMEOUT
             ).json()
 
             act_doc, pred_doc = self._get_doc_pair(ground_truth_model_task)
@@ -397,7 +420,8 @@ class Model(metaclass=abc.ABCMeta):
             post_response = self._post_response_eval(
                 session=session,
                 endpoint=f'{url}/evaluations',
-                data=data)
+                data=data,
+                timeout=self.DEFAULT_TIMEOUT)
             post_responses.append(post_response)
         return post_responses
 
@@ -420,10 +444,11 @@ class Model(metaclass=abc.ABCMeta):
     @staticmethod
     def _post_response_eval(session: requests.Session,
                             endpoint: str,
-                            data: dict
-                            ) -> requests.Response:
+                            data: dict,
+                            timeout) -> requests.Response:
         session.headers.update({"Content-Type": "application/json"})
         post_response = session.post(endpoint,
                                      data=json.dumps(data, ignore_nan=True),
-                                     verify=False)
+                                     verify=False,
+                                     timeout=timeout)
         return post_response

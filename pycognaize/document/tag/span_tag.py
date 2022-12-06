@@ -1,5 +1,5 @@
 from pycognaize.common.utils import convert_coord_to_num
-from pycognaize.document.tag.tag import Tag
+from pycognaize.document.tag.tag import BoxTag
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from pycognaize.document.page import Page
@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 from pycognaize.common.decorators import module_not_found
 
 
-class SpanTag(Tag):
+class SpanTag(BoxTag):
     """Represents a Tag included in a spanfield"""
 
     def __init__(self, left, right, top, bottom,

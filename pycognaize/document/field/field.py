@@ -4,21 +4,22 @@ from typing import List, Optional, Dict, Type
 
 from pycognaize.common.enums import IqFieldKeyEnum
 from pycognaize.document.page import Page
-from pycognaize.document.tag.tag import Tag
+from pycognaize.document.tag.tag import BoxTag
 
 
 class Field(metaclass=abc.ABCMeta):
     """Base class for all Field types"""
-    tag_class: Type[Tag] = Tag
+    tag_class: Type[BoxTag] = BoxTag
 
     def __init__(self, name: str,
                  value: str = '',
-                 tags: Optional[List[Tag]] = None,
+                 tags: Optional[List[BoxTag]] = None,
                  field_id: Optional[str] = None,
                  group_key: Optional[str] = None,
                  confidence: Optional[float] = -1.0,
                  group_name: Optional[str] = None,
                  ):
+        self._raw_value = value
         self._confidence = confidence
         if group_key is None:
             group_key = ''
@@ -33,6 +34,10 @@ class Field(metaclass=abc.ABCMeta):
             self._tags = tags
         self._value = value
         self._field_id = field_id
+
+    @property
+    def raw_value(self):
+        return self._raw_value
 
     @property
     def name(self):
