@@ -1,7 +1,7 @@
 # Changelog
 
 ## [1.2]
-### [1.2.5] - 2022-12-06
+### [1.2.6] - 2022-12-06
 - Update numeric parser to better handle decimal numbers
 
 ### [1.2.5] - 2022-11-28
