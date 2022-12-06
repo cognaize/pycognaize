@@ -159,7 +159,6 @@ class NumericParser:
     @staticmethod
     def strip_value(text: str):
         """Strip non-numeric characters from a string representing a number
-
         :param str text: Input string representing a number
         :return: String with stripped non-numeric characters
         :rtype str:
