@@ -82,6 +82,8 @@ class NumericParser:
             # if it doesn't work use more complicated logic
             if self.removed_sign:
                 self.parsed = float(self.raw.strip()) * self.sign
+            if re.split(r'\D+', self.raw)[-1] > 2:
+                raise Exception
             else:
                 self.parsed = float(self.raw.strip())
 
@@ -145,8 +147,8 @@ class NumericParser:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
             return int_part + dec_part
-        elif len(self._separators
-                 ) > 1 and self._separators[0] != self._separators[-1]:
+        elif len(self._separators) > 1 and self._separators[0] !=\
+                 self._separators[-1] and len(self._separated_digits[-1]) != 3:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
             return int_part + dec_part
