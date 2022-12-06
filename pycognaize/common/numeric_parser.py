@@ -147,8 +147,8 @@ class NumericParser:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
             return int_part + dec_part
-        elif len(self._separators) > 1 and self._separators[0] !=\
-                 self._separators[-1] and len(self._separated_digits[-1]) != 3:
+        elif len(self._separators) > 1 and self._separators[0] != \
+                self._separators[-1] and len(self._separated_digits[-1]) != 3:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
             return int_part + dec_part
