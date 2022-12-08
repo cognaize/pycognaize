@@ -16,7 +16,7 @@ class TestIndex(unittest.TestCase):
 
         self.assertEqual(instance1, instance2)
 
-    @patch('requests.post')
+    @patch('requests.Session.post')
     def test_login(self, mock_post):
         instance = Login()
         mock_post.return_value.status_code = 200
