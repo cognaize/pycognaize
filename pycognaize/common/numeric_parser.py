@@ -13,7 +13,6 @@ class NumericParser:
                r"|[1-9][0-9]+)([,.][0-9]*)?[\]\)]*$)")
     delimiters = r"[.,]"
     REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z0-9)\[\](-.,]')
-    REGEX_NO_NUMERIC_CHARS = re.compile(r'\D+')
 
     brackets = r"[\[\]\(\)]"
     # match a pattern with whitespace followed by either a single comma
@@ -81,13 +80,13 @@ class NumericParser:
         try:
             # try parsing like a regular float number
             # if it doesn't work use more complicated logic
-            if self.removed_sign:
+            delimiter = any(re.findall(self.delimiters, self.raw))
+            decimal_part = len(re.split(self.delimiters, self.raw)[-1]) if\
+                delimiter else 0
+            if decimal_part < 3:
                 self.parsed = float(self.raw.strip()) * self.sign
-            if self.REGEX_NO_NUMERIC_CHARS.split(self.raw)[-1] > 2:
+            elif decimal_part > 2:
                 return None
-            else:
-                self.parsed = float(self.raw.strip())
-
             return self.parsed
         except Exception:
             return None
@@ -144,12 +143,12 @@ class NumericParser:
         """
         if len(self._separators) == 0:
             return int(self._separated_digits[0])
-        elif len(self._separated_digits[-1]) != 3:
+        elif len(self._separated_digits[-1]) < 3:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
             return int_part + dec_part
         elif len(self._separators) > 1 and self._separators[0] != \
-                self._separators[-1] and len(self._separated_digits[-1]) != 3:
+                self._separators[-1] and len(self._separated_digits[-1]) < 3:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
             return int_part + dec_part
