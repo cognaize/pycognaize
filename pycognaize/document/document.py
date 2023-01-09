@@ -516,10 +516,10 @@ def annotate_pdf(doc: fitz.Document,
                  opacity: float = 0.3) -> bytes:
     """An annotated Document pdf in bytes"""
     page = doc[tag.page.page_number-1]
-    x0 = tag.left * page.MediaBox.width / 100
-    y0 = tag.top * page.MediaBox.height / 100
-    x1 = tag.right * page.MediaBox.width / 100
-    y1 = tag.bottom * page.MediaBox.height / 100
+    x0 = tag.left * page.mediabox.width / 100
+    y0 = tag.top * page.mediabox.height / 100
+    x1 = tag.right * page.mediabox.width / 100
+    y1 = tag.bottom * page.mediabox.height / 100
     annot_rect = fitz.Rect(x0, y0, x1, y1)
     if color.upper() not in getColorList():
         raise ValueError(f'Wrong color {color}')
