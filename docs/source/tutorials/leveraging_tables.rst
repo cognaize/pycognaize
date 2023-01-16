@@ -18,9 +18,9 @@ Leveraging Tables
     table_field = document.x['table']
     table_1 = table_field[0]
 
-cognaize python SDK provides a wide functionality designed to handle
+Cognaize python SDK provides a wide functionality designed to handle
 data in table forms of :term:`snapshot` in the most efficient way. Two main
-concepts for accessing and representing tables in cognaize SDK
+concepts for accessing and representing tables in Cognaize SDK
 are ``TableField`` and ``TableTag`` classes.
 
 See corresponding documentation in API reference
@@ -60,7 +60,7 @@ for more details.
 .. doctest::
 
     >>> table_1.get_table_title()
-    'Sample table heading in form tutorial of cognaize SDK'
+    'Sample table heading in form tutorial of Cognaize SDK'
 
 In order to access the actual table structure, content and coordinates, we use the ``TableTag`` class.
 TableTag objects can be extracted from ``document``.

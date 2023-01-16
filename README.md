@@ -7,23 +7,23 @@
 ![Stability Status](https://github.com/cognaize/pycognaize/blob/master/media/badges/stability_status.svg?raw=true)
 ![Coverage Percentage](https://github.com/cognaize/pycognaize/blob/master/media/badges/coverage_percentage.svg?raw=true)
 
-# cognaize SDK
-Welcome to cognaize SDK. cognaize SDK provides tools and
-functionalities for creating, evaluating and deploying models into cognaize platform.
+# Cognaize SDK
+Welcome to Cognaize SDK. Cognaize SDK provides tools and
+functionalities for creating, evaluating and deploying models into Cognaize platform.
 
 - **[Website](https://www.cognaize.com)**
 - **[Documentation](http://pycognaize-docs.com.s3-website.us-east-2.amazonaws.com)**
 
-**cognaize SDK** provides:
+**Cognaize SDK** provides:
 
-- Working with **cognaize snapshots**
+- Working with **Cognaize snapshots**
 - Working with **OCR data**
 - Working with **PDF files**
 - Working with **images**
 
 ## Installation
 
-cognaize SDK can be installed using pip:
+Cognaize SDK can be installed using pip:
 
 ```
 pip install pycognaize
