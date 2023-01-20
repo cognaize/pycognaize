@@ -3,26 +3,26 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-cognaize SDK
+Cognaize SDK
 ===================
 
-Welcome to *cognaize SDK* documentation. *cognaize SDK* provides tools
+Welcome to *Cognaize SDK* documentation. *Cognaize SDK* provides tools
 and functionalities for creating,
-evaluating and deploying models into cognaize platform.
+evaluating and deploying models into Cognaize platform.
 
 Check our source code at `github <https://github.com/cognaize/pycognaize>`_
 
 Get Started
 -----------
 
-New to *cognaize SDK*? See the `installation guide <quickstart/installation.html>`_
+New to *Cognaize SDK*? See the `installation guide <quickstart/installation.html>`_
 and a `quick tutorial <tutorials/quick_tutorial.html>`_
 for an example and basic understanding of the feature set.
 
 API Reference
 -------------
 The `reference guide <api.html>`_ contains a detailed description
-of the cognaize SDK.
+of the Cognaize SDK.
 
 Tutorials
 ---------
@@ -66,4 +66,4 @@ Table of Contents
    :caption: About Us
    :hidden:
 
-   cognaize <https://www.cognaize.com/>
+   Cognaize <https://www.cognaize.com/>

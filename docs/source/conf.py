@@ -26,10 +26,10 @@ exclude_patterns = ["_build",
                     ]
 # -- Project information -----------------------------------------------------
 
-project = 'cognaize Python SDK'
+project = 'Cognaize Python SDK'
 # noinspection PyShadowingBuiltins
-copyright = '2022, cognaize CJSC'
-author = 'cognaize'
+copyright = '2022, Cognaize CJSC'
+author = 'Cognaize'
 autosummary_generate = True
 autosummary_mock_imports = [
     'pycognaize.tests',
@@ -85,9 +85,9 @@ spelling_word_list_filename = 'wordlist.txt'
 
 pdf_documents = [(
     'index',
-    f'cognaize Python SDK - version {version}',
-    'cognaize Python SDK',
-    'cognaize'
+    f'Cognaize Python SDK - version {version}',
+    'Cognaize Python SDK',
+    'Cognaize'
 ), ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -102,7 +102,7 @@ templates_path = ['_templates']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_title = 'cognaize Python SDK'
+html_title = 'Cognaize Python SDK'
 html_theme = 'sphinx_rtd_theme'
 pdf_stylesheets = ['twocolumn']
 html_theme_options = {
@@ -112,7 +112,7 @@ html_theme_options = {
     # "github_url": 'https://github.com/cognaize/pycognaize',
 
     # Set the name of the project to appear in the navigation.
-    # 'nav_title': 'cognaize Python SDK',
+    # 'nav_title': 'Cognaize Python SDK',
 
     # Set you GA account ID to enable tracking
     # 'google_analytics_account': 'UA-XXXXX',
