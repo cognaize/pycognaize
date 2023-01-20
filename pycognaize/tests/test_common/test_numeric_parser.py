@@ -31,6 +31,13 @@ class TestNumericParser(unittest.TestCase):
         '-140,753,100,100.24': -140753100100.24,
         '-140.753.100.100,24': -140753100100.24,
         '-140.753,24': -140753.24,
+        '(125.04)': -125.04,
+        '(125.0404)': -1250404,
+        '(125.040)': -125040,
+        '(1250.40)': -1250.4,
+        '(1.250.404.987,65)': -1250404987.65,
+        '(1.250.404.98765)': -125040498765,
+        '1.250.404.987': 1250404987,
         '-140.753.154,24': -140753154.24,
         '30,456 .67': 30456.67,
         '3,08,520.01': 308520.01,
@@ -53,7 +60,7 @@ class TestNumericParser(unittest.TestCase):
 
             if not pd.isna(expected):
                 self.assertEqual(
-                    NumericParser(actual).parse_numeric(), expected
+                   expected, NumericParser(actual).parse_numeric()
                 )
             else:
                 self.assertTrue(pd.isna(NumericParser(actual).parse_numeric()))
