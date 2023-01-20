@@ -4,7 +4,8 @@
 ### [1.2.8] - 2023-01-09
 - Update Numeric parser to handle float numbers with three or more
   decimal numbers
-- Add "-" character handler in numeric parser 
+- Add "-" character handler in numeric parser
+- Change all occurrences of 'cognaize' to 'Cognaize'
 
 ### [1.2.7] - 2022-12-22
 - Change PyMuPDF version to support M1
