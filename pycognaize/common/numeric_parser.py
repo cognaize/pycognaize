@@ -115,6 +115,7 @@ class NumericParser:
 
         :return: Parsed float or int value
         """
+        self.raw = self.raw.replace('–', '-')
         self.infer_sign()
 
         parse_float = self.parse_regular_float()
