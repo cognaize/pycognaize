@@ -21,6 +21,9 @@ class Tag(metaclass=abc.ABCMeta):
     def to_dict(self) -> dict:
         ...
 
+    def set_class_confidence(self, element_class, confidence):
+        ...
+
 
 class BoxTag(Tag, metaclass=abc.ABCMeta):
     """Represents a tag that has a varying width and height"""
@@ -32,7 +35,7 @@ class BoxTag(Tag, metaclass=abc.ABCMeta):
                  bottom: Union[int, float],
                  page: 'Page'):
         """Creates and validates coordinate data"""
-
+        self._class_confidence = {}
         self._left = left
         self._right = right
         self._top = top
@@ -56,6 +59,14 @@ class BoxTag(Tag, metaclass=abc.ABCMeta):
         return (f"<{self.__class__.__name__}:"
                 f" left: {self.left}, right: {self.right},"
                 f" top: {self.top}, bottom: {self.bottom}>")
+
+    @property
+    def class_confidence(self):
+        return self._class_confidence
+
+    def set_class_confidence(self, element_class, confidence):
+        self._class_confidence[element_class] = confidence
+
 
     @staticmethod
     def _parse_position(val: Union[float, int, str],
@@ -377,10 +388,17 @@ class LineTag(Tag, metaclass=abc.ABCMeta):
                  page: 'Page',
                  tag_type: str):
         """Creates and validates coordinate data"""
-
+        self._class_confidence = {}
         self._top = top
         self._page = page
         self._type = tag_type
+
+    @property
+    def class_confidence(self):
+        return self._class_confidence
+
+    def set_class_confidence(self, element_class, confidence):
+        self._class_confidence[element_class] = confidence
 
     @property
     def top(self) -> Union[int, float]:
