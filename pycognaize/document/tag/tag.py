@@ -3,6 +3,7 @@ import logging
 import math
 from typing import Union, Tuple
 
+from pycognaize.common.confidence import Confidence
 from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.cell import Cell
 
@@ -33,9 +34,10 @@ class BoxTag(Tag, metaclass=abc.ABCMeta):
                  right: Union[int, float],
                  top: Union[int, float],
                  bottom: Union[int, float],
-                 page: 'Page'):
+                 page: 'Page',
+                 confidence: 'Confidence' = None):
         """Creates and validates coordinate data"""
-        self._class_confidence = {}
+        self._confidence = confidence
         self._left = left
         self._right = right
         self._top = top
@@ -61,12 +63,10 @@ class BoxTag(Tag, metaclass=abc.ABCMeta):
                 f" top: {self.top}, bottom: {self.bottom}>")
 
     @property
-    def class_confidence(self):
-        return self._class_confidence
-
-    def set_class_confidence(self, element_class, confidence):
-        self._class_confidence[element_class] = confidence
-
+    def confidence(self):
+        if not self._confidence:
+            self._confidence = Confidence()
+        return self._confidence
 
     @staticmethod
     def _parse_position(val: Union[float, int, str],
