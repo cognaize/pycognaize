@@ -386,19 +386,19 @@ class LineTag(Tag, metaclass=abc.ABCMeta):
     def __init__(self,
                  top: Union[int, float],
                  page: 'Page',
-                 tag_type: str):
+                 tag_type: str,
+                 confidence: 'Confidence' = None):
         """Creates and validates coordinate data"""
-        self._class_confidence = {}
+        self._confidence = confidence
         self._top = top
         self._page = page
         self._type = tag_type
 
     @property
-    def class_confidence(self):
-        return self._class_confidence
-
-    def set_class_confidence(self, element_class, confidence):
-        self._class_confidence[element_class] = confidence
+    def confidence(self):
+        if not self._confidence:
+            self._confidence = Confidence()
+        return self._confidence
 
     @property
     def top(self) -> Union[int, float]:
