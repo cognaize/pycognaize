@@ -4,6 +4,7 @@ import string
 import pandas as pd
 from typing import Optional, Tuple
 
+from pycognaize.common.confidence import Confidence
 from pycognaize.common.enums import (
     IqCellKeyEnum,
     IqTableTagEnum,
@@ -24,9 +25,9 @@ class TableTag(BoxTag):
 
     def __init__(self, left, right, top, bottom,
                  page: 'Page',
-                 cell_data: dict, class_confidence):
+                 cell_data: dict, confidence: Confidence):
         super().__init__(left=left, right=right, top=top, bottom=bottom,
-                         page=page)
+                         page=page, confidence=confidence)
         self._cell_data = cell_data
         self._cells = {}
         self._populate_cells()
@@ -85,8 +86,8 @@ class TableTag(BoxTag):
         :return:
         """
         table_raw_data = raw[IqTableTagEnum.table.value]
-        class_confidence = table_raw_data.get(IqTableTagEnum.
-                                              confidence.value)
+        confidence = Confidence(table_raw_data.get(IqTableTagEnum.
+                                confidence.value))
         left = convert_coord_to_num(table_raw_data['left'])
         top = convert_coord_to_num(table_raw_data['top'])
         height = convert_coord_to_num(table_raw_data['height'])
@@ -96,7 +97,7 @@ class TableTag(BoxTag):
         bottom = top + height
         return cls(left=left, right=right, top=top, bottom=bottom,
                    page=page,
-                   cell_data=cells, class_confidence=class_confidence)
+                   cell_data=cells, confidence=confidence)
 
     def to_dict(self) -> dict:
         """Converts table tag to dict"""
@@ -107,7 +108,7 @@ class TableTag(BoxTag):
             IqTableTagEnum.height.value: f"{self.height}%",
             IqTableTagEnum.width.value: f"{self.width}%",
             IqTableTagEnum.cells.value: self.cell_data,
-            IqTableTagEnum.confidence.value: self.class_confidence,
+            IqTableTagEnum.confidence.value: self.confidence,
         }
         output_dict = {
             ID: bson.ObjectId(),
