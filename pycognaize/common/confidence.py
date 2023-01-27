@@ -1,6 +1,14 @@
 class Confidence:
+    """
+    This class is used by tag object to store confidence values
+    of possible classes.
+    """
 
     def __init__(self, confidences=None):
+        """
+        Initialize class with confidence scores.
+        :param confidences: dictionary of class names and their confidence
+        """
         self._is_finalized = False
         if confidences and isinstance(confidences, dict):
             self.confidences = confidences
@@ -9,29 +17,32 @@ class Confidence:
             self.confidences = {}
 
     def add_class(self, class_name, confidence):
+        """Add new class for confidence scores
+        :param class_name: name of the class
+        :param confidence: confidence score for the class
+        """
         self.confidences[class_name] = confidence
 
-    def get_confidence(self, class_name=None):
-        if not self._is_finalized:
-            raise ValueError('Confidence scores have to be finalized.')
-        if class_name:
-            result = self.confidences[class_name]
-        else:
-            result = self.confidences
-
-        return result
+    def number_of_classes(self):
+        """Returns number of classes"""
+        return len(self.confidences)
 
     def class_names(self):
+        """Returns class names"""
         return self.confidences.keys()
 
-    def number_of_classes(self):
-        return len(self.confidences)
+    def get_confidence(self):
+        """Returns confidence scores if finalized"""
+        if not self._is_finalized:
+            raise ValueError('Confidence scores have to be finalized.')
+        return self.confidences
 
     @property
     def is_finalized(self):
         return self._is_finalized
 
     def finalize(self):
+        """Finalize confidence scores by checking if all scores sum to 1"""
         if not sum(self.confidences.values()) == 1:
             raise ValueError('Confidence scores have to sum up to 1.')
         self._is_finalized = True
