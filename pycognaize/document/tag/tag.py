@@ -65,7 +65,7 @@ class BoxTag(Tag, metaclass=abc.ABCMeta):
     @property
     def confidence(self):
         if not self._confidence:
-            self._confidence = Confidence()
+            self._confidence = Confidence({})
         return self._confidence
 
     @staticmethod

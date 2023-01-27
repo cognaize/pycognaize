@@ -13,7 +13,7 @@ class Confidence:
         :param confidences: dictionary of class names and their confidence
         """
         self._is_finalized = False
-        if confidences and isinstance(confidences, dict):
+        if confidences is not None and isinstance(confidences, dict):
             self.confidences = confidences
             self.finalize()
         else:
@@ -47,7 +47,8 @@ class Confidence:
 
     def finalize(self) -> None:
         """Finalize confidence scores by checking if all scores sum to 1"""
-        if not sum(self.confidences.values()) == 1:
+        if not sum(self.confidences.values()) == 1 and\
+                self.number_of_classes() > 0:
             raise ValueError('Confidence scores have to sum up to 1.')
         self._is_finalized = True
 

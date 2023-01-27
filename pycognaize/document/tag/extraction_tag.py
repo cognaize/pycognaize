@@ -19,7 +19,7 @@ class ExtractionTag(BoxTag):
     """Represents field's coordinate data on document"""
 
     def __init__(self, left, right, top, bottom, page, raw_value,
-                 raw_ocr_value, confidence: Confidence):
+                 raw_ocr_value, confidence: Confidence = None):
         super().__init__(left=left, right=right, top=top, bottom=bottom,
                          page=page, confidence=confidence)
         self._raw_value = raw_value
@@ -33,7 +33,7 @@ class ExtractionTag(BoxTag):
         :return:
         """
         confidence = Confidence(raw.get(IqTagKeyEnum.
-                                confidence.value))
+                                confidence.value, {}))
         left = convert_coord_to_num(raw['left'])
         top = convert_coord_to_num(raw['top'])
         height = convert_coord_to_num(raw['height'])
@@ -147,5 +147,5 @@ class ExtractionTag(BoxTag):
             IqTagKeyEnum.height.value: f"{self.bottom - self.top}%",
             IqTagKeyEnum.width.value: f"{self.right - self.left}%",
             IqTagKeyEnum.page.value: self.page.page_number,
-            IqTagKeyEnum.confidence.value: self.confidence
+            IqTagKeyEnum.confidence.value: self.confidence.get_confidence(),
         }

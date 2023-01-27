@@ -126,6 +126,7 @@ class TestModel(unittest.TestCase):
 
     def setUp(self) -> None:
         self.model = ExampleModel()
+        self.maxDiff = None
 
     def test_execute_genie_v2(self):
 

@@ -25,9 +25,9 @@ class TableTag(BoxTag):
 
     def __init__(self, left, right, top, bottom,
                  page: 'Page',
-                 cell_data: dict, confidence: Confidence):
+                 cell_data: dict):
         super().__init__(left=left, right=right, top=top, bottom=bottom,
-                         page=page, confidence=confidence)
+                         page=page)
         self._cell_data = cell_data
         self._cells = {}
         self._populate_cells()
@@ -86,8 +86,6 @@ class TableTag(BoxTag):
         :return:
         """
         table_raw_data = raw[IqTableTagEnum.table.value]
-        confidence = Confidence(table_raw_data.get(IqTableTagEnum.
-                                confidence.value))
         left = convert_coord_to_num(table_raw_data['left'])
         top = convert_coord_to_num(table_raw_data['top'])
         height = convert_coord_to_num(table_raw_data['height'])
@@ -97,7 +95,7 @@ class TableTag(BoxTag):
         bottom = top + height
         return cls(left=left, right=right, top=top, bottom=bottom,
                    page=page,
-                   cell_data=cells, confidence=confidence)
+                   cell_data=cells)
 
     def to_dict(self) -> dict:
         """Converts table tag to dict"""
@@ -108,7 +106,6 @@ class TableTag(BoxTag):
             IqTableTagEnum.height.value: f"{self.height}%",
             IqTableTagEnum.width.value: f"{self.width}%",
             IqTableTagEnum.cells.value: self.cell_data,
-            IqTableTagEnum.confidence.value: self.confidence,
         }
         output_dict = {
             ID: bson.ObjectId(),
