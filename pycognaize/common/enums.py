@@ -100,6 +100,7 @@ class IqTagKeyEnum(enum.Enum):
     ocr_value = 'ocrValue'
     has_valid_ocr_value = 'hasValidOcrValue'
     is_table = 'isTable'
+    confidence = 'classConfidence'
 
 
 class IqPageEnum(enum.Enum):
@@ -138,6 +139,7 @@ class IqTableTagEnum(enum.Enum):
     top = "top"
     height = "height"
     width = "width"
+    confidence = 'classConfidence'
 
 
 class IqCellKeyEnum(enum.Enum):

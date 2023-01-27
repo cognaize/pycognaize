@@ -4,6 +4,7 @@ import bson
 from datetime import datetime
 from typing import Union
 
+from pycognaize.common.confidence import Confidence
 from pycognaize.common.enums import IqTagKeyEnum, ID
 from pycognaize.document.tag.tag import BoxTag
 
@@ -18,20 +19,21 @@ class ExtractionTag(BoxTag):
     """Represents field's coordinate data on document"""
 
     def __init__(self, left, right, top, bottom, page, raw_value,
-                 raw_ocr_value):
+                 raw_ocr_value, confidence: Confidence = None):
         super().__init__(left=left, right=right, top=top, bottom=bottom,
-                         page=page)
+                         page=page, confidence=confidence)
         self._raw_value = raw_value
         self._raw_ocr_value = raw_ocr_value
 
     @classmethod
     def construct_from_raw(cls, raw: dict, page: 'Page') -> 'ExtractionTag':
         """Builds Tag object from pycognaize raw data
-
         :param raw: pycognaize field's tag info
         :param page: `Page` to which the tag belongs
         :return:
         """
+        confidence = Confidence(raw.get(IqTagKeyEnum.
+                                confidence.value, {}))
         left = convert_coord_to_num(raw['left'])
         top = convert_coord_to_num(raw['top'])
         height = convert_coord_to_num(raw['height'])
@@ -41,7 +43,8 @@ class ExtractionTag(BoxTag):
         raw_value = raw['value']
         raw_ocr_value = raw['ocrValue']
         tag = cls(left=left, right=right, top=top, bottom=bottom,
-                  page=page, raw_value=raw_value, raw_ocr_value=raw_ocr_value)
+                  page=page, raw_value=raw_value, raw_ocr_value=raw_ocr_value,
+                  confidence=confidence)
         return tag
 
     def hshift(self, by) -> 'ExtractionTag':
@@ -53,21 +56,22 @@ class ExtractionTag(BoxTag):
         return self.__class__(left=self.left + by, right=self.right + by,
                               top=self.top, bottom=self.bottom,
                               page=self.page, raw_value=self.raw_value,
-                              raw_ocr_value=self.raw_ocr_value)
+                              raw_ocr_value=self.raw_ocr_value,
+                              confidence=self.confidence)
 
     def horizontal_shift(self, by):
         return self.hshift(by)
 
     def vshift(self, by) -> 'ExtractionTag':
         """Shifts rectangle vertically
-
         :param by: the amount by which the tag should be vertically shifted
         :return: shifted rectangle
         """
         return self.__class__(left=self.left, right=self.right,
                               top=self.top + by, bottom=self.bottom + by,
                               page=self.page, raw_value=self.raw_value,
-                              raw_ocr_value=self.raw_ocr_value)
+                              raw_ocr_value=self.raw_ocr_value,
+                              confidence=self.confidence)
 
     def vertical_shift(self, by):
         return self.vshift(by)
@@ -85,7 +89,8 @@ class ExtractionTag(BoxTag):
             return ExtractionTag(
                 left=left, right=right, top=top, bottom=bottom,
                 page=self.page, raw_value=self.raw_value,
-                raw_ocr_value=raw_ocr_value_joined)
+                raw_ocr_value=raw_ocr_value_joined,
+                confidence=self.confidence)
         else:
             raise ValueError("Tags are not on the same page.")
 
@@ -141,5 +146,6 @@ class ExtractionTag(BoxTag):
             IqTagKeyEnum.top.value: f"{self.top}%",
             IqTagKeyEnum.height.value: f"{self.bottom - self.top}%",
             IqTagKeyEnum.width.value: f"{self.right - self.left}%",
-            IqTagKeyEnum.page.value: self.page.page_number
+            IqTagKeyEnum.page.value: self.page.page_number,
+            IqTagKeyEnum.confidence.value: self.confidence.get_confidence(),
         }

@@ -3,6 +3,7 @@ import logging
 import math
 from typing import Union, Tuple
 
+from pycognaize.common.confidence import Confidence
 from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.cell import Cell
 
@@ -21,6 +22,9 @@ class Tag(metaclass=abc.ABCMeta):
     def to_dict(self) -> dict:
         ...
 
+    def set_class_confidence(self, element_class, confidence):
+        ...
+
 
 class BoxTag(Tag, metaclass=abc.ABCMeta):
     """Represents a tag that has a varying width and height"""
@@ -30,9 +34,10 @@ class BoxTag(Tag, metaclass=abc.ABCMeta):
                  right: Union[int, float],
                  top: Union[int, float],
                  bottom: Union[int, float],
-                 page: 'Page'):
+                 page: 'Page',
+                 confidence: 'Confidence' = None):
         """Creates and validates coordinate data"""
-
+        self._confidence = confidence
         self._left = left
         self._right = right
         self._top = top
@@ -56,6 +61,12 @@ class BoxTag(Tag, metaclass=abc.ABCMeta):
         return (f"<{self.__class__.__name__}:"
                 f" left: {self.left}, right: {self.right},"
                 f" top: {self.top}, bottom: {self.bottom}>")
+
+    @property
+    def confidence(self):
+        if not self._confidence:
+            self._confidence = Confidence({})
+        return self._confidence
 
     @staticmethod
     def _parse_position(val: Union[float, int, str],
@@ -375,12 +386,19 @@ class LineTag(Tag, metaclass=abc.ABCMeta):
     def __init__(self,
                  top: Union[int, float],
                  page: 'Page',
-                 tag_type: str):
+                 tag_type: str,
+                 confidence: 'Confidence' = None):
         """Creates and validates coordinate data"""
-
+        self._confidence = confidence
         self._top = top
         self._page = page
         self._type = tag_type
+
+    @property
+    def confidence(self):
+        if not self._confidence:
+            self._confidence = Confidence()
+        return self._confidence
 
     @property
     def top(self) -> Union[int, float]:

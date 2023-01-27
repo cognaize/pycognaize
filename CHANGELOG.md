@@ -1,6 +1,10 @@
 # Changelog
 
 ## [1.2]
+
+### [1.2.9] - 2023-01-17
+- Add class confidence functionality to tag objects
+
 ### [1.2.8] - 2023-01-09
 - Update Numeric parser to handle float numbers with three or more
   decimal numbers
