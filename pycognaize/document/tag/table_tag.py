@@ -4,7 +4,6 @@ import string
 import pandas as pd
 from typing import Optional, Tuple
 
-from pycognaize.common.confidence import Confidence
 from pycognaize.common.enums import (
     IqCellKeyEnum,
     IqTableTagEnum,
