@@ -1,4 +1,3 @@
-from collections.abc import dict_keys
 from typing import Union
 
 
@@ -32,9 +31,9 @@ class Confidence:
         """Returns number of classes"""
         return len(self.confidences)
 
-    def class_names(self) -> dict_keys:
+    def class_names(self) -> list:
         """Returns class names"""
-        return self.confidences.keys()
+        return list(self.confidences.keys())
 
     def get_confidence(self) -> dict:
         """Returns confidence scores if finalized"""
