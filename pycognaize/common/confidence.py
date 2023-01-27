@@ -35,3 +35,14 @@ class Confidence:
         if not sum(self.confidences.values()) == 1:
             raise ValueError('Confidence scores have to sum up to 1.')
         self._is_finalized = True
+
+    def __getitem__(self, item):
+        if not self._is_finalized:
+            raise ValueError('Confidence scores have to be finalized.')
+        if item in self.confidences:
+            return self.confidences[item]
+        else:
+            raise KeyError(f'Class {item} not found in confidence scores.')
+
+    def __setitem__(self, key, value):
+        self.confidences[key] = value

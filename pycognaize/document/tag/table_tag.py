@@ -86,7 +86,7 @@ class TableTag(BoxTag):
         """
         table_raw_data = raw[IqTableTagEnum.table.value]
         class_confidence = table_raw_data.get(IqTableTagEnum.
-                                              class_confidence.value)
+                                              confidence.value)
         left = convert_coord_to_num(table_raw_data['left'])
         top = convert_coord_to_num(table_raw_data['top'])
         height = convert_coord_to_num(table_raw_data['height'])
@@ -107,7 +107,7 @@ class TableTag(BoxTag):
             IqTableTagEnum.height.value: f"{self.height}%",
             IqTableTagEnum.width.value: f"{self.width}%",
             IqTableTagEnum.cells.value: self.cell_data,
-            IqTableTagEnum.class_confidence.value: self.class_confidence,
+            IqTableTagEnum.confidence.value: self.class_confidence,
         }
         output_dict = {
             ID: bson.ObjectId(),

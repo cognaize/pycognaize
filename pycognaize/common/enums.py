@@ -133,7 +133,7 @@ class IqRecipeEnum(enum.Enum):
 class IqTableTagEnum(enum.Enum):
     table = 'table'
     cells = 'cells'
-    class_confidence = 'classConfidence'
+    confidence = 'classConfidence'
     page = 'page'
     left = "left"
     top = "top"
