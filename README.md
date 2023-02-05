@@ -1,5 +1,5 @@
 <h1 align="center">
-<img src="https://github.com/cognaize/pycognaize/blob/master/media/logo/logo.svg?raw=true" width="300">
+<img src="https://github.com/cognaize/pycognaize/blob/master/media/logo/logo.png?raw=true" width="300">
 </h1><br>
 
 ![Package Version](https://github.com/cognaize/pycognaize/blob/master/media/badges/package_version.svg?raw=true)
