@@ -1,4 +1,5 @@
 import itertools
+import unicodedata
 from typing import Optional, Dict, List, Type, Union
 
 import logging
@@ -12,7 +13,7 @@ from pycognaize.common.enums import (
 )
 from pycognaize.common.utils import (
     convert_tag_coords_to_percentages,
-    get_index_of_first_non_empty_list
+    get_index_of_first_non_empty_list, filter_lines
 )
 from pycognaize.document.field import Field
 from pycognaize.document.html_ import HTML
@@ -52,7 +53,19 @@ class TableField(Field):
     @staticmethod
     def _get_table_title_from_html(tag: HTMLTableTag, n_lines_above: int
                                    ) -> str:
-        pass
+        table_html = tag.html.html_soup.find_all(
+            'table', {'id': tag.html_id})[0]
+        above_lines = []
+        for count, above_line in enumerate(table_html.previous_elements):
+            line_text = unicodedata.normalize('NFKD',
+                                              above_line.text.strip().lower())
+            if line_text and line_text not in above_lines:
+                above_lines.append(line_text)
+            if count >= n_lines_above:
+                break
+        filtered_above_lines = filter_lines(above_lines)
+        title = ' '.join(filtered_above_lines)
+        return title
 
 
     @staticmethod

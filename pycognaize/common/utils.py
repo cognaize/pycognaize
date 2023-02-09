@@ -586,6 +586,16 @@ def get_index_of_first_non_empty_list(list_of_lists):
             return idx
     return non_empty_idx
 
+def filter_lines(lines: List[str]) -> List[str]:
+    """Filters all the lines that are already part of other line"""
+    lines_copy = lines.copy()
+    sorted_lines = sorted(lines, key=lambda x: len(x))
+    for idx, line in enumerate(sorted_lines):
+        for next_line in sorted_lines[idx + 1:]:
+            if line in next_line:
+                lines_copy.remove(line)
+                break
+    return lines_copy
 
 def convert_tag_coords_to_percentages(tag, w, h) -> dict:
     return dict(left=tag.left * w / 100,
