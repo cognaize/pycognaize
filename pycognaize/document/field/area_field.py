@@ -1,5 +1,5 @@
 import logging
-from typing import List, Optional, Dict, Type
+from typing import List, Optional, Dict, Type, Union
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
@@ -12,6 +12,7 @@ from pycognaize.document.field import Field
 from pycognaize.document.html_ import HTML
 from pycognaize.document.tag import ExtractionTag
 from pycognaize.document.page import Page
+from pycognaize.document.tag.html_tag import TDTag
 
 
 class AreaField(Field):
@@ -21,7 +22,7 @@ class AreaField(Field):
     def __init__(self,
                  name: str,
                  value: str = '',
-                 tags: Optional[List[ExtractionTag]] = None,
+                 tags: Optional[List[Union[ExtractionTag, TDTag]]] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
