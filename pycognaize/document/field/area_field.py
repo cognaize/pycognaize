@@ -9,6 +9,7 @@ from pycognaize.common.enums import (
     IqDataTypesEnum
 )
 from pycognaize.document.field import Field
+from pycognaize.document.html_ import HTML
 from pycognaize.document.tag import ExtractionTag
 from pycognaize.document.page import Page
 
@@ -46,7 +47,7 @@ class AreaField(Field):
 
     @classmethod
     def construct_from_raw(
-            cls, raw: dict, pages: Dict[int, Page]) -> 'AreaField':
+            cls, raw: dict, pages: Dict[int, Page], html: HTML) -> 'AreaField':
         """Create AreaField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []

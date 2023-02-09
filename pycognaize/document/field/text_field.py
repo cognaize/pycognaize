@@ -22,6 +22,7 @@ from pycognaize.common.enums import (
     IqFieldKeyEnum,
     IqDataTypesEnum
 )
+from pycognaize.document.html_ import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.field import Field
 from pycognaize.document.tag import ExtractionTag
@@ -61,7 +62,7 @@ class TextField(Field):
 
     @classmethod
     def construct_from_raw(
-            cls, raw: dict, pages: Dict[int, Page]) -> 'TextField':
+            cls, raw: dict, pages: Dict[int, Page], html: HTML) -> 'TextField':
         """Create TextField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []

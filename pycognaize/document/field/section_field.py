@@ -8,6 +8,7 @@ from pycognaize.common.enums import (
     IqFieldKeyEnum,
     IqDataTypesEnum
 )
+from pycognaize.document.html_ import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.field import Field
 from pycognaize.document.tag.section_tag import SectionTag
@@ -40,7 +41,7 @@ class SectionField(Field):
 
     @classmethod
     def construct_from_raw(
-            cls, raw: dict, pages: Dict[int, Page]) -> 'SectionField':
+            cls, raw: dict, pages: Dict[int, Page], html: HTML) -> 'SectionField':
         """Create SectionField object from dictionary"""
         section_dict: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []

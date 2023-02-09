@@ -1,5 +1,5 @@
 import itertools
-from typing import Optional, Dict, List, Type
+from typing import Optional, Dict, List, Type, Union
 
 import logging
 
@@ -15,7 +15,9 @@ from pycognaize.common.utils import (
     get_index_of_first_non_empty_list
 )
 from pycognaize.document.field import Field
-from pycognaize.document.tag import TableTag
+from pycognaize.document.html_ import HTML
+from pycognaize.document.tag import TableTag, ExtractionTag
+from pycognaize.document.tag.html_tag import  HTMLTableTag
 from pycognaize.document.tag.tag import BoxTag
 from pycognaize.document.page import Page
 
@@ -23,10 +25,11 @@ from pycognaize.document.page import Page
 class TableField(Field):
     """Base class for all pycognaize table fields"""
     tag_class: Type[BoxTag] = TableTag
+    html_tag_class: Type[HTMLTableTag] = HTMLTableTag
 
     def __init__(self,
                  name: str,
-                 tag: Optional[TableTag] = None,
+                 tag: Optional[Union[TableTag, HTMLTableTag]] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
@@ -38,14 +41,31 @@ class TableField(Field):
         self._field_id = field_id
 
     def get_table_title(self, n_lines_above=8, margin=10) -> str:
+        if isinstance(self.tags[0], HTMLTableTag):
+            title = self._get_table_title_from_html(
+                self.tags[0], n_lines_above=n_lines_above)
+        elif isinstance(self.tags[0], ExtractionTag):
+            title = self._get_table_title_from_pdf(
+                self.tags[0],n_lines_above=n_lines_above, margin=margin)
+        return title
+
+    @staticmethod
+    def _get_table_title_from_html(tag: HTMLTableTag, n_lines_above: int
+                                   ) -> str:
+        pass
+
+
+    @staticmethod
+    def _get_table_title_from_pdf(tag: ExtractionTag, n_lines_above=8,
+                                  margin=10) -> str:
         """Return the title of the table found on the pdf"""
-        h = self.tags[0].page.image_height
-        w = self.tags[0].page.image_width
+        h = tag.page.image_height
+        w = tag.page.image_width
         tags_converted = convert_tag_coords_to_percentages(
-            self.tags[0], w=w, h=h)
+            tag, w=w, h=h)
         table_top = tags_converted['top']
         all_rows_above = []
-        for line in self.tags[0].page.lines:
+        for line in tag.page.lines:
             all_rows_above.append(
                 [w['ocr_text'] for w in line
                  if w['bottom'] < table_top + margin])
@@ -58,14 +78,19 @@ class TableField(Field):
 
     @classmethod
     def construct_from_raw(
-            cls, raw: dict, pages: Dict[int, Page]) -> 'TableField':
+            cls, raw: dict, pages: Dict[int, Page],
+            html: HTML) -> 'TableField':
         """Create TableField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:
             try:
-                tags.append(cls.tag_class.construct_from_raw(
-                    raw=i, page=pages[i['page']]))
+                if not pages:
+                    tags.append(cls.html_tag_class.construct_from_raw(
+                        raw=i, html=html))
+                else:
+                    tags.append(cls.tag_class.construct_from_raw(
+                        raw=i, page=pages[i['page']]))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
         if len(tags) > 1:

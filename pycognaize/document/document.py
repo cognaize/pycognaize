@@ -12,6 +12,7 @@ import fitz
 import pandas as pd
 from fitz.utils import getColor, getColorList
 
+from pycognaize.document.html_ import HTML
 from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
@@ -32,10 +33,13 @@ class Document:
                  input_fields: 'FieldCollection[str, List[Field]]',
                  output_fields: 'FieldCollection[str, List[Field]]',
                  pages: Dict[int, Page],
+                 html_: HTML,
                  metadata: Dict[str, Any]):
         self._login_instance = Login()
         self._metadata = metadata
-        self._pages: Dict[int, Page] = pages
+        self._pages: Dict[int, Page] = pages if pages else None
+
+        self._html: HTML = html_ if html_ else None
         self._x: FieldCollection[str, List[Field]] = input_fields
         self._y: FieldCollection[str, List[Field]] = output_fields
 
@@ -71,6 +75,11 @@ class Document:
         """Returns a dictionary, where each key is the page number
         and values are Page objects"""
         return self._pages
+
+    @property
+    def html(self):
+        """Returns `HTML` object"""
+        return self._html
 
     @staticmethod
     def get_matching_table_cells_for_tag(
@@ -394,12 +403,13 @@ class Document:
                 f"Expected dict for 'raw' argument got {type(raw)} instead")
         metadata = raw['metadata']
         pages = OrderedDict()
+        html_ = HTML(path=data_path)
         for page_n in range(1, metadata['numberOfPages'] + 1):
             if (
                     'pages' in raw
                     and str(page_n) in raw['pages']
                     and 'width' in raw['pages'][str(page_n)]
-                    and 'height' in raw['pages'][str(page_n)]
+                    and 'height' in raw[ 'pages'][str(page_n)]
             ):
                 image_width = raw['pages'][str(page_n)]['width']
                 image_height = raw['pages'][str(page_n)]['height']
@@ -415,19 +425,20 @@ class Document:
             {name: [
                 FieldMapping[
                     field[IqDocumentKeysEnum.data_type.value]
-                ].value.construct_from_raw(raw=field, pages=pages)
+                ].value.construct_from_raw(raw=field, pages=pages, html=html_)
                 for field in fields]
              for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
             {name: [
                 FieldMapping[
                     field[IqDocumentKeysEnum.data_type.value]
-                ].value.construct_from_raw(raw=field, pages=pages)
+                ].value.construct_from_raw(raw=field, pages=pages, html=html_)
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
                    output_fields=output_fields,
-                   pages=pages, metadata=metadata)
+                   pages=pages, html_=html_,
+                   metadata=metadata)
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],

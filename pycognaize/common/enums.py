@@ -19,6 +19,7 @@ class StorageEnum(enum.Enum):
     image_folder = 'images'
     doc_file = 'document.json'
     pdf_file = 'original.pdf'
+    html_file = 'source.html'
     # snap_file = f"snap.{SNAPSHOT_EXTENSION}"
 
 
@@ -165,3 +166,17 @@ class FieldTypeEnum(enum.Enum):
     INPUT_FIELD = 'input'
     OUTPUT_FIELD = 'output'
     BOTH = 'both'
+
+class XBRLEnum(enum.Enum):
+    """Enumeration for XBRL document fields"""
+    source = 'source'
+    html_id = 'html_id'
+    xpath = 'xpath'
+    anchor_id = 'anchorId'
+    id = 'id'
+    is_bold = 'isBold'
+    left_indentation = 'leftIndentation'
+    ids = 'ids'
+    row_index = 'rowIndex'
+    col_index = 'colIndex'
+    tag_id = 'tagId'

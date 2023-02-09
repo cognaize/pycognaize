@@ -9,14 +9,17 @@ from pycognaize.common.enums import (
     IqFieldKeyEnum,
     IqDataTypesEnum
 )
+from pycognaize.document.html_ import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.field import Field
 from pycognaize.document.tag import ExtractionTag
+from pycognaize.document.tag.html_tag import TDTag
 
 
 class NumericField(Field):
     """Base class for all pycognaize number fields"""
     tag_class: Type[ExtractionTag] = ExtractionTag
+    html_tag_class: Type[TDTag] = TDTag
 
     def __init__(self,
                  name: str,
@@ -56,14 +59,18 @@ class NumericField(Field):
 
     @classmethod
     def construct_from_raw(
-            cls, raw: dict, pages: Dict[int, Page]) -> 'NumericField':
+            cls, raw: dict, pages: Dict[int, Page], html: HTML) -> 'NumericField':
         """Create NumericField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:
             try:
-                tags.append(cls.tag_class.construct_from_raw(
-                    raw=i, page=pages[i['page']]))
+                if pages:
+                    tags.append(cls.tag_class.construct_from_raw(
+                        raw=i, page=pages[i['page']]))
+                else:
+                    tags.append(cls.html_tag_class.construct_from_raw(
+                        raw=i, html=html))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
         return cls(name=raw[IqDocumentKeysEnum.name.value],
