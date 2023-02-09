@@ -37,7 +37,8 @@ class HTML:
     @property
     def html_soup(self):
         if self._html_soup is None:
-            self._html_soup = BeautifulSoup(self.get_html(), features='lxml')
+            self._html_soup = BeautifulSoup(self.get_html(),
+                                            features="html.parser")
         return self._html_soup
 
 

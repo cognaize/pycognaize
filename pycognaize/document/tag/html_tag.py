@@ -139,16 +139,16 @@ class HTMLTableTag(HTMLTag):
         cols = set()
         rows = set()
         for cell_ in self.cells.values():
-            cols.add(cell_.col_index)
-            rows.add(cell_.row_index)
+            cols.add(cell_.col_index - 1)
+            rows.add(cell_.row_index - 1)
         cols = list(cols)
         rows = list(rows)
         cols.sort()
         rows.sort()
         df = pd.DataFrame(columns=cols, index=rows)
         for cell_ in self.cells.values():
-            row_index = cell_.row_index
-            col_index = cell_.col_index
+            row_index = cell_.row_index - 1
+            col_index = cell_.col_index - 1
             for col_n in range(col_index, col_index + cell_.col_span):
                 for row_n in range(row_index, row_index + cell_.row_span):
                     df[col_n][row_n] = TDTag(html_id=cell_.html_id,
