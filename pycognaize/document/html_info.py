@@ -12,7 +12,8 @@ class HTML:
     """Represents html of a xbrl document in pycognaize"""
     def __init__(self, path: str) -> None:
         """
-        :param path: Local or remote path to the document folder, which includes the html file
+        :param path: Local or remote path to the document folder,
+            which includes the html file
         """
         self._path = path
         self._login_instance = Login()
