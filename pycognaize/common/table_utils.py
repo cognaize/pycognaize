@@ -1,7 +1,7 @@
 import logging
 from itertools import groupby
 
-from pycognaize.document.tag.html_tag import HTMLTableTag
+from pycognaize.document.tag.html_tag import HTMLTableTag, TDTag
 
 
 def filter_out_invalid_tables(tables):
@@ -58,7 +58,8 @@ def assign_indices_to_tables(tables, threshold: float = 0.4):
     """
     tables_dict = {}
     valid_tables = filter_out_invalid_tables(tables)
-    if all(isinstance(table.tags[0], HTMLTableTag) for table in tables):
+    if all(isinstance(table.tags[0], HTMLTableTag) or
+           isinstance(table.tags[0], TDTag)for table in tables):
         return {(idx, 0): table for idx, table in enumerate(tables, start=1)}
     sorted_tables = sorted(valid_tables,
                            key=lambda x: x.tags[0].page.page_number)
