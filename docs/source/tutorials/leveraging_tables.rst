@@ -50,7 +50,9 @@ and retrieved a ``TableField`` object from ``document.x``.
 ``TableField`` object can be used to extract the title of the table from the page,
 or to convert the table to a ``JSON`` format.
 
-To get the table's title data we use ``get_table_title()`` method
+**Extracting table's title**
+
+To get the table's title data we use ``get_table_title()`` method on table field object
 which can be called without any additional parameters or with ``margin`` and
 ``n_lines_above`` specified.
 
