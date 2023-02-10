@@ -18,7 +18,7 @@ from pycognaize.common.utils import (
 from pycognaize.document.field import Field
 from pycognaize.document.html_info import HTML
 from pycognaize.document.tag import TableTag, ExtractionTag
-from pycognaize.document.tag.html_tag import  HTMLTableTag
+from pycognaize.document.tag.html_tag import HTMLTableTag
 from pycognaize.document.tag.tag import BoxTag
 from pycognaize.document.page import Page
 
@@ -47,7 +47,7 @@ class TableField(Field):
                 self.tags[0], n_lines_above=n_lines_above)
         elif isinstance(self.tags[0], ExtractionTag):
             title = self._get_table_title_from_pdf(
-                self.tags[0],n_lines_above=n_lines_above, margin=margin)
+                self.tags[0], n_lines_above=n_lines_above, margin=margin)
         return title
 
     @staticmethod
@@ -66,7 +66,6 @@ class TableField(Field):
         filtered_above_lines = filter_lines(above_lines)
         title = ' '.join(filtered_above_lines)
         return title
-
 
     @staticmethod
     def _get_table_title_from_pdf(tag: ExtractionTag, n_lines_above=8,

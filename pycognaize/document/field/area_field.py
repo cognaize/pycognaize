@@ -47,7 +47,8 @@ class AreaField(Field):
         return self._value
 
     @classmethod
-    def construct_from_raw(cls, raw: dict, pages: Dict[int, Page], html: Optional[HTML] = None) -> 'AreaField':
+    def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
+                           html: Optional[HTML] = None) -> 'AreaField':
         """Create AreaField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []

@@ -5,7 +5,8 @@ import bson
 import pandas as pd
 
 from pycognaize.common.enums import (IqDataTypesEnum, ID,
-                                     IqRecipeEnum, XBRLCellEnum, XBRLTableTagEnum, XBRLTagEnum)
+                                     IqRecipeEnum, XBRLCellEnum,
+                                     XBRLTableTagEnum, XBRLTagEnum)
 from pycognaize.document.html_info import HTML
 from pycognaize.document.tag.tag import Tag
 
@@ -122,14 +123,14 @@ class HTMLTableTag(HTMLTag):
     def _populate_cell(keys: tuple, cell_dict: dict) -> 'HTMLCell':
         """ Creates `TDTag` object for each item in Table"""
         return HTMLCell(html_id=cell_dict[XBRLCellEnum.id.value],
-                         xpath=cell_dict[XBRLCellEnum.xpath.value],
-                         row_index=keys[1],
-                         col_index=keys[0],
-                         col_span=cell_dict[XBRLCellEnum.col_span.value],
-                         row_span=cell_dict[XBRLCellEnum.row_span.value],
-                         raw_value=cell_dict[XBRLCellEnum.raw_value.value],
-                         is_bold=cell_dict[XBRLCellEnum.is_bold.value],
-                         left_indentation=cell_dict[XBRLCellEnum.left_indentation.value])
+                        xpath=cell_dict[XBRLCellEnum.xpath.value],
+                        row_index=keys[1],
+                        col_index=keys[0],
+                        col_span=cell_dict[XBRLCellEnum.col_span.value],
+                        row_span=cell_dict[XBRLCellEnum.row_span.value],
+                        raw_value=cell_dict[XBRLCellEnum.raw_value.value],
+                        is_bold=cell_dict[XBRLCellEnum.is_bold.value],
+                        left_indentation=cell_dict[XBRLCellEnum.left_indentation.value])
 
     def to_dict(self) -> dict:
         """Converts HTMLTableTag to dict"""
@@ -166,8 +167,10 @@ class HTMLTableTag(HTMLTag):
         html_id = table_raw_data[XBRLTableTagEnum.anchor_id.value]
         cell_data = table_raw_data[XBRLTableTagEnum.cells.value]
         source_ids = raw[XBRLTableTagEnum.source.value]
-        return cls(tag_id=tag_id, ocr_value=ocr_value, value=value, is_table=True, xpath=xpath,
-                   title=title, html_id=html_id, cell_data=cell_data, html=html, source_ids=source_ids)
+        return cls(tag_id=tag_id, ocr_value=ocr_value, value=value,
+                   is_table=True, xpath=xpath, title=title,
+                   html_id=html_id, cell_data=cell_data,
+                   html=html, source_ids=source_ids)
 
     def _build_df(self) -> pd.DataFrame:
         """Build pandas data frame using `TDTag` Cells
@@ -308,8 +311,9 @@ class HTMLCell:
 
 class TDTag(HTMLTag):
     def __init__(self, td_id, html_id: List[str], value: str,
-                 raw_value: str, is_table: bool, field_id: Optional[str],
-                 tag_id: Optional[str], row_index: int, col_index: int, xpath: str):
+                 raw_value: str, is_table: bool,
+                 field_id: Optional[str], tag_id: Optional[str],
+                 row_index: int, col_index: int, xpath: str):
         super().__init__(html_id=html_id, xpath=xpath)
         self._td_id = td_id
         self._value = value
@@ -367,8 +371,10 @@ class TDTag(HTMLTag):
         field_id = source_data[IqRecipeEnum.field_id.value]
         tag_id = source_data[XBRLTagEnum.tag_id.value]
         return cls(td_id=td_id, html_id=html_id,  value=value,
-                   raw_value=raw_value, is_table=is_table, field_id=field_id, tag_id=tag_id,
-                   row_index=row_index, col_index=col_index, xpath=xpath)
+                   raw_value=raw_value, is_table=is_table,
+                   field_id=field_id, tag_id=tag_id,
+                   row_index=row_index, col_index=col_index,
+                   xpath=xpath)
 
     def to_dict(self) -> dict:
         """Converts tag to dict"""

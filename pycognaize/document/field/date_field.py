@@ -44,7 +44,8 @@ class DateField(Field):
 
     @classmethod
     def construct_from_raw(
-            cls, raw: dict, pages: Dict[int, Page], html: Optional[HTML] = None) -> 'DateField':
+            cls, raw: dict, pages: Dict[int, Page],
+            html: Optional[HTML] = None) -> 'DateField':
         """Create DateField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []

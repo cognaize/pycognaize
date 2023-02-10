@@ -409,7 +409,7 @@ class Document:
                     'pages' in raw
                     and str(page_n) in raw['pages']
                     and 'width' in raw['pages'][str(page_n)]
-                    and 'height' in raw[ 'pages'][str(page_n)]
+                    and 'height' in raw['pages'][str(page_n)]
             ):
                 image_width = raw['pages'][str(page_n)]['width']
                 image_height = raw['pages'][str(page_n)]['height']
@@ -425,14 +425,16 @@ class Document:
             {name: [
                 FieldMapping[
                     field[IqDocumentKeysEnum.data_type.value]
-                ].value.construct_from_raw(raw=field, pages=pages, html=html_info)
+                ].value.construct_from_raw(raw=field, pages=pages,
+                                           html=html_info)
                 for field in fields]
              for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
             {name: [
                 FieldMapping[
                     field[IqDocumentKeysEnum.data_type.value]
-                ].value.construct_from_raw(raw=field, pages=pages, html=html_info)
+                ].value.construct_from_raw(raw=field, pages=pages,
+                                           html=html_info)
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
