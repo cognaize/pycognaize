@@ -22,14 +22,17 @@ from pycognaize.common.enums import (
     IqFieldKeyEnum,
     IqDataTypesEnum
 )
+from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.field import Field
 from pycognaize.document.tag import ExtractionTag
+from pycognaize.document.tag.html_tag import TDTag
 
 
 class TextField(Field):
     """Base class for all pycognaize text fields"""
     tag_class: Type[ExtractionTag] = ExtractionTag
+    html_tag_class: Type[TDTag] = TDTag
 
     def __init__(self,
                  name: str,
@@ -60,19 +63,27 @@ class TextField(Field):
         return self._value
 
     @classmethod
-    def construct_from_raw(
-            cls, raw: dict, pages: Dict[int, Page]) -> 'TextField':
+    def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
+                           html: Optional[HTML] = None) -> 'TextField':
         """Create TextField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:
             try:
-                tags.append(cls.tag_class.construct_from_raw(
-                    raw=i, page=pages[i['page']]))
+                if pages:
+                    tags.append(cls.tag_class.construct_from_raw(
+                        raw=i, page=pages[i['page']]))
+                else:
+                    tags.append(cls.html_tag_class.construct_from_raw(
+                        raw=i, html=html))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
+        if pages is None:
+            value = tags[0].value if tags else raw[IqTagKeyEnum.value.value]
+        else:
+            value = raw[IqTagKeyEnum.value.value]
         return cls(name=raw[IqDocumentKeysEnum.name.value],
-                   value=raw[IqTagKeyEnum.value.value],
+                   value=value,
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
