@@ -46,7 +46,7 @@ class TableField(Field):
         if isinstance(self.tags[0], HTMLTableTag):
             title = self._get_table_title_from_html(
                 self.tags[0], n_lines_above=n_lines_above)
-        elif isinstance(self.tags[0], ExtractionTag):
+        elif isinstance(self.tags[0], (ExtractionTag, TableTag)):
             title = self._get_table_title_from_pdf(
                 self.tags[0], n_lines_above=n_lines_above, margin=margin)
         return title
