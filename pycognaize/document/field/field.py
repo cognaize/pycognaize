@@ -3,7 +3,7 @@ import abc
 from typing import List, Optional, Dict, Type
 
 from pycognaize.common.enums import IqFieldKeyEnum
-from pycognaize.document.html_ import HTML
+from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.tag.tag import BoxTag
 
@@ -83,7 +83,7 @@ class Field(metaclass=abc.ABCMeta):
     @classmethod
     @abc.abstractmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
-                           html: HTML) -> 'Field':
+                           html: Optional[HTML] = None) -> 'Field':
         """Use raw dictionary in order to recreate the Field python object"""
         pass
 

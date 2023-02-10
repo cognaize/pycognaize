@@ -9,7 +9,7 @@ from pycognaize.common.enums import (
     IqFieldKeyEnum,
     IqDataTypesEnum
 )
-from pycognaize.document.html_ import HTML
+from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.field import Field
 from pycognaize.document.tag import ExtractionTag
@@ -47,19 +47,9 @@ class NumericField(Field):
     def value(self):
         return self._value
 
-    @staticmethod
-    def convert_to_numeric(value):
-        """converts string value to numeric"""
-        # noinspection PyBroadException
-        try:
-            value = float(value)
-        except Exception:
-            value = float('nan')
-        return value
-
     @classmethod
-    def construct_from_raw(
-            cls, raw: dict, pages: Dict[int, Page], html: HTML) -> 'NumericField':
+    def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
+                           html: Optional[HTML] = None) -> 'NumericField':
         """Create NumericField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
@@ -73,13 +63,27 @@ class NumericField(Field):
                         raw=i, html=html))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
+        if pages is None:
+            value = tags[0].value if tags else raw[IqTagKeyEnum.value.value]
+        else:
+            value = raw[IqTagKeyEnum.value.value]
         return cls(name=raw[IqDocumentKeysEnum.name.value],
-                   value=raw[IqTagKeyEnum.value.value],
+                   value=value,
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                    group_name=raw.get(IqFieldKeyEnum.group.value, '')
                    )
+
+    @staticmethod
+    def convert_to_numeric(value):
+        """converts string value to numeric"""
+        # noinspection PyBroadException
+        try:
+            value = float(value)
+        except Exception:
+            value = float('nan')
+        return value
 
     def to_dict(self) -> dict:
         """Converts NumericField object to dictionary"""

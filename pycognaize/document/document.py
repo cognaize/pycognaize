@@ -12,7 +12,7 @@ import fitz
 import pandas as pd
 from fitz.utils import getColor, getColorList
 
-from pycognaize.document.html_ import HTML
+from pycognaize.document.html_info import HTML
 from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
@@ -403,7 +403,7 @@ class Document:
                 f"Expected dict for 'raw' argument got {type(raw)} instead")
         metadata = raw['metadata']
         pages = OrderedDict()
-        html_ = HTML(path=data_path)
+        html_info = HTML(path=data_path)
         for page_n in range(1, metadata['numberOfPages'] + 1):
             if (
                     'pages' in raw
@@ -425,19 +425,19 @@ class Document:
             {name: [
                 FieldMapping[
                     field[IqDocumentKeysEnum.data_type.value]
-                ].value.construct_from_raw(raw=field, pages=pages, html=html_)
+                ].value.construct_from_raw(raw=field, pages=pages, html=html_info)
                 for field in fields]
              for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
             {name: [
                 FieldMapping[
                     field[IqDocumentKeysEnum.data_type.value]
-                ].value.construct_from_raw(raw=field, pages=pages, html=html_)
+                ].value.construct_from_raw(raw=field, pages=pages, html=html_info)
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
                    output_fields=output_fields,
-                   pages=pages, html_=html_,
+                   pages=pages, html_=html_info,
                    metadata=metadata)
 
     def _collect_all_tags_for_fields(self,
