@@ -52,7 +52,7 @@ or to convert the table to a ``JSON`` format.
 
 **Extracting title of the table**
 
-To get the table's title data we use ``get_table_title()`` method on table field object
+To get the table's title data we use ``get_table_title()`` method
 which can be called without any additional parameters or with ``margin`` and
 ``n_lines_above`` specified.
 
