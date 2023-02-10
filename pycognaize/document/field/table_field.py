@@ -42,7 +42,7 @@ class TableField(Field):
         self._field_id = field_id
 
     def get_table_title(self, n_lines_above=8, margin=10) -> str:
-        title = None
+        title = ''
         if isinstance(self.tags[0], HTMLTableTag):
             title = self._get_table_title_from_html(
                 self.tags[0], n_lines_above=n_lines_above)
