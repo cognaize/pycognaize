@@ -19,6 +19,7 @@ class StorageEnum(enum.Enum):
     image_folder = 'images'
     doc_file = 'document.json'
     pdf_file = 'original.pdf'
+    html_file = 'source.html'
     # snap_file = f"snap.{SNAPSHOT_EXTENSION}"
 
 
@@ -165,3 +166,51 @@ class FieldTypeEnum(enum.Enum):
     INPUT_FIELD = 'input'
     OUTPUT_FIELD = 'output'
     BOTH = 'both'
+
+
+class XBRLTagEnum(enum.Enum):
+    """Enumeration for XBRL document fields"""
+    source = 'source'
+    td_id = '_id'
+    xpath = 'xpath'
+    anchor_id = 'anchorId'
+    id = 'id'
+    is_bold = 'isBold'
+    left_indentation = 'leftIndentation'
+    ids = 'ids'
+    row_index = 'rowIndex'
+    col_index = 'colIndex'
+    tag_id = 'tagId'
+    ocr_value = 'ocrValue'
+    value = 'value'
+    is_table = 'isTable'
+
+
+class XBRLCellEnum(enum.Enum):
+    id = 'id'
+    source = 'source'
+    ids = 'ids'
+    html_id = 'id'
+    xpath = 'xpath'
+    row_index = 'rowIndex'
+    col_index = 'colIndex'
+    col_span = 'colspan'
+    row_span = 'rowspan'
+    raw_value = 'value'
+    is_bold = 'isBold'
+    left_indentation = 'leftIndentation'
+
+
+class XBRLTableTagEnum(enum.Enum):
+    source = 'source'
+    ocr_value = 'ocrValue'
+    value = 'value'
+    is_table = 'isTable'
+    is_bold = 'isBold'
+    left_indentation = 'leftIndentation'
+    anchor_id = 'anchorId'
+    xpath = 'xpath'
+    table = 'table'
+    cells = 'cells'
+    title = 'title'
+    _id = '_id'

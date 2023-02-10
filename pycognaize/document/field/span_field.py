@@ -9,6 +9,7 @@ from pycognaize.common.enums import (
 )
 
 from pycognaize.document.field import Field
+from pycognaize.document.html_info import HTML
 from pycognaize.document.tag.span_tag import SpanTag
 from pycognaize.document.page import Page
 
@@ -32,8 +33,8 @@ class SpanField(Field):
         self._field_id = field_id
 
     @classmethod
-    def construct_from_raw(
-            cls, raw: dict, pages: Dict[int, Page]) -> 'SpanField':
+    def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
+                           html: Optional[HTML] = None) -> 'SpanField':
         """Create SnapField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
