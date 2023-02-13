@@ -59,8 +59,9 @@ def assign_indices_to_tables(tables, threshold: float = 0.4):
     tables_dict = {}
     valid_tables = filter_out_invalid_tables(tables)
     if all(isinstance(table.tags[0], HTMLTableTag) or
-           isinstance(table.tags[0], TDTag)for table in tables):
-        return {(idx, 0): table for idx, table in enumerate(tables, start=1)}
+           isinstance(table.tags[0], TDTag)for table in valid_tables):
+        return {(idx, 0): table for idx, table
+                in enumerate(valid_tables, start=1)}
     sorted_tables = sorted(valid_tables,
                            key=lambda x: x.tags[0].page.page_number)
     grouped_tables = {page: list(table) for page, table in
