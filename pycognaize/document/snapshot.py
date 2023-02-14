@@ -1,4 +1,6 @@
 import os
+import tempfile
+import logging
 from typing import Mapping
 
 from pycognaize.common import utils
@@ -23,6 +25,14 @@ class Snapshot:
         return self._documents
 
     @classmethod
+    def get_by_id(cls, snapshot_id: str) -> 'Snapshot':
+        """Returns the Snapshot Object"""
+        tmp_dir = tempfile.mkdtemp()
+        cls.__class__.download(snapshot_id, tmp_dir)
+        snapshot_path = os.path.join(tmp_dir, snapshot_id)
+        return cls(path=snapshot_path)
+
+    @classmethod
     def download(cls, snapshot_id: str, destination_dir: str):
         """Downloads snapshot to specified destination"""
         login_instance = Login()
@@ -32,6 +42,13 @@ class Snapshot:
                                          snapshot_id)
             ci = utils.cloud_interface_login(login_instance)
             ci.copy_dir(snapshot_path, destination_dir)
+
+            logging.info(f"Snapshot {snapshot_id} downloaded to "
+                         f"{destination_dir}. To use the snapshot, check our "
+                         f"documentation at: ",
+                         f"http://pycognaize-docs.com."
+                         f"s3-website.us-east-2.amazonaws.com")
+
         else:
             raise AuthenthicationError()
 
