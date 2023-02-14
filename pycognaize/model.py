@@ -1,6 +1,6 @@
 import abc
 from collections import Counter, defaultdict
-from typing import Tuple, List
+from typing import Tuple, List, Union
 
 import requests
 import simplejson as json
@@ -13,6 +13,7 @@ from pycognaize.common.utils import (
 )
 from pycognaize.document.document import Document
 from pycognaize.document.tag import ExtractionTag
+from pycognaize.document.tag.html_tag import TDTag
 
 
 def join_url(*parts):
@@ -370,11 +371,15 @@ class Model(metaclass=abc.ABCMeta):
         return groups
 
     @staticmethod
-    def matches(act_tag: ExtractionTag, pred_tag: ExtractionTag,
+    def matches(act_tag: Union[ExtractionTag, TDTag],
+                pred_tag: Union[ExtractionTag, TDTag],
                 threshold: float = 0.6) -> bool:
-        """ Detects if there is a match between two extraction tags
+        """ If tags are TDTag checks that two tags have the same html_id,
+            otherwise detects if there is a match between two extraction tags
             having the same page number. Returns true if
         intersection is greater than the threshold"""
+        if isinstance(act_tag, TDTag) and isinstance(pred_tag, TDTag):
+            return act_tag.html_id == pred_tag.html_id
         return act_tag.page.page_number == pred_tag.page.page_number and (
                 act_tag & pred_tag) / min(
             act_tag, pred_tag, key=lambda x: x.area).area >= threshold
