@@ -22,7 +22,7 @@ class AreaField(Field):
     def __init__(self,
                  name: str,
                  value: str = '',
-                 tags: Optional[Union[ExtractionTag, TDTag]] = None,
+                 tags: Optional[List[Union[ExtractionTag, TDTag]]] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
