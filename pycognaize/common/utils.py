@@ -587,8 +587,8 @@ def get_index_of_first_non_empty_list(list_of_lists):
     return non_empty_idx
 
 
-def filter_lines(lines: List[str]) -> List[str]:
-    """Filters all the lines that are already part of other line"""
+def filter_out_nested_lines(lines: List[str]) -> List[str]:
+    """ Filters out nested html text lines"""
     lines_copy = lines.copy()
     sorted_lines = sorted(lines, key=lambda x: len(x))
     for idx, line in enumerate(sorted_lines):
