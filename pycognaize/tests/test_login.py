@@ -50,3 +50,8 @@ class TestIndex(unittest.TestCase):
         self.assertRaises(ServerAPIException, instance.login, 'test@gmail.com', 'test_password')
 
         instance.destroy()
+
+    def test_api_host(self):
+        os.unsetenv("API_HOST")
+        instance = Login()
+        self.assertRaises(OSError, instance.login, 'test@gmail.com', 'test_password')
