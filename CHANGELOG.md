@@ -2,6 +2,12 @@
 
 ## [1.3]
 
+### [1.3.1] - 2023-02-14
+- Update install requirementst in `setup.cfg`
+- Rename environment variable `COGNAIZE_HOST` to `API_HOST`
+- Raise error when trying to log in without `API_HOST` environment variable
+- Add documentation and make cosmetic changes in `login.py`
+
 ### [1.3.0] - 2023-02-10
 - Add XBRL support
 - Add `spacy` to `model-requirements.txt`
