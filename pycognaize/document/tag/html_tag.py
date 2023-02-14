@@ -126,7 +126,6 @@ class HTMLTableTag(HTMLTag):
             html_id=cell_dict[XBRLCellEnum.id.value],
             xpath=cell_dict[XBRLCellEnum.xpath.value],
             row_index=keys[1],
-            col_index=keys[0],
             col_span=cell_dict[XBRLCellEnum.col_span.value],
             row_span=cell_dict[XBRLCellEnum.row_span.value],
             raw_value=cell_dict[XBRLCellEnum.raw_value.value],
@@ -327,6 +326,10 @@ class TDTag(HTMLTag):
         self._col_index = col_index
 
     @property
+    def td_id(self):
+        return self._td_id
+
+    @property
     def value(self):
         return self._value
 
@@ -336,7 +339,7 @@ class TDTag(HTMLTag):
 
     @property
     def is_table(self):
-        return self.is_table
+        return self._is_table
 
     @property
     def field_id(self):
