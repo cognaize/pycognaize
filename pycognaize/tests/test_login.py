@@ -1,3 +1,4 @@
+import os
 import unittest
 from unittest.mock import Mock, patch
 
@@ -18,6 +19,7 @@ class TestIndex(unittest.TestCase):
 
     @patch('requests.Session.post')
     def test_login(self, mock_post):
+        os.environ["API_HOST"] = "test.api_host.com"
         instance = Login()
         mock_post.return_value.status_code = 200
         mock_post.return_value.json.return_value = \
