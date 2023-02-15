@@ -126,6 +126,7 @@ class HTMLTableTag(HTMLTag):
             html_id=cell_dict[XBRLCellEnum.id.value],
             xpath=cell_dict[XBRLCellEnum.xpath.value],
             row_index=keys[1],
+            col_index=keys[0],
             col_span=cell_dict[XBRLCellEnum.col_span.value],
             row_span=cell_dict[XBRLCellEnum.row_span.value],
             raw_value=cell_dict[XBRLCellEnum.raw_value.value],
