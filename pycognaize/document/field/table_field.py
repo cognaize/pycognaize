@@ -13,7 +13,7 @@ from pycognaize.common.enums import (
 )
 from pycognaize.common.utils import (
     convert_tag_coords_to_percentages,
-    get_index_of_first_non_empty_list, filter_lines
+    get_index_of_first_non_empty_list, filter_out_nested_lines
 )
 from pycognaize.document.field import Field
 from pycognaize.document.html_info import HTML
@@ -64,7 +64,7 @@ class TableField(Field):
                 above_lines.append(line_text)
             if count >= n_lines_above:
                 break
-        filtered_above_lines = filter_lines(above_lines)
+        filtered_above_lines = filter_out_nested_lines(above_lines)
         title = ' '.join(filtered_above_lines)
         return title
 
