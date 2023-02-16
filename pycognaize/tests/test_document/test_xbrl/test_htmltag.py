@@ -12,6 +12,7 @@ class TestHTMLTag(unittest.TestCase):
     def setUp(self):
         self.html_id = ['html_id']
         self.xpath = 'xpath'
+        self.tag_id = ''
         self.html_tag = HTMLTag(html_id=self.html_id, xpath=self.xpath)
 
     def test__html_id(self):
@@ -22,7 +23,8 @@ class TestHTMLTag(unittest.TestCase):
 
     def test__construct_from_raw(self):
         raw = {IqDataTypesEnum.table.value: {XBRLTagEnum.anchor_id.value: self.html_id,
-                                             XBRLTagEnum.xpath.value: self.xpath}}
+                                             XBRLTagEnum.xpath.value: self.xpath,
+                                             XBRLTagEnum.tag_id.value: self.tag_id}}
         html = HTML(self.xpath)
         html_tag = HTMLTag.construct_from_raw(raw=raw, html=html)
         self.assertIsInstance(html_tag, HTMLTag)

@@ -14,9 +14,11 @@ from pycognaize.document.tag.tag import Tag
 class HTMLTag(Tag, metaclass=abc.ABCMeta):
     """Base class for XBRL document tags"""
 
-    def __init__(self, html_id: List[str], xpath: str):
+    def __init__(self, html_id: List[str], xpath: str,
+                 tag_id: Optional[str] = None):
         self._html_id = html_id
         self._xpath = xpath
+        self._tag_id = tag_id
 
     @property
     def html_id(self):
@@ -25,6 +27,10 @@ class HTMLTag(Tag, metaclass=abc.ABCMeta):
     @property
     def xpath(self):
         return self._xpath
+
+    @property
+    def tag_id(self):
+        return self._tag_id
 
     @classmethod
     def construct_from_raw(cls, raw: dict, html: HTML) -> 'HTMLTag':
@@ -36,7 +42,8 @@ class HTMLTag(Tag, metaclass=abc.ABCMeta):
         table_raw_data = raw[IqDataTypesEnum.table.value]
         html_id = table_raw_data[XBRLTagEnum.anchor_id.value]
         xpath = table_raw_data[XBRLTagEnum.xpath.value]
-        return cls(html_id=html_id, xpath=xpath)
+        tag_id = table_raw_data[XBRLTagEnum.tag_id.value]
+        return cls(html_id=html_id, xpath=xpath, tag_id=tag_id)
 
     # @abc.abstractmethod
     # def to_dict(self) -> dict:
@@ -50,8 +57,7 @@ class HTMLTableTag(HTMLTag):
     def __init__(self, tag_id: str, ocr_value: str, value: str,
                  xpath: str, title: str, html_id: List[str], cell_data: dict,
                  html: HTML, source_ids, is_table: bool = True):
-        super().__init__(html_id=html_id, xpath=xpath)
-        self._tag_id = tag_id
+        super().__init__(html_id=html_id, xpath=xpath, tag_id=tag_id)
         self._ocr_value = ocr_value
         self._value = value
         self._is_table = is_table
@@ -97,9 +103,6 @@ class HTMLTableTag(HTMLTag):
     def html(self):
         return self._html
 
-    @property
-    def tag_id(self):
-        return self._tag_id
 
     @staticmethod
     def _extract_value(x):
@@ -316,13 +319,12 @@ class TDTag(HTMLTag):
                  raw_value: str, is_table: bool,
                  field_id: Optional[str], tag_id: Optional[str],
                  row_index: int, col_index: int, xpath: str):
-        super().__init__(html_id=html_id, xpath=xpath)
+        super().__init__(html_id=html_id, xpath=xpath, tag_id=tag_id)
         self._td_id = td_id
         self._value = value
         self._raw_value = raw_value
         self._is_table = is_table
         self._field_id = field_id
-        self._tag_id = tag_id
         self._row_index = row_index
         self._col_index = col_index
 
