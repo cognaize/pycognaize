@@ -13,7 +13,7 @@ from pycognaize.common.utils import (
 )
 from pycognaize.document.document import Document
 from pycognaize.document.tag import ExtractionTag
-from pycognaize.document.tag.html_tag import TDTag
+from pycognaize.document.tag.html_tag import TDTag, HTMLTableTag
 
 
 def join_url(*parts):
@@ -109,7 +109,7 @@ class Model(metaclass=abc.ABCMeta):
         session.mount('http://', HTTPAdapter(max_retries=self.RETRIES))
         session.mount('https://', HTTPAdapter(max_retries=self.RETRIES))
         session.headers = {'x-auth': token}
-        get_response: requests.Response =\
+        get_response: requests.Response = \
             session.get(url + '/' + task_id, verify=False,
                         timeout=self.DEFAULT_TIMEOUT)
         get_response.raise_for_status()
@@ -371,8 +371,8 @@ class Model(metaclass=abc.ABCMeta):
         return groups
 
     @staticmethod
-    def matches(act_tag: Union[ExtractionTag, TDTag],
-                pred_tag: Union[ExtractionTag, TDTag],
+    def matches(act_tag: Union[ExtractionTag, TDTag, HTMLTableTag],
+                pred_tag: Union[ExtractionTag, TDTag, HTMLTableTag],
                 threshold: float = 0.6) -> bool:
         """ If tags are TDTag checks that two tags have the same html_id,
             otherwise detects if there is a match between two extraction tags
@@ -380,9 +380,13 @@ class Model(metaclass=abc.ABCMeta):
         intersection is greater than the threshold"""
         if isinstance(act_tag, TDTag) and isinstance(pred_tag, TDTag):
             return act_tag.html_id == pred_tag.html_id
-        return act_tag.page.page_number == pred_tag.page.page_number and (
-                act_tag & pred_tag) / min(
-            act_tag, pred_tag, key=lambda x: x.area).area >= threshold
+        elif (isinstance(act_tag, TDTag) and isinstance(pred_tag, HTMLTableTag)
+        ) or (isinstance(act_tag, HTMLTableTag) and isinstance(pred_tag, TDTag)):
+            return act_tag.tag_id == pred_tag.tag_id
+        else:
+            return act_tag.page.page_number == pred_tag.page.page_number and (
+                    act_tag & pred_tag) / min(
+                act_tag, pred_tag, key=lambda x: x.area).area >= threshold
 
     def execute_eval(self,
                      token: str,

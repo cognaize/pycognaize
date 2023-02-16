@@ -203,8 +203,8 @@ class HTMLTableTag(HTMLTag):
                                              is_table=False,
                                              html_id=cell_.html_id,
                                              xpath=cell_.xpath,
-                                             value=cell_.raw_value,
                                              raw_value=cell_.raw_value,
+                                             raw_ocr_value=cell_.raw_value,
                                              field_id='',
                                              tag_id='',
                                              row_index=row_index,
@@ -315,14 +315,14 @@ class HTMLCell:
 
 
 class TDTag(HTMLTag):
-    def __init__(self, td_id, html_id: List[str], value: str,
-                 raw_value: str, is_table: bool,
+    def __init__(self, td_id, html_id: List[str], raw_value: str,
+                 raw_ocr_value: str, is_table: bool,
                  field_id: Optional[str], tag_id: Optional[str],
                  row_index: int, col_index: int, xpath: str):
         super().__init__(html_id=html_id, xpath=xpath, tag_id=tag_id)
         self._td_id = td_id
-        self._value = value
         self._raw_value = raw_value
+        self._raw_ocr_value = raw_ocr_value
         self._is_table = is_table
         self._field_id = field_id
         self._row_index = row_index
@@ -333,12 +333,13 @@ class TDTag(HTMLTag):
         return self._td_id
 
     @property
-    def value(self):
-        return self._value
+    def raw_value(self):
+        """returns adjusted value"""
+        return self._raw_value
 
     @property
-    def raw_value(self):
-        return self._raw_value
+    def raw_ocr_value(self):
+        return self._raw_ocr_value
 
     @property
     def is_table(self):
@@ -369,8 +370,8 @@ class TDTag(HTMLTag):
         """
         source_data = raw[XBRLTagEnum.source.value]
         td_id = raw[XBRLTagEnum.td_id.value]
-        value = raw[XBRLTagEnum.value.value]
-        raw_value = raw[XBRLTagEnum.ocr_value.value]
+        raw_value = raw[XBRLTagEnum.value.value]
+        raw_ocr_value = raw[XBRLTagEnum.ocr_value.value]
         is_table = raw[XBRLTagEnum.is_table.value]
         html_id = source_data[XBRLTagEnum.ids.value]
         xpath = source_data[XBRLTagEnum.xpath.value]
@@ -378,8 +379,8 @@ class TDTag(HTMLTag):
         col_index = source_data[XBRLTagEnum.col_index.value]
         field_id = source_data[IqRecipeEnum.field_id.value]
         tag_id = source_data[XBRLTagEnum.tag_id.value]
-        return cls(td_id=td_id, html_id=html_id,  value=value,
-                   raw_value=raw_value, is_table=is_table,
+        return cls(td_id=td_id, html_id=html_id,  raw_value=raw_value,
+                   raw_ocr_value=raw_ocr_value, is_table=is_table,
                    field_id=field_id, tag_id=tag_id,
                    row_index=row_index, col_index=col_index,
                    xpath=xpath)
@@ -390,8 +391,8 @@ class TDTag(HTMLTag):
             ID: str(bson.ObjectId()),
             XBRLTagEnum.ids.value: self.html_id,
             XBRLTagEnum.xpath.value: self.xpath,
-            XBRLTagEnum.value.value: self.value,
-            XBRLTagEnum.ocr_value.value: self.raw_value,
+            XBRLTagEnum.value.value: self.raw_value,
+            XBRLTagEnum.ocr_value.value: self.raw_ocr_value,
             IqRecipeEnum.field_id.value: self.field_id,
             XBRLTagEnum.tag_id.value: self.tag_id,
             XBRLTagEnum.row_index.value: self.row_index,

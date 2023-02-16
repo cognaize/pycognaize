@@ -161,24 +161,24 @@ class TestHTMLCell(unittest.TestCase):
 class TestTDTag(unittest.TestCase):
     def setUp(self):
         self.td_id = 'test_td_id'
-        self.html_id = [1, 2, 3]
+        self.html_id = ['1', '2', '3']
         self.xpath = "/xpath"
-        self.value = "value"
         self.raw_value = "raw_value"
+        self.raw_ocr_value = "raw_ocr_value"
         self.is_table = False
         self.field_id = "field_id"
         self.tag_id = "tag_id"
         self.row_index = 0
         self.col_index = 1
-        self.td_tag = TDTag(td_id=self.td_id, html_id=self.html_id, xpath=self.xpath, value=self.value,
-                            raw_value=self.raw_value, is_table=self.is_table, field_id=self.field_id,
+        self.td_tag = TDTag(td_id=self.td_id, html_id=self.html_id, xpath=self.xpath, raw_value=self.raw_value,
+                            raw_ocr_value=self.raw_ocr_value, is_table=self.is_table, field_id=self.field_id,
                             tag_id=self.tag_id, row_index=self.row_index, col_index=self.col_index)
 
     def test__td_tag_init(self):
         self.assertEqual(self.td_tag.html_id, self.html_id)
         self.assertEqual(self.td_tag.xpath, self.xpath)
-        self.assertEqual(self.td_tag.value, self.value)
         self.assertEqual(self.td_tag.raw_value, self.raw_value)
+        self.assertEqual(self.td_tag.raw_ocr_value, self.raw_ocr_value)
         self.assertEqual(self.td_tag.field_id, self.field_id)
         self.assertEqual(self.td_tag.tag_id, self.tag_id)
         self.assertEqual(self.td_tag.row_index, self.row_index)
@@ -196,29 +196,29 @@ class TestTDTag(unittest.TestCase):
                 IqRecipeEnum.field_id.value: "field_id",
                 XBRLTagEnum.tag_id.value: "tag_id",
             },
-            XBRLTagEnum.ocr_value.value: "raw_value",
-            XBRLTagEnum.value.value: "value"
+            XBRLTagEnum.ocr_value.value: "raw_ocr_value",
+            XBRLTagEnum.value.value: "raw_value"
         }
         html = HTML(self.xpath)
         td_tag = TDTag.construct_from_raw(raw, html)
         self.assertEqual(td_tag.html_id, [1, 2, 3])
         self.assertEqual(td_tag.xpath, "/xpath")
-        self.assertEqual(td_tag.value, "value")
         self.assertEqual(td_tag.raw_value, "raw_value")
+        self.assertEqual(td_tag.raw_ocr_value, "raw_ocr_value")
         self.assertEqual(td_tag.field_id, "field_id")
         self.assertEqual(td_tag.tag_id, "tag_id")
         self.assertEqual(td_tag.row_index, 0)
         self.assertEqual(td_tag.col_index, 1)
 
     def test__td_tag_to_dict(self):
-        td_tag = TDTag(td_id='test td_id', html_id=['1', '2', '3'], xpath="/xpath", value="value",
-                       raw_value="raw_value", is_table=False, field_id="field_id",
+        td_tag = TDTag(td_id='test td_id', html_id=['1', '2', '3'], xpath="/xpath", raw_value="raw_value",
+                       raw_ocr_value="raw_ocr_value", is_table=False, field_id="field_id",
                        tag_id="tag_id", row_index=0, col_index=1)
         output_dict = td_tag.to_dict()
         expected_dict = {
             ID: output_dict[ID], XBRLTagEnum.ids.value: ['1', '2', '3'],
-            XBRLTagEnum.xpath.value: "/xpath", XBRLTagEnum.value.value: "value",
-            XBRLTagEnum.ocr_value.value: "raw_value", IqRecipeEnum.field_id.value: "field_id",
+            XBRLTagEnum.xpath.value: "/xpath", XBRLTagEnum.value.value: "raw_value",
+            XBRLTagEnum.ocr_value.value: "raw_ocr_value", IqRecipeEnum.field_id.value: "field_id",
             XBRLTagEnum.tag_id.value: "tag_id", XBRLTagEnum.row_index.value: 0, XBRLTagEnum.col_index.value: 1}
         self.assertDictEqual(output_dict, expected_dict)
 
