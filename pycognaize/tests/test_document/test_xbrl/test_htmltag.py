@@ -12,14 +12,28 @@ class TestHTMLTag(unittest.TestCase):
     def setUp(self):
         self.html_id = ['html_id']
         self.xpath = 'xpath'
-        self.tag_id = ''
-        self.html_tag = HTMLTag(html_id=self.html_id, xpath=self.xpath)
+        self.tag_id = '62fa8ac1ddc7d62ca2fcc3c5'
+        self.html_tag_1 = HTMLTag(
+            html_id=['585abc60-7eb2-4bab-b482-2fc9b74b010a'],
+            xpath='/html/body/div[87]/table',
+            tag_id='62fa8ac1ddc7d62ca2fcc3c5')
+        self.html_tag_2 = HTMLTag(
+            html_id=["5a5dd62d-8996-4e8c-96f0-df0c4d556bba",
+                     "5046fa33-8c9a-4c2c-86f5-afcecaa4cd16"],
+            xpath='/html/body/div[89]/table')
 
     def test__html_id(self):
-        self.assertEqual(self.html_tag.html_id, self.html_id)
+        self.assertEqual(self.html_tag_1.html_id, ['585abc60-7eb2-4bab-b482-2fc9b74b010a'])
+        self.assertEqual(self.html_tag_2.html_id, ["5a5dd62d-8996-4e8c-96f0-df0c4d556bba",
+                                                   "5046fa33-8c9a-4c2c-86f5-afcecaa4cd16"])
 
     def test__xpath(self):
-        self.assertEqual(self.html_tag.xpath, self.xpath)
+        self.assertEqual(self.html_tag_1.xpath, '/html/body/div[87]/table')
+        self.assertEqual(self.html_tag_2.xpath, '/html/body/div[89]/table')
+
+    def test__tag_id(self):
+        self.assertEqual(self.html_tag_1.tag_id, '62fa8ac1ddc7d62ca2fcc3c5')
+        self.assertEqual(self.html_tag_2.tag_id, '')
 
     def test__construct_from_raw(self):
         raw = {IqDataTypesEnum.table.value: {XBRLTagEnum.anchor_id.value: self.html_id,
