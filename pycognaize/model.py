@@ -1,6 +1,6 @@
 import abc
 from collections import Counter, defaultdict
-from typing import Tuple, List, Union
+from typing import Tuple, List
 
 import requests
 import simplejson as json
@@ -9,11 +9,9 @@ from requests.adapters import HTTPAdapter, Retry
 
 from pycognaize.common.utils import (
     replace_object_ids_with_string,
-    ConfusionMatrix
+    ConfusionMatrix, matches
 )
 from pycognaize.document.document import Document
-from pycognaize.document.tag import ExtractionTag
-from pycognaize.document.tag.html_tag import TDTag, HTMLTableTag
 
 
 def join_url(*parts):
@@ -244,7 +242,7 @@ class Model(metaclass=abc.ABCMeta):
                 for pred_tag_idx, pred_tag in enumerate(pred_tags):
                     if (act_tag_idx not in matched_act_idxs
                             and pred_tag_idx not in matched_pred_idxs):
-                        if (self.matches(act_tag=act_tag, pred_tag=pred_tag)
+                        if (matches(act_tag=act_tag, pred_tag=pred_tag)
                                 and act_tag.raw_ocr_value
                                 == pred_tag.raw_ocr_value):
                             tp_t += 1
@@ -328,7 +326,7 @@ class Model(metaclass=abc.ABCMeta):
                     for field_name in entity_act.keys():
                         if (entity_act[field_name].tags
                                 or entity_pred[field_name].tags):
-                            if any(self.matches(act_tag=act_tag,
+                            if any(matches(act_tag=act_tag,
                                                 pred_tag=pred_tag)
                                    for act_tag in entity_act[field_name].tags
                                    for pred_tag
@@ -370,23 +368,6 @@ class Model(metaclass=abc.ABCMeta):
                         groups[key][field_name] = item
         return groups
 
-    @staticmethod
-    def matches(act_tag: Union[ExtractionTag, TDTag, HTMLTableTag],
-                pred_tag: Union[ExtractionTag, TDTag, HTMLTableTag],
-                threshold: float = 0.6) -> bool:
-        """ If tags are TDTag checks that two tags have the same html_id,
-            otherwise detects if there is a match between two extraction tags
-            having the same page number. Returns true if
-        intersection is greater than the threshold"""
-        if isinstance(act_tag, TDTag) and isinstance(pred_tag, TDTag):
-            return act_tag.html_id == pred_tag.html_id
-        elif (isinstance(act_tag, TDTag) and isinstance(pred_tag, HTMLTableTag)
-        ) or (isinstance(act_tag, HTMLTableTag) and isinstance(pred_tag, TDTag)):
-            return act_tag.tag_id == pred_tag.tag_id
-        else:
-            return act_tag.page.page_number == pred_tag.page.page_number and (
-                    act_tag & pred_tag) / min(
-                act_tag, pred_tag, key=lambda x: x.area).area >= threshold
 
     def execute_eval(self,
                      token: str,
