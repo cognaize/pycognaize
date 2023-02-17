@@ -27,6 +27,18 @@ class HTML:
         return self._path
 
     def _validate_path(self, path, doc_id):
+        """
+        :param path: path of the source document
+        :param doc_id: document id
+        :return: valid path for the `source.html` file
+            corresponding to the document id
+        If the input path contains a directory with the same name
+            as the document ID, the valid path
+            is the combination of the input path and the document id
+        If the input path contains a file named `source.html`,
+            the valid path is simply the input path.
+        Otherwise, the function returns an empty string as the valid path.
+        """
         valid_path = ''
         if self.ci.isdir(os.path.join(path, doc_id)):
             valid_path = os.path.join(path, doc_id)
