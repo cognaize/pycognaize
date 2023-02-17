@@ -45,10 +45,6 @@ class HTMLTag(Tag, metaclass=abc.ABCMeta):
         tag_id = table_raw_data[XBRLTagEnum.tag_id.value]
         return cls(html_id=html_id, xpath=xpath, tag_id=tag_id)
 
-    # @abc.abstractmethod
-    # def to_dict(self) -> dict:
-    #     """Return a dictionary representing the tag object"""
-    #     pass
 
 
 class HTMLTableTag(HTMLTag):
@@ -265,11 +261,6 @@ class HTMLCell:
     @property
     def left_indentation(self) -> str:
         return self._left_indentation
-
-    # @abc.abstractmethod
-    # def to_dict(self) -> dict:
-    #     """Return a dictionary representing the tag object"""
-    #     pass
 
     @classmethod
     def construct_from_raw(cls, raw: dict) -> 'HTMLCell':
