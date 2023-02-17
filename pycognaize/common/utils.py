@@ -15,10 +15,7 @@ from cloudstorageio import CloudInterface
 from pycognaize.login import Login
 from pycognaize.common.enums import PythonShellEnum
 from pycognaize.common.decorators import soon_be_deprecated
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from pycognaize.document.tag import ExtractionTag
-    from pycognaize.document.tag.html_tag import TDTag, HTMLTableTag
+
 
 REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
 
@@ -435,24 +432,6 @@ def intersects(word: dict,
     """
     return (word['left'] < right and word['right'] > left
             and word['top'] < bottom and word['bottom'] > top)
-
-
-def matches(act_tag: Union['ExtractionTag', 'TDTag', 'HTMLTableTag'],
-            pred_tag: Union['ExtractionTag', 'TDTag', 'HTMLTableTag'],
-            threshold: float = 0.6) -> bool:
-    """ If tags are TDTag checks that two tags have the same html_id,
-        otherwise detects if there is a match between two extraction tags
-        having the same page number. Returns true if
-    intersection is greater than the threshold"""
-    if isinstance(act_tag, TDTag) and isinstance(pred_tag, TDTag):
-        return act_tag.html_id == pred_tag.html_id
-    elif (isinstance(act_tag, TDTag) and isinstance(pred_tag, HTMLTableTag)
-    ) or (isinstance(act_tag, HTMLTableTag) and isinstance(pred_tag, TDTag)):
-        return act_tag.tag_id == pred_tag.tag_id
-    else:
-        return act_tag.page.page_number == pred_tag.page.page_number and (
-                act_tag & pred_tag) / min(
-            act_tag, pred_tag, key=lambda x: x.area).area >= threshold
 
 
 def compute_intersection_area(word: dict,
