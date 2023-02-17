@@ -33,13 +33,14 @@ class Document:
                  input_fields: 'FieldCollection[str, List[Field]]',
                  output_fields: 'FieldCollection[str, List[Field]]',
                  pages: Dict[int, Page],
-                 html_: HTML,
+                 html_info: HTML,
                  metadata: Dict[str, Any]):
         self._login_instance = Login()
         self._metadata = metadata
         self._pages: Dict[int, Page] = pages if pages else None
 
-        self._html: HTML = html_ if html_ else None
+        self._is_xbrl: bool = False
+        self._html_info: HTML = html_info
         self._x: FieldCollection[str, List[Field]] = input_fields
         self._y: FieldCollection[str, List[Field]] = output_fields
 
@@ -77,9 +78,14 @@ class Document:
         return self._pages
 
     @property
+    def is_xbrl(self) -> bool:
+        """Returns True if document is XBRL, otherwise False"""
+        return self._html_info is not None
+
+    @property
     def html(self):
         """Returns `HTML` object"""
-        return self._html
+        return self._html_info
 
     @staticmethod
     def get_matching_table_cells_for_tag(
@@ -403,7 +409,8 @@ class Document:
                 f"Expected dict for 'raw' argument got {type(raw)} instead")
         metadata = raw['metadata']
         pages = OrderedDict()
-        html_info = HTML(path=data_path)
+        html_info = (HTML(path=data_path)
+                     if HTML(path=data_path).get_html() else None)
         for page_n in range(1, metadata['numberOfPages'] + 1):
             if (
                     'pages' in raw
@@ -439,7 +446,7 @@ class Document:
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
                    output_fields=output_fields,
-                   pages=pages, html_=html_info,
+                   pages=pages, html_info=html_info,
                    metadata=metadata)
 
     def _collect_all_tags_for_fields(self,
