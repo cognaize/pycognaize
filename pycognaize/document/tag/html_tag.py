@@ -147,8 +147,8 @@ class HTMLTableTag(HTMLTag):
         }
         output_dict = {
             XBRLTableTagEnum._id.value: self.tag_id,
-            XBRLTableTagEnum.ocr_value.value: '',
             XBRLTableTagEnum.value.value: '',
+            XBRLTableTagEnum.ocr_value.value: '',
             XBRLTableTagEnum.is_table.value: True,
             XBRLTableTagEnum.table.value: table_dict,
             XBRLTableTagEnum.source.value: self.source_ids}
@@ -303,15 +303,16 @@ class HTMLCell:
         """Converts cell to dict"""
         return {
             ID: str(bson.ObjectId()),
-            XBRLCellEnum.row_index.value: self.row_index,
-            XBRLCellEnum.col_index.value: self.col_index,
+            # XBRLCellEnum.row_index.value: self.row_index,
+            # XBRLCellEnum.col_index.value: self.col_index,
             XBRLCellEnum.col_span.value: self.col_span,
             XBRLCellEnum.row_span.value: self.row_span,
-            XBRLCellEnum.raw_value.value: self.raw_value,
             XBRLCellEnum.html_id.value: self.html_id,
             XBRLCellEnum.xpath.value: self.xpath,
+            XBRLCellEnum.left_indentation.value: self.left_indentation,
             XBRLCellEnum.is_bold.value: self.is_bold,
-            XBRLCellEnum.left_indentation.value: self.left_indentation}
+            XBRLCellEnum.raw_value.value: self.raw_value,
+        }
 
 
 class TDTag(HTMLTag):
@@ -386,15 +387,20 @@ class TDTag(HTMLTag):
                    xpath=xpath)
 
     def to_dict(self) -> dict:
-        """Converts tag to dict"""
-        output_dict = {
-            ID: str(bson.ObjectId()),
+        tag_info = {
             XBRLTagEnum.ids.value: self.html_id,
-            XBRLTagEnum.xpath.value: self.xpath,
-            XBRLTagEnum.value.value: self.raw_value,
-            XBRLTagEnum.ocr_value.value: self.raw_ocr_value,
             IqRecipeEnum.field_id.value: self.field_id,
             XBRLTagEnum.tag_id.value: self.tag_id,
-            XBRLTagEnum.row_index.value: self.row_index,
-            XBRLTagEnum.col_index.value: self.col_index}
+            XBRLTagEnum.row_index.value: self.row_index + 1,
+            XBRLTagEnum.col_index.value: self.col_index + 1,
+            XBRLTagEnum.xpath.value: self.xpath,
+        }
+        output_dict = {
+            ID: str(bson.ObjectId()),
+            XBRLTagEnum.value.value: self.raw_value,
+            XBRLTagEnum.ocr_value.value: self.raw_ocr_value,
+            XBRLTagEnum.is_table.value: self.is_table,
+            XBRLTagEnum.source.value: tag_info,
+         }
+        """Converts tag to dict"""
         return output_dict
