@@ -272,8 +272,8 @@ class HTMLCell:
         source_data = raw[XBRLCellEnum.source.value]
         html_id = source_data[XBRLCellEnum.html_id.value]
         xpath = source_data[XBRLCellEnum.xpath.value]
-        row_index = source_data[XBRLCellEnum.row_index.value]
-        col_index = source_data[XBRLCellEnum.col_index.value]
+        row_index = source_data[XBRLCellEnum.row_index.value] - 1
+        col_index = source_data[XBRLCellEnum.col_index.value] - 1
         col_span = source_data[XBRLCellEnum.col_span.value]
         row_span = source_data[XBRLCellEnum.row_span.value]
         if XBRLCellEnum.is_bold.value in source_data:
@@ -292,18 +292,15 @@ class HTMLCell:
 
     def to_dict(self) -> dict:
         """Converts cell to dict"""
-        return {
-            ID: str(bson.ObjectId()),
-            # XBRLCellEnum.row_index.value: self.row_index,
-            # XBRLCellEnum.col_index.value: self.col_index,
+        cell_dict = {ID: str(bson.ObjectId()),
             XBRLCellEnum.col_span.value: self.col_span,
             XBRLCellEnum.row_span.value: self.row_span,
             XBRLCellEnum.html_id.value: self.html_id,
             XBRLCellEnum.xpath.value: self.xpath,
             XBRLCellEnum.left_indentation.value: self.left_indentation,
             XBRLCellEnum.is_bold.value: self.is_bold,
-            XBRLCellEnum.raw_value.value: self.raw_value,
-        }
+            XBRLCellEnum.raw_value.value: self.raw_value,}
+        return {f"{self.col_index + 1}:{self.row_index + 1}": cell_dict}
 
 
 class TDTag(HTMLTag):
@@ -367,8 +364,8 @@ class TDTag(HTMLTag):
         is_table = raw[XBRLTagEnum.is_table.value]
         html_id = source_data[XBRLTagEnum.ids.value]
         xpath = source_data[XBRLTagEnum.xpath.value]
-        row_index = source_data[XBRLTagEnum.row_index.value]
-        col_index = source_data[XBRLTagEnum.col_index.value]
+        row_index = source_data[XBRLTagEnum.row_index.value] - 1
+        col_index = source_data[XBRLTagEnum.col_index.value] - 1
         field_id = source_data[IqRecipeEnum.field_id.value]
         tag_id = source_data[XBRLTagEnum.tag_id.value]
         return cls(td_id=td_id, html_id=html_id,  raw_value=raw_value,
