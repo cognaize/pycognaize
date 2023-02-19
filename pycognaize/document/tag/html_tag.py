@@ -14,8 +14,7 @@ from pycognaize.document.tag.tag import Tag
 class HTMLTag(Tag, metaclass=abc.ABCMeta):
     """Base class for XBRL document tags"""
 
-    def __init__(self, html_id: List[str], xpath: str,
-                 tag_id: Optional[str] = None):
+    def __init__(self, html_id: List[str], xpath: str, tag_id: str):
         self._html_id = html_id
         self._xpath = xpath
         self._tag_id = tag_id
@@ -214,7 +213,7 @@ class HTMLCell:
     def __init__(self, html_id: List[str], xpath: str, row_index: int,
                  col_index: int, col_span: int,
                  row_span: int, raw_value: str, is_bold: False,
-                 left_indentation: None):
+                 left_indentation: Optional[str] = None):
 
         self._html_id = html_id
         self._xpath = xpath
@@ -306,7 +305,7 @@ class HTMLCell:
 class TDTag(HTMLTag):
     def __init__(self, td_id, html_id: List[str], raw_value: str,
                  raw_ocr_value: str, is_table: bool,
-                 field_id: Optional[str], tag_id: Optional[str],
+                 field_id: str, tag_id: str,
                  row_index: int, col_index: int, xpath: str):
         super().__init__(html_id=html_id, xpath=xpath, tag_id=tag_id)
         self._td_id = td_id
