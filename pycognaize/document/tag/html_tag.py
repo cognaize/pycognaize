@@ -202,7 +202,7 @@ class HTMLTableTag(HTMLTag):
                                              raw_value=cell_.raw_value,
                                              raw_ocr_value=cell_.raw_value,
                                              field_id='',
-                                             tag_id='',
+                                             tag_id=self.tag_id,
                                              row_index=row_index,
                                              col_index=col_index)
         return df
