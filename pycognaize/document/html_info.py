@@ -26,6 +26,14 @@ class HTML:
         """Path of the source document"""
         return self._path
 
+    @property
+    def html_soup(self):
+        if self._html_soup is None:
+            if self.path:
+                self._html_soup = BeautifulSoup(self._get_html(),
+                                                features="html.parser")
+        return self._html_soup
+
     def _validate_path(self, path, doc_id):
         """
         :param path: path of the source document
@@ -40,8 +48,10 @@ class HTML:
         Otherwise, the function returns an empty string as the valid path.
         """
         valid_path = ''
-        if self.ci.isdir(os.path.join(path, doc_id)):
-            valid_path = os.path.join(path, doc_id)
+        joined_path = os.path.join(path, doc_id)
+        if (self.ci.isdir(joined_path) and StorageEnum.html_file.value
+                in self.ci.listdir(joined_path)):
+            valid_path = joined_path
         elif StorageEnum.html_file.value in self.ci.listdir(path):
             valid_path = path
         return valid_path
@@ -52,15 +62,7 @@ class HTML:
                 self._html_file = file.read()
         return self._html_file
 
-    @property
-    def html_soup(self):
-        if self._html_soup is None:
-            if self.path:
-                self._html_soup = BeautifulSoup(self.get_html(),
-                                                features="html.parser")
-        return self._html_soup
-
-    def get_html(self):
+    def _get_html(self):
         html_bytes = None
         uri = os.path.join(self.path, StorageEnum.html_file.value)
         try:
