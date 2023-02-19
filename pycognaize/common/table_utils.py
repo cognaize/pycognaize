@@ -49,7 +49,7 @@ def _sort_table_horizontally(tables, threshold: float):
     return sorted_tables
 
 
-def assign_indices_to_tables(tables, all_tables: Optional[list],
+def assign_indices_to_tables(tables, all_tables: Optional[list] = None,
                              threshold: float = 0.4) -> dict:
     """
     :param tables: a list of tables that need to be indexed
@@ -87,8 +87,8 @@ def assign_indices_to_tables(tables, all_tables: Optional[list],
         for page, page_tables in grouped_tables.items():
             sorted_page_tables = sorted(page_tables,
                                         key=lambda x: x.tags[0].left)
-            final_ordered_tables = _sort_table_horizontally(sorted_page_tables,
-                                                            threshold=threshold)
+            final_ordered_tables = _sort_table_horizontally(
+                sorted_page_tables,threshold=threshold)
             tables_dict.update({(page, idx): table
                                 for idx, table in
                                 enumerate(final_ordered_tables)})
