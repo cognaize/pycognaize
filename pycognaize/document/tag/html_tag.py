@@ -1,10 +1,11 @@
 import abc
 from typing import Optional, List
 
+import bson
 import pandas as pd
 
 from pycognaize.common.enums import (IqRecipeEnum, XBRLCellEnum,
-                                     XBRLTableTagEnum, XBRLTagEnum)
+                                     XBRLTableTagEnum, XBRLTagEnum, ID)
 from pycognaize.document.html_info import HTML
 from pycognaize.document.tag.tag import Tag
 
@@ -62,7 +63,9 @@ class HTMLTableTag(HTMLTag):
         return self._source_ids
 
     @property
-    def cell_data(self):
+    def cell_data(self) -> dict:
+        if not self._cell_data:
+            raise Exception('Cell data is empty')
         return self._cell_data
 
     @property
@@ -338,7 +341,7 @@ class TDTag(HTMLTag):
         html_id = source_data[XBRLTagEnum.ids.value]
         field_id = source_data[IqRecipeEnum.field_id.value]
         tag_id = source_data[XBRLTagEnum.tag_id.value]
-        row_index = source_data[XBRLTagEnum.row_index.value] - 1
+        row_index = source_data[XBRLTagEnum.row_index.value]
         col_index = source_data[XBRLTagEnum.col_index.value] - 1
         xpath = source_data[XBRLTagEnum.xpath.value]
         return cls(html_id=html_id,  raw_value=raw_value,
@@ -358,6 +361,7 @@ class TDTag(HTMLTag):
             XBRLTagEnum.xpath.value: self.xpath,
         }
         output_dict = {
+            ID: str(bson.ObjectId()),
             XBRLTagEnum.value.value: self.raw_value,
             XBRLTagEnum.ocr_value.value: self.raw_ocr_value,
             XBRLTagEnum.is_table.value: self.is_table,
