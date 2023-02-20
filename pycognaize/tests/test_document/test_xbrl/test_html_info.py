@@ -12,27 +12,22 @@ class TestHTML(unittest.TestCase):
         self.path1 = RESOURCE_FOLDER + '/xbrl_snapshot'
         self.path2 = RESOURCE_FOLDER
         self.path3 = RESOURCE_FOLDER + '/snapshots/60b76b3d6f3f980019105dac'
-        self.path4 = RESOURCE_FOLDER + '/snapshots'
         self.doc_id_1 = '63fd387178232c6001119a41a'
-        self.doc_id_2 = '60b76b3d6f3f980019105dac'
 
         self.html_info_1 = HTML(path=self.path1, doc_id=self.doc_id_1)
         self.html_info_2 = HTML(path=self.path2, doc_id=self.doc_id_1)
         self.html_info_3 = HTML(path=self.path3, doc_id=self.doc_id_1)
-        self.html_info_4 = HTML(path=self.path4, doc_id=self.doc_id_2)
 
 
     def test_path(self):
         self.assertEqual(self.html_info_1.path, os.path.join(self.path1, self.doc_id_1))
         self.assertEqual(self.html_info_2.path, self.path2)
         self.assertEqual(self.html_info_3.path, '')
-        self.assertEqual(self.html_info_4.path, '')
 
     def test__html_soup(self):
         self.assertIsInstance(self.html_info_1.html_soup, bs4.BeautifulSoup)
         self.assertIsInstance(self.html_info_2.html_soup, bs4.BeautifulSoup)
         self.assertIsNone(self.html_info_3.html_soup)
-        self.assertIsNone(self.html_info_4.html_soup)
 
         self.assertEqual(self.html_info_1.html_soup.text, '\n\n\n This is a blank HTML page \n\n')
         self.assertEqual(self.html_info_2.html_soup.text, '\n\n\n This is a blank HTML page \n\n')

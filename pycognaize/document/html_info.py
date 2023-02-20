@@ -48,10 +48,8 @@ class HTML:
         Otherwise, the function returns an empty string as the valid path.
         """
         valid_path = ''
-        joined_path = os.path.join(path, doc_id)
-        if (self.ci.isdir(joined_path) and StorageEnum.html_file.value
-                in self.ci.listdir(joined_path)):
-            valid_path = joined_path
+        if self.ci.isdir(os.path.join(path, doc_id)):
+            valid_path = os.path.join(path, doc_id)
         elif StorageEnum.html_file.value in self.ci.listdir(path):
             valid_path = path
         return valid_path
