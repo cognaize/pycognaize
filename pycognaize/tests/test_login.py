@@ -1,3 +1,4 @@
+import os
 import unittest
 from unittest.mock import Mock, patch
 
@@ -18,6 +19,7 @@ class TestIndex(unittest.TestCase):
 
     @patch('requests.Session.post')
     def test_login(self, mock_post):
+        os.environ["API_HOST"] = "test.api_host.com"
         instance = Login()
         mock_post.return_value.status_code = 200
         mock_post.return_value.json.return_value = \
@@ -48,3 +50,8 @@ class TestIndex(unittest.TestCase):
         self.assertRaises(ServerAPIException, instance.login, 'test@gmail.com', 'test_password')
 
         instance.destroy()
+
+    def test_api_host(self):
+        os.unsetenv("API_HOST")
+        instance = Login()
+        self.assertRaises(OSError, instance.login, 'test@gmail.com', 'test_password')

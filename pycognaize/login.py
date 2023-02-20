@@ -1,3 +1,4 @@
+"""This module provides login functionality for downloading snapshots"""
 import os
 import requests
 from requests.adapters import HTTPAdapter
@@ -7,22 +8,23 @@ from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.common.exceptions import ServerAPIException
 
 
-class Login(object):
+class Login:
     """Allows to access the AWS S3 bucket using cognaize credentials"""
+    INSTANCE = None
     _access_key = ''
     _secret_access_key = ''
     _session_token = ''
     _snapshot_root = ''
     _logged_in = False
 
-    def __new__(cls):
-        if not hasattr(cls, 'instance'):
-            cls.instance = super(Login, cls).__new__(cls)
-        return cls.instance
+    def __new__(cls) -> 'Login':
+        if cls.INSTANCE is None:
+            cls.INSTANCE = super().__new__(cls)
+        return cls.INSTANCE
 
     @property
     def logged_in(self) -> bool:
-        """Access key for AWS"""
+        """Return `True` if already logged in"""
         return self._logged_in
 
     @property
@@ -58,6 +60,11 @@ class Login(object):
         http.mount("https://", adapter)
 
         host = os.environ.get(EnvConfigEnum.HOST.value)
+        if host is None:
+            raise EnvironmentError(
+                f"{EnvConfigEnum.HOST.value} environment variable"
+                f" required for login"
+            )
         url = f"{host}/api/v1/integration/storage/token"
 
         authentication = {'email': email,
@@ -95,5 +102,6 @@ class Login(object):
                                      "with the serve")
 
     @classmethod
-    def destroy(cls):
-        del cls.instance
+    def destroy(cls) -> None:
+        """Delete singleton"""
+        cls.INSTANCE = None
