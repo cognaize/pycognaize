@@ -46,8 +46,8 @@ class Snapshot:
             logging.info(f"Snapshot {snapshot_id} downloaded to "
                          f"{destination_dir}. To use the snapshot, check our "
                          f"documentation at: ",
-                         f"http://pycognaize-docs.com."
-                         f"s3-website.us-east-2.amazonaws.com")
+                         "http://pycognaize-docs.com."
+                         "s3-website.us-east-2.amazonaws.com")
 
         else:
             raise AuthenthicationError()
