@@ -1,6 +1,9 @@
 import json
+import os.path
 import unittest
 from copy import deepcopy
+
+from pycognaize.document.html_info import HTML
 
 from pycognaize.common.enums import IqDocumentKeysEnum, IqTagKeyEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field import NumericField
@@ -23,8 +26,10 @@ class TestNumericField(unittest.TestCase):
         self.pages_2 = {1: create_dummy_page(page_n=1),
                         2: create_dummy_page(page_n=2)}
 
-        self.num_field_1 = NumericField.construct_from_raw(raw=self.raw_num_field_1, pages=self.pages_1)
-        self.num_field_2 = NumericField.construct_from_raw(raw=self.raw_num_field_2, pages=self.pages_2)
+        self.html = HTML(path=(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906'),
+                         doc_id='60f554497883ab0013d9d906')
+        self.num_field_1 = NumericField.construct_from_raw(raw=self.raw_num_field_1, pages=self.pages_1, html=self.html)
+        self.num_field_2 = NumericField.construct_from_raw(raw=self.raw_num_field_2, pages=self.pages_2, html=self.html)
         self.num_field_3 = NumericField(name='', value='5000')
 
     def test_convert_to_numeric(self):

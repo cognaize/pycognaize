@@ -1,6 +1,9 @@
 import json
+import os
 import unittest
 from copy import deepcopy
+
+from pycognaize.document.html_info import HTML
 
 from pycognaize.common.enums import IqDocumentKeysEnum, IqTagKeyEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field import TextField
@@ -14,6 +17,9 @@ class TestTextField(unittest.TestCase):
         with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json') as document_json:
             self.data_with_group_key = json.load(document_json)
 
+        self.html = HTML(path=(
+            RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906'),
+                         doc_id='60f554497883ab0013d9d906')
         # add groupKey value to test in test_to_dict
         self.data_with_group_key["input_fields"]["ref"][0]['groupKey'] = 'test_group_key'
         self.raw_text_1 = self.data_with_group_key['input_fields']['paragraph'][0]
@@ -23,8 +29,8 @@ class TestTextField(unittest.TestCase):
         self.pages_2 = {1: create_dummy_page(page_n=1),
                         2: create_dummy_page(page_n=2)}
 
-        self.text_field_1 = TextField.construct_from_raw(raw=self.raw_text_1, pages=self.pages_1)
-        self.text_field_2 = TextField.construct_from_raw(raw=self.raw_text_2, pages=self.pages_2)
+        self.text_field_1 = TextField.construct_from_raw(raw=self.raw_text_1, pages=self.pages_1, html=self.html)
+        self.text_field_2 = TextField.construct_from_raw(raw=self.raw_text_2, pages=self.pages_2, html=self.html)
         self.text_field_3 = TextField(name='', value='SAMPLE TEXT')
 
     def test___str__(self):
