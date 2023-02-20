@@ -1,11 +1,9 @@
 import abc
 from typing import Optional, List
 
-import bson
 import pandas as pd
 
-from pycognaize.common.enums import (IqDataTypesEnum, ID,
-                                     IqRecipeEnum, XBRLCellEnum,
+from pycognaize.common.enums import (IqRecipeEnum, XBRLCellEnum,
                                      XBRLTableTagEnum, XBRLTagEnum)
 from pycognaize.document.html_info import HTML
 from pycognaize.document.tag.tag import Tag
@@ -13,8 +11,8 @@ from pycognaize.document.tag.tag import Tag
 
 class HTMLTag(Tag, metaclass=abc.ABCMeta):
     """Base class for XBRL document tags"""
-
-    def __init__(self, html_id: List[str], xpath: str, tag_id: str):
+    def __init__(self, html_id: List[str], xpath: str,
+                 tag_id: Optional[str] = None):
         self._html_id = html_id
         self._xpath = xpath
         self._tag_id = tag_id
@@ -33,34 +31,23 @@ class HTMLTag(Tag, metaclass=abc.ABCMeta):
 
     @classmethod
     def construct_from_raw(cls, raw: dict, html: HTML) -> 'HTMLTag':
-        """Builds HTMLTag object from pycognaize raw data
-        :param raw: pycognaize field's tag info
-        :param html: HTML
-        :return:
-        """
-        table_raw_data = raw[IqDataTypesEnum.table.value]
-        html_id = table_raw_data[XBRLTagEnum.anchor_id.value]
-        xpath = table_raw_data[XBRLTagEnum.xpath.value]
-        tag_id = table_raw_data[XBRLTagEnum.tag_id.value]
-        return cls(html_id=html_id, xpath=xpath, tag_id=tag_id)
-
-
+        ...
 
 class HTMLTableTag(HTMLTag):
     """Represents table's coordinate data in XBRL document"""
 
-    def __init__(self, tag_id: str, ocr_value: str, value: str,
+    def __init__(self, tag_id: str,  value: str, ocr_value: str,
                  xpath: str, title: str, html_id: List[str], cell_data: dict,
                  html: HTML, source_ids, is_table: bool = True):
         super().__init__(html_id=html_id, xpath=xpath, tag_id=tag_id)
-        self._ocr_value = ocr_value
         self._value = value
+        self._ocr_value = ocr_value
         self._is_table = is_table
         self._title = title
-        self._html = html
-        self._source_ids = source_ids
         self._cell_data = cell_data
         self._cells = {}
+        self._html = html
+        self._source_ids = source_ids
         self._populate_cells()
         self._build_df()
         self._raw_df = None
@@ -91,7 +78,8 @@ class HTMLTableTag(HTMLTag):
     @property
     def df(self) -> pd.DataFrame:
         if self._df is None:
-            self._df = self.raw_df.applymap(lambda x: self._extract_value(x))
+            self._df = self.raw_df.applymap(
+                lambda x: self._extract_value(x))
         return self._df
 
     @property
@@ -120,8 +108,7 @@ class HTMLTableTag(HTMLTag):
     @staticmethod
     def _populate_cell(keys: tuple, cell_dict: dict) -> 'HTMLCell':
         """ Creates `TDTag` object for each item in Table"""
-        return HTMLCell(
-            html_id=cell_dict[XBRLCellEnum.id.value],
+        return HTMLCell(html_id=cell_dict[XBRLCellEnum.id.value],
             xpath=cell_dict[XBRLCellEnum.xpath.value],
             row_index=keys[1],
             col_index=keys[0],
@@ -194,8 +181,7 @@ class HTMLTableTag(HTMLTag):
             col_index = cell_.col_index - 1
             for col_n in range(col_index, col_index + cell_.col_span):
                 for row_n in range(row_index, row_index + cell_.row_span):
-                    df[col_n][row_n] = TDTag(td_id='',
-                                             is_table=False,
+                    df[col_n][row_n] = TDTag(is_table=False,
                                              html_id=cell_.html_id,
                                              xpath=cell_.xpath,
                                              raw_value=cell_.raw_value,
@@ -209,29 +195,20 @@ class HTMLTableTag(HTMLTag):
 
 class HTMLCell:
     """Represents cell tag for XBRL tables"""
-
-    def __init__(self, html_id: List[str], xpath: str, row_index: int,
-                 col_index: int, col_span: int,
-                 row_span: int, raw_value: str, is_bold: False,
-                 left_indentation: Optional[str] = None):
-
-        self._html_id = html_id
-        self._xpath = xpath
+    def __init__(self, row_index: int, col_index: int,
+                 col_span: int, row_span: int,
+                 html_id: List[str], xpath: str,
+                 raw_value: str, is_bold: False,
+                 left_indentation: None):
         self._row_index = row_index
         self._col_index = col_index
         self._col_span = col_span
         self._row_span = row_span
+        self._html_id = html_id
+        self._xpath = xpath
         self._raw_value = raw_value
         self._is_bold = is_bold
         self._left_indentation = left_indentation
-
-    @property
-    def html_id(self):
-        return self._html_id
-
-    @property
-    def xpath(self):
-        return self._xpath
 
     @property
     def row_index(self) -> int:
@@ -248,6 +225,14 @@ class HTMLCell:
     @property
     def row_span(self) -> int:
         return self._row_span
+
+    @property
+    def html_id(self):
+        return self._html_id
+
+    @property
+    def xpath(self):
+        return self._xpath
 
     @property
     def raw_value(self) -> str:
@@ -269,21 +254,17 @@ class HTMLCell:
         :return:
         """
         source_data = raw[XBRLCellEnum.source.value]
-        html_id = source_data[XBRLCellEnum.html_id.value]
-        xpath = source_data[XBRLCellEnum.xpath.value]
-        row_index = source_data[XBRLCellEnum.row_index.value] - 1
-        col_index = source_data[XBRLCellEnum.col_index.value] - 1
+        row_index = source_data[XBRLCellEnum.row_index.value]
+        col_index = source_data[XBRLCellEnum.col_index.value]
         col_span = source_data[XBRLCellEnum.col_span.value]
         row_span = source_data[XBRLCellEnum.row_span.value]
-        if XBRLCellEnum.is_bold.value in source_data:
-            is_bold = source_data[XBRLCellEnum.is_bold.value]
-        else:
-            is_bold = False
-        if XBRLCellEnum.left_indentation.value in source_data:
-            left_indentation = source_data[XBRLCellEnum.left_indentation.value]
-        else:
-            left_indentation = None
         raw_value = raw[XBRLCellEnum.raw_value.value]
+        html_id = source_data[XBRLCellEnum.html_id.value]
+        xpath = source_data[XBRLCellEnum.xpath.value]
+        is_bold = (source_data[XBRLCellEnum.is_bold.value]
+                   if XBRLCellEnum.is_bold.value in source_data else False)
+        left_indentation = (source_data[XBRLCellEnum.left_indentation.value]
+                            if XBRLCellEnum.left_indentation.value else None)
         return cls(html_id=html_id, xpath=xpath, row_index=row_index,
                    col_index=col_index, col_span=col_span, row_span=row_span,
                    raw_value=raw_value, is_bold=is_bold,
@@ -291,34 +272,28 @@ class HTMLCell:
 
     def to_dict(self) -> dict:
         """Converts cell to dict"""
-        cell_dict = {ID: str(bson.ObjectId()),
+        cell_dict = {
             XBRLCellEnum.col_span.value: self.col_span,
             XBRLCellEnum.row_span.value: self.row_span,
             XBRLCellEnum.html_id.value: self.html_id,
             XBRLCellEnum.xpath.value: self.xpath,
+            XBRLCellEnum.raw_value.value: self.raw_value,
             XBRLCellEnum.left_indentation.value: self.left_indentation,
-            XBRLCellEnum.is_bold.value: self.is_bold,
-            XBRLCellEnum.raw_value.value: self.raw_value,}
-        return {f"{self.col_index + 1}:{self.row_index + 1}": cell_dict}
-
+            XBRLCellEnum.is_bold.value: self.is_bold}
+        return {f"{self.col_index}:{self.row_index}": cell_dict}
 
 class TDTag(HTMLTag):
-    def __init__(self, td_id, html_id: List[str], raw_value: str,
-                 raw_ocr_value: str, is_table: bool,
-                 field_id: str, tag_id: str,
+    def __init__(self, raw_value: str, raw_ocr_value: str,
+                 is_table: bool, html_id: List[str],
+                 field_id: Optional[str], tag_id: Optional[str],
                  row_index: int, col_index: int, xpath: str):
         super().__init__(html_id=html_id, xpath=xpath, tag_id=tag_id)
-        self._td_id = td_id
         self._raw_value = raw_value
         self._raw_ocr_value = raw_ocr_value
         self._is_table = is_table
         self._field_id = field_id
         self._row_index = row_index
         self._col_index = col_index
-
-    @property
-    def td_id(self):
-        return self._td_id
 
     @property
     def raw_value(self):
@@ -357,37 +332,35 @@ class TDTag(HTMLTag):
         :return:
         """
         source_data = raw[XBRLTagEnum.source.value]
-        td_id = raw[XBRLTagEnum.td_id.value]
         raw_value = raw[XBRLTagEnum.value.value]
         raw_ocr_value = raw[XBRLTagEnum.ocr_value.value]
         is_table = raw[XBRLTagEnum.is_table.value]
         html_id = source_data[XBRLTagEnum.ids.value]
-        xpath = source_data[XBRLTagEnum.xpath.value]
-        row_index = source_data[XBRLTagEnum.row_index.value] - 1
-        col_index = source_data[XBRLTagEnum.col_index.value] - 1
         field_id = source_data[IqRecipeEnum.field_id.value]
         tag_id = source_data[XBRLTagEnum.tag_id.value]
-        return cls(td_id=td_id, html_id=html_id,  raw_value=raw_value,
+        row_index = source_data[XBRLTagEnum.row_index.value] - 1
+        col_index = source_data[XBRLTagEnum.col_index.value] - 1
+        xpath = source_data[XBRLTagEnum.xpath.value]
+        return cls(html_id=html_id,  raw_value=raw_value,
                    raw_ocr_value=raw_ocr_value, is_table=is_table,
                    field_id=field_id, tag_id=tag_id,
                    row_index=row_index, col_index=col_index,
                    xpath=xpath)
 
     def to_dict(self) -> dict:
+        """Converts tag to dict"""
         tag_info = {
             XBRLTagEnum.ids.value: self.html_id,
             IqRecipeEnum.field_id.value: self.field_id,
             XBRLTagEnum.tag_id.value: self.tag_id,
-            XBRLTagEnum.row_index.value: self.row_index + 1,
+            XBRLTagEnum.row_index.value: self.row_index,
             XBRLTagEnum.col_index.value: self.col_index + 1,
             XBRLTagEnum.xpath.value: self.xpath,
         }
         output_dict = {
-            ID: str(bson.ObjectId()),
             XBRLTagEnum.value.value: self.raw_value,
             XBRLTagEnum.ocr_value.value: self.raw_ocr_value,
             XBRLTagEnum.is_table.value: self.is_table,
             XBRLTagEnum.source.value: tag_info,
          }
-        """Converts tag to dict"""
         return output_dict
