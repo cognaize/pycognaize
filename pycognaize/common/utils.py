@@ -488,6 +488,7 @@ def replace_object_ids_with_string(bson_obj):
     else:
         return bson_obj
 
+
 def empty_keys(obj: Union[List, Dict, Iterable], keys: List[str],
                empty: bool = False):
     if empty:
@@ -499,6 +500,7 @@ def empty_keys(obj: Union[List, Dict, Iterable], keys: List[str],
         for idx, el in enumerate(obj):
             obj[idx] = empty_keys(el, keys=keys)
     return obj
+
 
 @dataclass
 class ConfusionMatrix:
