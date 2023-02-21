@@ -63,14 +63,30 @@ class HTMLTableTag(HTMLTag):
         return self._source_ids
 
     @property
-    def cell_data(self) -> dict:
-        if not self._cell_data:
-            raise Exception('Cell data is empty')
-        return self._cell_data
+    def value(self):
+        return self._value
+
+    @property
+    def ocr_value(self):
+        return self._ocr_value
+
+    @property
+    def is_table(self):
+        return self._is_table
+
+    @property
+    def html(self):
+        return self._html
 
     @property
     def cells(self):
         return self._cells
+
+    @property
+    def cell_data(self) -> dict:
+        if not self._cell_data:
+            raise Exception('Cell data is empty')
+        return self._cell_data
 
     @property
     def raw_df(self) -> pd.DataFrame:
@@ -84,11 +100,6 @@ class HTMLTableTag(HTMLTag):
             self._df = self.raw_df.applymap(
                 lambda x: self._extract_value(x))
         return self._df
-
-    @property
-    def html(self):
-        return self._html
-
 
     @staticmethod
     def _extract_value(x):
@@ -285,6 +296,7 @@ class HTMLCell:
             XBRLCellEnum.is_bold.value: self.is_bold}
         return {f"{self.col_index}:{self.row_index}": cell_dict}
 
+
 class TDTag(HTMLTag):
     def __init__(self, raw_value: str, raw_ocr_value: str,
                  is_table: bool, html_id: List[str],
@@ -314,10 +326,6 @@ class TDTag(HTMLTag):
     @property
     def field_id(self):
         return self._field_id
-
-    @property
-    def tag_id(self):
-        return self._tag_id
 
     @property
     def row_index(self):
