@@ -2,6 +2,14 @@
 
 ## [1.3]
 
+### [1.3.2] - 2023-02-21
+- Add is_xbrl attribute in document, to identify if document is XBRL or not
+- Modify assign indices functionality to handle XBRL tables
+- Modify Model.matches() to also match with HTMLTags
+- Add HTML._validate_path() to get valid path of `source.html` file
+- Fix reading html file from S3
+- Add tag_id attribute to HTMLTag
+
 ### [1.3.1] - 2023-02-14
 - Update install requirementst in `setup.cfg`
 - Rename environment variable `COGNAIZE_HOST` to `API_HOST`
