@@ -383,7 +383,7 @@ class Model(metaclass=abc.ABCMeta):
         elif ((isinstance(act_tag, TDTag)
               and isinstance(pred_tag, HTMLTableTag)) or
               (isinstance(act_tag, HTMLTableTag)
-               and isinstance(pred_tag,TDTag))):
+               and isinstance(pred_tag, TDTag))):
             return act_tag.tag_id == pred_tag.tag_id
         else:
             return act_tag.page.page_number == pred_tag.page.page_number and (
