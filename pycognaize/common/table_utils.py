@@ -52,10 +52,6 @@ def _sort_table_horizontally(tables, threshold: float):
 def assign_indices_to_tables(tables, all_tables: Optional[list] = None,
                              threshold: float = 0.4) -> dict:
     """
-    :param tables: a list of tables that need to be indexed
-    :param all_tables: a list of all tables in the document.
-        This parameter is required if the tables are from an XBRL document
-    :param threshold: intersection threshold
     If the document is an XBRL document,
         the function matches the tables based on the ordering of all tables.
     If it's not an XBRL document,
@@ -64,9 +60,16 @@ def assign_indices_to_tables(tables, all_tables: Optional[list] = None,
 
     Return dict where the keys are indices based above-mentioned ordering
         and the values are the corresponding tables.
+
+    :param tables: a list of tables that need to be indexed
+    :param all_tables: a list of all tables in the document.
+        This parameter is required if the tables are from an XBRL document
+    :param threshold: intersection threshold
     """
     tables_dict = {}
     valid_tables = filter_out_invalid_tables(tables)
+    if not valid_tables:
+        return  tables_dict
     if all(isinstance(table.tags[0], HTMLTableTag) or
            isinstance(table.tags[0], TDTag) for table in valid_tables):
         if not all_tables:
