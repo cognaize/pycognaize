@@ -7,7 +7,7 @@ import logging
 
 from PIL import Image
 from itertools import groupby
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Iterable, Dict
 from bson.json_util import loads as bson_loads
 from dataclasses import dataclass
 from cloudstorageio import CloudInterface
@@ -488,6 +488,17 @@ def replace_object_ids_with_string(bson_obj):
     else:
         return bson_obj
 
+def empty_keys(obj: Union[List, Dict, Iterable], keys: List[str],
+               empty: bool = False):
+    if empty:
+        return ''
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            obj[key] = empty_keys(value, keys=keys, empty=key in keys)
+    if isinstance(obj, list):
+        for idx, el in enumerate(obj):
+            obj[idx] = empty_keys(el, keys=keys)
+    return obj
 
 @dataclass
 class ConfusionMatrix:

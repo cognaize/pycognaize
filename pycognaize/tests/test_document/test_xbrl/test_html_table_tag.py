@@ -3,10 +3,12 @@ import os
 import unittest
 from copy import deepcopy
 
+from pycognaize.common.utils import empty_keys
 from pycognaize.document.html_info import HTML
 
-from pycognaize.common.enums import IqFieldKeyEnum, IqTableTagEnum, \
-    IqTagKeyEnum
+from pycognaize.common.enums import (IqFieldKeyEnum,
+                                     IqTableTagEnum,
+                                     IqTagKeyEnum)
 from pycognaize.document.tag.html_tag import HTMLTableTag
 
 from pycognaize.tests.resources import RESOURCE_FOLDER
@@ -82,6 +84,10 @@ class TestHTMLTableTag(unittest.TestCase):
         self.assertEqual(
             ttd[IqTableTagEnum.table.value][IqTableTagEnum.cells.value][
                 '4:1']['colspan'], 2)
+
+        cleaned_ttd = empty_keys(deepcopy(ttd), keys=['_id'])
+        cleaned_raw_ttd = empty_keys(deepcopy(self.raw_tbl_tag), keys=['_id'])
+        self.assertDictEqual(cleaned_ttd, cleaned_raw_ttd)
 
     def test_cells(self):
         cells = self.tbl_tag.cells

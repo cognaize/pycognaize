@@ -4,6 +4,7 @@ import unittest
 from copy import deepcopy
 
 from pycognaize.common.enums import IqFieldKeyEnum, XBRLCellEnum
+from pycognaize.common.utils import empty_keys
 
 from pycognaize.document.html_info import HTML
 
@@ -83,11 +84,28 @@ class TestTDTag(unittest.TestCase):
         self.assertEqual(raw_df[self.td_tag_3.col_index][self.td_tag_3.row_index].tag_id, self.td_tag_3.tag_id)
 
     def test__to_dict(self):
-        field_dict = self.td_tag_1.to_dict()
-        self.assertEqual(field_dict.keys(), self.td_tag_dict_1.keys())
+        field_dict_1 = self.td_tag_1.to_dict()
+        self.assertEqual(field_dict_1.keys(), self.td_tag_dict_1.keys())
 
-        self.assertEqual(field_dict[XBRLCellEnum.source.value].keys(), self.td_tag_dict_1[XBRLCellEnum.source.value].keys())
+        self.assertEqual(field_dict_1[XBRLCellEnum.source.value].keys(), self.td_tag_dict_1[XBRLCellEnum.source.value].keys())
 
+        cleaned_td_tag_dict_1 = empty_keys(obj=deepcopy(self.td_tag_dict_1), keys=['_id'])
+        cleaned_field_dict_1 = empty_keys(obj=deepcopy(field_dict_1), keys=['_id'])
+        self.assertDictEqual(cleaned_field_dict_1, cleaned_td_tag_dict_1)
+
+        field_dict_2 = self.td_tag_2.to_dict()
+        cleaned_td_tag_dict_2 = empty_keys(obj=deepcopy(self.td_tag_dict_2),
+                                           keys=['_id'])
+        cleaned_field_dict_2 = empty_keys(obj=deepcopy(field_dict_2),
+                                        keys=['_id'])
+        self.assertDictEqual(cleaned_field_dict_2, cleaned_td_tag_dict_2)
+
+        field_dict_3 = self.td_tag_3.to_dict()
+        cleaned_td_tag_dict_3 = empty_keys(obj=deepcopy(self.td_tag_dict_3),
+                                           keys=['_id'])
+        cleaned_field_dict_3 = empty_keys(obj=deepcopy(field_dict_3),
+                                          keys=['_id'])
+        self.assertDictEqual(cleaned_field_dict_3, cleaned_td_tag_dict_3)
 
 if __name__ == '__main__':
     unittest.main()
