@@ -14,9 +14,9 @@ class TestHTML(unittest.TestCase):
         self.path3 = RESOURCE_FOLDER + '/snapshots/60b76b3d6f3f980019105dac'
         self.doc_id_1 = '63fd387178232c6001119a41a'
 
-        self.html_info_1 = HTML(path=self.path1, doc_id=self.doc_id_1)
-        self.html_info_2 = HTML(path=self.path2, doc_id=self.doc_id_1)
-        self.html_info_3 = HTML(path=self.path3, doc_id=self.doc_id_1)
+        self.html_info_1 = HTML(path=self.path1, document_id=self.doc_id_1)
+        self.html_info_2 = HTML(path=self.path2, document_id=self.doc_id_1)
+        self.html_info_3 = HTML(path=self.path3, document_id=self.doc_id_1)
 
 
     def test_path(self):

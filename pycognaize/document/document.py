@@ -409,7 +409,7 @@ class Document:
                 f"Expected dict for 'raw' argument got {type(raw)} instead")
         metadata = raw['metadata']
         pages = OrderedDict()
-        html_info = HTML(path=data_path, doc_id=metadata['document_id'])
+        html_info = HTML(path=data_path, document_id=metadata['document_id'])
         for page_n in range(1, metadata['numberOfPages'] + 1):
             if (
                     'pages' in raw

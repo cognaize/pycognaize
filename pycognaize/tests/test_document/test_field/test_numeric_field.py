@@ -27,7 +27,7 @@ class TestNumericField(unittest.TestCase):
                         2: create_dummy_page(page_n=2)}
 
         self.html = HTML(path=(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906'),
-                         doc_id='60f554497883ab0013d9d906')
+                         document_id='60f554497883ab0013d9d906')
         self.num_field_1 = NumericField.construct_from_raw(raw=self.raw_num_field_1, pages=self.pages_1, html=self.html)
         self.num_field_2 = NumericField.construct_from_raw(raw=self.raw_num_field_2, pages=self.pages_2, html=self.html)
         self.num_field_3 = NumericField(name='', value='5000')

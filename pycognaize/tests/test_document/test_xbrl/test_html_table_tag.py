@@ -30,7 +30,7 @@ class TestHTMLTableTag(unittest.TestCase):
         table_field = deepcopy(self.data['input_fields']['table'][0])
         self.raw_tbl_tag = table_field[IqFieldKeyEnum.tags.value][0]
 
-        self.html = HTML(path=RESOURCE_FOLDER, doc_id=self.SNAPSHOT_ID)
+        self.html = HTML(path=RESOURCE_FOLDER, document_id=self.SNAPSHOT_ID)
         self.tbl_tag = HTMLTableTag.construct_from_raw(self.raw_tbl_tag,
                                                        html=self.html)
 

@@ -26,7 +26,7 @@ class TestTDTag(unittest.TestCase):
         with open(self.snap_storage_path + '/document.json') as document_json:
             self.data = json.load(document_json)
 
-        self.html = HTML(path=RESOURCE_FOLDER, doc_id=self.SNAPSHOT_ID)
+        self.html = HTML(path=RESOURCE_FOLDER, document_id=self.SNAPSHOT_ID)
 
         table_field = deepcopy(self.data['input_fields']['table'][0])
         self.raw_tbl_tag = table_field[IqFieldKeyEnum.tags.value][0]

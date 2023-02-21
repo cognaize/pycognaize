@@ -19,7 +19,7 @@ class TestTextField(unittest.TestCase):
 
         self.html = HTML(path=(
             RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906'),
-                         doc_id='60f554497883ab0013d9d906')
+                         document_id='60f554497883ab0013d9d906')
         # add groupKey value to test in test_to_dict
         self.data_with_group_key["input_fields"]["ref"][0]['groupKey'] = 'test_group_key'
         self.raw_text_1 = self.data_with_group_key['input_fields']['paragraph'][0]

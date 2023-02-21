@@ -10,19 +10,19 @@ from pycognaize.common.utils import cloud_interface_login
 
 class HTML:
     """Represents html of a xbrl document in pycognaize"""
-    def __init__(self, path: str, doc_id: str) -> None:
+    def __init__(self, path: str, document_id: str) -> None:
         """
         :param path: Local or remote path to the document folder,
             which includes the html file
         """
         self._login_instance = Login()
         self.ci = cloud_interface_login(self._login_instance)
-        self._path = self._validate_path(path, doc_id)
+        self._path = self._validate_path(path, document_id)
         self._html_file = None
         self._html_soup = None
 
     @property
-    def path(self):
+    def path(self) -> str:
         """Path of the source document"""
         return self._path
 
@@ -34,7 +34,7 @@ class HTML:
                                                 features="html.parser")
         return self._html_soup
 
-    def _validate_path(self, path, doc_id):
+    def _validate_path(self, path: str, document_id: str) -> str:
         """
         :param path: path of the source document
         :param doc_id: document id
@@ -48,8 +48,8 @@ class HTML:
         Otherwise, the function returns an empty string as the valid path.
         """
         valid_path = ''
-        if self.ci.isdir(os.path.join(path, doc_id)):
-            valid_path = os.path.join(path, doc_id)
+        if self.ci.isdir(os.path.join(path, document_id)):
+            valid_path = os.path.join(path, document_id)
         elif StorageEnum.html_file.value in self.ci.listdir(path):
             valid_path = path
         return valid_path
