@@ -76,8 +76,9 @@ def assign_indices_to_tables(tables, all_tables: Optional[list] = None,
         tables_html_id_idx_mapping = {
             table.tags[0].html_id: (idx, 0)
             for idx, table in enumerate(all_valid_tables, start=1)}
-        tables_dict = {tables_html_id_idx_mapping[table.tags[0].html_id]: table
-                for table in valid_tables}
+        tables_dict = {
+            tables_html_id_idx_mapping[table.tags[0].html_id]: table
+            for table in valid_tables}
     else:
         sorted_tables = sorted(valid_tables,
                                key=lambda x: x.tags[0].page.page_number)
@@ -88,7 +89,7 @@ def assign_indices_to_tables(tables, all_tables: Optional[list] = None,
             sorted_page_tables = sorted(page_tables,
                                         key=lambda x: x.tags[0].left)
             final_ordered_tables = _sort_table_horizontally(
-                sorted_page_tables,threshold=threshold)
+                sorted_page_tables, threshold=threshold)
             tables_dict.update({(page, idx): table
                                 for idx, table in
                                 enumerate(final_ordered_tables)})

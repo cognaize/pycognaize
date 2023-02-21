@@ -7,6 +7,7 @@ from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.common.lazy_dict import LazyDocumentDict
 from pycognaize.login import Login
 
+
 class Snapshot:
     """A snapshot of annotated documents from one or more collections"""
 
