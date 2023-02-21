@@ -1,11 +1,12 @@
 import os
-from typing import Mapping
+import logging
+from typing import Mapping, Tuple
 
-from pycognaize.common import utils
-from pycognaize.common.exceptions import AuthenthicationError
-from pycognaize.common.enums import EnvConfigEnum
-from pycognaize.common.lazy_dict import LazyDocumentDict
 from pycognaize.login import Login
+from pycognaize.common import utils
+from pycognaize.common.enums import EnvConfigEnum
+from pycognaize.common.exceptions import AuthenthicationError
+from pycognaize.common.lazy_dict import LazyDocumentDict
 
 class Snapshot:
     """A snapshot of annotated documents from one or more collections"""
@@ -22,7 +23,22 @@ class Snapshot:
         return self._documents
 
     @classmethod
-    def download(cls, snapshot_id: str, destination_dir: str):
+    def get_by_id(cls, snapshot_id: str) -> 'Snapshot':
+        """Returns the Snapshot Object"""
+        login_instance = Login()
+        if login_instance.logged_in:
+            snapshot_dir = login_instance.snapshot_root
+            snapshot_path = os.path.join(snapshot_dir, snapshot_id)
+            return cls(path=snapshot_path)
+        else:
+            snapshot_dir = os.environ[EnvConfigEnum.SNAPSHOT_PATH.value]
+            snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
+            snapshot_path = os.path.join(snapshot_dir, snapshot_id)
+            return cls(path=snapshot_path)
+
+    @classmethod
+    def download(cls, snapshot_id: str, destination_dir: str) -> \
+            Tuple['Snapshot', str]:
         """Downloads snapshot to specified destination"""
         login_instance = Login()
 
@@ -31,6 +47,15 @@ class Snapshot:
                                          snapshot_id)
             ci = utils.cloud_interface_login(login_instance)
             ci.copy_dir(snapshot_path, destination_dir)
+
+            logging.info(f"Snapshot {snapshot_id} downloaded to "
+                         f"{destination_dir}. To use the snapshot, check our "
+                         f"documentation at: ",
+                         "http://pycognaize-docs.com."
+                         "s3-website.us-east-2.amazonaws.com")
+
+            return cls(path=snapshot_path), \
+                os.path.join(destination_dir, snapshot_id),
         else:
             raise AuthenthicationError()
 
