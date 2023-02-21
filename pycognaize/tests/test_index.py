@@ -9,6 +9,7 @@ from typing import Tuple
 from unittest.mock import patch, create_autospec
 
 import requests
+from pycognaize.document.html_info import HTML
 
 from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.document import Document
@@ -39,13 +40,13 @@ class TestIndex(unittest.TestCase):
         cls.snap_storage_path = os.path.join(cls.SNAPSHOT_PATH, cls.path)
 
         # load resource data
-        with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json') as document_json:
+        with open(RESOURCE_FOLDER + '/snapshots/60f5260c7883ab0013d9c184/document.json') as document_json:
             cls.data = json.load(document_json)
 
         cls.snap_path = os.path.join(cls.SNAPSHOT_PATH, 'sample_snapshot_1',
                                      str(cls.data['metadata']['document_id']))
 
-        shutil.copytree(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/', cls.snap_path)
+        shutil.copytree(RESOURCE_FOLDER + '/snapshots/60f5260c7883ab0013d9c184/', cls.snap_path)
 
     def setUp(self) -> None:
         with open(RESOURCE_FOLDER + '/snapshots/60f5260c7883ab0013d9c184/document.json') as document_json:

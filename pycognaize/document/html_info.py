@@ -10,40 +10,59 @@ from pycognaize.common.utils import cloud_interface_login
 
 class HTML:
     """Represents html of a xbrl document in pycognaize"""
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str, document_id: str) -> None:
         """
         :param path: Local or remote path to the document folder,
             which includes the html file
         """
-        self._path = path
         self._login_instance = Login()
         self.ci = cloud_interface_login(self._login_instance)
+        self._path = self._validate_path(path, document_id)
         self._html_file = None
         self._html_soup = None
 
     @property
-    def path(self):
+    def path(self) -> str:
         """Path of the source document"""
         return self._path
-
-    def _read_html(self, path: str) -> str:
-        if self._html_file is None:
-            with open(path, 'r') as file:
-                self._html_file = file.read()
-        return self._html_file
 
     @property
     def html_soup(self):
         if self._html_soup is None:
-            if self.get_html():
-                self._html_soup = BeautifulSoup(self.get_html(),
+            if self.path:
+                self._html_soup = BeautifulSoup(self._get_html(),
                                                 features="html.parser")
         return self._html_soup
 
-    def get_html(self):
+    def _validate_path(self, path: str, document_id: str) -> str:
+        """
+        If the input path contains a directory with the same name
+            as the document ID, the valid path
+            is the combination of the input path and the document id
+        If the input path contains a file named `source.html`,
+            the valid path is simply the input path.
+        Otherwise, the function returns an empty string as the valid path.
+
+        :param path: path of the source document
+        :param document_id: document id
+        :return: valid path for the `source.html` file
+            corresponding to the document id
+        """
+        valid_path = ''
+        if self.ci.isdir(os.path.join(path, document_id)):
+            valid_path = os.path.join(path, document_id)
+        elif StorageEnum.html_file.value in self.ci.listdir(path):
+            valid_path = path
+        return valid_path
+
+    def _read_html(self, path: str) -> str:
+        if self._html_file is None:
+            with self.ci.open(path, 'r') as file:
+                self._html_file = file.read()
+        return self._html_file
+
+    def _get_html(self):
         html_bytes = None
-        if StorageEnum.html_file.value not in os.listdir(self.path):
-            return html_bytes
         uri = os.path.join(self.path, StorageEnum.html_file.value)
         try:
             html_bytes = self._read_html(path=uri)

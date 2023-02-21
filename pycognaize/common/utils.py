@@ -1,17 +1,15 @@
 import io
 import os
 import re
-
-from PIL import Image
+import numpy as np
 import bson
 import logging
+
+from PIL import Image
 from itertools import groupby
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Iterable, Dict
 from bson.json_util import loads as bson_loads
-
-import numpy as np
 from dataclasses import dataclass
-
 from cloudstorageio import CloudInterface
 
 from pycognaize.login import Login
@@ -491,6 +489,19 @@ def replace_object_ids_with_string(bson_obj):
         return bson_obj
 
 
+def empty_keys(obj: Union[List, Dict, Iterable], keys: List[str],
+               empty: bool = False):
+    if empty:
+        return ''
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            obj[key] = empty_keys(value, keys=keys, empty=key in keys)
+    if isinstance(obj, list):
+        for idx, el in enumerate(obj):
+            obj[idx] = empty_keys(el, keys=keys)
+    return obj
+
+
 @dataclass
 class ConfusionMatrix:
     TP: int = 0
@@ -587,8 +598,8 @@ def get_index_of_first_non_empty_list(list_of_lists):
     return non_empty_idx
 
 
-def filter_lines(lines: List[str]) -> List[str]:
-    """Filters all the lines that are already part of other line"""
+def filter_out_nested_lines(lines: List[str]) -> List[str]:
+    """ Filters out nested html text lines"""
     lines_copy = lines.copy()
     sorted_lines = sorted(lines, key=lambda x: len(x))
     for idx, line in enumerate(sorted_lines):

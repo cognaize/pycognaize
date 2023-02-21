@@ -78,10 +78,8 @@ class TextField(Field):
                         raw=i, html=html))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
-        if pages is None:
-            value = tags[0].value if tags else raw[IqTagKeyEnum.value.value]
-        else:
-            value = raw[IqTagKeyEnum.value.value]
+        value = (tags[0].raw_value if (html.path and tags)
+                 else raw[IqTagKeyEnum.value.value])
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    value=value,
                    tags=tags,

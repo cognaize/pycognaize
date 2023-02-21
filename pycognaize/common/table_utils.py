@@ -1,5 +1,6 @@
 import logging
 from itertools import groupby
+from typing import Optional
 
 from pycognaize.document.tag.html_tag import HTMLTableTag, TDTag
 
@@ -48,31 +49,51 @@ def _sort_table_horizontally(tables, threshold: float):
     return sorted_tables
 
 
-def assign_indices_to_tables(tables, threshold: float = 0.4):
+def assign_indices_to_tables(tables, all_tables: Optional[list] = None,
+                             threshold: float = 0.4) -> dict:
     """
-    Given tables are grouped by pages,
-        then for each page, tables are left sorted then
-            ordered horizontally and vertically.
-    Return dict where keys are indices based above-mentioned ordering
-        and values are corresponding tables.
+    If the document is an XBRL document,
+        the function matches the tables based on the ordering of all tables.
+    If it's not an XBRL document,
+        the tables are grouped by pages and for each page,
+        the tables are left sorted and ordered horizontally and vertically.
+
+    Return dict where the keys are indices based above-mentioned ordering
+        and the values are the corresponding tables.
+
+    :param tables: a list of tables that need to be indexed
+    :param all_tables: a list of all tables in the document.
+        This parameter is required if the tables are from an XBRL document
+    :param threshold: intersection threshold
     """
     tables_dict = {}
     valid_tables = filter_out_invalid_tables(tables)
+    if not valid_tables:
+        return tables_dict
     if all(isinstance(table.tags[0], HTMLTableTag) or
-           isinstance(table.tags[0], TDTag)for table in valid_tables):
-        return {(idx, 0): table for idx, table
-                in enumerate(valid_tables, start=1)}
-    sorted_tables = sorted(valid_tables,
-                           key=lambda x: x.tags[0].page.page_number)
-    grouped_tables = {page: list(table) for page, table in
-                      groupby(sorted_tables,
-                              key=lambda x: x.tags[0].page.page_number)}
-    for page, page_tables in grouped_tables.items():
-        sorted_page_tables = sorted(page_tables,
-                                    key=lambda x: x.tags[0].left)
-        final_ordered_tables = _sort_table_horizontally(sorted_page_tables,
-                                                        threshold=threshold)
-        tables_dict.update({(page, idx): table
-                            for idx, table in
-                            enumerate(final_ordered_tables)})
+           isinstance(table.tags[0], TDTag) for table in valid_tables):
+        if not all_tables:
+            logging.error('Missing argument: list of all table fields')
+            return tables_dict
+        all_valid_tables = filter_out_invalid_tables(all_tables)
+        tables_html_id_idx_mapping = {
+            table.tags[0].html_id: (idx, 0)
+            for idx, table in enumerate(all_valid_tables, start=1)}
+        tables_dict = {
+            tables_html_id_idx_mapping[table.tags[0].html_id]: table
+            for table in valid_tables}
+    else:
+        sorted_tables = sorted(valid_tables,
+                               key=lambda x: x.tags[0].page.page_number)
+        grouped_tables = {page: list(table) for page, table in
+                          groupby(sorted_tables,
+                                  key=lambda x: x.tags[0].page.page_number)}
+        for page, page_tables in grouped_tables.items():
+            sorted_page_tables = sorted(page_tables,
+                                        key=lambda x: x.tags[0].left)
+            final_ordered_tables = _sort_table_horizontally(
+                sorted_page_tables, threshold=threshold)
+            tables_dict.update({(page, idx): table
+                                for idx, table in
+                                enumerate(final_ordered_tables)})
     return tables_dict
