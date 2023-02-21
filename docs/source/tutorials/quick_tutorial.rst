@@ -54,12 +54,26 @@ Alternatively, ``Snapshot`` can be initialized with the corresponding parameters
 Cognaize SDK supports logging using Cognaize account, to access snapshots
 from the cloud. To use this feature, you need to login using your Cognaize account.
 
+First of all, ``API_HOST`` environment variable should be set to the Cognaize API host.
+
+    .. code:: python
+
+        os.environ['API_HOST'] = "https://api.cognaize.com"
+
     .. code:: python
 
         from pycognaize.login import Login
 
         login_instance = Login()
-        login_instance.login(username=..., password=...)
+        login_instance.login(email=..., password=...)
+
+Now Snapshot is enabled to access snapshots with `id` using ``get_by_id()``,
+or downloading snapshot files from cloud storage using  ``download()``.
+
+    .. code:: python
+
+        snapshot = Snapshot.get_by_id(snapshot_id=...)
+        snapshot = Snapshot.download(snapshot_id=..., destination_path=...)
 
     .. note::
 
