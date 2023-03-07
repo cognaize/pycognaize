@@ -1,3 +1,4 @@
+import math
 from typing import Union
 
 
@@ -47,7 +48,8 @@ class Confidence:
 
     def finalize(self) -> None:
         """Finalize confidence scores by checking if all scores sum to 1"""
-        if not sum(self.confidences.values()) == 1 and\
+        sum_scores = sum(self.confidences.values())
+        if not math.isclose(sum_scores, 1, rel_tol=0.0001) and \
                 self.number_of_classes() > 0:
             raise ValueError('Confidence scores have to sum up to 1.')
         self._is_finalized = True
