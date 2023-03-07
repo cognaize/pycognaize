@@ -46,10 +46,13 @@ class Confidence:
     def is_finalized(self) -> bool:
         return self._is_finalized
 
-    def finalize(self) -> None:
-        """Finalize confidence scores by checking if all scores sum to 1"""
+    def finalize(self, tolerance=0.0001) -> None:
+        """Finalize confidence scores by checking if all scores sum to 1
+        :param tolerance: tolerance for comparing sum of confidences (float)
+        with 1
+        """
         sum_scores = sum(self.confidences.values())
-        if not math.isclose(sum_scores, 1, rel_tol=0.0001) and \
+        if not math.isclose(sum_scores, 1, rel_tol=tolerance) and \
                 self.number_of_classes() > 0:
             raise ValueError('Confidence scores have to sum up to 1.')
         self._is_finalized = True
