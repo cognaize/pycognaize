@@ -2,6 +2,9 @@
 
 ## [1.3]
 
+### [1.3.4] - 2023-03-09
+- Rename classConfidence key to Confidence in enums.
+
 ### [1.3.3] - 2023-03-07
 - Check that the sum of confidence values is close to 1 instead of exactly 1.
 
