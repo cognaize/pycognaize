@@ -2,6 +2,9 @@
 
 ## [1.3]
 
+### [1.3.5] - 2023-03-11
+- Make Confidence key lowercase.
+
 ### [1.3.4] - 2023-03-09
 - Rename classConfidence key to Confidence in enums.
 
