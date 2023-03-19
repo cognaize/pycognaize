@@ -393,7 +393,8 @@ class Model(metaclass=abc.ABCMeta):
     def execute_eval(self,
                      token: str,
                      url: str,
-                     model_version: str
+                     model_version: str,
+                     ground_truth_id: str = None,
                      ) -> List[requests.Response]:
         """ Execute evaluation for a given model_version """
         session = requests.Session()
@@ -401,11 +402,14 @@ class Model(metaclass=abc.ABCMeta):
         session.mount('https://', HTTPAdapter(max_retries=self.RETRIES))
         session.headers = {'x-auth': token}
 
-        ground_truth_ids = session.get(
-            url=f'{url}/groundtruths/{model_version}',
-            verify=False,
-            timeout=self.DEFAULT_TIMEOUT
-        ).json()
+        if ground_truth_id is None:
+            ground_truth_ids = session.get(
+                url=f'{url}/groundtruths/{model_version}',
+                verify=False,
+                timeout=self.DEFAULT_TIMEOUT
+            ).json()
+        else:
+            ground_truth_ids = [ground_truth_id]
 
         post_responses = []
         for gt_id in ground_truth_ids:
