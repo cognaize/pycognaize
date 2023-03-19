@@ -2,6 +2,10 @@
 
 ## [1.3]
 
+### [1.3.6] - 2023-03-19
+- Add functionality to run Model().execute_eval given
+  the ground truth document id
+
 ### [1.3.5] - 2023-03-11
 - Make Confidence key lowercase.
 
