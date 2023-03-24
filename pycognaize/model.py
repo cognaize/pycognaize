@@ -378,23 +378,25 @@ class Model(metaclass=abc.ABCMeta):
             otherwise detects if there is a match between two extraction tags
             having the same page number. Returns true if
         intersection is greater than the threshold"""
-        matching = False
+        is_match = False
         if isinstance(act_tag, TDTag) and isinstance(pred_tag, TDTag):
             cell_xpath = max(act_tag.xpath, pred_tag.xpath, key=len)
             field_xpath = min(act_tag.xpath, pred_tag.xpath, key=len)
-            matching = field_xpath in cell_xpath \
+            is_match = field_xpath in cell_xpath \
                 and act_tag.col_index == pred_tag.col_index\
                 and act_tag.row_index == pred_tag.row_index
         elif ((isinstance(act_tag, TDTag)
               and isinstance(pred_tag, HTMLTableTag)) or
               (isinstance(act_tag, HTMLTableTag)
                and isinstance(pred_tag, TDTag))):
-            matching = act_tag.tag_id == pred_tag.tag_id
+            is_match = act_tag.tag_id == pred_tag.tag_id
         else:
-            matching = act_tag.page.page_number == pred_tag.page.page_number\
-                       and (act_tag & pred_tag) / min(act_tag, pred_tag,
-                                                      key=lambda x: x.area).area >= threshold
-        return matching
+            is_match = (
+                    act_tag.page.page_number == pred_tag.page.page_number
+                    and ((act_tag & pred_tag) / min(act_tag, pred_tag,
+                         key=lambda x: x.area).area >= threshold)
+            )
+        return is_match
 
     def execute_eval(self,
                      token: str,

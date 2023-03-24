@@ -571,9 +571,14 @@ class TestModelXBRL(unittest.TestCase):
                                                        html=self.html)
         self.td_tag_dict_1 = deepcopy(
             self.data['output_fields']['v_other_operating_expenses_operating_is__current'][0]['tags'][0])
+        self.td_tag_dict_2 = deepcopy(self.data['output_fields']['v_other_operating_expenses_operating_is__previous'][0]['tags'][0])
 
         self.td_tag_1 = TDTag.construct_from_raw(self.td_tag_dict_1, html=self.html)
+        self.td_tag_2 = TDTag.construct_from_raw(self.td_tag_dict_2, html=self.html)
         self.cell_tag = self.tbl_tag.raw_df[1][4]
 
     def test__matches(self):
-        Model.matches(self.cell_tag, self.td_tag_1)
+        self.assertEqual(Model.matches(self.cell_tag, self.td_tag_1), True)
+        self.assertEqual(Model.matches(self.cell_tag, self.td_tag_2), False)
+
+
