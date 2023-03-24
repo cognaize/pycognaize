@@ -3,6 +3,8 @@ import os
 import tempfile
 import unittest
 import uuid
+from copy import deepcopy
+
 import requests
 
 from unittest.mock import Mock, patch, create_autospec
@@ -16,6 +18,9 @@ from pycognaize.document.field import TextField
 from pycognaize.document.page import create_dummy_page
 from pycognaize.document.tag import ExtractionTag
 from pycognaize.tests.resources import RESOURCE_FOLDER
+from pycognaize.common.enums import IqFieldKeyEnum
+from pycognaize.document.html_info import HTML
+from pycognaize.document.tag.html_tag import TDTag, HTMLTableTag
 
 
 def set_empty_ids_from_dict_convert_percent_string_to_float(doc_data):
@@ -545,3 +550,32 @@ class TestModel(unittest.TestCase):
                                       'recall': 1.0,
                                       'accuracy': 0.6666666666666666}
         self.assertDictEqual(result_repeating_group, result_act_repeating_group)
+
+
+class TestModelXBRL(unittest.TestCase):
+    SNAPSHOT_PATH = os.path.join(RESOURCE_FOLDER, 'xbrl_snapshot')
+    SNAPSHOT_ID = '63fd387178232c6001119a41a'
+    snap_storage_path = None
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.snap_storage_path = os.path.join(cls.SNAPSHOT_PATH,
+                                             cls.SNAPSHOT_ID)
+
+    def setUp(self) -> None:
+        with open(self.snap_storage_path + '/document.json') as document_json:
+            self.data = json.load(document_json)
+        self.html = HTML(path=RESOURCE_FOLDER, document_id=self.SNAPSHOT_ID)
+
+        table_field = deepcopy(self.data['input_fields']['table'][0])
+        self.raw_tbl_tag = table_field[IqFieldKeyEnum.tags.value][0]
+        self.tbl_tag = HTMLTableTag.construct_from_raw(self.raw_tbl_tag,
+                                                       html=self.html)
+        self.td_tag_dict_1 = deepcopy(
+            self.data['output_fields']['v_other_operating_expenses_operating_is__current'][0]['tags'][0])
+
+        self.td_tag_1 = TDTag.construct_from_raw(self.td_tag_dict_1, html=self.html)
+        self.cell_tag = self.tbl_tag.raw_df[1][4]
+
+    def test_matches(self):
+        Model.matches(self.cell_tag, self.td_tag_1)
