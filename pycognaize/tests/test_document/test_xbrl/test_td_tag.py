@@ -5,11 +5,10 @@ from copy import deepcopy
 
 from pycognaize.common.enums import IqFieldKeyEnum, XBRLCellEnum
 from pycognaize.common.utils import empty_keys
-
 from pycognaize.document.html_info import HTML
-
 from pycognaize.document.tag.html_tag import TDTag, HTMLTableTag
 from pycognaize.tests.resources import RESOURCE_FOLDER
+
 
 class TestTDTag(unittest.TestCase):
 
@@ -106,6 +105,7 @@ class TestTDTag(unittest.TestCase):
         cleaned_field_dict_3 = empty_keys(obj=deepcopy(field_dict_3),
                                           keys=['_id'])
         self.assertDictEqual(cleaned_field_dict_3, cleaned_td_tag_dict_3)
+
 
 if __name__ == '__main__':
     unittest.main()
