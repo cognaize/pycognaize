@@ -4,9 +4,7 @@ import tempfile
 import unittest
 import uuid
 from copy import deepcopy
-
 import requests
-
 from unittest.mock import Mock, patch, create_autospec
 from bson import json_util
 from cloudstorageio import CloudInterface
