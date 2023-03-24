@@ -391,8 +391,8 @@ class Model(metaclass=abc.ABCMeta):
                and isinstance(pred_tag, TDTag))):
             matching = act_tag.tag_id == pred_tag.tag_id
         else:
-            matching = act_tag.page.page_number == pred_tag.page.page_number and (
-                    act_tag & pred_tag) / min(
+            matching = act_tag.page.page_number == pred_tag.page.page_number\
+                       and (act_tag & pred_tag) / min(
                 act_tag, pred_tag, key=lambda x: x.area).area >= threshold
         return matching
 
