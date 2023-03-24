@@ -577,5 +577,5 @@ class TestModelXBRL(unittest.TestCase):
         self.td_tag_1 = TDTag.construct_from_raw(self.td_tag_dict_1, html=self.html)
         self.cell_tag = self.tbl_tag.raw_df[1][4]
 
-    def test_matches(self):
+    def test__matches(self):
         Model.matches(self.cell_tag, self.td_tag_1)
