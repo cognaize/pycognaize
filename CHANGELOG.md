@@ -2,6 +2,9 @@
 
 ## [1.3]
 
+### [1.3.3] - 2023-03-24
+- Match (xbrl) using xpath and indices in matches function of `model.py`
+
 ### [1.3.2] - 2023-02-21
 - Add is_xbrl attribute in document, to identify if document is XBRL or not
 - Modify assign indices functionality to handle XBRL tables
