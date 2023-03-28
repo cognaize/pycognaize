@@ -37,7 +37,8 @@ class HTML:
     def _validate_path(self, path: str, document_id: str) -> str:
         """
         If the input path contains a directory with the same name
-            as the document ID, the valid path
+            as the document ID and if that directory contains a file
+            named `source.html`, the valid path
             is the combination of the input path and the document id
         If the input path contains a file named `source.html`,
             the valid path is simply the input path.
@@ -49,8 +50,12 @@ class HTML:
             corresponding to the document id
         """
         valid_path = ''
-        if self.ci.isdir(os.path.join(path, document_id)):
-            valid_path = os.path.join(path, document_id)
+        joined_path = os.path.join(path, document_id)
+        if (
+                self.ci.isdir(joined_path)
+                and StorageEnum.html_file.value in self.ci.listdir(joined_path)
+        ):
+            valid_path = joined_path
         elif StorageEnum.html_file.value in self.ci.listdir(path):
             valid_path = path
         return valid_path
