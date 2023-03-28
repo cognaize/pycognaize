@@ -2,6 +2,10 @@
 
 ## [1.3]
 
+### [1.3.8] - 2023-03-28
+- Improve html file path validation by adding a new check
+in HTML._validate_path()
+
 ### [1.3.7] - 2023-03-24
 - Match (xbrl) using xpath and indices in matches function of `model.py`
 
