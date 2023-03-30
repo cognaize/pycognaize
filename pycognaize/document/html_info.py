@@ -50,14 +50,18 @@ class HTML:
             corresponding to the document id
         """
         valid_path = ''
-        joined_path = os.path.join(path, document_id)
-        if (
-                self.ci.isdir(joined_path)
-                and StorageEnum.html_file.value in self.ci.listdir(joined_path)
-        ):
-            valid_path = joined_path
-        elif StorageEnum.html_file.value in self.ci.listdir(path):
-            valid_path = path
+        try:
+            joined_path = os.path.join(path, document_id)
+            if (
+                    self.ci.isdir(joined_path)
+                    and StorageEnum.html_file.value
+                    in self.ci.listdir(joined_path)
+            ):
+                valid_path = joined_path
+            elif StorageEnum.html_file.value in self.ci.listdir(path):
+                valid_path = path
+        except Exception as e:
+            logging.debug(f"An error occurred while validating the path: {e}")
         return valid_path
 
     def _read_html(self, path: str) -> str:
