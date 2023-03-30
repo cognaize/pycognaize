@@ -2,6 +2,9 @@
 
 ## [1.3]
 
+### [1.3.9] - 2023-03-30
+- Refactor HTML._validate_path() to include try-except block
+
 ### [1.3.8] - 2023-03-28
 - Improve html file path validation by adding a new check
 in HTML._validate_path()
