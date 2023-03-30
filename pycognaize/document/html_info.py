@@ -2,7 +2,6 @@ import logging
 import os
 
 from bs4 import BeautifulSoup
-from cloudpathlib import CloudPath
 
 from pycognaize.login import Login
 from pycognaize.common.enums import StorageEnum
@@ -35,37 +34,34 @@ class HTML:
                                                 features="html.parser")
         return self._html_soup
 
-    @staticmethod
-    def _validate_s3_path(path: str, document_id: str) -> str:
-        cloudpath = CloudPath(path)
-        joined_path = cloudpath.joinpath(document_id)
-        valid_path = ''
-        if joined_path.is_dir() and joined_path.joinpath(
-                StorageEnum.html_file.value) in joined_path.iterdir():
-            valid_path = str(joined_path)
-        elif cloudpath.joinpath(
-                StorageEnum.html_file.value) in cloudpath.iterdir():
-            valid_path = str(cloudpath)
-        return valid_path
-
-    @staticmethod
-    def _validate_local_path(path: str, document_id: str) -> str:
-        from pathlib import Path
-        path = Path(path)
-        joined_path = path.joinpath(document_id)
-        valid_path = ''
-        if joined_path.is_dir() and joined_path.joinpath(
-                StorageEnum.html_file.value) in joined_path.iterdir():
-            valid_path = str(joined_path)
-        elif path.joinpath(StorageEnum.html_file.value) in path.iterdir():
-            valid_path = str(path)
-        return valid_path
-
     def _validate_path(self, path: str, document_id: str) -> str:
-        if path.startswith('s3://'):
-            valid_path = self._validate_s3_path(path, document_id)
-        else:
-            valid_path = self._validate_local_path(path, document_id)
+        """
+        If the input path contains a directory with the same name
+            as the document ID and if that directory contains a file
+            named `source.html`, the valid path
+            is the combination of the input path and the document id
+        If the input path contains a file named `source.html`,
+            the valid path is simply the input path.
+        Otherwise, the function returns an empty string as the valid path.
+
+        :param path: path of the source document
+        :param document_id: document id
+        :return: valid path for the `source.html` file
+            corresponding to the document id
+        """
+        valid_path = ''
+        try:
+            joined_path = os.path.join(path, document_id)
+            if (
+                    self.ci.isdir(joined_path)
+                    and StorageEnum.html_file.value
+                    in self.ci.listdir(joined_path)
+            ):
+                valid_path = joined_path
+            elif StorageEnum.html_file.value in self.ci.listdir(path):
+                valid_path = path
+        except Exception as e:
+            logging.debug(f"An error occurred while validating the path: {e}")
         return valid_path
 
     def _read_html(self, path: str) -> str:
