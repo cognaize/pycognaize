@@ -9,5 +9,3 @@ pymupdf==1.21.1
 urllib3
 beautifulsoup4==4.11.2
 lxml
-
-cloudpathlib==0.13.0
