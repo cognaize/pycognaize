@@ -2,6 +2,10 @@
 
 ## [1.3]
 
+
+### [1.3.10] - 2023-03-31
+- Add login command and code for submit to model registry
+
 ### [1.3.9] - 2023-03-30
 - Refactor HTML._validate_path() to include try-except block
 
