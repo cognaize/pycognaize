@@ -26,7 +26,7 @@ setup_options = dict(
     python_requires=">= 3.7",
     entry_points='''
         [console_scripts]
-        cognaize=bin.cognaize:main''',
+        cognaize=pycognaize.cli:cognaize''',
     project_urls={
         'Source': 'https://github.com/cognaize/pycognaize',
         'Reference': 'https://pycognaize.readthedocs.io/en/latest/',
