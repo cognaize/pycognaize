@@ -16,7 +16,9 @@ class Run(Base):
 class Experiment(Base):
     __tablename__ = 'experiments'
 
-    id = Column(types.INTEGER, primary_key=True, autoincrement=True)
+    id = Column(types.INTEGER,
+                primary_key=True,
+                autoincrement=True)
     executed_at = Column(types.DATE)
     command = Column(types.String)
     git_repo = Column(types.String)
@@ -26,4 +28,3 @@ class Experiment(Base):
     github_name = Column(types.String)
     github_email = Column(types.String)
     created_at = Column(types.DATE, default=datetime.now)
-
