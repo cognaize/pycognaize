@@ -2,7 +2,7 @@
     all the data and functionality provided by the pycognaize application.
 """
 
-__version__ = "1.3.9"
+__version__ = "1.3.10"
 
 __all__ = ['Login', 'Model', 'Snapshot']
 
