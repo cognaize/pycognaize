@@ -1,8 +1,11 @@
 import io
 import os
+import pathlib
 import re
 
 import hashlib
+from pathlib import Path
+
 import numpy as np
 import bson
 import logging
@@ -640,12 +643,11 @@ def directory_summary_hash(dirname: str):
         raise TypeError("{} is not a directory.".format(dirname))
 
     hash_values = []
-    for root, dirs, _ in os.listdir(dirname):
-        dirs.sort()
-
-        for dir_name in dirs:
-            hash_values.append(_dirhash(os.path.join(root, dir_name),
-                                        hash_func))
+    path = pathlib.Path(dirname)
+    directories = sorted([str(i) for i in path.iterdir() if i.is_dir()])
+    for dir_name in directories:
+        hash_values.append(_dirhash(os.path.join(dirname, dir_name),
+                                    hash_func))
     return _reduce_hash(hash_values, hash_func)
 
 
