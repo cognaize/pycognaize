@@ -631,6 +631,7 @@ def cloud_interface_login(login_instance: Login) -> CloudInterface:
         ci_instance = CloudInterface()
     return ci_instance
 
+
 def directory_summary_hash(dirname: str):
     """ Computes hash of directory summary"""
     hash_func = hashlib.md5
