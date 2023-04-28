@@ -643,12 +643,13 @@ def directory_summary_hash(dirname: str):
         dirs.sort()
 
         for dir_name in dirs:
-            hash_values.append(_filehash(os.path.join(root, dir_name),
-                                         hash_func))
+            hash_values.append(_dirhash(os.path.join(root, dir_name),
+                                        hash_func))
     return _reduce_hash(hash_values, hash_func)
 
 
-def _filehash(filepath, hash_function):
+def _dirhash(filepath, hash_function):
+    """ Computes hash of dir"""
     hasher = hash_function()
 
     if not os.path.exists(filepath):
@@ -659,6 +660,7 @@ def _filehash(filepath, hash_function):
 
 
 def _reduce_hash(hashlist, hash_function):
+    """ Computes hash of hashlist"""
     hasher = hash_function()
     for hash_value in sorted(hashlist):
         hasher.update(hash_value.encode("utf-8"))
