@@ -1,6 +1,9 @@
 import io
 import os
+import pathlib
 import re
+
+import hashlib
 import numpy as np
 import bson
 import logging
@@ -628,3 +631,38 @@ def cloud_interface_login(login_instance: Login) -> CloudInterface:
     else:
         ci_instance = CloudInterface()
     return ci_instance
+
+
+def directory_summary_hash(dirname: str):
+    """ Computes hash of directory summary"""
+    hash_func = hashlib.md5
+
+    if not os.path.isdir(dirname):
+        raise TypeError("{} is not a directory.".format(dirname))
+
+    hash_values = []
+    path = pathlib.Path(dirname)
+    directories = sorted([str(i) for i in path.iterdir() if i.is_dir()])
+    for dir_name in directories:
+        hash_values.append(_dirhash(os.path.join(dirname, dir_name),
+                                    hash_func))
+    return _reduce_hash(hash_values, hash_func)
+
+
+def _dirhash(filepath, hash_function):
+    """ Computes hash of dir"""
+    hasher = hash_function()
+
+    if not os.path.exists(filepath):
+        return hasher.hexdigest()
+    hasher.update(filepath.encode("utf-8"))
+
+    return hasher.hexdigest()
+
+
+def _reduce_hash(hashlist, hash_function):
+    """ Computes hash of hashlist"""
+    hasher = hash_function()
+    for hash_value in sorted(hashlist):
+        hasher.update(hash_value.encode("utf-8"))
+    return hasher.hexdigest()
