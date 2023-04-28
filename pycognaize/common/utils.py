@@ -640,7 +640,7 @@ def directory_summary_hash(dirname: str):
         raise TypeError("{} is not a directory.".format(dirname))
 
     hash_values = []
-    for root, dirs, _ in os.walk(dirname, topdown=True, followlinks=False):
+    for root, dirs, _ in os.listdir(dirname):
         dirs.sort()
 
         for dir_name in dirs:
