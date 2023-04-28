@@ -2,7 +2,7 @@ import os
 import logging
 from typing import Mapping, Tuple
 
-from pycognaize.common.utils import generate_directory_summary_hash
+from pycognaize.common.utils import directory_summary_hash
 from pycognaize.login import Login
 from pycognaize.common import utils
 from pycognaize.common.enums import EnvConfigEnum, HASH_FILE
@@ -50,7 +50,7 @@ class Snapshot:
             ci = utils.cloud_interface_login(login_instance)
             ci.copy_dir(snapshot_path, destination_dir)
 
-            summary_hash = generate_directory_summary_hash(destination_dir)
+            summary_hash = directory_summary_hash(destination_dir)
             with open(os.path.join(destination_dir, HASH_FILE), 'w') as f:
                 f.write(summary_hash)
 
