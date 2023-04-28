@@ -2,6 +2,10 @@
 
 ## [1.3]
 
+### [1.3.11] - 2023-04-28
+- Add interface to create directory summary hashes
+- Add automatic snapshot hash creation for ``snapshot.download``
+
 
 ### [1.3.10] - 2023-03-31
 - Add login command and code for submit to model registry
