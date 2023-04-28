@@ -1,6 +1,8 @@
 import io
 import os
 import re
+
+import checksumdir
 import numpy as np
 import bson
 import logging
@@ -628,3 +630,7 @@ def cloud_interface_login(login_instance: Login) -> CloudInterface:
     else:
         ci_instance = CloudInterface()
     return ci_instance
+
+def generate_directory_summary_hash(directory: str) -> str:
+    summary_hash = checksumdir.dirhash(directory)
+    return summary_hash
