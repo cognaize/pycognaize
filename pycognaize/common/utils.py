@@ -4,8 +4,6 @@ import pathlib
 import re
 
 import hashlib
-from pathlib import Path
-
 import numpy as np
 import bson
 import logging
