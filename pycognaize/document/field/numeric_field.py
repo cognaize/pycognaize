@@ -13,13 +13,13 @@ from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.field import Field
 from pycognaize.document.tag import ExtractionTag
-from pycognaize.document.tag.html_tag import TDTag
+from pycognaize.document.tag.html_tag import HTMLTag
 
 
 class NumericField(Field):
     """Base class for all pycognaize number fields"""
     tag_class: Type[ExtractionTag] = ExtractionTag
-    html_tag_class: Type[TDTag] = TDTag
+    html_tag_class: Type[HTMLTag] = HTMLTag
 
     def __init__(self,
                  name: str,
