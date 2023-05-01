@@ -327,6 +327,36 @@
                 "group": "Other operating expenses",
                 "groupKey": "79a437cc-2224-11ed-8687-51244c7164db"
             }
+        ],
+        "v_cash_at_bank_and_in_hand_bs__tr": [
+            {
+                "_id": "ab01c3bafc49b3789212d838a",
+                "name": "Text representation",
+                "value": "",
+                "tags": [
+                    {
+                        "_id": "gh8fd1395d11110000fd17e8",
+                        "value": "Cash at bank",
+                        "ocrValue": "Cash at bank",
+                        "isTable": false,
+                        "source": {
+                            "html": {
+                                "parentId": "4f220e52-19f8-44e7-bdc0-bf443df1c590",
+                                "value": "Cash at bank"
+                            },
+                            "ids": [],
+                            "fieldId": "",
+                            "tagId": "",
+                            "rowIndex": 0,
+                            "colIndex": 0,
+                            "xpath": ""
+                        }
+                    }
+                ],
+                "dataType": "text",
+                "group": "Cash at bank and in hand",
+                "groupKey": "c1667bdd-1cc4-11ed-9565-9cb6d0eefc6f"
+            }
         ]
     },
     "metadata": {
