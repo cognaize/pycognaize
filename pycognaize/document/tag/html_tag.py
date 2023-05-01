@@ -304,7 +304,8 @@ class HTMLTag(HTMLTagABC):
     def __init__(self, raw_value: str, raw_ocr_value: str,
                  is_table: bool, html_id: Union[str, List[str]],
                  field_id: Optional[str], tag_id: Optional[str],
-                 row_index: int, col_index: int, xpath: str):
+                 row_index: int, col_index: int, xpath: str,
+                 is_td: bool = True):
         super().__init__(html_id=html_id, xpath=xpath, tag_id=tag_id)
         self._raw_value = raw_value
         self._raw_ocr_value = raw_ocr_value
@@ -312,6 +313,7 @@ class HTMLTag(HTMLTagABC):
         self._field_id = field_id
         self._row_index = row_index
         self._col_index = col_index
+        self._is_td = is_td
 
     @property
     def raw_value(self):
@@ -338,6 +340,10 @@ class HTMLTag(HTMLTagABC):
     def col_index(self):
         return self._col_index
 
+    @property
+    def is_td(self):
+        return self._is_td
+
     @classmethod
     def construct_from_raw(cls, raw: dict, html: HTML) -> 'HTMLTag':
         """Build HTMLTag from pycognaize raw data
@@ -347,9 +353,11 @@ class HTMLTag(HTMLTagABC):
         """
         source_data = raw[XBRLTagEnum.source.value]
         if XBRLTagEnum.html.value in source_data:
+            is_td = False
             html_id = source_data[XBRLTagEnum.html.value][
                 XBRLTagEnum.parent_id.value]
         else:
+            is_td = True
             html_id = source_data[XBRLTagEnum.ids.value]
         raw_value = raw[XBRLTagEnum.value.value]
         raw_ocr_value = raw[XBRLTagEnum.ocr_value.value]
@@ -363,17 +371,13 @@ class HTMLTag(HTMLTagABC):
                    raw_ocr_value=raw_ocr_value, is_table=is_table,
                    field_id=field_id, tag_id=tag_id,
                    row_index=row_index, col_index=col_index,
-                   xpath=xpath)
+                   xpath=xpath, is_td=is_td)
 
     def to_dict(self) -> dict:
         """Converts tag to dict"""
-        if not self.xpath:
+        if self.is_td:
             tag_info = {
-                XBRLTagEnum.html.value: {
-                    XBRLTagEnum.parent_id.value: self.html_id,
-                    XBRLTagEnum.value.value: self.raw_value
-                },
-                XBRLTagEnum.ids.value: [],
+                XBRLTagEnum.ids.value: self.html_id,
                 IqRecipeEnum.field_id.value: self.field_id,
                 XBRLTagEnum.tag_id.value: self.tag_id,
                 XBRLTagEnum.row_index.value: self.row_index,
@@ -382,7 +386,11 @@ class HTMLTag(HTMLTagABC):
             }
         else:
             tag_info = {
-                XBRLTagEnum.ids.value: self.html_id,
+                XBRLTagEnum.html.value: {
+                    XBRLTagEnum.parent_id.value: self.html_id,
+                    XBRLTagEnum.value.value: self.raw_value
+                },
+                XBRLTagEnum.ids.value: [],
                 IqRecipeEnum.field_id.value: self.field_id,
                 XBRLTagEnum.tag_id.value: self.tag_id,
                 XBRLTagEnum.row_index.value: self.row_index,
