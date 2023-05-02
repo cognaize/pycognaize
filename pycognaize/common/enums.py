@@ -185,6 +185,8 @@ class XBRLTagEnum(enum.Enum):
     ocr_value = 'ocrValue'
     value = 'value'
     is_table = 'isTable'
+    html = 'html'
+    parent_id = 'parentId'
 
 
 class XBRLCellEnum(enum.Enum):

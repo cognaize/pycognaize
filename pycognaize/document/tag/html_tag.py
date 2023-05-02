@@ -1,5 +1,5 @@
 import abc
-from typing import Optional, List
+from typing import Optional, List, Union
 
 import bson
 import pandas as pd
@@ -10,9 +10,9 @@ from pycognaize.document.html_info import HTML
 from pycognaize.document.tag.tag import Tag
 
 
-class HTMLTag(Tag, metaclass=abc.ABCMeta):
+class HTMLTagABC(Tag, metaclass=abc.ABCMeta):
     """Base class for XBRL document tags"""
-    def __init__(self, html_id: List[str], xpath: str,
+    def __init__(self, html_id: Union[str, List[str]], xpath: str,
                  tag_id: Optional[str] = None):
         self._html_id = html_id
         self._xpath = xpath
@@ -31,16 +31,17 @@ class HTMLTag(Tag, metaclass=abc.ABCMeta):
         return self._tag_id
 
     @classmethod
-    def construct_from_raw(cls, raw: dict, html: HTML) -> 'HTMLTag':
+    def construct_from_raw(cls, raw: dict, html: HTML) -> 'HTMLTagABC':
         ...
 
 
-class HTMLTableTag(HTMLTag):
+class HTMLTableTag(HTMLTagABC):
     """Represents table's coordinate data in XBRL document"""
 
     def __init__(self, tag_id: str,  value: str, ocr_value: str,
-                 xpath: str, title: str, html_id: List[str], cell_data: dict,
-                 html: HTML, source_ids, is_table: bool = True):
+                 xpath: str, title: str, html_id: Union[str, List[str]],
+                 cell_data: dict, html: HTML, source_ids,
+                 is_table: bool = True):
         super().__init__(html_id=html_id, xpath=xpath, tag_id=tag_id)
         self._value = value
         self._ocr_value = ocr_value
@@ -104,7 +105,7 @@ class HTMLTableTag(HTMLTag):
 
     @staticmethod
     def _extract_value(x):
-        """Returns text value from `TDTag` object"""
+        """Returns text value from `HTMLTag` object"""
         try:
             return x.raw_value
         except AttributeError:
@@ -122,7 +123,7 @@ class HTMLTableTag(HTMLTag):
 
     @staticmethod
     def _populate_cell(keys: tuple, cell_dict: dict) -> 'HTMLCell':
-        """ Creates `TDTag` object for each item in Table"""
+        """ Creates `HTMLCell` object for each item in Table"""
         return HTMLCell(
             html_id=cell_dict[XBRLCellEnum.id.value],
             xpath=cell_dict[XBRLCellEnum.xpath.value],
@@ -176,9 +177,9 @@ class HTMLTableTag(HTMLTag):
                    html=html, source_ids=source_ids)
 
     def _build_df(self) -> pd.DataFrame:
-        """Build pandas data frame using `TDTag` Cells
+        """Build pandas data frame using `HTMLTag` Cells
 
-        :return: DataFrame object,where each cell contains an TDTag
+        :return: DataFrame object,where each cell contains an HTMLTag
             object with the html_id and values from the annotated
             document
         """
@@ -197,15 +198,15 @@ class HTMLTableTag(HTMLTag):
             col_index = cell_.col_index - 1
             for col_n in range(col_index, col_index + cell_.col_span):
                 for row_n in range(row_index, row_index + cell_.row_span):
-                    df[col_n][row_n] = TDTag(is_table=False,
-                                             html_id=cell_.html_id,
-                                             xpath=cell_.xpath,
-                                             raw_value=cell_.raw_value,
-                                             raw_ocr_value=cell_.raw_value,
-                                             field_id='',
-                                             tag_id=self.tag_id,
-                                             row_index=row_index,
-                                             col_index=col_index)
+                    df[col_n][row_n] = HTMLTag(is_table=False,
+                                               html_id=cell_.html_id,
+                                               xpath=cell_.xpath,
+                                               raw_value=cell_.raw_value,
+                                               raw_ocr_value=cell_.raw_value,
+                                               field_id='',
+                                               tag_id=self.tag_id,
+                                               row_index=row_index,
+                                               col_index=col_index)
         return df
 
 
@@ -213,7 +214,7 @@ class HTMLCell:
     """Represents cell tag for XBRL tables"""
     def __init__(self, row_index: int, col_index: int,
                  col_span: int, row_span: int,
-                 html_id: List[str], xpath: str,
+                 html_id: Union[str, List[str]], xpath: str,
                  raw_value: str, is_bold: False,
                  left_indentation: None):
         self._row_index = row_index
@@ -264,7 +265,7 @@ class HTMLCell:
 
     @classmethod
     def construct_from_raw(cls, raw: dict) -> 'HTMLCell':
-        """Build TDTag from pycognaize raw data
+        """Build HTMLTAG from pycognaize raw data
 
         :param raw: pycognaize field's tag info
         :return:
@@ -299,11 +300,12 @@ class HTMLCell:
         return {f"{self.col_index}:{self.row_index}": cell_dict}
 
 
-class TDTag(HTMLTag):
+class HTMLTag(HTMLTagABC):
     def __init__(self, raw_value: str, raw_ocr_value: str,
-                 is_table: bool, html_id: List[str],
+                 is_table: bool, html_id: Union[str, List[str]],
                  field_id: Optional[str], tag_id: Optional[str],
-                 row_index: int, col_index: int, xpath: str):
+                 row_index: int, col_index: int, xpath: str,
+                 is_td: bool = True):
         super().__init__(html_id=html_id, xpath=xpath, tag_id=tag_id)
         self._raw_value = raw_value
         self._raw_ocr_value = raw_ocr_value
@@ -311,6 +313,7 @@ class TDTag(HTMLTag):
         self._field_id = field_id
         self._row_index = row_index
         self._col_index = col_index
+        self._is_td = is_td
 
     @property
     def raw_value(self):
@@ -337,18 +340,28 @@ class TDTag(HTMLTag):
     def col_index(self):
         return self._col_index
 
+    @property
+    def is_td(self):
+        return self._is_td
+
     @classmethod
-    def construct_from_raw(cls, raw: dict, html: HTML) -> 'TDTag':
-        """Build TDTag from pycognaize raw data
+    def construct_from_raw(cls, raw: dict, html: HTML) -> 'HTMLTag':
+        """Build HTMLTag from pycognaize raw data
         :param html: HTML
         :param raw: pycognaize field's tag info
         :return:
         """
         source_data = raw[XBRLTagEnum.source.value]
+        if XBRLTagEnum.html.value in source_data:
+            is_td = False
+            html_id = source_data[XBRLTagEnum.html.value][
+                XBRLTagEnum.parent_id.value]
+        else:
+            is_td = True
+            html_id = source_data[XBRLTagEnum.ids.value]
         raw_value = raw[XBRLTagEnum.value.value]
         raw_ocr_value = raw[XBRLTagEnum.ocr_value.value]
         is_table = raw[XBRLTagEnum.is_table.value]
-        html_id = source_data[XBRLTagEnum.ids.value]
         field_id = source_data[IqRecipeEnum.field_id.value]
         tag_id = source_data[XBRLTagEnum.tag_id.value]
         row_index = source_data[XBRLTagEnum.row_index.value]
@@ -358,18 +371,32 @@ class TDTag(HTMLTag):
                    raw_ocr_value=raw_ocr_value, is_table=is_table,
                    field_id=field_id, tag_id=tag_id,
                    row_index=row_index, col_index=col_index,
-                   xpath=xpath)
+                   xpath=xpath, is_td=is_td)
 
     def to_dict(self) -> dict:
         """Converts tag to dict"""
-        tag_info = {
-            XBRLTagEnum.ids.value: self.html_id,
-            IqRecipeEnum.field_id.value: self.field_id,
-            XBRLTagEnum.tag_id.value: self.tag_id,
-            XBRLTagEnum.row_index.value: self.row_index,
-            XBRLTagEnum.col_index.value: self.col_index + 1,
-            XBRLTagEnum.xpath.value: self.xpath,
-        }
+        if self.is_td:
+            tag_info = {
+                XBRLTagEnum.ids.value: self.html_id,
+                IqRecipeEnum.field_id.value: self.field_id,
+                XBRLTagEnum.tag_id.value: self.tag_id,
+                XBRLTagEnum.row_index.value: self.row_index,
+                XBRLTagEnum.col_index.value: self.col_index + 1,
+                XBRLTagEnum.xpath.value: self.xpath,
+            }
+        else:
+            tag_info = {
+                XBRLTagEnum.html.value: {
+                    XBRLTagEnum.parent_id.value: self.html_id,
+                    XBRLTagEnum.value.value: self.raw_value
+                },
+                XBRLTagEnum.ids.value: [],
+                IqRecipeEnum.field_id.value: self.field_id,
+                XBRLTagEnum.tag_id.value: self.tag_id,
+                XBRLTagEnum.row_index.value: self.row_index,
+                XBRLTagEnum.col_index.value: self.col_index + 1,
+                XBRLTagEnum.xpath.value: self.xpath,
+            }
         output_dict = {
             ID: str(bson.ObjectId()),
             XBRLTagEnum.value.value: self.raw_value,

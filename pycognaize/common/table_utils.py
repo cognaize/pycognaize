@@ -2,7 +2,7 @@ import logging
 from itertools import groupby
 from typing import Optional
 
-from pycognaize.document.tag.html_tag import HTMLTableTag, TDTag
+from pycognaize.document.tag.html_tag import HTMLTableTag, HTMLTag
 
 
 def filter_out_invalid_tables(tables):
@@ -71,7 +71,7 @@ def assign_indices_to_tables(tables, all_tables: Optional[list] = None,
     if not valid_tables:
         return tables_dict
     if all(isinstance(table.tags[0], HTMLTableTag) or
-           isinstance(table.tags[0], TDTag) for table in valid_tables):
+           isinstance(table.tags[0], HTMLTag) for table in valid_tables):
         if not all_tables:
             logging.error('Missing argument: list of all table fields')
             return tables_dict

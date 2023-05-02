@@ -2,10 +2,14 @@
 
 ## [1.3]
 
+### [1.3.12] - 2023-05-01
+- Rename HTMLTag to HTMLTagABC
+- Rename TDTag to HTMLTag
+- Handle out of table tags in XBRL
+
 ### [1.3.11] - 2023-04-28
 - Add interface to create directory summary hashes
 - Add automatic snapshot hash creation for ``snapshot.download``
-
 
 ### [1.3.10] - 2023-03-31
 - Add login command and code for submit to model registry

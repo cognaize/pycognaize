@@ -13,7 +13,7 @@ from pycognaize.common.utils import (
 )
 from pycognaize.document.document import Document
 from pycognaize.document.tag import ExtractionTag
-from pycognaize.document.tag.html_tag import TDTag, HTMLTableTag
+from pycognaize.document.tag.html_tag import HTMLTag, HTMLTableTag
 
 
 def join_url(*parts):
@@ -371,24 +371,24 @@ class Model(metaclass=abc.ABCMeta):
         return groups
 
     @staticmethod
-    def matches(act_tag: Union['ExtractionTag', 'TDTag', 'HTMLTableTag'],
-                pred_tag: Union['ExtractionTag', 'TDTag', 'HTMLTableTag'],
+    def matches(act_tag: Union['ExtractionTag', 'HTMLTag', 'HTMLTableTag'],
+                pred_tag: Union['ExtractionTag', 'HTMLTag', 'HTMLTableTag'],
                 threshold: float = 0.6) -> bool:
-        """ If tags are TDTag checks that two tags have the same html_id,
+        """ If tags are HTMLTag checks that two tags have the same html_id,
             otherwise detects if there is a match between two extraction tags
             having the same page number. Returns true if
         intersection is greater than the threshold"""
         is_match = False
-        if isinstance(act_tag, TDTag) and isinstance(pred_tag, TDTag):
+        if isinstance(act_tag, HTMLTag) and isinstance(pred_tag, HTMLTag):
             cell_xpath = max(act_tag.xpath, pred_tag.xpath, key=len)
             field_xpath = min(act_tag.xpath, pred_tag.xpath, key=len)
             is_match = field_xpath in cell_xpath \
                 and act_tag.col_index == pred_tag.col_index\
                 and act_tag.row_index == pred_tag.row_index
-        elif ((isinstance(act_tag, TDTag)
+        elif ((isinstance(act_tag, HTMLTag)
               and isinstance(pred_tag, HTMLTableTag)) or
               (isinstance(act_tag, HTMLTableTag)
-               and isinstance(pred_tag, TDTag))):
+               and isinstance(pred_tag, HTMLTag))):
             is_match = act_tag.tag_id == pred_tag.tag_id
         else:
             is_match = (

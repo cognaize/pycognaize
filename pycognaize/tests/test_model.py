@@ -18,7 +18,7 @@ from pycognaize.document.tag import ExtractionTag
 from pycognaize.tests.resources import RESOURCE_FOLDER
 from pycognaize.common.enums import IqFieldKeyEnum
 from pycognaize.document.html_info import HTML
-from pycognaize.document.tag.html_tag import TDTag, HTMLTableTag
+from pycognaize.document.tag.html_tag import HTMLTag, HTMLTableTag
 
 
 def set_empty_ids_from_dict_convert_percent_string_to_float(doc_data):
@@ -569,16 +569,16 @@ class TestModelXBRL(unittest.TestCase):
         self.raw_tbl_tag = table_field[IqFieldKeyEnum.tags.value][0]
         self.tbl_tag = HTMLTableTag.construct_from_raw(self.raw_tbl_tag,
                                                        html=self.html)
-        self.td_tag_dict_1 = deepcopy(
+        self.html_tag_dict_1 = deepcopy(
             self.data['output_fields']['v_other_operating_expenses_operating_is__current'][0]['tags'][0])
-        self.td_tag_dict_2 = deepcopy(self.data['output_fields']['v_other_operating_expenses_operating_is__previous'][0]['tags'][0])
+        self.html_tag_dict_2 = deepcopy(self.data['output_fields']['v_other_operating_expenses_operating_is__previous'][0]['tags'][0])
 
-        self.td_tag_1 = TDTag.construct_from_raw(self.td_tag_dict_1, html=self.html)
-        self.td_tag_2 = TDTag.construct_from_raw(self.td_tag_dict_2, html=self.html)
+        self.html_tag_1 = HTMLTag.construct_from_raw(self.html_tag_dict_1, html=self.html)
+        self.html_tag_2 = HTMLTag.construct_from_raw(self.html_tag_dict_2, html=self.html)
         self.cell_tag = self.tbl_tag.raw_df[1][4]
 
     def test__matches(self):
-        self.assertEqual(Model.matches(self.cell_tag, self.td_tag_1), True)
-        self.assertEqual(Model.matches(self.cell_tag, self.td_tag_2), False)
+        self.assertEqual(Model.matches(self.cell_tag, self.html_tag_1), True)
+        self.assertEqual(Model.matches(self.cell_tag, self.html_tag_2), False)
 
 
