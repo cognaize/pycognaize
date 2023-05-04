@@ -55,7 +55,7 @@ class HTML:
             if (
                     self.ci.isdir(joined_path)
                     and StorageEnum.html_file.value
-                    in self.ci.listdir(joined_path)
+                    in self.ci.listdir(joined_path, exclude_folders=True)
             ):
                 valid_path = joined_path
             elif StorageEnum.html_file.value in self.ci.listdir(path):
