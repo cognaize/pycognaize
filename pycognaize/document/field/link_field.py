@@ -14,7 +14,6 @@
 import logging
 from typing import List, Optional, Dict, Type
 
-
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     IqTagKeyEnum,
@@ -97,8 +96,11 @@ class LinkField(Field):
         return field_dict
 
     def __repr__(self):
-        return (f"<{self.__class__.__name__}: {self.name}:"
-                f" {'|'.join([i.raw_value for i in self.tags]) if self.tags else self.value}>")
+        repr_values = ('|'.join([i.raw_value for i in self.tags])
+                       if self.tags else self.value)
+        return f"<{self.__class__.__name__}: {self.name}: {repr_values}>"
 
     def __str__(self):
-        return f"{'|'.join([i.raw_value for i in self.tags]) if self.tags else self.value}"
+        str_value = '|'.join([i.raw_value for i in self.tags]) \
+            if self.tags else self.value
+        return str_value
