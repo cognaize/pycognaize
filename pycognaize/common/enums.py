@@ -116,6 +116,7 @@ class IqDataTypesEnum(enum.Enum):
     date = 'date'
     number = 'number'
     area = 'area'
+    link = 'link'
 
 
 class IqRecipeEnum(enum.Enum):
