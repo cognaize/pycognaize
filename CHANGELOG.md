@@ -2,6 +2,10 @@
 
 ## [1.3]
 
+### [1.3.14] - 2023-05-10
+- Add LinkField object
+- Add returning group name in to_dict functionality of Field object 
+
 ### [1.3.13] - 2023-05-01
 - Add exclude folders option for ``lisdir`` in ``html_info``
 - Update version cloudstorageio >= 1.2.8
