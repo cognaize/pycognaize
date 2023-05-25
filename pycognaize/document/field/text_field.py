@@ -67,10 +67,10 @@ class TextField(Field):
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
                            html: Optional[HTML] = None,
-                           classification_labels_raw: Optional[dict] = None)\
+                           src_field_id: Optional[str] = None)\
             -> 'TextField':
         """Create TextField object from dictionary"""
-        classification_labels = ClassificationLabels(classification_labels_raw)
+        classification_labels = ClassificationLabels(raw, src_field_id)
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:

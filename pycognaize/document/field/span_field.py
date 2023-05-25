@@ -1,6 +1,7 @@
 from typing import Optional, Dict, List, Type
 import logging
 
+from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     ID,
@@ -25,17 +26,22 @@ class SpanField(Field):
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
                  group_name: str = None,
+                 classification_labels: Optional[ClassificationLabels] = None
                  ):
+        self._classification_labels = classification_labels
         tags = [] if tags is None else tags
         super().__init__(name=name, tags=tags,
                          group_key=group_key, confidence=confidence,
-                         group_name=group_name)
+                         group_name=group_name,)
         self._field_id = field_id
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
-                           html: Optional[HTML] = None) -> 'SpanField':
+                           html: Optional[HTML] = None,
+                           src_field_id: Optional[str] = None)\
+            -> 'SpanField':
         """Create SnapField object from dictionary"""
+        classification_labels = ClassificationLabels(raw, src_field_id)
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:
@@ -48,7 +54,8 @@ class SpanField(Field):
                    tags=tags[0] if tags else None,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
-                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
+                   group_name=raw.get(IqFieldKeyEnum.group.value, ''),
+                   classification_labels=classification_labels,
                    )
 
     def to_dict(self) -> dict:
