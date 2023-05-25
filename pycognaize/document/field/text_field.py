@@ -91,8 +91,7 @@ class TextField(Field):
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                    group_name=raw.get(IqFieldKeyEnum.group.value, ''),
-                   classification_labels = classification_labels,
-                   )
+                   classification_labels=classification_labels)
 
     def to_dict(self) -> dict:
         """Converts TextField object to dictionary"""

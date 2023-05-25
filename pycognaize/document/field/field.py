@@ -91,7 +91,8 @@ class Field(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
                            html: Optional[HTML] = None,
-                           classification_labels_raw: Optional[dict] = None) -> 'Field':
+                           classification_labels_raw: Optional[dict] = None)\
+            -> 'Field':
         """Use raw dictionary in order to recreate the Field python object"""
         pass
 

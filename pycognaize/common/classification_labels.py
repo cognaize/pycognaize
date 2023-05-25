@@ -16,7 +16,6 @@ class ParentLabel:
         self.parent.append(parent)
 
 
-
 class Label:
 
     def __init__(self, label_id, label_name, parent):
@@ -35,6 +34,7 @@ class Label:
     @property
     def parents(self):
         return self._parent
+
 
 class ClassificationLabels:
 
@@ -72,7 +72,6 @@ class ClassificationLabels:
                               label_name=value[1],
                               parent=parent)
                 self.add_node(parent, label)
-
 
     def build_tree(self, classification_labels_data):
         tree = {}

@@ -433,7 +433,9 @@ class Document:
                     field[IqDocumentKeysEnum.data_type.value]
                 ].value.construct_from_raw(raw=field, pages=pages,
                                            html=html_info,
-                                           src_field_id = field.get('srcFieldId', None))
+                                           src_field_id=field.get(
+                                               IqDocumentKeysEnum.src_field_id,
+                                               None))
                 for field in fields]
              for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
@@ -442,7 +444,9 @@ class Document:
                     field[IqDocumentKeysEnum.data_type.value]
                 ].value.construct_from_raw(raw=field, pages=pages,
                                            html=html_info,
-                                           src_field_id = field.get('srcFieldId', None))
+                                           src_field_id=field.get(
+                                               IqDocumentKeysEnum.src_field_id,
+                                               None))
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
