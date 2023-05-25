@@ -38,11 +38,17 @@ class Label:
 
 class ClassificationLabels:
 
-    def __init__(self, classification_labels_data):
+    def __init__(self, raw: dict, src_field_id: str):
         self._label_names = []
         self._labels = []
         self.tree = None
-        self.create_labels(classification_labels_data)
+
+        try:
+            classification_labels_raw = raw['FieldCategories'][src_field_id]
+        except KeyError:
+            classification_labels_raw = None
+
+        self.create_labels(classification_labels_raw)
 
     def add_node(self, parent, label):
         if parent is None:
