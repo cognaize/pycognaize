@@ -92,33 +92,3 @@ class ClassificationLabels:
     @property
     def label_names(self):
         return self._label_names
-
-    # def get_label_by_id(self, label_id):
-    #     for label in self.labels:
-    #         if label.label_id == label_id:
-    #             return label
-    #     return None
-
-
-
-if __name__ == '__main__':
-    classification_labels_raw = {
-        "64476dec06058bde57f97c29": ["Balance Sheet", "Assets",
-                                     "Accumulated Depreciation"],
-        "64476dec06058bde57f97c2a": ["Balance Sheet", "Assets",
-                                     "acquired intellectual property"],
-        "64476dec06058bde57f97c2b": ["Balance Sheet", "AUAU", "Assets",
-                                     "assets of discontinued operations"],
-        "64476dec06058bde57f97c2c": ["Balance Sheet", "Assets",
-                                     "Assets under construction"],
-        "64476dec06058bde57f97c2d": ["Balance Sheet", "Assets",
-                                     "book inventory"],
-        "64476dec06058bde57f97c2e": ["Balance Sheet", "Assets",
-                                     "buildings and land"],
-        "64476dec06058bde57f97c2f": ["Balance Sheet", "Assets",
-                                     "Buildings and Leasehold Improvements"],
-        "64476dec06058bde57f97c30": ["Balance Sheet", "Assets",
-                                     "certificates of deposit"],
-        "64476dec06058bde57f97c31": ["Balance Sheet", "Assets",
-                                     "Construction in progress"]}
-    classification_labels = ClassificationLabels(classification_labels_raw)
