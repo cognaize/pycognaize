@@ -20,7 +20,7 @@ class Field(metaclass=abc.ABCMeta):
                  group_key: Optional[str] = None,
                  confidence: Optional[float] = -1.0,
                  group_name: Optional[str] = None,
-                 classification_labels_raw: Optional[dict] = None
+                 classification_labels: Optional[ClassificationLabels] = None
                  ):
         self._raw_value = value
         self._confidence = confidence
@@ -37,8 +37,7 @@ class Field(metaclass=abc.ABCMeta):
             self._tags = tags
         self._value = value
         self._field_id = field_id
-        self._classification_labels = \
-            ClassificationLabels(classification_labels_raw)
+        self._classification_labels = classification_labels
 
     @property
     def raw_value(self):

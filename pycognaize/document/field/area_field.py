@@ -28,12 +28,13 @@ class AreaField(Field):
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
                  group_name: str = None,
-                 classification_labels: Optional[dict] = None
+                 classification_labels: Optional[ClassificationLabels] = None
                  ):
         super().__init__(name=name, value=value, tags=tags,
                          group_key=group_key, confidence=confidence,
                          group_name=group_name)
         self._field_id = field_id
+        self._classification_labels = classification_labels
         if self.tags:
             self._value = '; '.join([i.raw_value for i in self.tags])
         elif isinstance(value, str):
@@ -50,8 +51,11 @@ class AreaField(Field):
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
-                           html: Optional[HTML] = None) -> 'AreaField':
+                           html: Optional[HTML] = None,
+                           src_field_id: Optional[str] = None)\
+            -> 'AreaField':
         """Create AreaField object from dictionary"""
+        classification_labels = ClassificationLabels(raw, src_field_id)
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:
@@ -65,8 +69,9 @@ class AreaField(Field):
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
-                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
-                   )
+                   group_name=raw.get(IqFieldKeyEnum.group.value, ''),
+                   classification_labels = classification_labels,
+        )
 
     def to_dict(self) -> dict:
         """Converts AreaField object to dictionary"""
