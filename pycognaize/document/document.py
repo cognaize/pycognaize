@@ -433,7 +433,7 @@ class Document:
                     field[IqDocumentKeysEnum.data_type.value]
                 ].value.construct_from_raw(raw=field, pages=pages,
                                            html=html_info,
-                                           classification_labels_raw =raw['fieldCategories'].get(field['srcFieldId'], None))
+                                           src_field_id = field.get('srcFieldId', None))
                 for field in fields]
              for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
@@ -442,7 +442,7 @@ class Document:
                     field[IqDocumentKeysEnum.data_type.value]
                 ].value.construct_from_raw(raw=field, pages=pages,
                                            html=html_info,
-                                           classification_labels_raw =raw['fieldCategories'].get(field['srcFieldId'], None))
+                                           src_field_id = field.get('srcFieldId', None))
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
@@ -552,5 +552,3 @@ def annotate_pdf(doc: fitz.Document,
     annot.set_opacity(opacity)
     annot.update()
     return doc.write()
-
-ent.from_dict(raw=raw_data, data_path='/home')
