@@ -553,8 +553,4 @@ def annotate_pdf(doc: fitz.Document,
     annot.update()
     return doc.write()
 
-
-if __name__ == '__main__':
-    import json
-    raw_data = json.load(open('/home/atlantx/Downloads/test.json', 'r'))
-    doc = Document.from_dict(raw=raw_data, data_path='/home')
+ent.from_dict(raw=raw_data, data_path='/home')
