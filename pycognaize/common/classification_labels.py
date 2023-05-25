@@ -1,6 +1,3 @@
-from collections import defaultdict
-
-
 class ParentLabel:
 
     def __init__(self, label_name, parent=None):
@@ -8,15 +5,16 @@ class ParentLabel:
         self.children = []
         self.parent = parent
 
+    @property
+    def name(self):
+        return self._name
+
     def add_child(self, child):
         self.children.append(child)
 
     def add_parent(self, parent):
         self.parent.append(parent)
 
-    @property
-    def name(self):
-        return self._name
 
 
 class Label:
@@ -24,7 +22,7 @@ class Label:
     def __init__(self, label_id, label_name, parent):
         self._label_id = label_id
         self._name = label_name
-        self._parents = parent
+        self._parent = parent
 
     @property
     def label_id(self):
@@ -36,35 +34,38 @@ class Label:
 
     @property
     def parents(self):
-        return self._parents
+        return self._parent
 
 class ClassificationLabels:
-    # classification_labels: list
 
     def __init__(self, classification_labels_data):
         self._label_names = []
         self._labels = []
+        self.tree = None
         self.create_labels(classification_labels_data)
 
-    #     TODO: Add validation step to ensure that the labels are unique
+    def add_node(self, parent, label):
+        if parent is None:
+            self._labels.append(label)
+        else:
+            parent.add_child(label)
 
     def create_labels(self, classification_labels_data):
-
-        tree = self.build_tree(classification_labels_data)
-        self.traverse(tree)
+        if classification_labels_data is not None:
+            tree = self.build_tree(classification_labels_data)
+            self.traverse(tree)
 
     def traverse(self, tree, parent=None):
         for key, value in tree.items():
             if isinstance(value, dict):
                 label = ParentLabel(label_name=key, parent=parent)
-                if parent is None:
-                    self._labels.append(label)
-                else:
-                    parent.add_child(label)
+                self.add_node(parent, label)
                 self.traverse(value, parent=label)
             else:
-                label = Label(label_id=value[0], label_name=value[1], parent=parent)
-                parent.add_child(label)
+                label = Label(label_id=value[0],
+                              label_name=value[1],
+                              parent=parent)
+                self.add_node(parent, label)
 
 
     def build_tree(self, classification_labels_data):
