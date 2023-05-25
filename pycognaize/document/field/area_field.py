@@ -27,14 +27,11 @@ class AreaField(Field):
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
-                 group_name: str = None,
-                 classification_labels: Optional[ClassificationLabels] = None
-                 ):
+                 group_name: str = None,                 ):
         super().__init__(name=name, value=value, tags=tags,
                          group_key=group_key, confidence=confidence,
                          group_name=group_name)
         self._field_id = field_id
-        self._classification_labels = classification_labels
         if self.tags:
             self._value = '; '.join([i.raw_value for i in self.tags])
         elif isinstance(value, str):
