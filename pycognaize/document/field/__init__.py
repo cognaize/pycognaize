@@ -7,10 +7,11 @@ from .section_field import SectionField
 from .table_field import TableField
 from .text_field import TextField
 from .area_field import AreaField
+from .link_field import LinkField
 
 
 __all__ = ['Field', 'DateField', 'NumericField',
-           'TableField', 'TextField', 'AreaField', 'FieldMapping']
+           'TableField', 'TextField', 'AreaField', 'FieldMapping', 'LinkField']
 
 
 class FieldMapping(enum.Enum):
@@ -21,3 +22,4 @@ class FieldMapping(enum.Enum):
     table = TableField
     area = AreaField
     section = SectionField
+    link = LinkField

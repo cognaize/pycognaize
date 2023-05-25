@@ -103,6 +103,8 @@ class Field(metaclass=abc.ABCMeta):
         field_dict[IqFieldKeyEnum.name.value] = self.name
         if self._group_key:
             field_dict[IqFieldKeyEnum.group_key.value] = self._group_key
+        if self._group_name:
+            field_dict[IqFieldKeyEnum.group.value] = self._group_name
         field_dict[IqFieldKeyEnum.tags.value] = [
             i.to_dict() for i in self.tags]
         return field_dict
