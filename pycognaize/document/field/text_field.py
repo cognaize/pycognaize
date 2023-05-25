@@ -14,7 +14,7 @@
 import logging
 from typing import List, Optional, Dict, Type
 
-
+from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     IqTagKeyEnum,
@@ -41,7 +41,8 @@ class TextField(Field):
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
-                 group_name: str = None
+                 group_name: str = None,
+                 classification_labels: Optional[ClassificationLabels] = None
                  ):
         """ Create a TextField object
 
@@ -54,6 +55,7 @@ class TextField(Field):
         super().__init__(name=name, tags=tags, value=value,
                          group_key=group_key, confidence=confidence,
                          group_name=group_name)
+        self._classification_labels = classification_labels
         self._field_id = field_id
         self._value = '; '.join([i.raw_value
                                  for i in self.tags]) if self.tags else value
@@ -64,8 +66,11 @@ class TextField(Field):
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
-                           html: Optional[HTML] = None) -> 'TextField':
+                           html: Optional[HTML] = None,
+                           classification_labels_raw: Optional[dict] = None)\
+            -> 'TextField':
         """Create TextField object from dictionary"""
+        classification_labels = ClassificationLabels(classification_labels_raw)
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:
@@ -85,7 +90,8 @@ class TextField(Field):
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
-                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
+                   group_name=raw.get(IqFieldKeyEnum.group.value, ''),
+                   classification_labels = classification_labels,
                    )
 
     def to_dict(self) -> dict:

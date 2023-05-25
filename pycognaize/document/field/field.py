@@ -2,6 +2,7 @@ import abc
 
 from typing import List, Optional, Dict, Type
 
+from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.common.enums import IqFieldKeyEnum
 from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
@@ -19,6 +20,7 @@ class Field(metaclass=abc.ABCMeta):
                  group_key: Optional[str] = None,
                  confidence: Optional[float] = -1.0,
                  group_name: Optional[str] = None,
+                 classification_labels_raw: Optional[dict] = None
                  ):
         self._raw_value = value
         self._confidence = confidence
@@ -35,6 +37,8 @@ class Field(metaclass=abc.ABCMeta):
             self._tags = tags
         self._value = value
         self._field_id = field_id
+        self._classification_labels = \
+            ClassificationLabels(classification_labels_raw)
 
     @property
     def raw_value(self):
@@ -64,6 +68,10 @@ class Field(metaclass=abc.ABCMeta):
     def field_id(self):
         return self._field_id
 
+    @property
+    def classification_labels(self):
+        return self._classification_labels
+
     @group_key.setter
     def group_key(self, value):
         if not isinstance(value, str):
@@ -83,7 +91,8 @@ class Field(metaclass=abc.ABCMeta):
     @classmethod
     @abc.abstractmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
-                           html: Optional[HTML] = None) -> 'Field':
+                           html: Optional[HTML] = None,
+                           classification_labels_raw: Optional[dict] = None) -> 'Field':
         """Use raw dictionary in order to recreate the Field python object"""
         pass
 

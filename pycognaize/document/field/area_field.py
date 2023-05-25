@@ -1,6 +1,7 @@
 import logging
 from typing import List, Optional, Dict, Type, Union
 
+from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     IqTagKeyEnum,
@@ -26,7 +27,8 @@ class AreaField(Field):
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
-                 group_name: str = None
+                 group_name: str = None,
+                 classification_labels: Optional[dict] = None
                  ):
         super().__init__(name=name, value=value, tags=tags,
                          group_key=group_key, confidence=confidence,

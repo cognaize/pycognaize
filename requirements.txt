@@ -12,3 +12,4 @@ lxml
 PyYAML
 SQLAlchemy
 click
+pydantic
