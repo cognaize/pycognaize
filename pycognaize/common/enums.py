@@ -65,6 +65,7 @@ class IqDocumentKeysEnum(enum.Enum):
     name = 'name'
     section = 'section'
     field_type = 'fieldType'
+    field_category = 'fieldCategories'
     field_id = '_id'
     src_field_id = "srcFieldId"
     page = 'page'

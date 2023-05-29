@@ -3,6 +3,7 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
+import json
 import multiprocessing
 import os
 from collections import OrderedDict
@@ -12,6 +13,7 @@ import fitz
 import pandas as pd
 from fitz.utils import getColor, getColorList
 
+from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.document.html_info import HTML
 from pycognaize.login import Login
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
@@ -33,12 +35,13 @@ class Document:
                  input_fields: 'FieldCollection[str, List[Field]]',
                  output_fields: 'FieldCollection[str, List[Field]]',
                  pages: Dict[int, Page],
+                 classification_labels: Dict[str, ClassificationLabels],
                  html_info: HTML,
                  metadata: Dict[str, Any]):
         self._login_instance = Login()
         self._metadata = metadata
         self._pages: Dict[int, Page] = pages if pages else None
-
+        self._classification_labels = classification_labels
         self._is_xbrl: bool = False
         self._html_info: HTML = html_info
         self._x: FieldCollection[str, List[Field]] = input_fields
@@ -404,12 +407,16 @@ class Document:
         :param data_path: path to the documents OCR and page images
         :param login_instance: login instance of pycognaize
         """
+        classification_labels = dict()
         if not isinstance(raw, dict):
             raise TypeError(
                 f"Expected dict for 'raw' argument got {type(raw)} instead")
         metadata = raw['metadata']
         pages = OrderedDict()
         html_info = HTML(path=data_path, document_id=metadata['document_id'])
+        for src_field_id, data in \
+                raw.get(IqDocumentKeysEnum.field_category.value, {}).items():
+            classification_labels[src_field_id] = ClassificationLabels(data)
         for page_n in range(1, metadata['numberOfPages'] + 1):
             if (
                     'pages' in raw
@@ -433,9 +440,7 @@ class Document:
                     field[IqDocumentKeysEnum.data_type.value]
                 ].value.construct_from_raw(raw=field, pages=pages,
                                            html=html_info,
-                                           src_field_id=field.get(
-                                               IqDocumentKeysEnum.src_field_id,
-                                               None))
+                                           labels=classification_labels.get(field.get(IqDocumentKeysEnum.src_field_id.value, ''), None))
                 for field in fields]
              for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
@@ -444,15 +449,14 @@ class Document:
                     field[IqDocumentKeysEnum.data_type.value]
                 ].value.construct_from_raw(raw=field, pages=pages,
                                            html=html_info,
-                                           src_field_id=field.get(
-                                               IqDocumentKeysEnum.src_field_id,
-                                               None))
+                                           labels=classification_labels.get(field.get(IqDocumentKeysEnum.src_field_id.value, ''), None))
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
                    output_fields=output_fields,
                    pages=pages, html_info=html_info,
-                   metadata=metadata)
+                   metadata=metadata,
+                   classification_labels=classification_labels)
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],
@@ -556,3 +560,10 @@ def annotate_pdf(doc: fitz.Document,
     annot.set_opacity(opacity)
     annot.update()
     return doc.write()
+
+
+if __name__ == '__main__':
+    # Load json from fiel
+    with open('/home/atlantx/Downloads/test.json', 'r') as f:
+        data = json.load(f)
+    doc = Document.from_dict(data, '/')
