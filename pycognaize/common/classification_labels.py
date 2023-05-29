@@ -1,4 +1,4 @@
-from anytree import Node, RenderTree
+from anytree import Node
 
 
 class ClassificationLabels:
@@ -55,4 +55,3 @@ class ClassificationLabels:
     @property
     def label_names(self):
         return self._label_names
-
