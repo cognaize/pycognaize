@@ -3,7 +3,6 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
-import json
 import multiprocessing
 import os
 from collections import OrderedDict
@@ -440,7 +439,11 @@ class Document:
                     field[IqDocumentKeysEnum.data_type.value]
                 ].value.construct_from_raw(raw=field, pages=pages,
                                            html=html_info,
-                                           labels=classification_labels.get(field.get(IqDocumentKeysEnum.src_field_id.value, ''), None))
+                                           labels=classification_labels.get(
+                                               field.get(
+                                                   IqDocumentKeysEnum.
+                                                   src_field_id.value, ''),
+                                               None))
                 for field in fields]
              for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
@@ -449,7 +452,11 @@ class Document:
                     field[IqDocumentKeysEnum.data_type.value]
                 ].value.construct_from_raw(raw=field, pages=pages,
                                            html=html_info,
-                                           labels=classification_labels.get(field.get(IqDocumentKeysEnum.src_field_id.value, ''), None))
+                                           labels=classification_labels.get(
+                                               field.get(
+                                                   IqDocumentKeysEnum.
+                                                   src_field_id.value, ''),
+                                               None))
                 for field in fields]
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
@@ -560,10 +567,3 @@ def annotate_pdf(doc: fitz.Document,
     annot.set_opacity(opacity)
     annot.update()
     return doc.write()
-
-
-if __name__ == '__main__':
-    # Load json from fiel
-    with open('/home/atlantx/Downloads/test.json', 'r') as f:
-        data = json.load(f)
-    doc = Document.from_dict(data, '/')
