@@ -4,9 +4,8 @@ from typing import List, Optional, Dict, Type
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
-    ID,
-    IqFieldKeyEnum,
-    IqDataTypesEnum
+    ID, START, END,
+    IqFieldKeyEnum, IqDataTypesEnum,
 )
 from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
@@ -20,6 +19,8 @@ class SectionField(Field):
 
     def __init__(self,
                  name: str,
+                 value: str = '',
+                 ocr_value: str = '',
                  tags: Optional[List[SectionTag]] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
@@ -38,6 +39,18 @@ class SectionField(Field):
                          group_key=group_key, confidence=confidence,
                          group_name=group_name)
         self._field_id = field_id
+        self._value = value
+        self._ocr_value = ocr_value
+
+    @property
+    def start_tag(self):
+        """Returns the start tag of the field"""
+        return self.tags[0] if len(self.tags) > 0 else None
+
+    @property
+    def end_tag(self):
+        """Returns the end tag of the field"""
+        return self.tags[1] if len(self.tags) == 2 else None
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
@@ -58,6 +71,8 @@ class SectionField(Field):
                     logging.debug(f"Failed creating tag"
                                   f" for field {raw[ID]}: {e}")
         return cls(name=raw[IqDocumentKeysEnum.name.value],
+                   value=raw[IqDocumentKeysEnum.tags.value][0][IqFieldKeyEnum.value.value],
+                   ocr_value=raw[IqDocumentKeysEnum.tags.value][0][IqFieldKeyEnum.ocr_value.value],
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
@@ -65,11 +80,25 @@ class SectionField(Field):
                    )
 
     def to_dict(self) -> dict:
-        """Converts TextField object to dictionary"""
-        field_dict = super().to_dict()
-        field_dict[ID] = self._field_id
-        field_dict[IqFieldKeyEnum.value.value] = self.value
-        field_dict[IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.text.value
+        """Converts SectionField object to dictionary"""
+        field_dict = dict()
+        field_dict[IqFieldKeyEnum.name.value] = self.name
+        field_dict[ID] = self.field_id
+        field_dict[IqFieldKeyEnum.group_key.value] = self._group_key
+        field_dict[IqFieldKeyEnum.group.value] = self._group_name
+        field_dict[IqFieldKeyEnum.data_type.value] =\
+            IqDataTypesEnum.section.value
+        field_dict[IqFieldKeyEnum.tags.value] = [
+            {
+                ID: self._field_id,
+                IqFieldKeyEnum.value.value: self._value,
+                IqFieldKeyEnum.ocr_value.value: self._ocr_value,
+                IqFieldKeyEnum.section.value: {
+                    START: self.start_tag.to_dict(),
+                    END: self.end_tag.to_dict()
+                }
+            }
+        ]
         return field_dict
 
     def __repr__(self):
