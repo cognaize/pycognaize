@@ -1,4 +1,3 @@
-import anytree
 from anytree import Node
 
 from pycognaize.common.enums import IqDocumentKeysEnum
