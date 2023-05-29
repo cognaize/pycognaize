@@ -1,39 +1,4 @@
-class ParentLabel:
-
-    def __init__(self, label_name, parent=None):
-        self._name = label_name
-        self.children = []
-        self.parent = parent
-
-    @property
-    def name(self):
-        return self._name
-
-    def add_child(self, child):
-        self.children.append(child)
-
-    def add_parent(self, parent):
-        self.parent.append(parent)
-
-
-class Label:
-
-    def __init__(self, label_id, label_name, parent):
-        self._label_id = label_id
-        self._name = label_name
-        self._parent = parent
-
-    @property
-    def label_id(self):
-        return self._label_id
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def parents(self):
-        return self._parent
+from anytree import Node, RenderTree
 
 
 class ClassificationLabels:
@@ -49,8 +14,6 @@ class ClassificationLabels:
     def add_node(self, parent, label):
         if parent is None:
             self._labels.append(label)
-        else:
-            parent.add_child(label)
 
     def create_labels(self, classification_labels_data):
         if classification_labels_data is not None:
@@ -60,13 +23,12 @@ class ClassificationLabels:
     def traverse(self, tree, parent=None):
         for key, value in tree.items():
             if isinstance(value, dict):
-                label = ParentLabel(label_name=key, parent=parent)
+                label = Node(name=key, parent=parent)
                 self.add_node(parent, label)
+                # self.add_node(parent, label)
                 self.traverse(value, parent=label)
             else:
-                label = Label(label_id=value[0],
-                              label_name=value[1],
-                              parent=parent)
+                label = Node(name=value[0], label_name=value[1], parent=parent)
                 self.add_node(parent, label)
 
     def build_tree(self, classification_labels_data):
@@ -93,3 +55,4 @@ class ClassificationLabels:
     @property
     def label_names(self):
         return self._label_names
+
