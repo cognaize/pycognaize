@@ -406,16 +406,13 @@ class Document:
         :param data_path: path to the documents OCR and page images
         :param login_instance: login instance of pycognaize
         """
-        classification_labels = dict()
         if not isinstance(raw, dict):
             raise TypeError(
                 f"Expected dict for 'raw' argument got {type(raw)} instead")
         metadata = raw['metadata']
         pages = OrderedDict()
         html_info = HTML(path=data_path, document_id=metadata['document_id'])
-        for src_field_id, data in \
-                raw.get(IqDocumentKeysEnum.field_category.value, {}).items():
-            classification_labels[src_field_id] = ClassificationLabels(data)
+        classification_labels = ClassificationLabels(raw)
         for page_n in range(1, metadata['numberOfPages'] + 1):
             if (
                     'pages' in raw
