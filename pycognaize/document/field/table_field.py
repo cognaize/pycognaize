@@ -92,7 +92,7 @@ class TableField(Field):
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
                            html: Optional[HTML] = None,
-                           src_field_id=None) -> 'TableField':
+                           labels=None) -> 'TableField':
         """Create TableField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []

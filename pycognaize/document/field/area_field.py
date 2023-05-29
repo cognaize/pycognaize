@@ -52,10 +52,9 @@ class AreaField(Field):
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
                            html: Optional[HTML] = None,
-                           src_field_id: Optional[str] = None)\
+                           labels: ClassificationLabels = None)\
             -> 'AreaField':
         """Create AreaField object from dictionary"""
-        classification_labels = ClassificationLabels(raw, src_field_id)
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:
@@ -70,7 +69,7 @@ class AreaField(Field):
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                    group_name=raw.get(IqFieldKeyEnum.group.value, ''),
-                   classification_labels=classification_labels)
+                   classification_labels=labels)
 
     def to_dict(self) -> dict:
         """Converts AreaField object to dictionary"""
