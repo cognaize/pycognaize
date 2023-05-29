@@ -70,9 +70,10 @@ class SectionField(Field):
                 except Exception as e:
                     logging.debug(f"Failed creating tag"
                                   f" for field {raw[ID]}: {e}")
+
         return cls(name=raw[IqDocumentKeysEnum.name.value],
-                   value=raw[IqDocumentKeysEnum.tags.value][0][IqFieldKeyEnum.value.value],
-                   ocr_value=raw[IqDocumentKeysEnum.tags.value][0][IqFieldKeyEnum.ocr_value.value],
+                   value=section_dict[0][IqFieldKeyEnum.value.value],
+                   ocr_value=section_dict[0][IqFieldKeyEnum.ocr_value.value],
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
@@ -107,4 +108,3 @@ class SectionField(Field):
 
     def __str__(self):
         return f"<{self.__class__.__name__}: {self.name}>"
-
