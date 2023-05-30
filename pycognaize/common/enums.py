@@ -1,6 +1,8 @@
 import enum
 
 ID = "_id"
+START = 'start'
+END = 'end'
 HASH_FILE = "document_summary_hash.md5"
 
 IMG_EXTENSION = 'jpeg'
@@ -89,7 +91,9 @@ class IqFieldKeyEnum(enum.Enum):
     tags = 'tags'
     template_id = 'templateId'
     value = 'value'
+    ocr_value = 'ocrValue'
     repeat_parent = 'repeatParent'
+    section = 'section'
 
 
 class IqTagKeyEnum(enum.Enum):
@@ -114,6 +118,7 @@ class IqPageEnum(enum.Enum):
 class IqDataTypesEnum(enum.Enum):
     table = 'table'
     text = 'text'
+    section = 'section'
     date = 'date'
     number = 'number'
     area = 'area'

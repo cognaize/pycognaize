@@ -2,6 +2,10 @@
 
 ## [1.4]
 
+### [1.4.1] - 2023-05-29
+- Add section field and section tag functionality
+
+
 ### [1.4.0] - 2023-05-25
 - Add classification labels functionality to ``Field`` objects
 

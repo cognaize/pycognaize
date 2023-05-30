@@ -13,10 +13,14 @@ if TYPE_CHECKING:
 class SectionTag(LineTag):
     """Represents field's coordinate data on document"""
 
-    def __init__(self, top, page, tag_type):
-        super().__init__(top=top, page=page, tag_type=tag_type)
+    def __init__(self, top, left, height, width, page, tag_type):
+        super().__init__(top=top,
+                         page=page, tag_type=tag_type)
         self._type = tag_type
         self._top = top
+        self._left = left
+        self._height = height
+        self._width = width
         self._page = page
 
     @classmethod
@@ -32,7 +36,15 @@ class SectionTag(LineTag):
         """
         page_number = raw['page']
         top = convert_coord_to_num(raw['top'])
-        tag = cls(top=top, page=pages[page_number],
+        left = convert_coord_to_num(raw['left'])
+        height = convert_coord_to_num(raw['height'])
+        width = convert_coord_to_num(raw['width'])
+
+        tag = cls(top=top,
+                  left=left,
+                  height=height,
+                  width=width,
+                  page=pages[page_number],
                   tag_type=tag_type)
         return tag
 
@@ -59,4 +71,7 @@ class SectionTag(LineTag):
         return {
             ID: str(bson.ObjectId()),
             IqTagKeyEnum.top.value: f"{self.top}%",
+            IqTagKeyEnum.left.value: f"{self._left}%",
+            IqTagKeyEnum.height.value: f"{self._height}%",
+            IqTagKeyEnum.width.value: f"{self._width}%",
             IqTagKeyEnum.page.value: self.page.page_number}
