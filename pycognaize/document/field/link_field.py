@@ -14,6 +14,7 @@
 import logging
 from typing import List, Optional, Dict, Type
 
+from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     IqTagKeyEnum,
@@ -63,7 +64,8 @@ class LinkField(Field):
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
-                           html: Optional[HTML] = None) -> 'LinkField':
+                           html: Optional[HTML] = None,
+                           labels: ClassificationLabels = None) -> 'LinkField':
         """Create LinkField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []

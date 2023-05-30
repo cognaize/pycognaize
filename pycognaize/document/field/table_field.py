@@ -34,7 +34,7 @@ class TableField(Field):
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
-                 group_name: str = None
+                 group_name: str = None,
                  ):
         tags = [] if tag is None else [tag]
         super().__init__(name=name, tags=tags, group_key=group_key,
@@ -91,7 +91,8 @@ class TableField(Field):
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
-                           html: Optional[HTML] = None) -> 'TableField':
+                           html: Optional[HTML] = None,
+                           labels=None) -> 'TableField':
         """Create TableField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []

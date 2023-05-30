@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4]
+
+### [1.4.0] - 2023-05-25
+- Add classification labels functionality to ``Field`` objects
+
 ## [1.3]
 
 ### [1.3.14] - 2023-05-10
