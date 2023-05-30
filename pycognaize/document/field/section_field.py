@@ -97,8 +97,8 @@ class SectionField(Field):
                 IqFieldKeyEnum.value.value: self._value,
                 IqFieldKeyEnum.ocr_value.value: self._ocr_value,
                 IqFieldKeyEnum.section.value: {
-                    START: self.start_tag.to_dict(),
-                    END: self.end_tag.to_dict()
+                    START: self.start.to_dict(),
+                    END: self.end.to_dict()
                 }
             }
         ]
