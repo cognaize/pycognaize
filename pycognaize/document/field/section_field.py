@@ -73,7 +73,8 @@ class SectionField(Field):
 
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    value=section_dict[0].get([IqFieldKeyEnum.value.value], ''),
-                   ocr_value=section_dict[0].get([IqFieldKeyEnum.ocr_value.value], ''),
+                   ocr_value=section_dict[0].get(
+                       [IqFieldKeyEnum.ocr_value.value], ''),
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
