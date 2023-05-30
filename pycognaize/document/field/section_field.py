@@ -43,12 +43,12 @@ class SectionField(Field):
         self._ocr_value = ocr_value
 
     @property
-    def start_tag(self):
+    def start_tag(self) -> Optional[SectionTag]:
         """Returns the start tag of the field"""
         return self.tags[0] if len(self.tags) > 0 else None
 
     @property
-    def end_tag(self):
+    def end_tag(self) -> Optional[SectionTag]:
         """Returns the end tag of the field"""
         return self.tags[1] if len(self.tags) == 2 else None
 
