@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.3] - 2023-05-31
+- Fix handling of section field with no tagsc
+
 ### [1.4.2] - 2023-05-30
 - Fix handling of section field value when field does not have tags
 
