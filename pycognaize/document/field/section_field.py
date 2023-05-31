@@ -1,6 +1,7 @@
 import logging
 from typing import List, Optional, Dict, Type
 
+import bson
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
@@ -72,9 +73,10 @@ class SectionField(Field):
                                   f" for field {raw[ID]}: {e}")
 
         return cls(name=raw[IqDocumentKeysEnum.name.value],
-                   value=section_dict[0].get([IqFieldKeyEnum.value.value], ''),
-                   ocr_value=section_dict[0].get(
-                       [IqFieldKeyEnum.ocr_value.value], ''),
+                   value=section_dict[0][
+                       IqFieldKeyEnum.value.value] if section_dict else '',
+                   ocr_value=section_dict[0][
+                       IqFieldKeyEnum.ocr_value.value] if section_dict else '',
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
@@ -91,9 +93,10 @@ class SectionField(Field):
         field_dict[IqFieldKeyEnum.value.value] = ''
         field_dict[IqFieldKeyEnum.data_type.value] =\
             IqDataTypesEnum.section.value
-        field_dict[IqFieldKeyEnum.tags.value] = [
-            {
-                ID: self._field_id,
+        field_dict[IqFieldKeyEnum.tags.value] = []
+        if self.start is not None and self.end is not None:
+            tag_data = {
+                ID: str(bson.ObjectId()),
                 IqFieldKeyEnum.value.value: self._value,
                 IqFieldKeyEnum.ocr_value.value: self._ocr_value,
                 IqFieldKeyEnum.section.value: {
@@ -101,7 +104,7 @@ class SectionField(Field):
                     END: self.end.to_dict()
                 }
             }
-        ]
+            field_dict[IqFieldKeyEnum.tags.value].append(tag_data)
         return field_dict
 
     def __repr__(self):
