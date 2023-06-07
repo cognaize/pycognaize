@@ -1,7 +1,8 @@
 import json
 import unittest
-
+import logging
 from copy import deepcopy
+from unittest.mock import patch
 
 from pycognaize.common.enums import IqDocumentKeysEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field.area_field import AreaField
@@ -49,7 +50,7 @@ class TestAreaField(unittest.TestCase):
         self.assertEqual(self.area_field_without_tags.name, 'Table')
         self.assertEqual(len(self.area_field_without_tags.tags), 0)
 
-        # invalid raw area
+        # invalid   area
         self.invalid_raw_1 = deepcopy(self.raw_area_field_with_group_key)
         self.invalid_raw_1.pop(IqDocumentKeysEnum.name.value)
         self.invalid_raw_2 = deepcopy(self.raw_area_field_with_group_key)
@@ -57,6 +58,26 @@ class TestAreaField(unittest.TestCase):
         with self.assertRaises(KeyError):
             AreaField.construct_from_raw(raw=self.invalid_raw_1,
                                          pages=self.pages)
+
+        self.invalid_raw_3 = deepcopy(self.raw_area_field_with_group_key)
+        self.invalid_raw_3['tags'][0].pop("left")
+
+        with patch("logging.debug") as mock_debug:
+            AreaField.construct_from_raw(raw=self.invalid_raw_3,
+                                         pages=self.pages)
+
+                # Assert that the logging.debug was called with the expected message
+            mock_debug.assert_called_once_with("Failed creating tag for field 5e41a093f4b20400137938d9: 'left'")
+
+
+        # with self.assertRaises(KeyError):
+        #     AreaField.construct_from_raw(raw=self.invalid_raw_3, pages=self.pages)
+
+                # Add assertions for the result if needed
+                # self.assertEqual(result.field_id, ...)
+                # self.assertEqual(result.tags, ...)
+                # ...
+
         # with self.assertRaises(KeyError):
         #     # invalid page number
         #     AreaField.construct_from_raw(raw=self.raw_area_field_with_group_key,
