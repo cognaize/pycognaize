@@ -32,6 +32,13 @@ class TestNumericField(unittest.TestCase):
         self.num_field_2 = NumericField.construct_from_raw(raw=self.raw_num_field_2, pages=self.pages_2, html=self.html)
         self.num_field_3 = NumericField(name='', value='5000')
 
+        with open(RESOURCE_FOLDER + '/xbrl_snapshot/63fd387178232c6001119a41a/document.json') as document_json:
+            self.data_with_group_key = json.load(document_json)
+
+        self.raw_num_field_4 = self.data_with_group_key["input_fields"]["table"][0]
+        self.num_field_4 = NumericField.construct_from_raw(raw=self.raw_num_field_4, pages=None, html=self.html)
+
+
     def test_convert_to_numeric(self):
         self.assertEqual(NumericField.convert_to_numeric("50000.00"), 50000)
 
@@ -59,6 +66,7 @@ class TestNumericField(unittest.TestCase):
     def test__construct_from_raw(self):
         self.assertEqual(self.num_field_1.name, 'ref')
         self.assertNotEqual(self.num_field_2.tags[0].raw_ocr_value, 101.0)
+        self.assertEqual(self.num_field_4.name, 'table')
 
         # invalid raw num
         invalid_raw_1 = deepcopy(self.raw_num_field_1)
