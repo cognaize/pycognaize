@@ -1,7 +1,7 @@
 import json
 import unittest
 from copy import deepcopy
-
+from unittest.mock import patch
 from pycognaize.common.enums import IqDocumentKeysEnum, IqTagKeyEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field import DateField
 from pycognaize.document.page import create_dummy_page
@@ -49,6 +49,13 @@ class TestDateField(unittest.TestCase):
         invalid_raw_2 = deepcopy(self.data_with_group_key_2["input_fields"]["source_date"][0])
         invalid_raw_2[IqDocumentKeysEnum.tags.value][0].pop(IqTagKeyEnum.value.value)
 
+        self.invalid_raw_3 = deepcopy(self.data_with_group_key_2["input_fields"]["source_date"][0])
+        self.invalid_raw_3['tags'][0].pop("_id")
+        with patch("logging.debug") as mock_debug:
+            DateField.construct_from_raw(raw=self.invalid_raw_3,
+                                         pages=self.pages_1)
+        mock_debug.assert_called_once_with("Failed creating tag for field 60251928095a6400123b7368: 2")
+
         # with self.assertRaises(KeyError):
         #     DateField.construct_from_raw(raw=invalid_raw_1, pages=self.pages_1)
         # with self.assertRaises(KeyError):
@@ -60,7 +67,7 @@ class TestDateField(unittest.TestCase):
         # with self.assertRaises(KeyError):
         #     # one page for 2 tags
         #     DateField.construct_from_raw(self.raw_date_2, self.pages_1)
-        # 
+        #
         # with self.assertRaises(KeyError):
         #     # not corresponding page numbers
         #     DateField.construct_from_raw(self.raw_date_2,
