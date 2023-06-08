@@ -33,6 +33,15 @@ class TestTextField(unittest.TestCase):
         self.text_field_2 = TextField.construct_from_raw(raw=self.raw_text_2, pages=self.pages_2, html=self.html)
         self.text_field_3 = TextField(name='', value='SAMPLE TEXT')
 
+        with open(RESOURCE_FOLDER + '/xbrl_snapshot/63fd387178232c6001119a41a/document.json') as document_json:
+            self.data_with_group_key = json.load(document_json)
+
+        self.html_2 = HTML(path=(RESOURCE_FOLDER + '/snapshots/63fd387178232c6001119a41a'),
+                         document_id='63fd387178232c6001119a41a')
+
+        self.raw_text_4 = self.data_with_group_key["input_fields"]["table"][0]
+        self.text_field_4 = TextField.construct_from_raw(raw=self.raw_text_4, pages=None, html=self.html_2)
+
     def test___str__(self):
         self.assertEqual(str(self.text_field_1), 'This division, Division 1.1 (commencing with Section 1000), Division 1.2 (commencing with Section 2000), Division 1.6 (commencing with Section 4800), Division 2 (commencing with Section 5000), Division 5 (commencing with Section 14000), Division 7 (commencing with Section 18000), and Division 15 (commencing with Section 31000) shall be known, and may be cited, as the “Financial Institutions Law.”')
         self.assertEqual(str(self.text_field_2), '101. If and to the extent that any provision of the Financial Institutions Law is preempted by federal law, the provision does not apply and shall not be enforced.')
@@ -57,6 +66,8 @@ class TestTextField(unittest.TestCase):
         self.assertEqual(self.text_field_1.name, 'paragraph')
         self.assertEqual(self.text_field_2.tags[0].raw_ocr_value, '101. If and to the extent that any provision of the Financial Institutions Law is preempted by federal law, the provision does not apply and shall not be enforced.')
         self.assertNotEqual(self.text_field_1.tags[0].top, '45.5%')
+        self.assertEqual(self.text_field_4.name, 'table')
+
 
         # # invalid raw text
         # invalid_raw_1 = deepcopy(self.raw_text_1)

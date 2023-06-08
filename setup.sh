@@ -19,8 +19,7 @@ python3 -m build
 echo "----------------------------------------------------------------------"
 echo "PUSHING $(find dist -maxdepth 1 -name 'pycognaize*.whl')"
 # DELETE --repository testpypi TO UPLOAD TO PYPI
-python3 -m twine upload --repository pypi dist/* --username __token__ \
-  --password "$PIP_TOKEN"
+python3 -m twine upload --repository pypi dist/* --username cognaize
 echo "----------------------------------------------------------------------"
 echo "REMOVING LEFTOVER FOLDERS"
 rm -rf build/ dist/ pycognaize.egg-info/ .eggs/ .pytest_cache/
