@@ -58,6 +58,7 @@ class TestAreaField(unittest.TestCase):
         with self.assertRaises(KeyError):
             AreaField.construct_from_raw(raw=self.invalid_raw_1,
                                          pages=self.pages)
+
         self.invalid_raw_3 = deepcopy(self.raw_area_field_with_group_key)
         self.invalid_raw_3['tags'][0].pop("left")
 
@@ -127,5 +128,3 @@ class TestAreaField(unittest.TestCase):
 
     def test_confidence(self):
         self.assertAlmostEqual(self.area_field_with_tags.confidence, -1.0)
-if __name__ == '__main__':
-    unittest.main()
