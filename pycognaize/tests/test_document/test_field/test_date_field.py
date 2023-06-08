@@ -1,6 +1,7 @@
 import json
 import unittest
 from copy import deepcopy
+from unittest.mock import patch
 
 from pycognaize.common.enums import IqDocumentKeysEnum, IqTagKeyEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field import DateField
@@ -44,10 +45,20 @@ class TestDateField(unittest.TestCase):
         self.assertEqual(self.date_field_1.name, 'source date')
         self.assertAlmostEqual(self.date_field_1.tags[0].left, 51.199427139276764)
         # invalid raw date
-        invalid_raw_1 = deepcopy(self.data_with_group_key_1["input_fields"]["source_date"][0])
+        invalid_raw_1 = deepcopy(self.        data_with_group_key_1["input_fields"]["source_date"][0])
         invalid_raw_1.pop(IqDocumentKeysEnum.name.value)
         invalid_raw_2 = deepcopy(self.data_with_group_key_2["input_fields"]["source_date"][0])
         invalid_raw_2[IqDocumentKeysEnum.tags.value][0].pop(IqTagKeyEnum.value.value)
+
+        self.invalid_raw_3 = deepcopy(self.data_with_group_key_2["input_fields"]["source_date"][0])
+        self.invalid_raw_3['tags'][0].pop("_id")
+
+        with patch("logging.debug") as mock_debug:
+            DateField.construct_from_raw(raw=self.invalid_raw_3,
+                                         pages=self.pages_1)
+
+            # Assert that the logging.debug was called with the expected message
+            mock_debug.assert_called_once_with('Failed creating tag for field 60251928095a6400123b7368: 2')
 
         # with self.assertRaises(KeyError):
         #     DateField.construct_from_raw(raw=invalid_raw_1, pages=self.pages_1)
@@ -114,3 +125,6 @@ class TestDateField(unittest.TestCase):
         to_dict_keys = [IqFieldKeyEnum.name.value, IqFieldKeyEnum.data_type.value, ID,
                         IqFieldKeyEnum.tags.value, IqFieldKeyEnum.group_key.value, IqFieldKeyEnum.value.value]
         self.assertEqual(sorted(test_dict.keys()), sorted(to_dict_keys))
+
+if __name__ == '__main__':
+    unittest.main()
