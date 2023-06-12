@@ -76,18 +76,23 @@ class TestTableField(unittest.TestCase):
                                'document.json')) as document_json:
             self.data = json.load(document_json)
 
+        self.tbl_field = TableField.construct_from_raw(
+            self.raw_table_with_group_key, pages=self.pages)
+
         # self.table_f = deepcopy(self.data['input_fields']['table'][0]["tags"][0]["table"])
         table_field = self.data['input_fields']['table'][0]
 
         self.raw_table_tag = table_field[IqFieldKeyEnum.tags.value][0]
         self.tbl_tag = HTMLTableTag.construct_from_raw(raw=self.raw_table_tag,
                                                        html=self.html)
-        self.tbl_field = TableField(name="", tag=self.tbl_tag)
-        title = self.tbl_field.get_table_title()
+        self.tbl_field_2 = TableField(name="", tag=self.tbl_tag)
+        # title = self.tbl_field.get_table_title()
 
     def test_get_table_title(self):
-        result = self.tbl_field.get_table_title()
-        self.assertEqual(result, '\u200b')
+        title_1 = self.tbl_field_2.get_table_title(n_lines_above=15, margin=9)
+        self.assertEqual(title_1, '\u200b (exact name of registrant as specified in its charter):usa truck inc.')
+        title_2 = self.tbl_field.get_table_title(n_lines_above=15, margin=9)
+        self.assertEqual(title_2, "")
 
 
 
