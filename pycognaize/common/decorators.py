@@ -1,4 +1,9 @@
+import functools
 import warnings
+
+from botocore.exceptions import ClientError
+from cloudstorageio import CloudInterface
+
 import pycognaize
 
 
@@ -10,16 +15,19 @@ def module_not_found(stack_level: int = 2):
     :param stack_level: stack level of the warning
     :type stack_level: int
     """
+
     def module_not_found_custom(func):
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
             except ModuleNotFoundError as e:
                 message = f"Please install module " \
-                          f"{str(e).split(' ')[-1]}. \n"\
+                          f"{str(e).split(' ')[-1]}. \n" \
                           f"It can be found in model-requirements.txt"
                 warnings.warn(message, UserWarning, stacklevel=stack_level)
+
         return wrapper
+
     return module_not_found_custom
 
 
@@ -43,5 +51,30 @@ def soon_be_deprecated(version: str = None, stack_level: int = 2):
                       f"version {version}"
             warnings.warn(message, DeprecationWarning, stacklevel=stack_level)
             return func(*args, **kwargs)
+
         return wrapper
+
     return soon_be_deprecated_custom
+
+
+def relogin_if_failed(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except ClientError:
+            login = pycognaize.Login()
+
+            login.relogin()
+
+            cloud_service = args[0]
+
+            cloud_service.ci = CloudInterface(
+                aws_access_key_id=login.aws_access_key,
+                aws_secret_access_key=login.aws_secret_access_key,
+                aws_session_token=login.aws_session_token
+            )
+
+            return func(*args, **kwargs)
+
+    return wrapper
