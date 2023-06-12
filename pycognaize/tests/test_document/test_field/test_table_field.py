@@ -71,28 +71,23 @@ class TestTableField(unittest.TestCase):
         self.pages = {page_n: create_dummy_page(page_n=page_n,
                                                 path=self.snap_storage_path)}
 
-        # self.html = HTML(path=RESOURCE_FOLDER, document_id='646c8efb96bed200112575e8')
+        self.html = HTML(path=os.path.join(RESOURCE_FOLDER, 'snapshots'), document_id=self.doc_id2)
         with open(os.path.join(RESOURCE_FOLDER, 'snapshots', self.doc_id2,
                                'document.json')) as document_json:
             self.data = json.load(document_json)
 
-        self.table_f = deepcopy(self.data['input_fields']['table'][0]["tags"][0]["table"][0])
+        # self.table_f = deepcopy(self.data['input_fields']['table'][0]["tags"][0]["table"])
+        table_field = self.data['input_fields']['table'][0]
 
-        self.raw_table_tag = self.table_f[IqFieldKeyEnum.tags.value][0]
-        # self.raw_table_tag = self.table_f.values()
-        self.table_tag = HTMLTableTag.construct_from_raw(self.raw_table_tag,
-                                                         html=self.html) #HTMLTable_tag
+        self.raw_table_tag = table_field[IqFieldKeyEnum.tags.value][0]
+        self.tbl_tag = HTMLTableTag.construct_from_raw(raw=self.raw_table_tag,
+                                                       html=self.html)
+        self.tbl_field = TableField(name="", tag=self.tbl_tag)
+        title = self.tbl_field.get_table_title()
 
-        self.table_field = TableField(name="", tag=self.table_tag)
-
-
-
-        table_title = self.table_field.get_table_title()
-        self.tbl_field = TableField.construct_from_raw(
-        self.raw_table_with_group_key, pages=self.pages)
-
-    # def test_get_table_title(self):
-
+    def test_get_table_title(self):
+        result = self.tbl_field.get_table_title()
+        self.assertEqual(result, '\u200b')
 
 
 
@@ -161,6 +156,8 @@ class TestTableField(unittest.TestCase):
             self.tbl_field.group_key = True
         with self.assertRaises(TypeError):
             self.tbl_field.group_key = ['abc']
+
+
 
     @classmethod
     def tearDownClass(cls) -> None:
