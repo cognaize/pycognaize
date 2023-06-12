@@ -5,7 +5,11 @@ import shutil
 import tempfile
 import unittest
 import uuid
+
+from copy import deepcopy
+
 from collections import defaultdict
+
 
 from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.document import Document
