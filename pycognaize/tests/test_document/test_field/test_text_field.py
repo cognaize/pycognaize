@@ -125,3 +125,6 @@ class TestTextField(unittest.TestCase):
         to_dict_keys = [IqFieldKeyEnum.name.value, IqFieldKeyEnum.data_type.value, ID,
                         IqFieldKeyEnum.tags.value, IqFieldKeyEnum.group_key.value, IqFieldKeyEnum.value.value]
         self.assertEqual(sorted(test_dict.keys()), sorted(to_dict_keys))
+
+    def test_classification_labels(self):
+        self.assertEqual(self.text_field_3.classification_labels, None)
