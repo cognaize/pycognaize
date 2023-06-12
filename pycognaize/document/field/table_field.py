@@ -126,6 +126,5 @@ class TableField(Field):
         field_dict[IqFieldKeyEnum.value.value] = ''
         return field_dict
 
-
     def __str__(self):
         return f"<{self.__class__.__name__}: {self.name}>"
