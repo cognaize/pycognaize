@@ -6,11 +6,15 @@ import unittest
 import uuid
 from copy import deepcopy
 
+
 from pycognaize.common.enums import StorageEnum, EnvConfigEnum, IqFieldKeyEnum, IqDocumentKeysEnum, ID
-from pycognaize.document.field import TableField
+from pycognaize.document.field.table_field import TableField
 from pycognaize.document.page import create_dummy_page
 from pycognaize.document.tag import TableTag
 from pycognaize.tests.resources import RESOURCE_FOLDER
+from pycognaize.document.html_info import HTML
+from pycognaize.document.tag.html_tag import HTMLTableTag
+
 
 
 class TestTableField(unittest.TestCase):
@@ -54,8 +58,9 @@ class TestTableField(unittest.TestCase):
 
     def setUp(self):
         self.doc_id = '60b76b3d6f3f980019105dac'
+        self.doc_id2 = '646c8efb96bed200112575e8'
         table_key = 'table'
-        with open(os.path.join(RESOURCE_FOLDER,'snapshots', self.doc_id,
+        with open(os.path.join(RESOURCE_FOLDER, 'snapshots', self.doc_id,
                                'document.json')) as document_json:
             self.data = json.load(document_json)
 
@@ -65,8 +70,32 @@ class TestTableField(unittest.TestCase):
         page_n = self.raw_table_with_group_key['tags'][0]['page']
         self.pages = {page_n: create_dummy_page(page_n=page_n,
                                                 path=self.snap_storage_path)}
+
+        # self.html = HTML(path=RESOURCE_FOLDER, document_id='646c8efb96bed200112575e8')
+        with open(os.path.join(RESOURCE_FOLDER, 'snapshots', self.doc_id2,
+                               'document.json')) as document_json:
+            self.data = json.load(document_json)
+
+        self.table_f = deepcopy(self.data['input_fields']['table'][0]["tags"][0]["table"][0])
+
+        self.raw_table_tag = self.table_f[IqFieldKeyEnum.tags.value][0]
+        # self.raw_table_tag = self.table_f.values()
+        self.table_tag = HTMLTableTag.construct_from_raw(self.raw_table_tag,
+                                                         html=self.html) #HTMLTable_tag
+
+        self.table_field = TableField(name="", tag=self.table_tag)
+
+
+
+        table_title = self.table_field.get_table_title()
         self.tbl_field = TableField.construct_from_raw(
-            self.raw_table_with_group_key, pages=self.pages)
+        self.raw_table_with_group_key, pages=self.pages)
+
+    # def test_get_table_title(self):
+
+
+
+
 
     def test___repr__(self):
         self.assertEqual(repr(self.tbl_field),
