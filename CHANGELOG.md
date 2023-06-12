@@ -2,8 +2,11 @@
 
 ## [1.4]
 
+### [1.4.4] - 2023-05-31
+- Add `anytree` to setup-requires in `setup.cfg`
+
 ### [1.4.3] - 2023-05-31
-- Fix handling of section field with no tagsc
+- Fix handling of section field with no tags
 
 ### [1.4.2] - 2023-05-30
 - Fix handling of section field value when field does not have tags
