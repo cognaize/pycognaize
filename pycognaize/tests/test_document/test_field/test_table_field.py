@@ -60,6 +60,7 @@ class TestTableField(unittest.TestCase):
         self.doc_id = '60b76b3d6f3f980019105dac'
         self.doc_id2 = '646c8efb96bed200112575e8'
         table_key = 'table'
+
         with open(os.path.join(RESOURCE_FOLDER, 'snapshots', self.doc_id,
                                'document.json')) as document_json:
             self.data = json.load(document_json)
@@ -71,15 +72,16 @@ class TestTableField(unittest.TestCase):
         self.pages = {page_n: create_dummy_page(page_n=page_n,
                                                 path=self.snap_storage_path)}
 
-        self.html = HTML(path=os.path.join(RESOURCE_FOLDER, 'snapshots'), document_id=self.doc_id2)
+        self.html = HTML(path=os.path.join(RESOURCE_FOLDER, 'snapshots'),
+                         document_id=self.doc_id2)
+
         with open(os.path.join(RESOURCE_FOLDER, 'snapshots', self.doc_id2,
                                'document.json')) as document_json:
             self.data = json.load(document_json)
 
-        self.tbl_field = TableField.construct_from_raw(
-            self.raw_table_with_group_key, pages=self.pages)
+        self.tbl_field = TableField.construct_from_raw(self.raw_table_with_group_key,
+                                                       pages=self.pages)
         table_field = self.data['input_fields']['table'][0]
-
         self.raw_table_tag = table_field[IqFieldKeyEnum.tags.value][0]
         self.tbl_tag = HTMLTableTag.construct_from_raw(raw=self.raw_table_tag,
                                                        html=self.html)
@@ -156,8 +158,6 @@ class TestTableField(unittest.TestCase):
             self.tbl_field.group_key = True
         with self.assertRaises(TypeError):
             self.tbl_field.group_key = ['abc']
-
-
 
     @classmethod
     def tearDownClass(cls) -> None:
