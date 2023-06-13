@@ -52,12 +52,19 @@ class TestLazyDict(unittest.TestCase):
 
     def test___iter__(self):
         doc_list = sorted(
-            ['60f554497883ab0013d9d906', '60b76b3d6f3f980019105dac',
-             '60f53e967883ab0013d9c6f9', '60f5260c7883ab0013d9c184',
-             '60215310dbf28200120e6afa', '62eb8e6b28d7ca0012ec8288',
-             '62eb8e6b28d7ca0012ec8288_error', '632c61fc86d52800197d03f3', '6405fdd7420ed0001184e4f3'])
+            ['60215310dbf28200120e6afa',
+             '60b76b3d6f3f980019105dac',
+             '60f5260c7883ab0013d9c184',
+             '60f53e967883ab0013d9c6f9',
+             '60f554497883ab0013d9d906',
+             '62eb8e6b28d7ca0012ec8288',
+             '62eb8e6b28d7ca0012ec8288_error',
+             '632c61fc86d52800197d03f3',
+             '6405fdd7420ed0001184e4f3',
+             '646c8efb96bed200112575e8']
+)
         for i, value in enumerate(self.docs):
             self.assertEqual(doc_list[i], value)
 
     def test___len__(self):
-        self.assertEqual(self.docs.__len__(), 9)
+        self.assertEqual(self.docs.__len__(), 10)
