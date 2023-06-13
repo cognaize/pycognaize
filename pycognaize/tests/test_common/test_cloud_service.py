@@ -10,7 +10,9 @@ from pycognaize.common.cloud_service import CloudService
 class CloudServiceTestCase(TestCase):
 
     @unittest.mock.patch('pycognaize.common.decorators.pycognaize')
-    def test_should_relogin_to_ci_when_token_is_expired(self, pycognaize_mock):
+    @unittest.mock.patch('pycognaize.common.decorators.CloudInterface')
+    def test_should_relogin_to_ci_when_token_is_expired(self, ci_mock,
+                                                        pycognaize_mock):
         ci = MagicMock()
         ci.listdir = MagicMock()
         ci.listdir.side_effect = ClientError(

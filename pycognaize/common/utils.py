@@ -204,8 +204,10 @@ def stick_word_boxes(box_coord: List[dict], img_bytes: bytes, padding=1):
         end_point_xmax = int(round(word['right'])) + 2
         end_point_ymax = int(round(word['bottom'])) + 2
 
-        cropped_word = b_and_w_image[start_point_ymin:end_point_ymax,
-                       start_point_xmin:end_point_xmax]
+        cropped_word = b_and_w_image[
+                           start_point_ymin:end_point_ymax,
+                           start_point_xmin:end_point_xmax
+                       ]
 
         vectors_y = np.mean(cropped_word, axis=1)
         min_max_y = np.where((vectors_y != 0) & (vectors_y != 255))

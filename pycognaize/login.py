@@ -90,6 +90,8 @@ class Login:
                 user_credentials['credentials']['SecretAccessKey']
             self._session_token = \
                 user_credentials['credentials']['SessionToken']
+            self._snapshot_root = user_credentials['snapshotRoot']
+
             self._email = email
             self._password = password
         elif user_credentials_response.status_code == 403:
