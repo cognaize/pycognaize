@@ -58,7 +58,7 @@ class TestTableField(unittest.TestCase):
 
     def setUp(self):
         self.doc_id = '60b76b3d6f3f980019105dac'
-        self.doc_id2 = '646c8efb96bed200112575e8'
+        self.doc_id_2 = '646c8efb96bed200112575e8'
         table_key = 'table'
 
         with open(os.path.join(RESOURCE_FOLDER, 'snapshots', self.doc_id,
@@ -73,9 +73,9 @@ class TestTableField(unittest.TestCase):
                                                 path=self.snap_storage_path)}
 
         self.html = HTML(path=os.path.join(RESOURCE_FOLDER, 'snapshots'),
-                         document_id=self.doc_id2)
+                         document_id=self.doc_id_2)
 
-        with open(os.path.join(RESOURCE_FOLDER, 'snapshots', self.doc_id2,
+        with open(os.path.join(RESOURCE_FOLDER, 'snapshots', self.doc_id_2,
                                'document.json')) as document_json:
             self.data = json.load(document_json)
 
