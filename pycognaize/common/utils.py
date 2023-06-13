@@ -1,24 +1,23 @@
+import hashlib
 import io
+import logging
 import os
 import pathlib
 import re
-
-import hashlib
-import numpy as np
-import bson
-import logging
-
-from PIL import Image
+from dataclasses import dataclass
 from itertools import groupby
 from typing import Union, List, Optional, Iterable, Dict
+
+import bson
+import numpy as np
+from PIL import Image
 from bson.json_util import loads as bson_loads
-from dataclasses import dataclass
 from cloudstorageio import CloudInterface
 
-from pycognaize.login import Login
-from pycognaize.common.enums import PythonShellEnum
+from pycognaize.common.cloud_service import CloudService
 from pycognaize.common.decorators import soon_be_deprecated
-
+from pycognaize.common.enums import PythonShellEnum
+from pycognaize.login import Login
 
 REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
 
@@ -205,8 +204,10 @@ def stick_word_boxes(box_coord: List[dict], img_bytes: bytes, padding=1):
         end_point_xmax = int(round(word['right'])) + 2
         end_point_ymax = int(round(word['bottom'])) + 2
 
-        cropped_word = b_and_w_image[start_point_ymin:end_point_ymax,
-                                     start_point_xmin:end_point_xmax]
+        cropped_word = b_and_w_image[
+                           start_point_ymin:end_point_ymax,
+                           start_point_xmin:end_point_xmax
+                       ]
 
         vectors_y = np.mean(cropped_word, axis=1)
         min_max_y = np.where((vectors_y != 0) & (vectors_y != 255))
@@ -620,7 +621,7 @@ def convert_tag_coords_to_percentages(tag, w, h) -> dict:
                 bottom=tag.bottom * h / 100)
 
 
-def cloud_interface_login(login_instance: Login) -> CloudInterface:
+def cloud_interface_login(login_instance: Login) -> CloudService:
     """Logs in to cloud interface"""
 
     if login_instance.logged_in:
@@ -630,7 +631,10 @@ def cloud_interface_login(login_instance: Login) -> CloudInterface:
             aws_session_token=login_instance.aws_session_token)
     else:
         ci_instance = CloudInterface()
-    return ci_instance
+
+    cloud_service = CloudService(ci_instance)
+
+    return cloud_service
 
 
 def directory_summary_hash(dirname: str):

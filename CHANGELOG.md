@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.5] - 2023-06-12
+- Add relogin when AWS token is expired
+
 ### [1.4.4] - 2023-05-31
 - Add `anytree` to setup-requires in `setup.cfg`
 

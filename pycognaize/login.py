@@ -1,5 +1,6 @@
 """This module provides login functionality for downloading snapshots"""
 import os
+
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
@@ -16,6 +17,8 @@ class Login:
     _session_token = ''
     _snapshot_root = ''
     _logged_in = False
+    _email = ''
+    _password = ''
 
     def __new__(cls) -> 'Login':
         if cls.INSTANCE is None:
@@ -79,7 +82,6 @@ class Login:
         except requests.exceptions.Timeout:
             raise ServerAPIException(f'Connection timed out: {url}')
 
-        print(user_credentials_response)
         user_credentials = user_credentials_response.json()
         if user_credentials_response.status_code == 200:
             self._logged_in = True
@@ -89,6 +91,9 @@ class Login:
             self._session_token = \
                 user_credentials['credentials']['SessionToken']
             self._snapshot_root = user_credentials['snapshotRoot']
+
+            self._email = email
+            self._password = password
         elif user_credentials_response.status_code == 403:
             raise ServerAPIException("Data download permission error. "
                                      "Please make sure you have access"
@@ -100,6 +105,9 @@ class Login:
         else:
             raise ServerAPIException("Server error. There was a problem "
                                      "with the serve")
+
+    def relogin(self):
+        self.login(self._email, self._password)
 
     @classmethod
     def destroy(cls) -> None:
