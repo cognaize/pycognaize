@@ -10,11 +10,11 @@ from copy import deepcopy
 from pycognaize.common.enums import StorageEnum, EnvConfigEnum, IqFieldKeyEnum, IqDocumentKeysEnum, ID
 from pycognaize.document.field.table_field import TableField
 from pycognaize.document.page import create_dummy_page
-from pycognaize.document.tag import TableTag
+from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.tests.resources import RESOURCE_FOLDER
 from pycognaize.document.html_info import HTML
 from pycognaize.document.tag.html_tag import HTMLTableTag
-
+from pycognaize.document.page import Page
 
 
 class TestTableField(unittest.TestCase):
@@ -87,12 +87,25 @@ class TestTableField(unittest.TestCase):
                                                        html=self.html)
         self.tbl_field_2 = TableField(name="", tag=self.tbl_tag)
 
+        self.path = os.path.join(RESOURCE_FOLDER, 'snapshots', self.doc_id)
+        self.ext_tag = ExtractionTag(left=11.1, right=13.1, top=10, bottom=13,
+                                     page=Page(page_number=1,
+                                               document_id='60b76b3d6f3f980019105dac',
+                                               path=self.path),
+                                     raw_value='04/14/2020',
+                                     raw_ocr_value='04.14.2020')
+
     def test_get_table_title(self):
         title_1 = self.tbl_field_2.get_table_title(n_lines_above=15, margin=9)
         self.assertEqual(title_1, '\u200b (exact name of registrant as specified in its charter):usa truck inc.')
         title_2 = self.tbl_field.get_table_title(n_lines_above=15, margin=9)
         self.assertEqual(title_2, "")
 
+    def test_get_table_title_from_pdf(self):
+        self.title_3 = TableField._get_table_title_from_pdf(tag=self.ext_tag, n_lines_above=15, margin=9)
+        # page_line = self.ext_tag.page.lines[0][0]["left"]
+        # self.assertEqual(page_line, 0)
+        self.assertEqual(self.title_3, "PXqCgvAxR liCnkCx GbCCuwYTzpXa kDGPWBMeg JK AI lfIpa dnN 8330 tFj PAO uac bSsrG lVjsII LmFpX CfzWC BTWzUXSe kJj oNdArPnsvK jkQdAkWA Nvr 2812 HFN DDXZs uEE 2624 gQS 9440")
 
     def test___repr__(self):
         self.assertEqual(repr(self.tbl_field),
