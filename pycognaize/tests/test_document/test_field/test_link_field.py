@@ -4,7 +4,7 @@ from copy import deepcopy
 
 from pycognaize.document.html_info import HTML
 
-from pycognaize.common.enums import IqDocumentKeysEnum, IqFieldKeyEnum, ID
+from pycognaize.common.enums import IqDocumentKeysEnum, IqFieldKeyEnum, ID,IqTagKeyEnum
 from pycognaize.document.field import LinkField
 from pycognaize.document.page import create_dummy_page
 from pycognaize.tests.resources import RESOURCE_FOLDER
@@ -20,6 +20,13 @@ class TestLinkField(unittest.TestCase):
             RESOURCE_FOLDER + '/snapshots/6405fdd7420ed0001184e4f3'),
                          document_id='6405fdd7420ed0001184e4f3')
 
+        with open(RESOURCE_FOLDER + '/xbrl_snapshot/63fd387178232c6001119a41a/document.json') as document_json:
+            self.data_with_group_key = json.load(document_json)
+
+        self.html_2 = HTML(path=(RESOURCE_FOLDER + '/snapshots/63fd387178232c6001119a41a'),
+                         document_id='63fd387178232c6001119a41a')
+
+
         self.raw_link1 = self.data['input_fields']['main_document_url'][0]
         self.raw_link2 = self.data['input_fields']['main_document_url'][1]
         self.raw_link3 = self.data['input_fields']['supplement_document_url'][1]
@@ -30,6 +37,10 @@ class TestLinkField(unittest.TestCase):
         self.link_field_2 = LinkField.construct_from_raw(raw=self.raw_link2, pages=self.pages, html=self.html)
         self.link_field_3 = LinkField.construct_from_raw(raw=self.raw_link3, pages=self.pages, html=self.html)
         self.link_field_4 = LinkField(name='', value='6406023e000ed0001155feec')
+
+        #TODO: Update raw when implemented platform
+        self.raw_link_5 = self.data_with_group_key["input_fields"]["table"][0]
+        self.link_field_5 = LinkField.construct_from_raw(raw=self.raw_link_5, pages=None, html=self.html_2)
 
     def test___str__(self):
         self.assertEqual(str(self.link_field_1), '6406023e420ed0001184feec')
@@ -55,6 +66,8 @@ class TestLinkField(unittest.TestCase):
         self.assertEqual(self.link_field_1.name, 'Main Document')
         self.assertEqual(self.link_field_3.tags[0].raw_ocr_value, 'http://www.iaasa.ie/getmedia/b23890131cf6458b9b8fa98202dc9c3a/')
         self.assertNotEqual(self.link_field_3.tags[0].top, '45.5%')
+        self.assertEqual(len(self.link_field_5.tags),0)
+        self.assertEqual(self.link_field_5.name, 'table')
 
     def test_to_dict(self):
         dict_2 = self.link_field_2.to_dict()
