@@ -134,6 +134,12 @@ class TestTableField(unittest.TestCase):
         with self.assertRaises(ValueError):
             TableField.construct_from_raw(invalid_table_tag, self.pages)
 
+        with open(RESOURCE_FOLDER + '/xbrl_snapshot/63fd387178232c6001119a41a/document.json') as document_json:
+            self.data_with_group_key = json.load(document_json)
+
+        self.raw_tbl_field = self.data_with_group_key["input_fields"]["table"][0]
+        self.raw_tbl_field = TableField.construct_from_raw(raw=self.raw_tbl_field, pages=None, html=self.html)
+
         # wrong page number
         # with self.assertRaises(KeyError):
         #     TableField.construct_from_raw(self.raw_table_with_group_key,
