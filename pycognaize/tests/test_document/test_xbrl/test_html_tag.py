@@ -45,6 +45,15 @@ class TestHTMLTag(unittest.TestCase):
 
         self.html_tag_4 = HTMLTag.construct_from_raw(self.html_tag_dict_4, html=self.html)
 
+    def test_value(self):
+        self.assertEqual(self.tbl_tag.value, '')
+
+    def test_ocr_value(self):
+        self.assertEqual(self.tbl_tag.ocr_value, '')
+
+    def test_html(self):
+        self.assertTrue(isinstance(self.tbl_tag.html, HTML))
+
     def test_raw_value(self):
         self.assertEqual(self.html_tag_1.raw_value, '6481')
         self.assertEqual(self.html_tag_2.raw_value, '3689')
@@ -74,6 +83,7 @@ class TestHTMLTag(unittest.TestCase):
         self.assertFalse(self.html_tag_2.is_table)
         self.assertFalse(self.html_tag_3.is_table)
         self.assertFalse(self.html_tag_4.is_table)
+        self.assertTrue(self.tbl_tag.is_table)
 
     def test__row_index_with_table(self):
         raw_df = self.tbl_tag.raw_df
@@ -122,6 +132,9 @@ class TestHTMLTag(unittest.TestCase):
                                           keys=['_id'])
         self.assertDictEqual(cleaned_field_dict_4, cleaned_html_tag_dict_4)
 
+
+    def test_df(self):
+        self.assertEqual(self.tbl_tag.df.at[4,1],'$6,481')
 
 if __name__ == '__main__':
     unittest.main()
