@@ -1,7 +1,6 @@
 import logging
+
 from typing import List, Optional, Dict, Type
-
-
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     ID,
