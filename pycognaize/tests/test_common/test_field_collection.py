@@ -1,12 +1,11 @@
-import unittest
 import json
 import os
 import shutil
 import tempfile
 import unittest
 import uuid
-from collections import defaultdict
 
+from collections import defaultdict
 from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.document import Document
 from pycognaize.tests.resources import RESOURCE_FOLDER

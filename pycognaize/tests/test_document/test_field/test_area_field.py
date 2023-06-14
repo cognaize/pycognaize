@@ -1,14 +1,12 @@
 import json
 import unittest
-import logging
+
 from copy import deepcopy
 from unittest.mock import patch
-
 from pycognaize.common.enums import IqDocumentKeysEnum, IqFieldKeyEnum, ID
 from pycognaize.document.field.area_field import AreaField
 from pycognaize.document.page import create_dummy_page
 from pycognaize.tests.resources import RESOURCE_FOLDER
-
 
 class TestAreaField(unittest.TestCase):
 
@@ -65,23 +63,8 @@ class TestAreaField(unittest.TestCase):
         with patch("logging.debug") as mock_debug:
             AreaField.construct_from_raw(raw=self.invalid_raw_3,
                                          pages=self.pages)
-
-                # Assert that the logging.debug was called with the expected message
+             # Assert that the logging.debug was called with the expected message
             mock_debug.assert_called_once_with("Failed creating tag for field 5e41a093f4b20400137938d9: 'left'")
-
-
-        # with self.assertRaises(KeyError):
-        #     AreaField.construct_from_raw(raw=self.invalid_raw_3, pages=self.pages)
-
-                # Add assertions for the result if needed
-                # self.assertEqual(result.field_id, ...)
-                # self.assertEqual(result.tags, ...)
-                # ...
-
-        # with self.assertRaises(KeyError):
-        #     # invalid page number
-        #     AreaField.construct_from_raw(raw=self.raw_area_field_with_group_key,
-        #                                  pages={3: create_dummy_page(3)})
 
     def test_to_dict(self):
         to_dict_keys = [IqFieldKeyEnum.name.value, IqFieldKeyEnum.data_type.value,
