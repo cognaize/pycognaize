@@ -40,10 +40,8 @@ class TestSpanField(unittest.TestCase):
         self.assertEqual(sorted(res_dict.keys()), sorted(field_dict_keys))
 
         for key in res_dict:
-            if key in [IqFieldKeyEnum.name.value, IqFieldKeyEnum.data_type.value]:
+            if key in [IqFieldKeyEnum.name.value, IqFieldKeyEnum.data_type.value, IqFieldKeyEnum.value.value, ID]:
                 self.assertEqual(res_dict[key], self.raw_span_1[key])
-
-        self.assertEqual(res_dict[ID], str(self.raw_span_1[ID]))
 
     def test_order_tags(self):
         with self.assertRaises(NotImplementedError):
