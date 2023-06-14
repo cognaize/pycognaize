@@ -35,8 +35,11 @@ class TestNumericField(unittest.TestCase):
         with open(RESOURCE_FOLDER + '/xbrl_snapshot/63fd387178232c6001119a41a/document.json') as document_json:
             self.data_with_group_key = json.load(document_json)
 
+        self.html_2 = HTML(path=(RESOURCE_FOLDER + '/snapshots/63fd387178232c6001119a41a'),
+                         document_id='63fd387178232c6001119a41a')
+
         self.raw_num_field_4 = self.data_with_group_key["input_fields"]["table"][0]
-        self.num_field_4 = NumericField.construct_from_raw(raw=self.raw_num_field_4, pages=None, html=self.html)
+        self.num_field_4 = NumericField.construct_from_raw(raw=self.raw_num_field_4, pages=None, html=self.html_2)
 
 
     def test_convert_to_numeric(self):
@@ -140,3 +143,12 @@ class TestNumericField(unittest.TestCase):
         to_dict_keys = [IqFieldKeyEnum.name.value, IqFieldKeyEnum.data_type.value, ID,
                         IqFieldKeyEnum.tags.value, IqFieldKeyEnum.group_key.value, IqFieldKeyEnum.value.value]
         self.assertEqual(sorted(test_dict.keys()), sorted(to_dict_keys))
+
+    def test_field_raw_value(self):
+        self.assertEqual(self.num_field_1.raw_value, '' )
+
+    def test_field_value(self):
+        self.assertEqual(self.num_field_1.value, 99.0)
+
+    def test_field_id(self):
+        self.assertEqual(self.num_field_1.field_id, '60251a70095a6400123b736e')

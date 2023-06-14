@@ -70,8 +70,5 @@ class SpanField(Field):
         """Order tags by pdf data"""
         raise NotImplementedError
 
-    def __repr__(self):
-        return f"<{self.__class__.__name__}: {self.name}>"
-
     def __str__(self):
-        return self.__repr__()
+        return f"<{self.__class__.__name__}: {self.name}>"

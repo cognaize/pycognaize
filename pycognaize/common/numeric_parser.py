@@ -10,7 +10,7 @@ class NumericParser:
     Use NumericColumnFormatter for validating your data.
     """
     numeric = (r"(^0+$|^[\\[\\(+-]*(([1-9][0-9]{0,2}([.,][0-9]{3})*)|[0-9]"
-               r"|[1-9][0-9]+)([,.][0-9]*)?[\]\)]*$)")
+               r"|[1-9][0-9]+)([,.][0-9]*)?[\]\)]*$)|(^0+[1-9]+$)")
     delimiters = r"[.,]"
     REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z0-9)\[\](-.,]')
 
