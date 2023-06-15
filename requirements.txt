@@ -13,3 +13,4 @@ PyYAML
 SQLAlchemy
 click
 anytree
+loguru==0.7.0

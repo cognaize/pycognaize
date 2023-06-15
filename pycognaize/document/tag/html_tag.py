@@ -4,6 +4,7 @@ from typing import Optional, List, Union
 import bson
 import pandas as pd
 
+from loguru import logger
 from pycognaize.common.enums import (IqRecipeEnum, XBRLCellEnum,
                                      XBRLTableTagEnum, XBRLTagEnum, ID)
 from pycognaize.document.html_info import HTML
@@ -207,6 +208,26 @@ class HTMLTableTag(HTMLTagABC):
                                                tag_id=self.tag_id,
                                                row_index=row_index,
                                                col_index=col_index)
+        df = self.replace_nans_with_empty_html_tags(df)
+        return df
+
+    @staticmethod
+    def replace_nans_with_empty_html_tags(df: pd.DataFrame) -> pd.DataFrame:
+        """ Fills empty HTMLTags in place of nans in raw_df"""
+        for col in df.columns:
+            for idx in df.index:
+                if pd.isna(df.loc[idx, col]):
+                    logger.warning(f'Build df issue: Replacing df empty cell'
+                                   f' at {idx, col} with empty HTMLTag')
+                    df.loc[idx, col] = HTMLTag(is_table=False,
+                                               html_id='',
+                                               xpath='',
+                                               raw_value='',
+                                               raw_ocr_value='',
+                                               field_id='',
+                                               tag_id='',
+                                               row_index=idx,
+                                               col_index=col)
         return df
 
 
