@@ -213,7 +213,9 @@ class HTMLTableTag(HTMLTagABC):
 
     @staticmethod
     def replace_nans_with_empty_html_tags(df: pd.DataFrame) -> pd.DataFrame:
-        """ Fills empty HTMLTags in place of nans in raw_df"""
+        """
+            Replaces NaN values in a DataFrame with empty HTML tags.
+        """
         for col in df.columns:
             for idx in df.index:
                 if pd.isna(df.loc[idx, col]):
