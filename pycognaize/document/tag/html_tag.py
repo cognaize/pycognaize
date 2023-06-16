@@ -210,16 +210,18 @@ class HTMLTableTag(HTMLTagABC):
         df = self.replace_nans_with_empty_html_tags(df)
         return df
 
-    def replace_nans_with_empty_html_tags(self, df: pd.DataFrame) -> pd.DataFrame:
+    def replace_nans_with_empty_html_tags(self,
+                                          df: pd.DataFrame) -> pd.DataFrame:
         """
             Replaces NaN values in a DataFrame with empty HTML tags.
         """
         for col in df.columns:
             for idx in df.index:
                 if pd.isna(df.loc[idx, col]):
-                    logging.warning(f'Build df issue: Replacing empty cell'
-                                    f'at {idx, col} with empty HTMLTag in HTMLTableTag'
-                                    f' with html id {self.html_id}')
+                    logging.warning(
+                        f'Build df issue: Replacing empty cell at  {idx, col} '
+                        f'with empty HTMLTag in HTMLTableTag with html id '
+                        f'{self.html_id}')
                     df.loc[idx, col] = HTMLTag(is_table=False,
                                                html_id='',
                                                xpath='',
