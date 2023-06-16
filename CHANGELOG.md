@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.6] - 2023-06-15
+- Add replace_nans_with_empty_html_tags functionality in HTMLTableTag build df
+
 ### [1.4.5] - 2023-06-12
 - Add relogin when AWS token is expired
 
