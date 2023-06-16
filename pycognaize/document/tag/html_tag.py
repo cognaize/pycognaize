@@ -219,7 +219,7 @@ class HTMLTableTag(HTMLTagABC):
             for idx in df.index:
                 if pd.isna(df.loc[idx, col]):
                     logging.warning(
-                        f'Build df issue: Replacing empty cell at  {idx, col} '
+                        f'Build df issue: Replacing empty cell at {idx, col} '
                         f'with empty HTMLTag in HTMLTableTag with html id '
                         f'{self.html_id}')
                     df.loc[idx, col] = HTMLTag(is_table=False,
