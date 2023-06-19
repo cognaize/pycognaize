@@ -263,7 +263,6 @@ class HTMLCell:
     def left_indentation(self) -> str:
         return self._left_indentation
 
-
     def to_dict(self) -> dict:
         """Converts cell to dict"""
         cell_dict = {
