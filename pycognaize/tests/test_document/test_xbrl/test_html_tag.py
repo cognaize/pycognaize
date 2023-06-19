@@ -6,7 +6,7 @@ from copy import deepcopy
 from pycognaize.common.enums import IqFieldKeyEnum, XBRLCellEnum
 from pycognaize.common.utils import empty_keys
 from pycognaize.document.html_info import HTML
-from pycognaize.document.tag.html_tag import HTMLTag, HTMLTableTag
+from pycognaize.document.tag.html_tag import HTMLTag, HTMLTableTag, HTMLCell
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
 
@@ -36,14 +36,18 @@ class TestHTMLTag(unittest.TestCase):
         self.html_tag_dict_1 = deepcopy(self.data['output_fields']['v_other_operating_expenses_operating_is__current'][0]['tags'][0])
         self.html_tag_dict_2 = deepcopy(self.data['output_fields']['v_other_operating_expenses_operating_is__previous'][0]['tags'][0])
         self.html_tag_dict_3 = deepcopy(self.data['output_fields']['v_other_operating_expenses_operating_is__tr'][0]['tags'][0])
-
         self.html_tag_dict_4 = deepcopy(self.data['output_fields']['v_cash_at_bank_and_in_hand_bs__tr'][0]['tags'][0])
+        self.html_tag_dict_5 = self.html_tag_dict_1["source"]
 
         self.html_tag_1 = HTMLTag.construct_from_raw(self.html_tag_dict_1, html=self.html)
         self.html_tag_2 = HTMLTag.construct_from_raw(self.html_tag_dict_2, html=self.html)
         self.html_tag_3 = HTMLTag.construct_from_raw(self.html_tag_dict_3, html=self.html)
 
         self.html_tag_4 = HTMLTag.construct_from_raw(self.html_tag_dict_4, html=self.html)
+        # self.html_tag_5 = HTMLCell.construct_from_raw(self.html_tag_dict_5)
+
+    # def test_construct_from_raw(self.html_tag_dict_5):
+    #     source_data = self.html_tag_dict_5[XBRLCellEnum.source.value]
 
     def test_value(self):
         self.assertEqual(self.tbl_tag.value, '')
@@ -103,6 +107,9 @@ class TestHTMLTag(unittest.TestCase):
 
     def test__to_dict(self):
         field_dict_1 = self.html_tag_1.to_dict()
+        # field_dict_1["colspan"] = 1
+        # field_dict_1["rowspan"] = 2
+        # field_dict_1["html_id"] = "63fd387178232c6001119a41a"
         self.assertEqual(field_dict_1.keys(), self.html_tag_dict_1.keys())
 
         self.assertEqual(field_dict_1[XBRLCellEnum.source.value].keys(), self.html_tag_dict_1[XBRLCellEnum.source.value].keys())
@@ -113,25 +120,24 @@ class TestHTMLTag(unittest.TestCase):
 
         field_dict_2 = self.html_tag_2.to_dict()
         cleaned_html_tag_dict_2 = empty_keys(obj=deepcopy(self.html_tag_dict_2),
-                                           keys=['_id'])
+                                             keys=['_id'])
         cleaned_field_dict_2 = empty_keys(obj=deepcopy(field_dict_2),
-                                        keys=['_id'])
+                                          keys=['_id'])
         self.assertDictEqual(cleaned_field_dict_2, cleaned_html_tag_dict_2)
 
         field_dict_3 = self.html_tag_3.to_dict()
         cleaned_html_tag_dict_3 = empty_keys(obj=deepcopy(self.html_tag_dict_3),
-                                           keys=['_id'])
+                                             keys=['_id'])
         cleaned_field_dict_3 = empty_keys(obj=deepcopy(field_dict_3),
                                           keys=['_id'])
         self.assertDictEqual(cleaned_field_dict_3, cleaned_html_tag_dict_3)
 
         field_dict_4 = self.html_tag_4.to_dict()
         cleaned_html_tag_dict_4 = empty_keys(obj=deepcopy(self.html_tag_dict_4),
-                                           keys=['_id'])
+                                             keys=['_id'])
         cleaned_field_dict_4 = empty_keys(obj=deepcopy(field_dict_4),
                                           keys=['_id'])
         self.assertDictEqual(cleaned_field_dict_4, cleaned_html_tag_dict_4)
-
 
     def test_df(self):
         self.assertEqual(self.tbl_tag.df.at[4,1],'$6,481')
