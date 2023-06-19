@@ -6,7 +6,7 @@ from copy import deepcopy
 from pycognaize.common.enums import IqFieldKeyEnum, XBRLCellEnum
 from pycognaize.common.utils import empty_keys
 from pycognaize.document.html_info import HTML
-from pycognaize.document.tag.html_tag import HTMLTag, HTMLTableTag, HTMLCell
+from pycognaize.document.tag.html_tag import HTMLTag, HTMLTableTag
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
 
