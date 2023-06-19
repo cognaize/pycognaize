@@ -65,10 +65,8 @@ class TestHTMLTag(unittest.TestCase):
         self.assertEqual(HTMLTableTag._extract_value(self.html_tag_4), 'Cash at bank')
         self.assertNotEqual(HTMLTableTag._extract_value(self.html_tag_4), 'Another sentence')
 
-        with self.assertRaises(AttributeError):
-            HTMLTableTag._extract_value(self.x)
-
-
+        # This case can work if we'll not have HTMLTag, because HTMLTag can't be created without raw_value
+        self.assertEqual(HTMLTableTag._extract_value(None), '')
 
     def test_raw_value(self):
         self.assertEqual(self.html_tag_1.raw_value, '6481')
