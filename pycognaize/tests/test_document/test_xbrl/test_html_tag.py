@@ -37,7 +37,7 @@ class TestHTMLTag(unittest.TestCase):
         self.html_tag_dict_2 = deepcopy(self.data['output_fields']['v_other_operating_expenses_operating_is__previous'][0]['tags'][0])
         self.html_tag_dict_3 = deepcopy(self.data['output_fields']['v_other_operating_expenses_operating_is__tr'][0]['tags'][0])
         self.html_tag_dict_4 = deepcopy(self.data['output_fields']['v_cash_at_bank_and_in_hand_bs__tr'][0]['tags'][0])
-        self.html_tag_dict_5 = self.html_tag_dict_1["source"]
+
 
         self.html_tag_1 = HTMLTag.construct_from_raw(self.html_tag_dict_1, html=self.html)
         self.html_tag_2 = HTMLTag.construct_from_raw(self.html_tag_dict_2, html=self.html)
@@ -57,6 +57,18 @@ class TestHTMLTag(unittest.TestCase):
 
     def test_html(self):
         self.assertTrue(isinstance(self.tbl_tag.html, HTML))
+
+    def test_extract_value(self):
+        self.assertEqual(HTMLTableTag._extract_value(self.html_tag_1), '6481')
+        self.assertEqual(HTMLTableTag._extract_value(self.html_tag_2), '3689')
+        self.assertEqual(HTMLTableTag._extract_value(self.html_tag_3), 'Operating costs')
+        self.assertEqual(HTMLTableTag._extract_value(self.html_tag_4), 'Cash at bank')
+        self.assertNotEqual(HTMLTableTag._extract_value(self.html_tag_4), 'Another sentence')
+
+        with self.assertRaises(AttributeError):
+            HTMLTableTag._extract_value(self.x)
+
+
 
     def test_raw_value(self):
         self.assertEqual(self.html_tag_1.raw_value, '6481')
