@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.7] - 2023-06-15
+- Add `ocr_tags()` and `line_tags()` to `Page`
+
 ### [1.4.6] - 2023-06-15
 - Add replace_nans_with_empty_html_tags functionality in HTMLTableTag build df
 
