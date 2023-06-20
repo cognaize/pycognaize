@@ -84,7 +84,7 @@ class Page:
         return self._ocr
 
     @property
-    def ocr_tags(self):
+    def ocr_tags(self)-> dict:
         """
         Makes the words extraction tags in the ocr data of pages.
         :return: dict of lists of tags, where each list represents formatted OCR of a page,
@@ -254,7 +254,7 @@ class Page:
         return self._lines
 
     @property
-    def line_tags(self):
+    def line_tags(self) -> list:
         """Makes the words extraction tags in the lines of pages
         :return: list of lists of tags,
             where each list represents a line,
