@@ -86,9 +86,12 @@ class ExtractionTag(BoxTag):
             raw_ocr_value_joined = " ".join(
                 [i.raw_ocr_value for i in sorted(
                     [self, other], key=lambda x: (x.left, x.top))])
+            raw_value_joined = " ".join(
+                [i.raw_value for i in sorted(
+                    [self, other], key=lambda x: (x.left, x.top))])
             return ExtractionTag(
                 left=left, right=right, top=top, bottom=bottom,
-                page=self.page, raw_value=self.raw_value,
+                page=self.page, raw_value=raw_value_joined,
                 raw_ocr_value=raw_ocr_value_joined,
                 confidence=self.confidence)
         else:
