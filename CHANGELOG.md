@@ -2,6 +2,10 @@
 
 ## [1.4]
 
+### [1.4.4] - 2023-06-20
+- Add functions ocr_tags() and line_tags()
+
+
 ### [1.4.3] - 2023-05-31
 - Fix handling of section field with no tagsc
 
