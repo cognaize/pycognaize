@@ -114,11 +114,12 @@ class TestExtractionTag(unittest.TestCase):
                                                 page=create_dummy_page(),
                                                 raw_value='04/14/2020', raw_ocr_value='04.14.2020',
                                                 )
-
+        self.invalid_raw_value_ext_tag = ExtractionTag(left=11.1, right=13.1, top=10, bottom=13,
+                                                       page=copy.deepcopy(self.page),
+                                                       raw_value='04/14/2020', raw_ocr_value='100.1%')
         self.raw_date_tag = raw_date_tag
         self.invalid_raw_value_tag = invalid_raw_value_tag
         self.invalid_raw_text_tag = invalid_raw_text_tag
-
 
     def test_raw_value(self):
         self.assertEqual(self.ext_tag_1.raw_value, '99.')
@@ -150,6 +151,8 @@ class TestExtractionTag(unittest.TestCase):
         self.invalid_numeric_ext_tag._validate_numeric()
         self.assertTrue(self.invalid_numeric_ext_tag.has_value_exception)
         self.assertFalse(self.invalid_numeric_ext_tag.has_raw_value_exception)
+        self.invalid_raw_value_ext_tag._validate_numeric()
+        self.assertTrue(self.invalid_raw_value_ext_tag.has_raw_value_exception)
 
     def test__construct_from_raw(self):
         ExtractionTag.construct_from_raw(raw=self.ext_tag_dict_2, page=self.page)
@@ -171,7 +174,26 @@ class TestExtractionTag(unittest.TestCase):
             invalid_field.to_dict()
 
     def test_horizontal_shift(self):
-        self.assertEqual(self.ext_tag_1.horizontal_shift(1).left, 11.812746151092016)
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(0.1).left, 10.912746151092016)
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(0.1).right, 13.060973863229503)
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(89).left, 99.81274615109201)
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(89).right, 100)
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(-.1).left, 10.712746151092016)
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(-.1).right, 12.860973863229503)
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(-15).left, 0)
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(-15).right, 0)
+
+    def test_vertical_shift(self):
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(0.1).right, 12.960973863229503)
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(91).top, 100)
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(91).bottom, 100)
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(-1).top, 25.42328894018314)
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(-1).bottom, 26.58753347203029)
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(-30).top, 0)
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(-30).bottom, 0)
+        self.assertEqual(self.ext_tag_1.vertical_shift(2).raw_value, '99.')
+        self.assertEqual(self.ext_tag_1.vertical_shift(2).page.page_number, 1)
+        self.assertEqual(self.ext_tag_1.vertical_shift(2).raw_ocr_value, '99.')
 
     def test_hshift(self):
         self.assertAlmostEqual(self.ext_tag_1.hshift(0.1).left, 10.912746151092016)
@@ -208,7 +230,6 @@ class TestExtractionTag(unittest.TestCase):
         self.assertAlmostEqual(self.ext_tag_15.shift(10, -37).right, 100)
         self.assertAlmostEqual(self.ext_tag_15.shift(10, -37).top, 0)
         self.assertAlmostEqual(self.ext_tag_15.shift(10, -37).bottom, 2.33121744544502)
-
 
     def test___contains__(self):
         self.assertTrue(self.ext_tag_1 in self.ext_tag_2)
