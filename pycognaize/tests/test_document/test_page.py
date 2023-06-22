@@ -72,7 +72,7 @@ class TestPage(unittest.TestCase):
     def test_ocr_tags(self):
         with self.assertRaises(ValueError):
             self.no_path_page.get_ocr()
-        self.assertEqual(len(self.page6.ocr_tags['words']), 581)
+        self.assertEqual(len(self.page6.ocr_tags), 581)
 
     def test_line_tags(self):
         self.assertEqual(len(self.page3.line_tags), 44)
