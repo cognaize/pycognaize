@@ -239,20 +239,22 @@ class Page:
         return self._lines
 
     @property
-    def ocr_tags(self) -> dict:
-        """
-        Makes the words extraction tags in the ocr data of pages.
-        :return: dict of lists of tags, where each list represents
-                 formatted OCR of a page,
-                 and each tag in that list is the OCR data represented as
-                 an Extraction tag, with its coordinates in the document.
-        """
-        ocr_dict = {}
+    def ocr_tags(self) -> list[list]:
+        """Makes the words extraction tags in the ocr data of pages
+              :return: list of lists of tags,
+                  where each list represents formatted ocr of page ,
+                  and each tag in that list is the ocr data
+                  represented as an Extraction tag, with its coordinates in the document
+              """
+
+        ocr_list = []
         page_ocr = self.ocr
-        for page, value in page_ocr.items():
-            ocr_dict[page] = [self.word_to_extraction_tag(item) for
-                              item in value]
-        return ocr_dict
+        for page_ocr in page_ocr:
+            page_ocr_list = []
+            for word_of_ocr in page_ocr:
+                page_ocr_list.append(self.word_to_extraction_tag(word_of_ocr))
+            ocr_list.append(page_ocr_list)
+        return ocr_list
 
     @property
     def line_tags(self) -> list:
