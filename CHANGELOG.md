@@ -2,6 +2,10 @@
 
 ## [1.4]
 
+### [1.4.8] - 2023-06-22
+- Update `ocr_tags()` to return list of lists of tags of only words
+
+
 ### [1.4.7] - 2023-06-15
 - Add `ocr_tags()` and `line_tags()` to `Page`
 
