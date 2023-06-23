@@ -30,6 +30,24 @@ class TestTable(unittest.TestCase):
         self.page = create_dummy_page(page_n=3, path=self.snap_storage_path)
         self.tbl_tag = TableTag.construct_from_raw(self.raw_tbl_tag, self.page)
 
+    def test_getitem(self):
+        val_test_1 = (1, 2)
+        val_test_2 = (-1, 100)
+        val_test_3 = slice(1, 3)
+        val_test_4 = "text"
+
+        result = self.tbl_tag.__getitem__(val_test_1)
+        self.assertEqual(result, self.tbl_tag.cells[val_test_1])
+
+        with self.assertRaises(NotImplementedError):
+            self.tbl_tag.__getitem__((val_test_3, val_test_3))
+
+        with self.assertRaises(IndexError):
+            self.tbl_tag.__getitem__(val_test_2)
+
+        with self.assertRaises(ValueError):
+            self.tbl_tag.__getitem__(val_test_4)
+
     def test_construct_from_raw(self):
 
         invalid_raw_table_tag = deepcopy(self.raw_tbl_tag)
