@@ -86,6 +86,9 @@ class TestTable(unittest.TestCase):
         with self.assertRaises(Exception):
             TableTag.construct_from_raw(invalid_raw_table_tag, self.page)
 
+    def test_extract_raw_ocr(self):
+        self.assertEqual(TableTag._extract_raw_ocr(self.tbl_tag), "")
+
     def test_to_dict(self):
         ttd = self.tbl_tag.to_dict()
         self.assertIsInstance(ttd[IqTableTagEnum.table.value], dict)
