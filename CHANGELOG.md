@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.8] - 2023-06-24
+- Add field value and tag value to numeric field
+
 ### [1.4.7] - 2023-06-15
 - Add `ocr_tags()` and `line_tags()` to `Page`
 
