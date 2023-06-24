@@ -36,7 +36,7 @@ class NumericField(Field):
         self._field_id = field_id
         self._raw_field_value = value
         self._value = self.convert_to_numeric(value)
-        self._field_value = self.confidence(value)
+        self._field_value = self.convert_to_numeric(value)
         self._tag_value = None
         if self.tags:
             self._value = sum([self.convert_to_numeric(i.raw_value)
