@@ -34,8 +34,9 @@ class NumericField(Field):
                          group_key=group_key, confidence=confidence,
                          group_name=group_name)
         self._field_id = field_id
+        self._raw_field_value = value
         self._value = self.convert_to_numeric(value)
-        self._field_value = value
+        self._field_value = self.confidence(value)
         self._tag_value = None
         if self.tags:
             self._value = sum([self.convert_to_numeric(i.raw_value)
@@ -57,6 +58,10 @@ class NumericField(Field):
     @property
     def tag_value(self):
         return self._tag_value
+
+    @property
+    def raw_field_value(self):
+        return self._raw_field_value
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
