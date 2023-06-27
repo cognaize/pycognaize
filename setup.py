@@ -32,7 +32,12 @@ setup_options = dict(
         'Reference': 'https://pycognaize.readthedocs.io/en/latest/',
         'Changelog': 'https://github.com/cognaize/pycognaize/blob/master/CHANGELOG.md',
     },
+    extras_require={
+            'langchain': ['langchain', 'transformers'],
+        },
 )
+
+
 
 setup_options['console'] = ['bin/cognaize']
 
