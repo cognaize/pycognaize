@@ -2,13 +2,17 @@
 
 ## [1.4]
 
+### [1.4.9] - 2023-06-27
+- Add `to_string()` functionality to `table_tags`
+- Add langchain_loader util to convert Pycognaize `Document` objects to Langchain `Document` objects
+
 ### [1.4.8] - 2023-06-24
 - Add field value and tag value to numeric field
 
 ### [1.4.7] - 2023-06-15
 - Add `ocr_tags()` and `line_tags()` to `Page`
 
-### [1.4.6] - 2023-06-15
+### [1.4.6] - 2023-06-27
 - Add replace_nans_with_empty_html_tags functionality in HTMLTableTag build df
 
 ### [1.4.5] - 2023-06-12
