@@ -118,6 +118,14 @@ class TableTag(BoxTag):
         }
         return output_dict
 
+    def to_string(self) -> str:
+        """
+        Returns a string representation of the table
+        """
+        if self.df is None:
+            return ''
+        return self.df.to_string()
+
     def _populate_cells(self):
         for left_col_top_row, cell_dict in self.cell_data.items():
             keys = tuple((int(i) for i in left_col_top_row.split(':')))
