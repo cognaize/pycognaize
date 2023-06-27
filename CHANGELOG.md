@@ -3,6 +3,9 @@
 ## [1.4]
 
 ### [1.4.8] - 2023-06-24
+- Add `to_string()` to `table_tags`
+
+### [1.4.8] - 2023-06-24
 - Add field value and tag value to numeric field
 
 ### [1.4.7] - 2023-06-15
