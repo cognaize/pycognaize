@@ -224,3 +224,18 @@ class XBRLTableTagEnum(enum.Enum):
     cells = 'cells'
     title = 'title'
     _id = '_id'
+
+class PageLayoutEnum(enum.Enum):
+    """Enum of page layout blocks, including tables"""
+    TEXT = 'page_layout__text'
+    # 'page_layout__picture'
+    CAPTION = 'page_layout__caption'
+    SECTION_HEADER = 'page_layout__section_header'
+    FOOTNOTE = 'page_layout__footnote'
+    FORMULA = 'page_layout__formula'
+    # 'page_layout__table'
+    LIST_ITEM = 'page_layout__list_item'
+    PAGE_HEADER = 'page_layout__page_header'
+    PAGE_FOOTER = 'page_layout__page_footer'
+    TITLE = 'page_layout__title'
+    TABLE = 'tables__table'

@@ -5,3 +5,5 @@ matplotlib
 dataclasses; python_version <= '3.6'
 seaborn
 spacy
+langchain
+transformers
