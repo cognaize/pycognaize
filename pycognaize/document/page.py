@@ -244,7 +244,8 @@ class Page:
               :return: list of lists of tags,
                   where each list represents formatted ocr of page ,
                   and each tag in that list is the ocr data
-                  represented as an Extraction tag, with its coordinates in the document
+                  represented as an Extraction tag, with its coordinates
+                   in the document
               """
 
         ocr_list = []
