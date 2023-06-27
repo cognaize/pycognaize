@@ -4,6 +4,8 @@ import string
 import pandas as pd
 from typing import Optional, Tuple
 
+from tabulate import tabulate
+
 from pycognaize.common.enums import (
     IqCellKeyEnum,
     IqTableTagEnum,
@@ -124,7 +126,7 @@ class TableTag(BoxTag):
         """
         if self.df is None:
             return ''
-        return self.df.to_string()
+        return tabulate(self.df, headers='keys', tablefmt='psql')
 
     def _populate_cells(self):
         for left_col_top_row, cell_dict in self.cell_data.items():
