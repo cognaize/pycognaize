@@ -1,14 +1,8 @@
 import importlib
-import pandas as pd
-
 from pycognaize.common.decorators import module_not_found
 from pycognaize.common.enums import PageLayoutEnum
 from pycognaize.document.document import Document
 from pycognaize.document.field import Field, TableField
-
-# from transformers import GPT2TokenizerFast
-
-# import iq_connector
 
 
 class LangchainLoader:
@@ -32,9 +26,10 @@ class LangchainLoader:
 
     @module_not_found()
     def load_and_split(self):
+        """
+        load and split the Document into separate langchain document objects
+        """
         langchain = importlib.import_module('langchain')
-        """load and split the Document into separate 
-            langchain document objects"""
         text_blocks_w_metadata: list[list[tuple[dict, str]]] =\
             self._get_as_text(self.document)
         metadata_list, text_list = self._create_text_and_metadata(
@@ -44,7 +39,8 @@ class LangchainLoader:
             chunk_size=self.LIMIT,
             chunk_overlap=self.OVERLAP,
             length_function=self.count_tokens)
-        docs = text_splitter.create_documents(texts=text_list, metadatas=metadata_list)
+        docs = text_splitter.create_documents(texts=text_list,
+                                              metadatas=metadata_list)
         return docs
 
     def get_document_src(self) -> str:
@@ -54,6 +50,19 @@ class LangchainLoader:
     def count_tokens(self, text: str) -> int:
         """Tokenize the text and count the number of tokens"""
         return len(self.tokenizer.encode(text))
+
+    @staticmethod
+    def _get_table_group(current_group: list[tuple[dict, str]],
+                         metadata, text_block):
+        if current_group and current_group[-1][0]['block'] in \
+                (PageLayoutEnum.PAGE_HEADER,
+                 PageLayoutEnum.SECTION_HEADER):
+            table_group = [current_group[-1], (metadata, text_block)]
+            current_group = current_group[:-1]
+        else:
+            table_group = [(metadata, text_block)]
+
+        return table_group, current_group
 
     def _get_as_text(self, document: Document) -> list[list[tuple[dict, str]]]:
         """Given a cognaize document object, return a list of strings,
@@ -70,19 +79,15 @@ class LangchainLoader:
             tuple[dict, str]] = self._order_text_blocks(fields)
         groups = []
         current_group = None
-        for block_n, (metadata, text_block) in enumerate(ordered_blocks_w_metadata):
+        for block_n, (metadata, text_block) in \
+                enumerate(ordered_blocks_w_metadata):
             # First block, create a new group
             if block_n == 0:
                 current_group = [(metadata, text_block)]
             # Table, create a separate group
             if metadata['block'] is PageLayoutEnum.TABLE:
-                if current_group and current_group[-1][0]['block'] in\
-                        (PageLayoutEnum.PAGE_HEADER,
-                         PageLayoutEnum.SECTION_HEADER):
-                    table_group = [current_group[-1], (metadata, text_block)]
-                    current_group = current_group[:-1]
-                else:
-                    table_group = [(metadata, text_block)]
+                table_group, current_group =\
+                    self._get_table_group(current_group, metadata, text_block)
                 # finalize the previous group
                 groups.append(current_group)
                 # finalized the table group
@@ -182,11 +187,3 @@ class LangchainLoader:
                 value = field.value
             text_blocks.append((metadata, value))
         return text_blocks
-
-
-# if __name__ == "__main__":
-#     cognaize_document_id = "6479f5f39857de0010d1162d"
-#     cognaize_document: Document = iq_connector.get_cognaize_document(cognaize_document_id)
-#     cognaize_loader = CognaizeLoader(cognaize_document)
-#     langchain_document = cognaize_loader.load_and_split()
-#     print(langchain_document)

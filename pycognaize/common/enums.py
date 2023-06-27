@@ -225,6 +225,7 @@ class XBRLTableTagEnum(enum.Enum):
     title = 'title'
     _id = '_id'
 
+
 class PageLayoutEnum(enum.Enum):
     """Enum of page layout blocks, including tables"""
     TEXT = 'page_layout__text'
