@@ -137,7 +137,7 @@ class LangchainLoader:
                 group_metadata['source'].append((tag.left, tag.top,
                                                  tag.right, tag.bottom,
                                                  tag.page.page_number))
-                group_text += f' {text}'
+                group_text += f'\n{text}'
             group_metadata['pages'] = list(group_metadata['pages'])
             group_metadata['document'] = document_id
             metadata_list.append(group_metadata)
