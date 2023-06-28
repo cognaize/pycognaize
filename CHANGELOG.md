@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.11] - 2023-06-28
+- Ignore empty table tags in `langchain_loader.py`
+
 ### [1.4.10] - 2023-06-28
 - Separate LangchainLoader text blocks with new lines
 
