@@ -154,7 +154,7 @@ class LangchainLoader:
         text_blocks = []
         filtered_fields = []
         for block_type, field in fields:
-            if isinstance(field, TableField):
+            if isinstance(field, TableField) and field.tags:
                 filtered_fields.append(
                     (
                         {
