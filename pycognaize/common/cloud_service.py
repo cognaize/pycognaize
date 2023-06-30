@@ -34,6 +34,8 @@ class CloudService:
         return self.ci.is_local_path(path)
 
     @relogin_if_failed
-    def copy_dir(self, source_dir: str, dest_dir: str, multiprocess: Optional[bool] = True,
+    def copy_dir(self, source_dir: str, dest_dir: str,
+                 multiprocess: Optional[bool] = True,
                  continue_copy: Optional[bool] = False):
-        return self.ci.copy_dir(source_dir, dest_dir, multiprocess, continue_copy)
+        return self.ci.copy_dir(source_dir, dest_dir,
+                                multiprocess, continue_copy)
