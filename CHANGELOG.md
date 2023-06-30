@@ -2,6 +2,10 @@
 
 ## [1.4]
 
+### [1.4.12]
+
+- Add missing function to `CloudService`
+
 ### [1.4.11] - 2023-06-28
 - Ignore empty table tags in `langchain_loader.py`
 
