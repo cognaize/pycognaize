@@ -263,30 +263,6 @@ class HTMLCell:
     def left_indentation(self) -> str:
         return self._left_indentation
 
-    @classmethod
-    def construct_from_raw(cls, raw: dict) -> 'HTMLCell':
-        """Build HTMLTAG from pycognaize raw data
-
-        :param raw: pycognaize field's tag info
-        :return:
-        """
-        source_data = raw[XBRLCellEnum.source.value]
-        row_index = source_data[XBRLCellEnum.row_index.value]
-        col_index = source_data[XBRLCellEnum.col_index.value]
-        col_span = source_data[XBRLCellEnum.col_span.value]
-        row_span = source_data[XBRLCellEnum.row_span.value]
-        raw_value = raw[XBRLCellEnum.raw_value.value]
-        html_id = source_data[XBRLCellEnum.html_id.value]
-        xpath = source_data[XBRLCellEnum.xpath.value]
-        is_bold = (source_data[XBRLCellEnum.is_bold.value]
-                   if XBRLCellEnum.is_bold.value in source_data else False)
-        left_indentation = (source_data[XBRLCellEnum.left_indentation.value]
-                            if XBRLCellEnum.left_indentation.value else None)
-        return cls(html_id=html_id, xpath=xpath, row_index=row_index,
-                   col_index=col_index, col_span=col_span, row_span=row_span,
-                   raw_value=raw_value, is_bold=is_bold,
-                   left_indentation=left_indentation)
-
     def to_dict(self) -> dict:
         """Converts cell to dict"""
         cell_dict = {
