@@ -1,7 +1,8 @@
 import unittest
 import pandas as pd
-from pycognaize.common.numeric_parser import NumericParser
+import math
 
+from pycognaize.common.numeric_parser import NumericParser
 
 class TestNumericParser(unittest.TestCase):
     CONVERT_TO_NUMBER = {
@@ -16,6 +17,7 @@ class TestNumericParser(unittest.TestCase):
         '0.00': 0.0,
         '0,0': 0.0,
         '0,01': 0.01,
+      # "12,345'67": 12345.67,
         '0.75%': float('nan'),
         '10, 000': 10000,
         '10,009 ': 10009,
@@ -53,6 +55,37 @@ class TestNumericParser(unittest.TestCase):
         '., 13': float('nan'),
     }
 
+    PARSED_TO_NUMBER = {
+        "$458": True,
+        "(125)": True,
+        "(1.25)": True,
+        "0, 01": True,
+        "0.75 %": False,
+        "10, 000%": False,
+        "10 %": False,
+        "A13": False
+    }
+    INFER_SIGN_NUMBER = {
+        "(0.01)": -1,
+        "-5": -1,
+        "944": 1,
+        "6.456": 1,
+        "(895.5)": -1,
+        "-9.045": -1
+    }
+
+    PARSE_TO_NUMBER_RAW = {
+        "123": 123,
+        "3.14": 3.14,
+        "1,234": 1234,
+        "1,234.56": 1234.56,
+        "123.00": 123,
+        "3.1400": 3.14,
+        "-42": -42,
+        "-3.14": -3.14,
+        "": ValueError,  # Empty input
+        "12a3.45": ValueError,  # Invalid characters
+    }
     def test_parse_numeric(self):
         for actual, expected in self.CONVERT_TO_NUMBER.items():
             if expected is not None:
@@ -65,6 +98,16 @@ class TestNumericParser(unittest.TestCase):
             else:
                 self.assertTrue(pd.isna(NumericParser(actual).parse_numeric()))
 
+    def test_is_numeric(self):
+        for actual, expected in self.PARSED_TO_NUMBER.items():
+            if expected is not None:
+                self.assertEqual(expected, NumericParser(actual).is_numeric())
+
+    def test_infer_sign(self):
+        for actual, expected in self.INFER_SIGN_NUMBER.items():
+            parser = NumericParser(actual)
+            parser.infer_sign()
+            self.assertEqual(expected, parser.sign)
 
 if __name__ == '__main__':
     unittest.main()
