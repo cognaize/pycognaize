@@ -37,13 +37,9 @@ class CloudService:
     def copy_dir(self, source_dir: str, dest_dir: str,
                  multiprocess: Optional[bool] = True,
                  continue_copy: Optional[bool] = False,
-                 exclude_images: bool = False,
-                 exclude_ocr: bool = False,
-                 exclude_pdf: bool = False
+                 exclude=None
                  ):
         return self.ci.copy_dir(source_dir, dest_dir,
                                 multiprocess, continue_copy,
-                                exclude_images,
-                                exclude_ocr,
-                                exclude_pdf
+                                exclude
                                 )

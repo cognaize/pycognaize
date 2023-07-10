@@ -52,11 +52,11 @@ class Snapshot:
                                          snapshot_id)
             ci = utils.cloud_interface_login(login_instance)
 
+            exclude = cls._get_exclude_patterns(exclude_images, exclude_ocr, exclude_pdf)
+
             ci.copy_dir(snapshot_path,
                         destination_dir,
-                        exclude_images=exclude_images,
-                        exclude_ocr=exclude_ocr,
-                        exclude_pdf=exclude_pdf)
+                        exclude=exclude)
 
             summary_hash = directory_summary_hash(destination_dir)
             with open(os.path.join(destination_dir, HASH_FILE), 'w') as f:
@@ -86,6 +86,21 @@ class Snapshot:
             snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
             snapshot_path = os.path.join(snapshot_dir, snapshot_id)
         return snapshot_path
+
+    @classmethod
+    def _get_exclude_patterns(cls, exclude_images, exclude_ocr, exclude_pdf):
+        exclude = []
+
+        if exclude_images:
+            exclude.append('*/images/*')
+
+        if exclude_ocr:
+            exclude.append('*/data/*')
+
+        if exclude_pdf:
+            exclude.append('*.pdf')
+
+        return exclude
 
     @classmethod
     def get(cls) -> 'Snapshot':
