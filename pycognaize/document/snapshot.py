@@ -52,7 +52,11 @@ class Snapshot:
                                          snapshot_id)
             ci = utils.cloud_interface_login(login_instance)
 
-            exclude = cls._get_exclude_patterns(exclude_images, exclude_ocr, exclude_pdf)
+            exclude = cls._get_exclude_patterns(
+                exclude_images,
+                exclude_ocr,
+                exclude_pdf
+            )
 
             ci.copy_dir(snapshot_path,
                         destination_dir,
