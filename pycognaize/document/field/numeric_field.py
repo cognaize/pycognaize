@@ -4,7 +4,6 @@ from typing import List, Optional, Dict, Type
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
-    IqTagKeyEnum,
     ID,
     IqFieldKeyEnum,
     IqDataTypesEnum
@@ -24,6 +23,7 @@ class NumericField(Field):
     def __init__(self,
                  name: str,
                  value: str = '',
+                 calculated_value: str = '',
                  tags: Optional[List[ExtractionTag]] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
@@ -35,6 +35,7 @@ class NumericField(Field):
                          group_name=group_name)
         self._field_id = field_id
         self._raw_field_value = value
+        self._calculated_value = calculated_value
         self._value = self.convert_to_numeric(value)
         self._field_value = self.convert_to_numeric(value)
         self._tag_value = None
@@ -50,6 +51,10 @@ class NumericField(Field):
     @property
     def value(self):
         return self._value
+
+    @property
+    def calculated_value(self):
+        return self._calculated_value
 
     @property
     def field_value(self):
@@ -80,10 +85,13 @@ class NumericField(Field):
                         raw=i, html=html))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
-        value = (tags[0].raw_value if (html.path and tags)
-                 else raw[IqTagKeyEnum.value.value])
+        calculated_value = raw.get(IqFieldKeyEnum.calculated_value.value, '')
+        field_value = raw[IqFieldKeyEnum.value.value]
+        field_value = (tags[0].raw_value if (html.path and tags)
+                       else field_value)
         return cls(name=raw[IqDocumentKeysEnum.name.value],
-                   value=value,
+                   value=field_value,
+                   calculated_value=calculated_value,
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
