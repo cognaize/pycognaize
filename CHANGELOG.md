@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.13] - 2023-07-10
+- Add calculated values to `NumericField`
+
 ### [1.4.12] - 2023-06-30
 - Add missing function to `CloudService`
 

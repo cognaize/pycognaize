@@ -91,6 +91,7 @@ class IqFieldKeyEnum(enum.Enum):
     tags = 'tags'
     template_id = 'templateId'
     value = 'value'
+    calculated_value = 'calculatedValue'
     ocr_value = 'ocrValue'
     repeat_parent = 'repeatParent'
     section = 'section'
