@@ -96,10 +96,10 @@ class Snapshot:
         exclude = []
 
         if exclude_images:
-            exclude.append('*/images/*')
+            exclude.append('*/images/*.jpeg')
 
         if exclude_ocr:
-            exclude.append('*/data/*')
+            exclude.append('*/data/*.json')
 
         if exclude_pdf:
             exclude.append('*.pdf')
