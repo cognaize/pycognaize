@@ -35,7 +35,7 @@ class NumericField(Field):
                          group_name=group_name)
         self._field_id = field_id
         self._raw_field_value = value
-        self._calculated_value = calculated_value
+        self._calculated_value = self.convert_to_numeric(calculated_value)
         self._value = self.convert_to_numeric(value)
         self._field_value = self.convert_to_numeric(value)
         self._tag_value = None
