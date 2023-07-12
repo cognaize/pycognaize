@@ -1,13 +1,13 @@
-import os
 import logging
+import os
 from typing import Mapping, Tuple
 
-from pycognaize.common.utils import directory_summary_hash
-from pycognaize.login import Login
 from pycognaize.common import utils
 from pycognaize.common.enums import EnvConfigEnum, HASH_FILE
 from pycognaize.common.exceptions import AuthenthicationError
 from pycognaize.common.lazy_dict import LazyDocumentDict
+from pycognaize.common.utils import directory_summary_hash
+from pycognaize.login import Login
 
 
 class Snapshot:
@@ -39,8 +39,11 @@ class Snapshot:
             return cls(path=snapshot_path)
 
     @classmethod
-    def download(cls, snapshot_id: str, destination_dir: str) -> \
-            Tuple['Snapshot', str]:
+    def download(cls, snapshot_id: str, destination_dir: str,
+                 exclude_images: bool = False,
+                 exclude_ocr: bool = False,
+                 exclude_pdf: bool = False
+                 ) -> Tuple['Snapshot', str]:
         """Downloads snapshot to specified destination"""
         login_instance = Login()
 
@@ -48,7 +51,16 @@ class Snapshot:
             snapshot_path = os.path.join(login_instance.snapshot_root,
                                          snapshot_id)
             ci = utils.cloud_interface_login(login_instance)
-            ci.copy_dir(snapshot_path, destination_dir)
+
+            exclude = cls._get_exclude_patterns(
+                exclude_images,
+                exclude_ocr,
+                exclude_pdf
+            )
+
+            ci.copy_dir(snapshot_path,
+                        destination_dir,
+                        exclude=exclude)
 
             summary_hash = directory_summary_hash(destination_dir)
             with open(os.path.join(destination_dir, HASH_FILE), 'w') as f:
@@ -78,6 +90,21 @@ class Snapshot:
             snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
             snapshot_path = os.path.join(snapshot_dir, snapshot_id)
         return snapshot_path
+
+    @classmethod
+    def _get_exclude_patterns(cls, exclude_images, exclude_ocr, exclude_pdf):
+        exclude = []
+
+        if exclude_images:
+            exclude.append('*/images/*.jpeg')
+
+        if exclude_ocr:
+            exclude.append('*/data/*.json')
+
+        if exclude_pdf:
+            exclude.append('*.pdf')
+
+        return exclude
 
     @classmethod
     def get(cls) -> 'Snapshot':
