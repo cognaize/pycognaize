@@ -1,4 +1,5 @@
 import logging
+import math
 from typing import List, Optional, Dict, Type
 
 
@@ -37,6 +38,8 @@ class NumericField(Field):
         self._raw_field_value = value
         self._calculated_value = self.convert_to_numeric(calculated_value)
         self._value = self.convert_to_numeric(value)
+        if math.isnan(self._value):
+            self._value = self.calculated_value
         self._field_value = self.convert_to_numeric(value)
         self._tag_value = None
         if self.tags:

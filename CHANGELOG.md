@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.15] - 2023-07-12
+- `NumericField.value` will return the calculated value if no field or tag values are available
+
 ### [1.4.14] - 2023-07-11
 - Add exclude options for Snapshot download
 
