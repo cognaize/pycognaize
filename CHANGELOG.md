@@ -2,6 +2,37 @@
 
 ## [1.4]
 
+### [1.4.15] - 2023-07-12
+- `NumericField.value` will return the calculated value if no field or tag values are available
+
+### [1.4.14] - 2023-07-11
+- Add exclude options for Snapshot download
+
+### [1.4.13] - 2023-07-10
+- Add calculated values to `NumericField`
+
+### [1.4.12] - 2023-06-30
+- Add missing function to `CloudService`
+
+### [1.4.11] - 2023-06-28
+- Ignore empty table tags in `langchain_loader.py`
+
+### [1.4.10] - 2023-06-28
+- Separate LangchainLoader text blocks with new lines
+
+### [1.4.9] - 2023-06-27
+- Add `to_string()` functionality to `table_tags`
+- Add langchain_loader util to convert Pycognaize `Document` objects to Langchain `Document` objects
+
+### [1.4.8] - 2023-06-24
+- Add field value and tag value to numeric field
+
+### [1.4.7] - 2023-06-15
+- Add `ocr_tags()` and `line_tags()` to `Page`
+
+### [1.4.6] - 2023-06-27
+- Add replace_nans_with_empty_html_tags functionality in HTMLTableTag build df
+
 ### [1.4.5] - 2023-06-12
 - Add relogin when AWS token is expired
 

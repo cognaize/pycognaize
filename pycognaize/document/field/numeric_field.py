@@ -1,10 +1,10 @@
 import logging
+import math
 from typing import List, Optional, Dict, Type
 
 
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
-    IqTagKeyEnum,
     ID,
     IqFieldKeyEnum,
     IqDataTypesEnum
@@ -24,6 +24,7 @@ class NumericField(Field):
     def __init__(self,
                  name: str,
                  value: str = '',
+                 calculated_value: str = '',
                  tags: Optional[List[ExtractionTag]] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
@@ -36,12 +37,19 @@ class NumericField(Field):
                          group_name=group_name)
         self.scale = scale
         self._field_id = field_id
+        self._raw_field_value = value
+        self._calculated_value = self.convert_to_numeric(calculated_value)
         self._value = self.convert_to_numeric(value)
+        if math.isnan(self._value):
+            self._value = self.calculated_value
+        self._field_value = self.convert_to_numeric(value)
+        self._tag_value = None
         if self.tags:
             self._value = sum([self.convert_to_numeric(i.raw_value)
                                for i in self.tags])
         if self.scale:
             self._value = self._value * self.scale
+        self._tag_value = self._value
 
     @property
     def name(self):
@@ -50,6 +58,22 @@ class NumericField(Field):
     @property
     def value(self):
         return self._value
+
+    @property
+    def calculated_value(self):
+        return self._calculated_value
+
+    @property
+    def field_value(self):
+        return self._field_value
+
+    @property
+    def tag_value(self):
+        return self._tag_value
+
+    @property
+    def raw_field_value(self):
+        return self._raw_field_value
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
@@ -70,8 +94,13 @@ class NumericField(Field):
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
         value = (tags[0].raw_value if tags
                  else raw[IqTagKeyEnum.value.value])
+        calculated_value = raw.get(IqFieldKeyEnum.calculated_value.value, '')
+        field_value = raw[IqFieldKeyEnum.value.value]
+        field_value = (tags[0].raw_value if (html.path and tags)
+                       else field_value)
         return cls(name=raw[IqDocumentKeysEnum.name.value],
-                   value=value,
+                   value=field_value,
+                   calculated_value=calculated_value,
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),

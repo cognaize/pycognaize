@@ -13,3 +13,4 @@ PyYAML
 SQLAlchemy
 click
 anytree
+tabulate
