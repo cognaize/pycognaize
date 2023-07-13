@@ -30,8 +30,7 @@ class LangchainLoader:
         load and split the Document into separate langchain document objects
         """
         langchain = importlib.import_module('langchain')
-        text_blocks_w_metadata: list[list[tuple[dict, str]]] =\
-            self._get_as_text(self.document)
+        text_blocks_w_metadata: list[list[tuple[dict, str]]] = self.document.to_text()
         metadata_list, text_list = self._create_text_and_metadata(
             text_blocks_w_metadata,
             document_id=self.get_document_src())
@@ -50,19 +49,6 @@ class LangchainLoader:
     def count_tokens(self, text: str) -> int:
         """Tokenize the text and count the number of tokens"""
         return len(self.tokenizer.encode(text))
-
-    @staticmethod
-    def _get_table_group(current_group: list[tuple[dict, str]],
-                         metadata, text_block):
-        if current_group and current_group[-1][0]['block'] in \
-                (PageLayoutEnum.PAGE_HEADER,
-                 PageLayoutEnum.SECTION_HEADER):
-            table_group = [current_group[-1], (metadata, text_block)]
-            current_group = current_group[:-1]
-        else:
-            table_group = [(metadata, text_block)]
-
-        return table_group, current_group
 
     def _get_as_text(self, document: Document) -> list[list[tuple[dict, str]]]:
         """Given a cognaize document object, return a list of strings,

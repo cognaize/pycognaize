@@ -15,7 +15,8 @@ from fitz.utils import getColor, getColorList
 from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.document.html_info import HTML
 from pycognaize.login import Login
-from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
+from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum, \
+    PageLayoutEnum
 from pycognaize.common.field_collection import FieldCollection
 from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document.field import FieldMapping, TableField
@@ -541,6 +542,120 @@ class Document:
                     color=output_color,
                     opacity=output_opacity)
         return pdf_bytes
+
+    @staticmethod
+    def _get_table_group(current_group: list[tuple[dict, str]],
+                         metadata, text_block):
+        if current_group and current_group[-1][0]['block'] in \
+                (PageLayoutEnum.PAGE_HEADER,
+                 PageLayoutEnum.SECTION_HEADER):
+            table_group = [current_group[-1], (metadata, text_block)]
+            current_group = current_group[:-1]
+        else:
+            table_group = [(metadata, text_block)]
+
+        return table_group, current_group
+
+    @staticmethod
+    def _order_text_blocks(fields: list[tuple[str, Field]]) -> \
+            list[tuple[dict, str]]:
+        """
+        Order the fields as they appear in the original document.
+        Order by page, top coordinate and left coordinate in that order.
+        """
+        text_blocks = []
+        filtered_fields = []
+        for block_type, field in fields:
+            if isinstance(field, TableField):
+                filtered_fields.append(
+                    (
+                        {
+                            'block': PageLayoutEnum(block_type),
+                            'tag': field.tags[0],
+                        },
+                        field
+                    )
+                )
+            else:
+                if field.tags and field.tags[0].raw_value.strip():
+                    filtered_fields.append(
+                        (
+                            {
+                                'block': PageLayoutEnum(block_type),
+                                'tag': field.tags[0],
+                            },
+                            field
+                        )
+                    )
+        fields: list[tuple[dict, Field]] = sorted(
+            filtered_fields,
+            key=lambda x: (x[1].tags[0].page.page_number,
+                           x[1].tags[0].top, x[1].tags[0].left))
+
+        for metadata, field in fields:
+            if isinstance(field, TableField):
+                value: str = field.tags[0].to_string()
+            else:
+                value = field.value
+            text_blocks.append((metadata, value))
+        return text_blocks
+
+
+    def to_text(self) -> list[list[tuple[dict, str]]]:
+        """Given a cognaize document object, return a list of strings,
+        where each string represents a single chunk/block.
+        The tables and text are always in separate groups.
+        """
+        input_fields = list(i.value for i in PageLayoutEnum)
+
+        fields = []
+        for pname in input_fields:
+            if pname not in self.x:
+                continue
+            block_fields = [(pname, i) for i in self.x[pname]]
+            fields.extend(block_fields)
+        ordered_blocks_w_metadata: list[
+            tuple[dict, str]] = self._order_text_blocks(fields)
+        groups = []
+        current_group = None
+        for block_n, (metadata, text_block) in \
+                enumerate(ordered_blocks_w_metadata):
+            # First block, create a new group
+            if block_n == 0:
+                current_group = [(metadata, text_block)]
+            # Table, create a separate group
+            if metadata['block'] is PageLayoutEnum.TABLE:
+                table_group, current_group =\
+                    self._get_table_group(current_group, metadata, text_block)
+                # finalize the previous group
+                groups.append(current_group)
+                # finalized the table group
+                groups.append(table_group)
+                # create an empty group
+                current_group = []
+            elif metadata['block'] in (PageLayoutEnum.PAGE_HEADER,
+                                       PageLayoutEnum.SECTION_HEADER):
+                # If all elements are headers in the group, continue with the
+                # same group
+                if all((
+                        g[0]['block']
+                        in (PageLayoutEnum.PAGE_HEADER,
+                            PageLayoutEnum.SECTION_HEADER)
+                        for g in current_group
+                )):
+                    current_group.append((metadata, text_block))
+                elif current_group:
+                    groups.append(current_group)
+                    current_group = [(metadata, text_block)]
+                else:
+                    current_group = [(metadata, text_block)]
+                # Create a new group
+            elif block_n == len(ordered_blocks_w_metadata) - 1 and\
+                    current_group:
+                groups.append(current_group)
+            else:
+                current_group.append((metadata, text_block))
+        return groups
 
 
 def annotate_pdf(doc: fitz.Document,
