@@ -7,7 +7,7 @@ from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     ID,
     IqFieldKeyEnum,
-    IqDataTypesEnum
+    IqDataTypesEnum, IqTagKeyEnum
 )
 from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page

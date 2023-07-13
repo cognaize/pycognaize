@@ -3,6 +3,7 @@ import os.path
 import unittest
 from copy import deepcopy
 
+from pycognaize.document import Document
 from pycognaize.document.html_info import HTML
 
 from pycognaize.common.enums import IqDocumentKeysEnum, IqTagKeyEnum, IqFieldKeyEnum, ID
@@ -36,6 +37,7 @@ class TestNumericField(unittest.TestCase):
 
         self.snapshot = Snapshot(RESOURCE_FOLDER + '/snapshots')
         self.document = self.snapshot.documents['63d4486c0e3fe60011fe3a75']
+        # self.document = Document.from_dict(self.data_with_scale, data_path='/home/maria/Desktop/pycognaize/pycognaize/tests/resources/snapshots')
 
         self.html = HTML(path=(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906'),
                          document_id='60f554497883ab0013d9d906')
