@@ -50,60 +50,6 @@ class LangchainLoader:
         """Tokenize the text and count the number of tokens"""
         return len(self.tokenizer.encode(text))
 
-    def _get_as_text(self, document: Document) -> list[list[tuple[dict, str]]]:
-        """Given a cognaize document object, return a list of strings,
-        where each string represents a single chunk/block.
-        The tables and text are always in separate groups.
-        """
-        fields = []
-        for pname in self.INPUT_FIELDS:
-            if pname not in document.x:
-                continue
-            block_fields = [(pname, i) for i in document.x[pname]]
-            fields.extend(block_fields)
-        ordered_blocks_w_metadata: list[
-            tuple[dict, str]] = self._order_text_blocks(fields)
-        groups = []
-        current_group = None
-        for block_n, (metadata, text_block) in \
-                enumerate(ordered_blocks_w_metadata):
-            # First block, create a new group
-            if block_n == 0:
-                current_group = [(metadata, text_block)]
-            # Table, create a separate group
-            if metadata['block'] is PageLayoutEnum.TABLE:
-                table_group, current_group =\
-                    self._get_table_group(current_group, metadata, text_block)
-                # finalize the previous group
-                groups.append(current_group)
-                # finalized the table group
-                groups.append(table_group)
-                # create an empty group
-                current_group = []
-            elif metadata['block'] in (PageLayoutEnum.PAGE_HEADER,
-                                       PageLayoutEnum.SECTION_HEADER):
-                # If all elements are headers in the group, continue with the
-                # same group
-                if all((
-                        g[0]['block']
-                        in (PageLayoutEnum.PAGE_HEADER,
-                            PageLayoutEnum.SECTION_HEADER)
-                        for g in current_group
-                )):
-                    current_group.append((metadata, text_block))
-                elif current_group:
-                    groups.append(current_group)
-                    current_group = [(metadata, text_block)]
-                else:
-                    current_group = [(metadata, text_block)]
-                # Create a new group
-            elif block_n == len(ordered_blocks_w_metadata) - 1 and\
-                    current_group:
-                groups.append(current_group)
-            else:
-                current_group.append((metadata, text_block))
-        return groups
-
     @staticmethod
     def _create_text_and_metadata(
         text_blocks_w_metadata: list[list[tuple[dict, str]]],
@@ -129,47 +75,3 @@ class LangchainLoader:
             metadata_list.append(group_metadata)
             text_list.append(group_text)
         return metadata_list, text_list
-
-    @staticmethod
-    def _order_text_blocks(fields: list[tuple[str, Field]]) -> \
-            list[tuple[dict, str]]:
-        """
-        Order the fields as they appear in the original document.
-        Order by page, top coordinate and left coordinate in that order.
-        """
-        text_blocks = []
-        filtered_fields = []
-        for block_type, field in fields:
-            if isinstance(field, TableField):
-                filtered_fields.append(
-                    (
-                        {
-                            'block': PageLayoutEnum(block_type),
-                            'tag': field.tags[0],
-                        },
-                        field
-                    )
-                )
-            else:
-                if field.tags and field.tags[0].raw_value.strip():
-                    filtered_fields.append(
-                        (
-                            {
-                                'block': PageLayoutEnum(block_type),
-                                'tag': field.tags[0],
-                            },
-                            field
-                        )
-                    )
-        fields: list[tuple[dict, Field]] = sorted(
-            filtered_fields,
-            key=lambda x: (x[1].tags[0].page.page_number,
-                           x[1].tags[0].top, x[1].tags[0].left))
-
-        for metadata, field in fields:
-            if isinstance(field, TableField):
-                value: str = field.tags[0].to_string()
-            else:
-                value = field.value
-            text_blocks.append((metadata, value))
-        return text_blocks
