@@ -94,7 +94,7 @@ class IqFieldKeyEnum(enum.Enum):
     ocr_value = 'ocrValue'
     repeat_parent = 'repeatParent'
     section = 'section'
-
+    scale = "scale"
 
 class IqTagKeyEnum(enum.Enum):
     value = 'value'

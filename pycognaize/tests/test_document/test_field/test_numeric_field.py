@@ -9,6 +9,7 @@ from pycognaize.common.enums import IqDocumentKeysEnum, IqTagKeyEnum, IqFieldKey
 from pycognaize.document.field import NumericField
 from pycognaize.document.page import create_dummy_page
 from pycognaize.tests.resources import RESOURCE_FOLDER
+from pycognaize import Snapshot
 
 
 class TestNumericField(unittest.TestCase):
@@ -16,15 +17,25 @@ class TestNumericField(unittest.TestCase):
     def setUp(self):
         with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json') as document_json:
             self.data_with_group_key = json.load(document_json)
+        with open(RESOURCE_FOLDER + '/snapshots/63d4486c0e3fe60011fe3a75/document.json') as document_json:
+            self.data_with_scale = json.load(document_json)
 
         # add groupKey value to test in test_to_dict
         self.data_with_group_key["input_fields"]["ref"][0]['groupKey'] = 'test_group_key'
         self.raw_num_field_1 = self.data_with_group_key["input_fields"]["ref"][0]
         self.raw_num_field_2 = self.data_with_group_key["input_fields"]["ref"][1]
+        self.data_with_scale_1 = self.data_with_scale['output_fields']['v_year_end_outstanding_shares_sup_is__current'][0]
+        self.numeric_field_scale_1 = self.data_with_scale['output_fields']['v_year_end_outstanding_shares_sup_is__current'][0]['scale']
+        self.data_with_scale_2 = self.data_with_scale['output_fields']['v_other_receivables_bs__current'][0]
+        self.numeric_field_scale_2 = self.data_with_scale['output_fields']['v_other_receivables_bs__current'][0]['scale']
+        self.numeric_field_value_3 = self.data_with_scale['output_fields']['v_other_receivables_bs__current'][0]['tags'][0]['ocrValue']
 
         self.pages_1 = {1: create_dummy_page(page_n=1)}
         self.pages_2 = {1: create_dummy_page(page_n=1),
                         2: create_dummy_page(page_n=2)}
+
+        self.snapshot = Snapshot(RESOURCE_FOLDER + '/snapshots')
+        self.document = self.snapshot.documents['63d4486c0e3fe60011fe3a75']
 
         self.html = HTML(path=(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906'),
                          document_id='60f554497883ab0013d9d906')
@@ -66,6 +77,9 @@ class TestNumericField(unittest.TestCase):
         invalid_raw_2 = deepcopy(self.raw_num_field_2)
         invalid_raw_2[IqDocumentKeysEnum.tags.value][0].pop(IqTagKeyEnum.page.value)
 
+        self.assertEqual(self.document.y['v_year_end_outstanding_shares_sup_is__current'][0].scale, self.numeric_field_scale_1)
+        self.assertEqual(self.document.y['v_other_receivables_bs__current'][0].scale, self.numeric_field_scale_2)
+        self.assertEqual(self.document.y['v_other_receivables_bs__current'][0].raw_value, self.numeric_field_value_3 * self.numeric_field_scale_2)
         # with self.assertRaises(KeyError):
         #     NumericField.construct_from_raw(raw=invalid_raw_1, pages=self.pages_1)
         # with self.assertRaises(KeyError):

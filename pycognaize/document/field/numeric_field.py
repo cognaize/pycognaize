@@ -28,16 +28,20 @@ class NumericField(Field):
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
-                 group_name: str = None
+                 group_name: str = None,
+                 scale: int = None
                  ):
         super().__init__(name=name, tags=tags, value=value,
                          group_key=group_key, confidence=confidence,
                          group_name=group_name)
+        self.scale = scale
         self._field_id = field_id
         self._value = self.convert_to_numeric(value)
         if self.tags:
             self._value = sum([self.convert_to_numeric(i.raw_value)
                                for i in self.tags])
+        if self.scale:
+            self._value = self._value * self.scale
 
     @property
     def name(self):
@@ -64,14 +68,15 @@ class NumericField(Field):
                         raw=i, html=html))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
-        value = (tags[0].raw_value if (html.path and tags)
+        value = (tags[0].raw_value if tags
                  else raw[IqTagKeyEnum.value.value])
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    value=value,
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
-                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
+                   group_name=raw.get(IqFieldKeyEnum.group.value, ''),
+                   scale=raw.get(IqFieldKeyEnum.scale.value, '')
                    )
 
     @staticmethod
