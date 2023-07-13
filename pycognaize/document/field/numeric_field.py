@@ -92,8 +92,6 @@ class NumericField(Field):
                         raw=i, html=html))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
-        value = (tags[0].raw_value if tags
-                 else raw[IqTagKeyEnum.value.value])
         calculated_value = raw.get(IqFieldKeyEnum.calculated_value.value, '')
         field_value = raw[IqFieldKeyEnum.value.value]
         field_value = (tags[0].raw_value if (html.path and tags)
