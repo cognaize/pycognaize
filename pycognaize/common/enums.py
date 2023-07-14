@@ -97,6 +97,7 @@ class IqFieldKeyEnum(enum.Enum):
     section = 'section'
     scale = "scale"
 
+
 class IqTagKeyEnum(enum.Enum):
     value = 'value'
     has_valid_value = 'hasValidValue'
