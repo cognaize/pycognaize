@@ -9,7 +9,7 @@ from pycognaize.common.enums import (
     IqFieldKeyEnum,
     IqDataTypesEnum
 )
-from pycognaize.common.numeric_parser import NumericParser
+
 from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.field import Field
