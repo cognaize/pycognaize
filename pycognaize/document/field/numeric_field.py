@@ -109,8 +109,11 @@ class NumericField(Field):
     def convert_to_numeric(value):
         """converts string value to numeric"""
         # noinspection PyBroadException
-        parsed = NumericParser(str(value)).parse_numeric()
-        return parsed
+        try:
+            value = float(value)
+        except Exception:
+            value = float('nan')
+        return value
 
     def to_dict(self) -> dict:
         """Converts NumericField object to dictionary"""

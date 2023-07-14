@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.16] - 2023-07-12
+- `NumericField.value` will return the calculated value if no field or tag values are available
+
 ### [1.4.15] - 2023-07-12
 - `NumericField.value` will return the calculated value if no field or tag values are available
 
