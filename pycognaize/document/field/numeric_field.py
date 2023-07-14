@@ -7,8 +7,9 @@ from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     ID,
     IqFieldKeyEnum,
-    IqDataTypesEnum, IqTagKeyEnum
+    IqDataTypesEnum
 )
+from pycognaize.common.numeric_parser import NumericParser
 from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.field import Field
@@ -47,8 +48,6 @@ class NumericField(Field):
         if self.tags:
             self._value = sum([self.convert_to_numeric(i.raw_value)
                                for i in self.tags])
-        if self.scale:
-            self._value = self._value * self.scale
         self._tag_value = self._value
 
     @property
@@ -110,11 +109,8 @@ class NumericField(Field):
     def convert_to_numeric(value):
         """converts string value to numeric"""
         # noinspection PyBroadException
-        try:
-            value = float(value)
-        except Exception:
-            value = float('nan')
-        return value
+        parsed = NumericParser(str(value)).parse_numeric()
+        return parsed
 
     def to_dict(self) -> dict:
         """Converts NumericField object to dictionary"""
