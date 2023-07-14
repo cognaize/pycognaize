@@ -48,7 +48,7 @@ class NumericField(Field):
         if self.tags:
             self._value = sum([self.convert_to_numeric(i.raw_value)
                                for i in self.tags])
-        self._tag_value = self._value
+            self._tag_value = self._value
 
     @property
     def name(self):
