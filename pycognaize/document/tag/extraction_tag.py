@@ -11,6 +11,7 @@ from pycognaize.document.tag.tag import BoxTag
 from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.cell import Cell
 from typing import TYPE_CHECKING
+# from pycognaize import Snapshot
 if TYPE_CHECKING:
     from pycognaize.document.page import Page
 
@@ -83,12 +84,28 @@ class ExtractionTag(BoxTag):
             right = max(self.right, other.right)
             top = min(self.top, other.top)
             bottom = max(self.bottom, other.bottom)
-            raw_ocr_value_joined = " ".join(
-                [i.raw_ocr_value for i in sorted(
-                    [self, other], key=lambda x: (x.left, x.top))])
+            # raw_ocr_value_joined = " ".join(
+            #     [i.raw_ocr_value for i in sorted(
+            #         [self, other], key=lambda x: (x.left, x.top))])
             raw_value_joined = " ".join(
                 [i.raw_value for i in sorted(
                     [self, other], key=lambda x: (x.left, x.top))])
+
+            # words = words_values[0]
+            # for l in words_values:
+            #         for d in l:
+            #            words.append(d)
+
+            left_actual = left * self.page.image_width/100
+            right_actual = right * self.page.image_width/100
+            top_actual = top*self.page.image_height/100
+            bottom_actual = bottom*self.page.image_height/100
+            words_list = self.page.extract_area_words(left=left_actual,
+                                                      right=right_actual,
+                                                      top=top_actual,
+                                                      bottom=bottom_actual)
+            words = [text['ocr_text'] for text in words_list]
+            raw_ocr_value_joined = " ".join(words)
             return ExtractionTag(
                 left=left, right=right, top=top, bottom=bottom,
                 page=self.page, raw_value=raw_value_joined,
