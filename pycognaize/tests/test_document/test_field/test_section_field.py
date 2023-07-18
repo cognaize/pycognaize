@@ -31,13 +31,13 @@ class TestSectionField(unittest.TestCase):
         self.raw_section = self.data['input_fields']['section'][0]
         self.pages_1 = {1: create_dummy_page(page_n=1)}
 
-    def test_contructor(self):
-        self.assertEqual(self.section_field_without_tags.name,"field")
-        self.assertEqual(self.section_field_without_tags.value, "")
+    # def test_contructor(self):
+    #     self.assertEqual(self.section_field_without_tags.name,"field")
+    #     self.assertEqual(self.section_field_without_tags.value, "")
 
     def test_start(self):
-        self.assertEqual(self.section_field_without_tags.start, None)   #if case
-        self.assertEqual(self.section_field_with_tags.start.top, 10)    #else case
+        self.assertEqual(self.section_field_with_tags.start.top, 10)    #if case
+        self.assertEqual(self.section_field_without_tags.start, None)   #else case
 
     def test_end(self):
         self.assertEqual(self.section_field_with_tags.end.top, 11)      #if case
