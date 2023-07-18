@@ -8,7 +8,8 @@ from pycognaize.document.tag import ExtractionTag
 from pycognaize.tests.resources import RESOURCE_FOLDER
 from pycognaize.tests.resources.field_and_tag_samples import raw_date_tag, invalid_raw_value_tag, \
     invalid_raw_text_tag
-
+from pycognaize.tests.resources import RESOURCE_FOLDER
+from pycognaize import Snapshot
 
 class TestExtractionTag(unittest.TestCase):
 
@@ -22,6 +23,10 @@ class TestExtractionTag(unittest.TestCase):
 
         with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json') as document_json:
             self.data = json.load(document_json)
+        with open(RESOURCE_FOLDER + '/snapshots/63d4486c0e3fe60011fe3a75/document.json') as document_json:
+            self.data1 = json.load(document_json)
+        snapshot = Snapshot(RESOURCE_FOLDER + '/snapshots')
+        doc = snapshot.documents['63d4486c0e3fe60011fe3a75']
 
         self.ext_tag_dict_1 = deepcopy(self.data['input_fields']['ref'][0]['tags'][0])
         self.ext_tag_dict_2 = deepcopy(self.data['input_fields']['paragraph'][0]['tags'][0])
@@ -49,6 +54,8 @@ class TestExtractionTag(unittest.TestCase):
         self.ext_tag_dict_24 = deepcopy(self.data['input_fields']['paragraph'][6]['tags'][0])
         self.ext_tag_dict_25 = deepcopy(self.data['input_fields']['paragraph'][7]['tags'][0])
         self.ext_tag_dict_26 = deepcopy(self.data['input_fields']['paragraph'][8]['tags'][0])
+        self.ext_tag_dict_27 = deepcopy(self.data1['output_fields']['v_other_income_is__current'][0]['tags'][0])
+        self.ext_tag_dict_28 = deepcopy(self.data1['output_fields']["v_interest_income_is__tr"][0]['tags'][0])
 
         self.ext_tag_1 = ExtractionTag.construct_from_raw(self.ext_tag_dict_1,
                                                           page=create_dummy_page(self.ext_tag_dict_1['page']))
@@ -102,6 +109,8 @@ class TestExtractionTag(unittest.TestCase):
                                                            page=create_dummy_page(self.ext_tag_dict_25['page']))
         self.ext_tag_26 = ExtractionTag.construct_from_raw(self.ext_tag_dict_26,
                                                            page=create_dummy_page(self.ext_tag_dict_26['page']))
+        self.ext_tag_27 = ExtractionTag.construct_from_raw(self.ext_tag_dict_27, page = doc.pages[19])
+        self.ext_tag_28 = ExtractionTag.construct_from_raw(self.ext_tag_dict_28, page = doc.pages[19])
 
         self.invalid_numeric_ext_tag = ExtractionTag(left=11.1, right=13.1, top=10, bottom=13,
                                                      page=copy.deepcopy(self.page),
@@ -248,8 +257,9 @@ class TestExtractionTag(unittest.TestCase):
         self.assertAlmostEqual((self.ext_tag_1 + self.ext_tag_2).right,  92.15896885069819)
         self.assertAlmostEqual((self.ext_tag_1 + self.ext_tag_2).top, 25.765237683052145)
         self.assertAlmostEqual((self.ext_tag_1 + self.ext_tag_2).bottom, 32.092653617004046)
-
-        self.assertEqual((self.ext_tag_4 + self.ext_tag_5).raw_ocr_value, '179. “Foreign (other state)”:')
+        self.assertAlmostEqual((self.ext_tag_27 + self.ext_tag_28).left,12.3525)
+        self.assertEqual((self.ext_tag_27 + self.ext_tag_27).raw_ocr_value,'11,916')
+        self.assertEqual((self.ext_tag_27 + self.ext_tag_28).raw_ocr_value,'Interest on loans with Group undertakings 21,776 Fair value gain on derivatives - interest rate swaps 11,916')
         with self.assertRaises(ValueError):
             self.ext_tag_1 + self.ext_tag_3
 
