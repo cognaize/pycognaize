@@ -11,7 +11,6 @@ from pycognaize.document.tag.tag import BoxTag
 from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.cell import Cell
 from typing import TYPE_CHECKING
-# from pycognaize import Snapshot
 if TYPE_CHECKING:
     from pycognaize.document.page import Page
 
@@ -87,10 +86,10 @@ class ExtractionTag(BoxTag):
             raw_value_joined = " ".join(
                 [i.raw_value for i in sorted(
                     [self, other], key=lambda x: (x.left, x.top))])
-            left_actual = left * self.page.image_width/100
-            right_actual = right * self.page.image_width/100
-            top_actual = top * self.page.image_height/100
-            bottom_actual = bottom * self.page.image_height/100
+            left_actual = left * self.page.image_width / 100
+            right_actual = right * self.page.image_width / 100
+            top_actual = top * self.page.image_height / 100
+            bottom_actual = bottom * self.page.image_height / 100
             words_list = self.page.extract_area_words(left=left_actual,
                                                       right=right_actual,
                                                       top=top_actual,

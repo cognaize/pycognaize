@@ -258,7 +258,7 @@ class TestExtractionTag(unittest.TestCase):
         self.assertAlmostEqual((self.ext_tag_1 + self.ext_tag_2).top, 25.765237683052145)
         self.assertAlmostEqual((self.ext_tag_1 + self.ext_tag_2).bottom, 32.092653617004046)
         self.assertAlmostEqual((self.ext_tag_27 + self.ext_tag_28).left,12.3525)
-        self.assertEqual((self.ext_tag_27 + self.ext_tag_27).raw_ocr_value,'11,916')
+        self.assertEqual((self.ext_tag_27 + self.ext_tag_27).raw_ocr_value, '11,916')
         self.assertEqual((self.ext_tag_27 + self.ext_tag_28).raw_ocr_value,'Interest on loans with Group undertakings 21,776 Fair value gain on derivatives - interest rate swaps 11,916')
         with self.assertRaises(ValueError):
             self.ext_tag_1 + self.ext_tag_3
