@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.17] - 2023-07-19
+- Updated `__add__` function in `ExtractionTag` class 
+
 ### [1.4.16] - 2023-07-14
 - Add `scale` property to `NumericField` class
 
