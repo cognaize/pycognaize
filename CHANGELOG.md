@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.17] - 2023-07-19
+- Update `__add__` function in `ExtractionTag` class in order to include the text between the two `BoxTag` objects selected
+
 ### [1.4.16] - 2023-07-14
 - Add `scale` property to `NumericField` class
 
