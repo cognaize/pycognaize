@@ -34,6 +34,9 @@ class SpanTag(BoxTag):
                   page=page, raw_value=raw_value, raw_ocr_value=raw_ocr_value)
         return tag
 
+    def to_dict(self) -> dict:
+        ...
+
     @module_not_found
     def __create_spacy_doc(self):
         """Creates spacy nlp object from raw value"""

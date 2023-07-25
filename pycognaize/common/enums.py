@@ -73,6 +73,7 @@ class IqDocumentKeysEnum(enum.Enum):
     page = 'page'
     src = 'src'
     page_src = 'src'
+    text_span = 'text-span'
 
 
 # TODO: move Document enum values to corresponding enum (field/tag etc)

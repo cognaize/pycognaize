@@ -21,6 +21,7 @@ class SpanField(Field):
 
     def __init__(self,
                  name: str,
+                 value: str,
                  tags: Optional[SpanTag] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
@@ -32,8 +33,10 @@ class SpanField(Field):
         tags = [] if tags is None else tags
         super().__init__(name=name, tags=tags,
                          group_key=group_key, confidence=confidence,
-                         group_name=group_name,)
+                         group_name=group_name, value=value)
         self._field_id = field_id
+        self._value = ' '.join([i.raw_value
+                                 for i in self.tags]) if self.tags else value
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
@@ -43,14 +46,17 @@ class SpanField(Field):
         """Create SnapField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
+        value = ''
         for i in tag_dicts:
             try:
                 tags.append(cls.tag_class.construct_from_raw(
                     raw=i, page=pages[i['page']]))
+                value = value + i['value']
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
         return cls(name=raw[IqDocumentKeysEnum.name.value],
-                   tags=tags[0] if tags else None,
+                   tags=tags if tags else None,
+                   value=value,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                    group_name=raw.get(IqFieldKeyEnum.group.value, ''),
