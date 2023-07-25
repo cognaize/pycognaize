@@ -8,6 +8,7 @@ HASH_FILE = "document_summary_hash.md5"
 IMG_EXTENSION = 'jpeg'
 OCR_DATA_EXTENSION = 'json'
 SNAPSHOT_EXTENSION = 'pickle'
+PDF_EXTENSION = 'pdf'
 
 
 class FieldDataTypeEnum(enum.Enum):
