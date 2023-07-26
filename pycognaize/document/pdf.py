@@ -47,7 +47,7 @@ class Pdf:
                 pdf_data = f.read()
                 pdf_document = fitz.open(filetype="pdf", stream=BytesIO(pdf_data))
         except FileNotFoundError as e:
-            logging.debug(f"Error: {e}Unable to get the pdf")
+            logging.debug(f"Error:{e}Unable to get the pdf")
         return pdf_document
 
     def __getitem__(self, page_number: int):
