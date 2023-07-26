@@ -1,13 +1,8 @@
 import logging
 from typing import Optional
-import os
-import re
-import PyPDF2
 import fitz
 from io import BytesIO
-from PyPDF2 import PdfReader
 from pathlib import Path
-# from langchain.document_loaders import pdf
 from pycognaize.login import Login
 from pycognaize.common.utils import cloud_interface_login
 
@@ -17,8 +12,6 @@ from pycognaize.common.enums import (
 
 
 class Pdf:
-    """Representing a page of a document in pycognaize"""
-    REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
 
     def __init__(self,
                  src_id: str,
@@ -31,7 +24,6 @@ class Pdf:
 
     @property
     def path(self) -> str:
-        """Path of the source document"""
         return self._path
 
     @property

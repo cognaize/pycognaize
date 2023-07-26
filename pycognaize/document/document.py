@@ -36,7 +36,7 @@ class Document:
                  pages: Dict[int, Page],
                  classification_labels: Dict[str, ClassificationLabels],
                  html_info: HTML,
-                 pdf_info: Pdf,
+                 pdf: Pdf,
                  metadata: Dict[str, Any]):
         self._login_instance = Login()
         self._metadata = metadata
@@ -46,7 +46,7 @@ class Document:
         self._html_info: HTML = html_info
         self._x: FieldCollection[str, List[Field]] = input_fields
         self._y: FieldCollection[str, List[Field]] = output_fields
-        self._pdf_info: Pdf = pdf_info
+        self._pdf: Pdf = pdf
     @property
     def x(self) -> 'FieldCollection[str, List[Field]]':
         """Returns a dictionary, where keys are input field names
@@ -91,7 +91,7 @@ class Document:
         return self._html_info
     @property
     def pdf(self):
-        return self._pdf_info
+        return self._pdf
 
     @staticmethod
     def get_matching_table_cells_for_tag(
@@ -416,7 +416,7 @@ class Document:
         metadata = raw['metadata']
         pages = OrderedDict()
         html_info = HTML(path=data_path, document_id=metadata['document_id'])
-        pdf_info = Pdf(path=data_path, src_id=metadata['src'])
+        pdf = Pdf(path=data_path, src_id=metadata['src'])
         classification_labels = ClassificationLabels(raw)
         for page_n in range(1, metadata['numberOfPages'] + 1):
             if (
@@ -463,7 +463,7 @@ class Document:
              for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
                    output_fields=output_fields,
-                   pages=pages, html_info=html_info, pdf_info=pdf_info,
+                   pages=pages, html_info=html_info, pdf=pdf,
                    metadata=metadata,
                    classification_labels=classification_labels)
 
