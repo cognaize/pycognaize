@@ -21,6 +21,7 @@ class Pdf:
         self._path = path
         self._login_instance = Login()
         self.ci = cloud_interface_login(self._login_instance)
+        self._pdf = None
 
     @property
     def path(self) -> str:
@@ -30,7 +31,14 @@ class Pdf:
     def src(self):
         return self._src_id
 
+    @property
+    def pdf(self):
+        if self._pdf is None:
+            self._pdf = self.get_pdf()
+        return self._pdf
+
     def get_pdf(self) -> Optional[dict]:
+        pdf_document = None
         if self.path is None:
             raise ValueError("No path defined for getting the pdf")
         uri = Path(self.path) / f"{self._src_id}.{PDF_EXTENSION}"
@@ -41,3 +49,9 @@ class Pdf:
         except FileNotFoundError as e:
             logging.debug("Unable to get the pdf")
         return pdf_document
+
+    def __getitem__(self, page_number: int):
+        return self.pdf[page_number]
+
+    def ocr(self, page_number: int):
+        return self.pdf[page_number].get_text()
