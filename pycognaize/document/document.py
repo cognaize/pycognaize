@@ -26,6 +26,7 @@ from pycognaize.document.tag.cell import Cell
 from pycognaize.document.tag.tag import BoxTag, LineTag
 from pycognaize.document.pdf import Pdf
 
+
 class Document:
     """Definition of input and output for a single document,
      depending on a given model"""
@@ -47,6 +48,7 @@ class Document:
         self._x: FieldCollection[str, List[Field]] = input_fields
         self._y: FieldCollection[str, List[Field]] = output_fields
         self._pdf: Pdf = pdf
+
     @property
     def x(self) -> 'FieldCollection[str, List[Field]]':
         """Returns a dictionary, where keys are input field names
@@ -89,6 +91,7 @@ class Document:
     def html(self):
         """Returns `HTML` object"""
         return self._html_info
+
     @property
     def pdf(self):
         return self._pdf
@@ -447,7 +450,7 @@ class Document:
                                                    src_field_id.value, ''),
                                                None))
                 for field in fields]
-             for name, fields in raw['input_fields'].items()})
+                for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
             {name: [
                 FieldMapping[
@@ -460,7 +463,7 @@ class Document:
                                                    src_field_id.value, ''),
                                                None))
                 for field in fields]
-             for name, fields in raw['output_fields'].items()})
+                for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
                    output_fields=output_fields,
                    pages=pages, html_info=html_info, pdf=pdf,
@@ -469,7 +472,7 @@ class Document:
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],
-                                     is_input_field: bool = True)\
+                                     is_input_field: bool = True) \
             -> List[Union[BoxTag, LineTag]]:
         """Collect all tags of given field names from either input or output
             fields
@@ -553,7 +556,7 @@ def annotate_pdf(doc: fitz.Document,
                  color: str,
                  opacity: float = 0.3) -> bytes:
     """An annotated Document pdf in bytes"""
-    page = doc[tag.page.page_number-1]
+    page = doc[tag.page.page_number - 1]
     x0 = tag.left * page.mediabox.width / 100
     y0 = tag.top * page.mediabox.height / 100
     x1 = tag.right * page.mediabox.width / 100

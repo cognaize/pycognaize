@@ -45,7 +45,8 @@ class Pdf:
         try:
             with self.ci.open(str(uri), 'rb') as f:
                 pdf_data = f.read()
-                pdf_document = fitz.open(filetype="pdf", stream=BytesIO(pdf_data))
+                pdf_document = fitz.open(
+                    filetype="pdf", stream=BytesIO(pdf_data))
         except FileNotFoundError as e:
             logging.debug(f"Error:{e}Unable to get the pdf")
         return pdf_document
