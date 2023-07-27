@@ -5,10 +5,7 @@ from io import BytesIO
 from pathlib import Path
 from pycognaize.login import Login
 from pycognaize.common.utils import cloud_interface_login
-
-from pycognaize.common.enums import (
-    PDF_EXTENSION
-)
+from pycognaize.common.enums import PDF_EXTENSION
 
 
 class Pdf:
@@ -41,18 +38,18 @@ class Pdf:
         pdf_document = None
         if self.path is None:
             raise ValueError("No path defined for getting the pdf")
-        uri = Path(self.path) / f"{self._src_id}.{PDF_EXTENSION}"
+        uri = Path(self.path).joinpath(f"{self._src_id}.{PDF_EXTENSION}")
         try:
             with self.ci.open(str(uri), 'rb') as f:
                 pdf_data = f.read()
                 pdf_document = fitz.open(
                     filetype="pdf", stream=BytesIO(pdf_data))
         except FileNotFoundError as e:
-            logging.debug(f"Error:{e}Unable to get the pdf")
+            logging.warning(f"Unable to get the pdf: {e}")
         return pdf_document
-
-    def __getitem__(self, page_number: int):
-        return self.pdf[page_number]
 
     def ocr(self, page_number: int):
         return self.pdf[page_number].get_text()
+
+    def __getitem__(self, page_number: int):
+        return self.pdf[page_number]
