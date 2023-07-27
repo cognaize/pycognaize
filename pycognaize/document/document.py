@@ -94,6 +94,7 @@ class Document:
 
     @property
     def pdf(self):
+        """Returns `Pdf` object"""
         return self._pdf
 
     @staticmethod
