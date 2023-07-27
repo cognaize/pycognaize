@@ -1,5 +1,7 @@
+import bson
 from pycognaize.common.utils import convert_coord_to_num
 from pycognaize.document.tag.tag import BoxTag
+from pycognaize.common.enums import IqTagKeyEnum, ID
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from pycognaize.document.page import Page
@@ -35,7 +37,17 @@ class SpanTag(BoxTag):
         return tag
 
     def to_dict(self) -> dict:
-        ...
+        return {
+            ID: str(bson.ObjectId()),
+            IqTagKeyEnum.ocr_value.value: self.raw_ocr_value,
+            IqTagKeyEnum.value.value: str(self.raw_value),
+            IqTagKeyEnum.left.value: f"{self.left}%",
+            IqTagKeyEnum.top.value: f"{self.top}%",
+            IqTagKeyEnum.height.value: f"{self.bottom - self.top}%",
+            IqTagKeyEnum.width.value: f"{self.right - self.left}%",
+            IqTagKeyEnum.page.value: self.page.page_number,
+            IqTagKeyEnum.confidence.value: self.confidence.get_confidence(),
+        }
 
     @module_not_found
     def __create_spacy_doc(self):

@@ -126,7 +126,7 @@ class IqDataTypesEnum(enum.Enum):
     number = 'number'
     area = 'area'
     link = 'link'
-
+    span = 'text-span'
 
 class IqRecipeEnum(enum.Enum):
     id = '_id'

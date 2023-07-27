@@ -34,15 +34,25 @@ class SpanField(Field):
         super().__init__(name=name, tags=tags,
                          group_key=group_key, confidence=confidence,
                          group_name=group_name, value=value)
+
         self._field_id = field_id
-        self._value = ' '.join([i.raw_value
-                                 for i in self.tags]) if self.tags else value
+        self._value = ''
+        # self._value = ' '.join([i.raw_value
+        #                         for i in self.tags]) if self.tags else value
+        self._line_values = [i.raw_value for i in self.tags] if self.tags else value
+
+    @property
+    def value(self):
+        return self._value
+
+    @property
+    def line_values(self):
+        return self._line_values
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
                            html: Optional[HTML] = None,
-                           labels: ClassificationLabels = None)\
-            -> 'SpanField':
+                           labels: ClassificationLabels = None) -> 'SpanField':
         """Create SnapField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
@@ -64,12 +74,18 @@ class SpanField(Field):
                    )
 
     def to_dict(self) -> dict:
-        """Converts TableField object to dictionary"""
-        field_dict = super().to_dict()
+        """Converts SpanField object to dictionary"""
+        field_dict = dict()
         field_dict[ID] = self._field_id
+        field_dict[IqFieldKeyEnum.name.value] = self.name
         field_dict[
-            IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.table.value
-        field_dict[IqFieldKeyEnum.value.value] = ''
+            IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.span.value
+        field_dict[IqFieldKeyEnum.value.value] = ""
+        field_dict[IqFieldKeyEnum.group_key.value] = self._group_key
+        field_dict[IqFieldKeyEnum.tags.value] = []
+        if self.tags:
+            for tag in self.tags:
+                field_dict[IqFieldKeyEnum.tags.value].append(tag.to_dict())
         return field_dict
 
     def order_tags(self):
