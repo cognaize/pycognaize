@@ -24,6 +24,7 @@ from pycognaize.document.page import Page
 from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
 from pycognaize.document.tag.tag import BoxTag, LineTag
+from pycognaize.document.pdf import Pdf
 
 
 class Document:
@@ -36,6 +37,7 @@ class Document:
                  pages: Dict[int, Page],
                  classification_labels: Dict[str, ClassificationLabels],
                  html_info: HTML,
+                 pdf: Pdf,
                  metadata: Dict[str, Any]):
         self._login_instance = Login()
         self._metadata = metadata
@@ -45,6 +47,7 @@ class Document:
         self._html_info: HTML = html_info
         self._x: FieldCollection[str, List[Field]] = input_fields
         self._y: FieldCollection[str, List[Field]] = output_fields
+        self._pdf: Pdf = pdf
 
     @property
     def x(self) -> 'FieldCollection[str, List[Field]]':
@@ -88,6 +91,11 @@ class Document:
     def html(self):
         """Returns `HTML` object"""
         return self._html_info
+
+    @property
+    def pdf(self):
+        """Returns `Pdf` object"""
+        return self._pdf
 
     @staticmethod
     def get_matching_table_cells_for_tag(
@@ -412,6 +420,7 @@ class Document:
         metadata = raw['metadata']
         pages = OrderedDict()
         html_info = HTML(path=data_path, document_id=metadata['document_id'])
+        pdf = Pdf(path=data_path, src_id=metadata['src'])
         classification_labels = ClassificationLabels(raw)
         for page_n in range(1, metadata['numberOfPages'] + 1):
             if (
@@ -442,7 +451,7 @@ class Document:
                                                    src_field_id.value, ''),
                                                None))
                 for field in fields]
-             for name, fields in raw['input_fields'].items()})
+                for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
             {name: [
                 FieldMapping[
@@ -455,16 +464,16 @@ class Document:
                                                    src_field_id.value, ''),
                                                None))
                 for field in fields]
-             for name, fields in raw['output_fields'].items()})
+                for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
                    output_fields=output_fields,
-                   pages=pages, html_info=html_info,
+                   pages=pages, html_info=html_info, pdf=pdf,
                    metadata=metadata,
                    classification_labels=classification_labels)
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],
-                                     is_input_field: bool = True)\
+                                     is_input_field: bool = True) \
             -> List[Union[BoxTag, LineTag]]:
         """Collect all tags of given field names from either input or output
             fields
@@ -548,7 +557,7 @@ def annotate_pdf(doc: fitz.Document,
                  color: str,
                  opacity: float = 0.3) -> bytes:
     """An annotated Document pdf in bytes"""
-    page = doc[tag.page.page_number-1]
+    page = doc[tag.page.page_number - 1]
     x0 = tag.left * page.mediabox.width / 100
     y0 = tag.top * page.mediabox.height / 100
     x1 = tag.right * page.mediabox.width / 100

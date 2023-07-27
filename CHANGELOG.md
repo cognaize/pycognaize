@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.18] - 2023-07-26
+- Add `Pdf` class in order to use the pdf files of documents
+
 ### [1.4.17] - 2023-07-19
 - Update `__add__` function in `ExtractionTag` class in order to include the text between the two `BoxTag` objects selected
 
