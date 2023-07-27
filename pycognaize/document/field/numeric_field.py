@@ -126,7 +126,7 @@ class NumericField(Field):
 
     def __repr__(self):
         return (f"<{self.__class__.__name__}: {self.name}:"
-                f" {'|'.join([i.raw_value for i in self.tags])}>")
+                f" {'|'.join([i.raw_value if i.raw_value is not None else '' for i in self.tags])}>")
 
     def __str__(self):
         return f"{'|'.join([i.raw_value for i in self.tags])}"
