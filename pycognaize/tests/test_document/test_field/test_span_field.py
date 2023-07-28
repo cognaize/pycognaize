@@ -42,6 +42,11 @@ class TestSpanField(unittest.TestCase):
         self.span_field_2 = SpanField.construct_from_raw(raw=self.raw_field_2,
                                                          pages=self.page_8,
                                                          html=self.html)
+        self.invalid_raw = self.raw_field_1.copy()
+        self.invalid_raw['tags'] = []
+        self.invalid_span = SpanField.construct_from_raw(raw=self.invalid_raw,
+                                                         pages=self.page_8,
+                                                         html=self.html)
 
     def test___repr__(self):
         self.assertEqual(self.span_field_1.name, self.raw_field_1['name'])
@@ -61,6 +66,8 @@ class TestSpanField(unittest.TestCase):
         self.assertEqual(self.span_field_1.tags[0].raw_ocr_value,
                          self.raw_field_1['tags'][0]['ocrValue'])
         self.assertNotEqual(self.span_field_2.tags[0].top, '42.02')
+        with self.assertRaises(IndexError):
+            var = self.invalid_span.tags[0].top
 
     def test_to_dict(self):
         dict_1 = self.span_field_1.to_dict()

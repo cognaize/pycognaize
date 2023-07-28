@@ -27,9 +27,7 @@ class SpanField(Field):
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
                  group_name: str = None,
-                 classification_labels: Optional[ClassificationLabels] = None
                  ):
-        self._classification_labels = classification_labels
         tags = [] if tags is None else tags
         super().__init__(name=name, tags=tags,
                          group_key=group_key, confidence=confidence,
@@ -37,8 +35,6 @@ class SpanField(Field):
 
         self._field_id = field_id
         self._value = ''
-        # self._value = ' '.join([i.raw_value
-        #                         for i in self.tags]) if self.tags else value
         self._line_values = [i.raw_value for i in self.tags] \
             if self.tags else value
 
@@ -71,7 +67,6 @@ class SpanField(Field):
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                    group_name=raw.get(IqFieldKeyEnum.group.value, ''),
-                   classification_labels=labels,
                    )
 
     def to_dict(self) -> dict:
