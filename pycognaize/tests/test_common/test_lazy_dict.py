@@ -62,4 +62,4 @@ class TestLazyDict(unittest.TestCase):
             self.assertEqual(doc_list[i], value)
 
     def test___len__(self):
-        self.assertEqual(self.docs.__len__(), 10)
+        self.assertEqual(self.docs.__len__(), 11)
