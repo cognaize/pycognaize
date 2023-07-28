@@ -15,9 +15,9 @@ from pycognaize.tests.resources import RESOURCE_FOLDER
 class TestSpanField(unittest.TestCase):
 
     def setUp(self):
-        with (open(RESOURCE_FOLDER +
-                   '/snapshots/64b1621a44acf9001017db4f/document.json')
-              as document_json):
+        with open(RESOURCE_FOLDER +
+                  '/snapshots/64b1621a44acf9001017db4f/document.json') \
+                as document_json:
             self.data_with_group_key = json.load(document_json)
 
         self.html = HTML(path=(
@@ -27,8 +27,9 @@ class TestSpanField(unittest.TestCase):
         self.raw_field_1 = self.data_with_group_key \
             ["output_fields"]["test_text_span__text_span"][0]
         self.raw_field_2 = \
-        self.data_with_group_key["output_fields"]["test_text_span__text_span"][
-            2]
+            self.data_with_group_key["output_fields"][
+                "test_text_span__text_span"][
+                2]
 
         self.page_10 = {
             10: create_dummy_page(page_n=self.raw_field_1['tags'][0]['page'])}

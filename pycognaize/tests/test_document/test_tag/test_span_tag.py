@@ -14,10 +14,10 @@ class TestSpanTag(unittest.TestCase):
     def setUp(self):
         self.page = create_dummy_page()
 
-        with (open(
+        with open(
                 RESOURCE_FOLDER +
-                '/snapshots/64b1621a44acf9001017db4f/document.json')
-        as document_json):
+                '/snapshots/64b1621a44acf9001017db4f/document.json') \
+        as document_json:
             self.data = json.load(document_json)
 
         snapshot = Snapshot(RESOURCE_FOLDER + '/snapshots')
