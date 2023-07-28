@@ -29,6 +29,10 @@
 ### [1.4.10] - 2023-06-28
 - Separate LangchainLoader text blocks with new lines
 
+### [1.4.10] - 2023-07-13
+- Add `to_text()` functionality to `Document` class that utilizes inputs from 
+  `PageLayout` model to create the text version of the document
+
 ### [1.4.9] - 2023-06-27
 - Add `to_string()` functionality to `table_tags`
 - Add langchain_loader util to convert Pycognaize `Document` objects to Langchain `Document` objects
