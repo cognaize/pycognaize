@@ -128,6 +128,7 @@ class IqDataTypesEnum(enum.Enum):
     link = 'link'
     span = 'text-span'
 
+
 class IqRecipeEnum(enum.Enum):
     id = '_id'
     field_id = 'fieldId'
