@@ -39,7 +39,8 @@ class SpanField(Field):
         self._value = ''
         # self._value = ' '.join([i.raw_value
         #                         for i in self.tags]) if self.tags else value
-        self._line_values = [i.raw_value for i in self.tags] if self.tags else value
+        self._line_values = [i.raw_value for i in self.tags] \
+            if self.tags else value
 
     @property
     def value(self):
