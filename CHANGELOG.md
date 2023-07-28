@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.18] - 2023-07-28
+- Update  `_line_values` attribute in `SpanField` class in order to return sentences per lines
+
 ### [1.4.17] - 2023-07-19
 - Update `__add__` function in `ExtractionTag` class in order to include the text between the two `BoxTag` objects selected
 
@@ -25,6 +28,10 @@
 
 ### [1.4.10] - 2023-06-28
 - Separate LangchainLoader text blocks with new lines
+
+### [1.4.10] - 2023-07-13
+- Add `to_text()` functionality to `Document` class that utilizes inputs from 
+  `PageLayout` model to create the text version of the document
 
 ### [1.4.9] - 2023-06-27
 - Add `to_string()` functionality to `table_tags`
