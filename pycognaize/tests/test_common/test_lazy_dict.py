@@ -56,7 +56,8 @@ class TestLazyDict(unittest.TestCase):
              '60f53e967883ab0013d9c6f9', '60f5260c7883ab0013d9c184',
              '60215310dbf28200120e6afa', '62eb8e6b28d7ca0012ec8288',
              '62eb8e6b28d7ca0012ec8288_error', '632c61fc86d52800197d03f3',
-             '6405fdd7420ed0001184e4f3','63d4486c0e3fe60011fe3a75'])
+             '6405fdd7420ed0001184e4f3','63d4486c0e3fe60011fe3a75',
+             '64b1621a44acf9001017db4f'])
         for i, value in enumerate(self.docs):
             self.assertEqual(doc_list[i], value)
 
