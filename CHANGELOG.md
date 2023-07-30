@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.20] - 2023-07-30
+- Add replacing text-span datatype with text_span in `from_dict` input_fields of Document object
+
 ### [1.4.19] - 2023-07-30
 - Update `_to_dict` and `construct_from_raw` functions in `SpanField` class to set value when field does not have tag
 
