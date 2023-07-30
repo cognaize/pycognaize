@@ -34,7 +34,7 @@ class SpanField(Field):
                          group_name=group_name, value=value)
 
         self._field_id = field_id
-        self._value = ''
+        self._value = value
         self._line_values = [i.raw_value for i in self.tags] \
             if self.tags else value
 
@@ -53,7 +53,7 @@ class SpanField(Field):
         """Create SnapField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
-        value = ''
+        value = IqDocumentKeysEnum.value.value
         for i in tag_dicts:
             try:
                 tags.append(cls.tag_class.construct_from_raw(
@@ -76,7 +76,7 @@ class SpanField(Field):
         field_dict[IqFieldKeyEnum.name.value] = self.name
         field_dict[
             IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.span.value
-        field_dict[IqFieldKeyEnum.value.value] = ""
+        field_dict[IqFieldKeyEnum.value.value] = self.value
         field_dict[IqFieldKeyEnum.group_key.value] = self._group_key
         field_dict[IqFieldKeyEnum.tags.value] = []
         if self.tags:
