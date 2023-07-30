@@ -433,7 +433,7 @@ class Document:
         input_fields = FieldCollection(
             {name: [
                 FieldMapping[
-                    field[IqDocumentKeysEnum.data_type.value]
+                    field[IqDocumentKeysEnum.data_type.value].replace('-', '_')
                 ].value.construct_from_raw(raw=field, pages=pages,
                                            html=html_info,
                                            labels=classification_labels.get(
