@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.19] - 2023-07-30
+- Update  `_to_dict` and `construct_from_raw` functions in `SpanField` class to set value when field does not have tag
+
 ### [1.4.18] - 2023-07-28
 - Update  `_line_values` attribute in `SpanField` class in order to return sentences per lines
 
