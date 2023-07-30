@@ -58,9 +58,10 @@ class SpanField(Field):
             try:
                 tags.append(cls.tag_class.construct_from_raw(
                     raw=i, page=pages[i['page']]))
-                value = value + i['value']
+                value += ' ' + i['value']
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
+        value = value.strip()
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    tags=tags if tags else None,
                    value=value,
