@@ -80,7 +80,7 @@ def string_to_array(img_str: bytes):
     import cv2
     nparr = np.frombuffer(img_str, np.uint8)
     img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    assert isinstance(img_np, np.ndarray),\
+    assert isinstance(img_np, np.ndarray), \
         f"Expected numpy array, received {type(img_np)}"
     return img_np
 
@@ -108,7 +108,7 @@ def image_string_to_array(img_str: bytes):
     image = Image.open(io.BytesIO(img_str))
     # Remove <alpha> channel if it exists
     img_np = np.array(image)[..., :3]
-    assert isinstance(img_np, np.ndarray),\
+    assert isinstance(img_np, np.ndarray), \
         f"Expected numpy array, received {type(img_np)}"
     return img_np
 
