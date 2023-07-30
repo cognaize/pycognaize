@@ -58,8 +58,21 @@ class TestSpanField(unittest.TestCase):
 
     def test_value(self):
         self.assertIsInstance(self.span_field_1.value, str)
-        self.assertEqual(self.span_field_1.value, self.raw_field_1['value'])
-        self.assertEqual(self.span_field_2.value, self.raw_field_2['value'])
+        self.assertEqual(self.span_field_1.value, "Does the Subscriber control, or is "
+                                                  "the Subscriber controlled by or under "
+                                                  "common control with, any other "
+                                                  "existing or prospective investor "
+                                                  "in the Partnership?")
+        self.assertEqual(self.span_field_2.value, "All Capital Contributions payable to "
+                                                  "the Partnership, in accordance with "
+                                                  "the terms of the Partnership "
+                                                  "Agreement, are payable in full by "
+                                                  "wire transfer of readily available "
+                                                  "funds to the account of the "
+                                                  "Partnership designated in the "
+                                                  "related draw down notice no later"
+                                                  " than the time specified in such "
+                                                  "draw down notice,")
 
     def test__construct_from_raw(self):
         self.assertEqual(self.span_field_1.name, self.raw_field_1['name'])
