@@ -76,7 +76,8 @@ class SpanField(Field):
         field_dict[IqFieldKeyEnum.name.value] = self.name
         field_dict[
             IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.span.value
-        field_dict[IqFieldKeyEnum.value.value] = '' if self.tags else self.value
+        field_dict[IqFieldKeyEnum.value.value] = \
+            '' if self.tags else self.value
         field_dict[IqFieldKeyEnum.group_key.value] = self._group_key
         field_dict[IqFieldKeyEnum.tags.value] = []
         if self.tags:
