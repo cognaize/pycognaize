@@ -36,10 +36,10 @@ class TestLinkField(unittest.TestCase):
         self.assertEqual(str(self.link_field_3), 'http://www.iaasa.ie/getmedia/b23890131cf6458b9b8fa98202dc9c3a/')
 
     def test___repr__(self):
-        repr_str_2 = '<LinkField: Main Document: field value- https://uat.cognaize.com/browse/62853fcaf22a6700138cb7d0: tag value- >'
+        repr_str_2 = '<LinkField: Main Document: field value - https://uat.cognaize.com/browse/62853fcaf22a6700138cb7d0: tag value - >'
         self.assertEqual(repr(self.link_field_2), repr_str_2)
 
-        repr_str_3 = '<LinkField: Supplement Document: field value- : tag value- http://www.iaasa.ie/getmedia/b23890131cf6458b9b8fa98202dc9c3a/>'
+        repr_str_3 = '<LinkField: Supplement Document: field value - : tag value - http://www.iaasa.ie/getmedia/b23890131cf6458b9b8fa98202dc9c3a/>'
         self.assertEqual(repr(self.link_field_3), repr_str_3)
 
     def test__field_id(self):

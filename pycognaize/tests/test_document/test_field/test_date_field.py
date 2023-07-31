@@ -72,10 +72,10 @@ class TestDateField(unittest.TestCase):
         self.assertEqual(str(self.date_field_2), 'December 31, 2016')
 
     def test___repr__(self):
-        repr_str_1 = "<DateField: source date: field value- : tag value- 12/12/2011>"
+        repr_str_1 = "<DateField: source date: field value - : tag value - 12/12/2011>"
         self.assertEqual(repr(self.date_field_1), repr_str_1)
 
-        repr_str_2 = '<DateField: source date: field value- : tag value- December 31, 2016>'
+        repr_str_2 = '<DateField: source date: field value - : tag value - December 31, 2016>'
         self.assertEqual(repr(self.date_field_2), repr_str_2)
 
     def test_to_dict(self):

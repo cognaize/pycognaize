@@ -7,7 +7,7 @@
 >>> link_field.name
 'URL'
 >>> link_field.value
-'LinkField'
+'https://LinkField'
 >>> link_field.tags
 []
 """
@@ -113,7 +113,7 @@ class LinkField(Field):
         field_str = self.raw_value
         field_value = "field value"
         repr_string = (f"<{self.__class__.__name__}: {self.name}: "
-                       f"{field_value}- {field_str}: {tag_value}- "
+                       f"{field_value} - {field_str}: {tag_value} - "
                        f"{tag_str}>")
         return repr_string
 

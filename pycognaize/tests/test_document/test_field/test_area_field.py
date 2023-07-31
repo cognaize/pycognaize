@@ -98,8 +98,8 @@ class TestAreaField(unittest.TestCase):
             self.area_field_with_tags.group_key = ['abc']
 
     def test___repr__(self):
-        self.assertEqual(self.area_field_with_tags.__repr__(), '<AreaField: Table: field value- : tag value- selection on page 2>')
-        self.assertEqual(self.area_field_without_tags.__repr__(), '<AreaField: Table: field value- sample_value: tag value- >')
+        self.assertEqual(self.area_field_with_tags.__repr__(), '<AreaField: Table: field value - : tag value - selection on page 2>')
+        self.assertEqual(self.area_field_without_tags.__repr__(), '<AreaField: Table: field value - sample_value: tag value - >')
 
     def test___str__(self):
         self.assertEqual(self.area_field_without_tags.__str__(), '')
