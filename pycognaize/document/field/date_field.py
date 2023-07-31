@@ -81,10 +81,15 @@ class DateField(Field):
                  concatenation of its tags separated by '|'. If a tag's
                  raw value is None, it will be represented as an empty string.
         """
-        tags_str = '|'.join(
+        tag_str = '|'.join(
             [i.raw_value if i.raw_value is not None else '' for i in self.tags]
         )
-        repr_string = f"<{self.__class__.__name__}: {self.name}: {tags_str}>"
+        tag_value = "tag value"
+        field_str = self.raw_value
+        field_value = "field value"
+        repr_string = (f"<{self.__class__.__name__}: {self.name}: "
+                       f"{field_value}- {field_str}: {tag_value}- "
+                       f"{tag_str}>")
         return repr_string
 
     def __str__(self):
