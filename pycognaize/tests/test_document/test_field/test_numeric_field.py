@@ -107,10 +107,10 @@ class TestNumericField(unittest.TestCase):
         self.assertEqual(str(self.num_field_2), '101.')
 
     def test___repr__(self):
-        repr_str_1 = f"<{self.num_field_1.__class__.__name__}: {self.raw_num_field_1['name']}: 99.>"
+        repr_str_1 = "<NumericField: ref: field value- : tag value- 99.>"
         self.assertEqual(repr(self.num_field_1), repr_str_1)
 
-        repr_str_2 = f"<{self.num_field_2.__class__.__name__}: {self.raw_num_field_2['name']}: 101.>"
+        repr_str_2 = '<NumericField: ref: field value- : tag value- 101.>'
         self.assertEqual(repr(self.num_field_2), repr_str_2)
 
     def test_to_dict(self):

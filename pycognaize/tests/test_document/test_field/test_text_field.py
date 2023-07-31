@@ -38,10 +38,10 @@ class TestTextField(unittest.TestCase):
         self.assertEqual(str(self.text_field_2), '101. If and to the extent that any provision of the Financial Institutions Law is preempted by federal law, the provision does not apply and shall not be enforced.')
 
     def test___repr__(self):
-        repr_str_1 = f"<{self.text_field_1.__class__.__name__}: {self.raw_text_1['name']}: This division, Division 1.1 (commencing with Section 1000), Division 1.2 (commencing with Section 2000), Division 1.6 (commencing with Section 4800), Division 2 (commencing with Section 5000), Division 5 (commencing with Section 14000), Division 7 (commencing with Section 18000), and Division 15 (commencing with Section 31000) shall be known, and may be cited, as the “Financial Institutions Law.”>"
+        repr_str_1 = '<TextField: paragraph: field value- : tag value- This division, Division 1.1 (commencing with Section 1000), Division 1.2 (commencing with Section 2000), Division 1.6 (commencing with Section 4800), Division 2 (commencing with Section 5000), Division 5 (commencing with Section 14000), Division 7 (commencing with Section 18000), and Division 15 (commencing with Section 31000) shall be known, and may be cited, as the “Financial Institutions Law.”>'
         self.assertEqual(repr(self.text_field_1), repr_str_1)
 
-        repr_str_2 = f"<{self.text_field_2.__class__.__name__}: {self.raw_text_2['name']}: 101. If and to the extent that any provision of the Financial Institutions Law is preempted by federal law, the provision does not apply and shall not be enforced.>"
+        repr_str_2 = '<TextField: paragraph: field value- : tag value- 101. If and to the extent that any provision of the Financial Institutions Law is preempted by federal law, the provision does not apply and shall not be enforced.>'
         self.assertEqual(repr(self.text_field_2), repr_str_2)
 
     def test__field_id(self):
