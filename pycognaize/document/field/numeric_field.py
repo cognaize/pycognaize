@@ -132,4 +132,7 @@ class NumericField(Field):
         return repr_string
 
     def __str__(self):
-        return f"{'|'.join([i.raw_value for i in self.tags])}"
+        value_str = '|'.join(
+            [i.raw_value if i.raw_value is not None else '' for i in self.tags]
+        )
+        return value_str
