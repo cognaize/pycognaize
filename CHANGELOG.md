@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.21] - 2023-08-01
+- Add unit test for `span_field`
+
 ### [1.4.20] - 2023-07-30
 - Add replacing text-span datatype with text_span in `from_dict` input_fields of Document object
 
