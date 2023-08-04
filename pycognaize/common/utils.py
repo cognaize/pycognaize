@@ -409,8 +409,8 @@ def find_first_word_coords(text: str, ocr_data: list,
             prev_word = word
             if idx >= len(words):
                 break
-        elif idx >= 1 and ocr_word != word and next_ocr_word == word and ocr_word == prev_word:
-            matched_words = [ocr_d]
+        elif idx >= 1 and next_ocr_word == word and ocr_word == prev_word:
+            matched_words = [ocr_d, ocr_data[ocr_idx + 1]]
             if idx >= len(words) - 1:
                 break
         else:
