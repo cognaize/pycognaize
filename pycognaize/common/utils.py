@@ -389,20 +389,29 @@ def find_first_word_coords(text: str, ocr_data: list,
         text = text.lower()
     words = text.split(' ')
     idx = 0
-    for ocr_d in ocr_data:
+    for ocr_idx, ocr_d in enumerate(ocr_data):
         ocr_word = ocr_d['ocr_text']
+        next_ocr_word = ocr_data[ocr_idx+1]['ocr_text'] if ocr_idx != len(ocr_data)-1 else ''
         if clean:
             ocr_word = cleanup_regex.sub('', ocr_word)
+            next_ocr_word = cleanup_regex.sub('', next_ocr_word)
             word = cleanup_regex.sub('', words[idx])
         else:
             word = words[idx]
         ocr_word = ocr_word.strip()
+        next_ocr_word = next_ocr_word.strip()
         if not case_sensitive:
             ocr_word = ocr_word.lower()
+            next_ocr_word = next_ocr_word.lower()
         if ocr_word == word:
             idx += 1
             matched_words.append(ocr_d)
+            prev_word = word
             if idx >= len(words):
+                break
+        elif idx >= 1 and ocr_word != word and next_ocr_word == word and ocr_word == prev_word:
+            matched_words = [ocr_d]
+            if idx >= len(words) - 1:
                 break
         else:
             matched_words = []
