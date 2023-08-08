@@ -2,7 +2,6 @@ import functools
 import warnings
 
 from cloudstorageio import CloudInterface
-from cloudstorageio.exceptions.exceptions import CredentialsExpiredError
 
 import pycognaize
 

@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.21rc1] - 2023-08-08
+- Use new method from cloudstorageio for big snapshot download
+
 ### [1.4.20] - 2023-07-30
 - Add replacing text-span datatype with text_span in `from_dict` input_fields of Document object
 
