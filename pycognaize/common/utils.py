@@ -625,7 +625,11 @@ def relogin_s3():
 
     login.relogin()
 
-    return login.aws_access_key, login.aws_secret_access_key, login.aws_session_token
+    return (
+        login.aws_access_key,
+        login.aws_secret_access_key,
+        login.aws_session_token
+    )
 
 
 def cloud_interface_login(login_instance: Login) -> CloudInterface:

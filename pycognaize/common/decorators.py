@@ -1,8 +1,4 @@
-import functools
 import warnings
-
-from cloudstorageio import CloudInterface
-
 import pycognaize
 
 
