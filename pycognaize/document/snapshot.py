@@ -58,9 +58,9 @@ class Snapshot:
                 exclude_pdf
             )
 
-            ci.copy_dir(snapshot_path,
-                        destination_dir,
-                        exclude=exclude)
+            ci.copy_directory(snapshot_path,
+                              destination_dir,
+                              exclude=exclude)
 
             summary_hash = directory_summary_hash(destination_dir)
             with open(os.path.join(destination_dir, HASH_FILE), 'w') as f:
