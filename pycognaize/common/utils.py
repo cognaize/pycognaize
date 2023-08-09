@@ -450,15 +450,18 @@ def find_first_word_coords(text: str, ocr_data: List[Dict[str, any]],
                            cleanup_regex=REGEX_NO_ALPHANUM_CHARS
                            ) -> Optional[Dict[str, any]]:
     """
-    Detect the coordinates of the first occurrence of `text` in `ocr_data` if any.
+    Detect the coordinates of the first occurrence
+    of `text` in `ocr_data` if any.
     If the `text` is not found in `ocr_data`, return None.
 
     :param text: Text to search for in OCR data
     :param ocr_data: List of dictionaries containing OCR word information
     :param case_sensitive: If True, the search will be case-sensitive
-    :param sort: If True, ocr_data will be ordered by `word_id_number` before searching
+    :param sort: If True, ocr_data will be ordered
+                 by `word_id_number` before searching
     :param clean: If True, non-alphanumeric characters will be cleaned
-    :param cleanup_regex: Provide the regex for cleanup to be used (if `clean` is True)
+    :param cleanup_regex: Provide the regex for cleanup to be used
+                          (if `clean` is True)
     :return: Dictionary with word coordinates and matched words information
     """
     if sort:
