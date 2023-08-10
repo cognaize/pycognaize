@@ -19,7 +19,7 @@ from pycognaize.common.decorators import soon_be_deprecated
 from pycognaize.common.enums import PythonShellEnum
 from pycognaize.login import Login
 
-REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
+REGEX_NO_ALPHANUM_CHARS = re.compile(r'^[\W\s]+|[\W\s]+$')
 
 
 def is_float(str_number: str) -> bool:
