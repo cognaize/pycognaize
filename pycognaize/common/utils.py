@@ -406,39 +406,31 @@ def find_matched_words(text: str, ocr_data: List[Dict[str, any]],
     words = preprocessed_text.split(' ')
     preprocessed_words = preprocess_words(words, clean, cleanup_regex)
 
-    idx = 0
-    for ocr_idx, ocr_d in enumerate(ocr_data):
+    word_idx = 0
+    ocr_idx = 0
+    while ocr_idx < len(ocr_data):
+        ocr_d = ocr_data[ocr_idx]
         ocr_word = ocr_d['ocr_text']
-        if ocr_idx != len(ocr_data) - 1:
-            next_ocr_word = ocr_data[ocr_idx + 1]['ocr_text']
-        else:
-            next_ocr_word = ''
 
         preprocessed_ocr_word = cleanup_text(ocr_word.strip(),
                                              cleanup_regex)
-        preprocessed_next_ocr_word = cleanup_text(next_ocr_word.strip(),
-                                                  cleanup_regex)
-
         if not case_sensitive:
             preprocessed_ocr_word = preprocessed_ocr_word.lower()
-            preprocessed_next_ocr_word = preprocessed_next_ocr_word.lower()
 
-        if preprocessed_ocr_word == preprocessed_words[idx]:
-            idx += 1
+        if preprocessed_ocr_word == preprocessed_words[word_idx]:
+            word_idx += 1
+            ocr_idx += 1
             matched_words.append(ocr_d)
-            if idx >= len(preprocessed_words):
+            if word_idx >= len(preprocessed_words):
                 break
-        elif (idx >= 1 and
-              preprocessed_next_ocr_word == preprocessed_words[idx] and
-              preprocessed_ocr_word == preprocessed_words[idx - 1]):
-            if len(matched_words):
-                matched_words = matched_words[1:]
-            matched_words.append(ocr_d)
-            if idx >= len(preprocessed_words):
-                break
+        elif word_idx >= 1:
+            word_idx = 0
+            matched_words = []
+
         else:
             matched_words = []
-            idx = 0
+            word_idx = 0
+            ocr_idx += 1
 
     return matched_words
 
