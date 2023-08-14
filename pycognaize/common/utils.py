@@ -425,8 +425,8 @@ def find_matched_words(text: str, ocr_data: List[Dict[str, any]],
                 break
 
         elif word_idx >= 1:
+            ocr_idx -= word_idx-1
             word_idx = 0
-            ocr_idx -= len(words)-2
             matched_words = []
 
         else:
