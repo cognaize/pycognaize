@@ -17,6 +17,13 @@ class FieldDataTypeEnum(enum.Enum):
     extraction_and_computation = 'extraction and computation'
 
 
+class ApiConfigEnum(enum.Enum):
+    API_PREFIX = '/api/v1/integration/'
+    CREATE_TASK_ENDPOINT = f"{API_PREFIX}document/modelinput"
+    RUN_MODEL_ENDPOINT = f"{API_PREFIX}data"
+    DEFAULT_TIMEOUT = 600
+
+
 class StorageEnum(enum.Enum):
     ocr_folder = 'data'
     image_folder = 'images'

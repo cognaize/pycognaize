@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.22] - 2023-08-16
+- Add new method for document fetching
+
 ### [1.4.21rc1] - 2023-08-08
 - Use new method from cloudstorageio for big snapshot download
 

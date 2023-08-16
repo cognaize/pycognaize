@@ -3,15 +3,16 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
+from requests.adapters import HTTPAdapter, Retry
+from pycognaize.common.enums import ApiConfigEnum
 import multiprocessing
 import os
 from collections import OrderedDict
 from typing import Dict, List, Tuple, Any, Optional, Callable, Union
-
+import requests
 import fitz
 import pandas as pd
 from fitz.utils import getColor, getColorList
-
 from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.document.html_info import HTML
 from pycognaize.login import Login
@@ -24,6 +25,10 @@ from pycognaize.document.page import Page
 from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
 from pycognaize.document.tag.tag import BoxTag, LineTag
+
+RETRY_ADAPTER = Retry(total=3,
+                      backoff_factor=10,
+                      status_forcelist=[500, 502, 503, 504])
 
 
 class Document:
@@ -58,6 +63,37 @@ class Document:
         and values are list of Field objects"""
         return self._y
 
+    @staticmethod
+    def __create_and_get_task_id(document_id: str, recipe_id: str) -> str:
+        """Create a modeltask object in the database given a document
+         id and recipe id"""
+        url = os.environ.get('API_HOST') + \
+            ApiConfigEnum.CREATE_TASK_ENDPOINT.value
+        payload = "{\"documentId\": \"%s\",\n \"recipeId\": \"%s\"\n}\n" \
+                  % (document_id, recipe_id)
+        headers = {'x-auth': os.environ.get('X_AUTH_TOKEN'),
+                   'content-type': "application/json"}
+        return requests.request("POST", url, data=payload,
+                                headers=headers).json()['taskId']
+
+    @staticmethod
+    def __get_document_by_task_id(task_id: str):
+        """Given a task, return a document object"""
+        session = requests.Session()
+        session.mount('http://', HTTPAdapter(max_retries=RETRY_ADAPTER))
+        session.mount('https://', HTTPAdapter(max_retries=RETRY_ADAPTER))
+        session.headers = {'x-auth': os.environ.get('X_AUTH_TOKEN')}
+        get_response: requests.Response = \
+            session.get(os.environ.get('API_HOST') +
+                        ApiConfigEnum.RUN_MODEL_ENDPOINT.value +
+                        '/' + task_id, verify=False,
+                        timeout=ApiConfigEnum.DEFAULT_TIMEOUT.value)
+        get_response.raise_for_status()
+        get_response_dict: dict = get_response.json()
+        doc_data_path: str = get_response_dict['documentRootPath']
+        document_json: dict = get_response_dict['inputDocument']
+        return doc_data_path, document_json
+
     @property
     def metadata(self) -> Dict[str, Any]:
         """Returns document metadata"""
@@ -88,6 +124,17 @@ class Document:
     def html(self):
         """Returns `HTML` object"""
         return self._html_info
+
+    @classmethod
+    def fetch_document(cls, recipe_id, doc_id):
+        """Get the document object, given a document id and recipe id"""
+        task_id = cls.__create_and_get_task_id(document_id=doc_id,
+                                               recipe_id=recipe_id)
+        doc_data_path, document_json = \
+            cls.__get_document_by_task_id(task_id=task_id)
+        document = Document.from_dict(document_json,
+                                      data_path=doc_data_path)
+        return document
 
     @staticmethod
     def get_matching_table_cells_for_tag(
@@ -404,7 +451,6 @@ class Document:
         """Document object created from data of dict
         :param raw: document dictionary
         :param data_path: path to the documents OCR and page images
-        :param login_instance: login instance of pycognaize
         """
         if not isinstance(raw, dict):
             raise TypeError(
@@ -442,7 +488,7 @@ class Document:
                                                    src_field_id.value, ''),
                                                None))
                 for field in fields]
-             for name, fields in raw['input_fields'].items()})
+                for name, fields in raw['input_fields'].items()})
         output_fields = FieldCollection(
             {name: [
                 FieldMapping[
@@ -455,7 +501,7 @@ class Document:
                                                    src_field_id.value, ''),
                                                None))
                 for field in fields]
-             for name, fields in raw['output_fields'].items()})
+                for name, fields in raw['output_fields'].items()})
         return cls(input_fields=input_fields,
                    output_fields=output_fields,
                    pages=pages, html_info=html_info,
@@ -464,7 +510,7 @@ class Document:
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],
-                                     is_input_field: bool = True)\
+                                     is_input_field: bool = True) \
             -> List[Union[BoxTag, LineTag]]:
         """Collect all tags of given field names from either input or output
             fields
@@ -548,7 +594,7 @@ def annotate_pdf(doc: fitz.Document,
                  color: str,
                  opacity: float = 0.3) -> bytes:
     """An annotated Document pdf in bytes"""
-    page = doc[tag.page.page_number-1]
+    page = doc[tag.page.page_number - 1]
     x0 = tag.left * page.mediabox.width / 100
     y0 = tag.top * page.mediabox.height / 100
     x1 = tag.right * page.mediabox.width / 100
