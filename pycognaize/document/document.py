@@ -3,20 +3,16 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
-from enum import Enum
 from requests.adapters import HTTPAdapter, Retry
-
+from pycognaize.common.enums import ApiConfigEnum
 import multiprocessing
 import os
 from collections import OrderedDict
 from typing import Dict, List, Tuple, Any, Optional, Callable, Union
-
 import requests
-
 import fitz
 import pandas as pd
 from fitz.utils import getColor, getColorList
-
 from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.document.html_info import HTML
 from pycognaize.login import Login
@@ -30,45 +26,9 @@ from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
 from pycognaize.document.tag.tag import BoxTag, LineTag
 
-
-class ApiConfig(Enum):
-    API_PREFIX = '/api/v1/integration/'
-    CREATE_TASK_ENDPOINT = f"{API_PREFIX}document/modelinput"
-    RUN_MODEL_ENDPOINT = f"{API_PREFIX}data"
-    DEFAULT_TIMEOUT = 600
-    RETRIES = Retry(total=3,
-                    backoff_factor=10,
-                    status_forcelist=[500, 502, 503, 504])
-
-
-def create_and_get_task_id(document_id: str, recipe_id: str) -> str:
-    """Create a modeltask object in the database given a document
-     id and recipe id"""
-    url = os.environ.get('API_HOST') + ApiConfig.CREATE_TASK_ENDPOINT.value
-    payload = "{\"documentId\": \"%s\",\n \"recipeId\": \"%s\"\n}\n" % (
-        document_id, recipe_id)
-    headers = {'x-auth': os.environ.get('X_AUTH_TOKEN'), 'content-type': "application/json"}
-    return requests.request("POST", url, data=payload,
-                            headers=headers).json()['taskId']
-
-
-def get_document_by_task_id(task_id: str,
-                            cache_locally: Optional[bool] = False):
-    """Given a task, return a document object"""
-    session = requests.Session()
-    session.mount('http://', HTTPAdapter(max_retries=ApiConfig.RETRIES))
-    session.mount('https://', HTTPAdapter(max_retries=ApiConfig.RETRIES))
-    session.headers = {'x-auth': os.environ.get('X_AUTH_TOKEN')}
-    get_response: requests.Response = session.get(
-        os.environ.get('API_HOST') + ApiConfig.RUN_MODEL_ENDPOINT.value + '/' + task_id, verify=False,
-        timeout= ApiConfig.DEFAULT_TIMEOUT.value)
-    get_response.raise_for_status()
-    get_response_dict: dict = get_response.json()
-    doc_data_path: str = get_response_dict['documentRootPath']
-    document_json: dict = get_response_dict['inputDocument']
-    doc: Document = Document.from_dict(document_json,
-                                       data_path=doc_data_path)
-    return doc
+RETRY_ADAPTER = Retry(total=3,
+                      backoff_factor=10,
+                      status_forcelist=[500, 502, 503, 504])
 
 
 class Document:
@@ -102,6 +62,39 @@ class Document:
         """Returns a dictionary, where keys are output field names
         and values are list of Field objects"""
         return self._y
+
+    @staticmethod
+    def __create_and_get_task_id(document_id: str, recipe_id: str) -> str:
+        """Create a modeltask object in the database given a document
+         id and recipe id"""
+        url = os.environ.get('API_HOST') + \
+            ApiConfigEnum.CREATE_TASK_ENDPOINT.value
+        payload = "{\"documentId\": \"%s\",\n \"recipeId\": \"%s\"\n}\n" \
+                  % (document_id, recipe_id)
+        headers = {'x-auth': os.environ.get('X_AUTH_TOKEN'),
+                   'content-type': "application/json"}
+        return requests.request("POST", url, data=payload,
+                                headers=headers).json()['taskId']
+
+    @staticmethod
+    def __get_document_by_task_id(task_id: str):
+        """Given a task, return a document object"""
+        session = requests.Session()
+        session.mount('http://', HTTPAdapter(max_retries=RETRY_ADAPTER))
+        session.mount('https://', HTTPAdapter(max_retries=RETRY_ADAPTER))
+        session.headers = {'x-auth': os.environ.get('X_AUTH_TOKEN')}
+        get_response: requests.Response = \
+            session.get(os.environ.get('API_HOST') +
+                        ApiConfigEnum.RUN_MODEL_ENDPOINT.value +
+                        '/' + task_id, verify=False,
+                        timeout=ApiConfigEnum.DEFAULT_TIMEOUT.value)
+        get_response.raise_for_status()
+        get_response_dict: dict = get_response.json()
+        doc_data_path: str = get_response_dict['documentRootPath']
+        document_json: dict = get_response_dict['inputDocument']
+        # doc: Document = Document.from_dict(document_json,
+        #                                    data_path=doc_data_path)
+        return doc_data_path, document_json
 
     @property
     def metadata(self) -> Dict[str, Any]:
@@ -137,10 +130,13 @@ class Document:
     @classmethod
     def fetch_document(cls, recipe_id, doc_id):
         """Get the document object, given a document id and recipe id"""
-        task_id = create_and_get_task_id(document_id=doc_id,
-                                         recipe_id=recipe_id)
-        doc = get_document_by_task_id(task_id=task_id)
-        return doc
+        task_id = cls.__create_and_get_task_id(document_id=doc_id,
+                                               recipe_id=recipe_id)
+        doc_data_path, document_json = \
+            cls.__get_document_by_task_id(task_id=task_id)
+        document = Document.from_dict(document_json,
+                                      data_path=doc_data_path)
+        return document
 
     @staticmethod
     def get_matching_table_cells_for_tag(
@@ -457,7 +453,6 @@ class Document:
         """Document object created from data of dict
         :param raw: document dictionary
         :param data_path: path to the documents OCR and page images
-        :param login_instance: login instance of pycognaize
         """
         if not isinstance(raw, dict):
             raise TypeError(
