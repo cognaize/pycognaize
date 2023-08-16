@@ -92,8 +92,6 @@ class Document:
         get_response_dict: dict = get_response.json()
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
-        # doc: Document = Document.from_dict(document_json,
-        #                                    data_path=doc_data_path)
         return doc_data_path, document_json
 
     @property
