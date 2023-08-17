@@ -2,6 +2,10 @@
 
 ## [1.4]
 
+### [1.4.23] - 2023-08-17
+- Add tests for exclude options
+- Add tests for cloudstorageio hooks usage
+
 ### [1.4.22] - 2023-08-16
 - Add new method for document fetching
 
