@@ -1,19 +1,18 @@
-import os
 import json
+import os
 import unittest
-from copy import deepcopy
+from unittest import mock
+from unittest.mock import MagicMock
 
+from pycognaize.common.enums import StorageEnum
 from pycognaize.common.utils import (
     intersects,
     is_float, convert_coord_to_num,
     stick_word_boxes,
     image_bytes_to_array,
     img_to_black_and_white,
-    group_sequence, ConfusionMatrix
+    group_sequence, ConfusionMatrix, cloud_interface_login
 )
-from pycognaize.common.enums import StorageEnum
-from pycognaize.document.page import create_dummy_page
-from pycognaize.document.tag import ExtractionTag
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
 
@@ -166,12 +165,12 @@ class TestUtils(unittest.TestCase):
 
     def test_intersects(self):
         self.assertTrue(intersects({"left": 10.812746151092016, "right": 12.960973863229503, "top": 26.42328894018314,
-                                    "bottom": 27.58753347203029, 'ocr_text':  '99.', 'word_id_number':
+                                    "bottom": 27.58753347203029, 'ocr_text': '99.', 'word_id_number':
                                         '60f5561fc23c8f0000e05d1a'}, 10.025062656641603, 92.15896885069819,
                                    25.765237683052145, 32.092653617004046))
         self.assertTrue(intersects({"left": 10.526315789473683, "right": 14.106695309702827, "top": 35.68662586748872,
                                     "bottom": 38.36945022348433, 'ocr_text': '101.', 'word_id_number':
-                                        '60f55634c23c8f0000e05d1f'},8.306480486931616, 91.87253848907984,
+                                        '60f55634c23c8f0000e05d1f'}, 8.306480486931616, 91.87253848907984,
                                    36.24343846967649, 39.33121744544502))
         self.assertTrue(intersects({"left": 9.595417114214106, "right": 14.321518080916576, "top": 44.140053555248464,
                                     "bottom": 45.75987203434015, 'ocr_text': '103.', 'word_id_number':
@@ -195,7 +194,7 @@ class TestUtils(unittest.TestCase):
                                    66.10883))
         self.assertTrue(intersects({"left": 10.1158, "right": 14.077, "top": 86.8607, "bottom": 88.29642659391153,
                                     'ocr_text': '111.', 'word_id_number': '60f55876c23c8f0000e05d40'},
-                                   13.1221, 89.43227672151127, 86.8464,  88.29674))
+                                   13.1221, 89.43227672151127, 86.8464, 88.29674))
         self.assertFalse(intersects({"left": 10.025062656641603, "right": 92.15896885069819, "top": 25.765237683052145,
                                      "bottom": 32.092653617004046, 'ocr_text': 'This division, Division 1.1',
                                      'word_id_number': '60f55624c23c8f0000e05d1b'}, 14.361891219338785,
@@ -204,3 +203,10 @@ class TestUtils(unittest.TestCase):
                                      "bottom": 54.97258963417412, 'ocr_text': '(a) Commercial banks.',
                                      'word_id_number': '60f556a9c23c8f0000e05d2f'}, 10.383100608664519,
                                     25.635517364840673, 55.63064089130512, 57.452936680283266))
+
+    @mock.patch('pycognaize.common.utils.cloudstorageio.hooks.hook_registry.register')
+    def test_should_register_hook_when_cloud_interface_is_created(self, register_mock):
+        login = MagicMock()
+        cloud_interface_login(login)
+
+        register_mock.assert_called()
