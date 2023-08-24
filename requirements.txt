@@ -2,7 +2,7 @@ pandas
 numpy
 pymongo
 requests
-cloudstorageio~=1.2.13rc2
+cloudstorageio~=1.2.14
 simplejson
 pillow
 pymupdf==1.21.1
