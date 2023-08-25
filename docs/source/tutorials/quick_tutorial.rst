@@ -99,6 +99,29 @@ let's choose one them and have a look at documents structure
     >>> document # doctest: +ELLIPSIS
     <pycognaize.document.document.Document object at 0x...>
 
+Additionally, You can retrieve the Document object from the Cloud using the `recipe_id` and `document_id`.
+This method allows you to access :term:`OCR` data and images associated with the specified document
+after logging into your Cognaize account
+
+.. note::
+    Before creating a document object using ``Document.fetch_document(recipe_id, doc_id)``
+    make sure to specify the corresponding environment variables
+
+    ``X_AUTH_TOKEN``: authentication token for API access
+    ``API_HOST``: URL for the Cognaize API  .
+
+    .. code:: python
+
+            os.environ['API_HOST'] = "https://api.cognaize.com"
+            os.environ['X_AUTH_TOKEN'] = "token"
+
+.. doctest::
+
+    >>> document = Document.fetch_document(recipe_id=..., doc_id=...)
+    >>> document # doctest: +ELLIPSIS
+    <pycognaize.document.document.Document object at 0x...>
+
+
 
 Documents are seperated into pages, which we can access
 by calling the ``document.pages`` method. Afterwards,
