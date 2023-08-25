@@ -104,7 +104,7 @@ This method allows you to access :term:`OCR` data and images associated with the
 after logging into your Cognaize account
 
 .. note::
-    Before creating a document object using ``Document.fetch_document(recipe_id, doc_id)``
+    Before creating a document object using ``Document.fetch_document(recipe_id, document_id)``
     make sure to specify the corresponding environment variables
 
     ``X_AUTH_TOKEN``: authentication token for API access
@@ -115,7 +115,7 @@ after logging into your Cognaize account
             os.environ['API_HOST'] = "https://api.cognaize.com"
             os.environ['X_AUTH_TOKEN'] = "token"
 
-.. doctest::
+.. code:: python
 
     >>> document = Document.fetch_document(recipe_id=..., doc_id=...)
     >>> document # doctest: +ELLIPSIS
