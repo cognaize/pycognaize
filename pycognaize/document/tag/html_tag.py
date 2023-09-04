@@ -99,7 +99,7 @@ class HTMLTableTag(HTMLTagABC):
     @property
     def df(self) -> pd.DataFrame:
         if self._df is None:
-            self._df = self.raw_df.map(
+            self._df = self.raw_df.applymap(
                 lambda x: self._extract_value(x))
         return self._df
 

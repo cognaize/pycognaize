@@ -67,7 +67,7 @@ class TableTag(BoxTag):
     @property
     def df(self) -> pd.DataFrame:
         if self._df is None:
-            self._df = self.raw_df.map(lambda x: self._extract_raw_ocr(x))
+            self._df = self.raw_df.applymap(lambda x: self._extract_raw_ocr(x))
         return self._df
 
     @staticmethod
