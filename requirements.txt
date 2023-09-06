@@ -5,7 +5,7 @@ requests
 cloudstorageio~=1.2.12
 simplejson
 pillow
-pymupdf==1.21.1
+pymupdf
 urllib3
 beautifulsoup4==4.11.2
 lxml
