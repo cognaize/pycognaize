@@ -3,20 +3,20 @@ import os
 
 from bs4 import BeautifulSoup
 
-from pycognaize.login import Login
+from pycognaize.common.cloud_interface import get_cloud_interface
 from pycognaize.common.enums import StorageEnum
-from pycognaize.common.utils import cloud_interface_login
+from pycognaize.login import Login
 
 
 class HTML:
     """Represents html of a xbrl document in pycognaize"""
+
     def __init__(self, path: str, document_id: str) -> None:
         """
         :param path: Local or remote path to the document folder,
             which includes the html file
         """
         self._login_instance = Login()
-        self.ci = cloud_interface_login(self._login_instance)
         self._path = self._validate_path(path, document_id)
         self._html_file = None
         self._html_soup = None
@@ -49,24 +49,26 @@ class HTML:
         :return: valid path for the `source.html` file
             corresponding to the document id
         """
+        ci = get_cloud_interface()
         valid_path = ''
         try:
             joined_path = os.path.join(path, document_id)
             if (
-                    self.ci.isdir(joined_path)
+                    ci.isdir(joined_path)
                     and StorageEnum.html_file.value
-                    in self.ci.listdir(joined_path, exclude_folders=True)
+                    in ci.listdir(joined_path, exclude_folders=True)
             ):
                 valid_path = joined_path
-            elif StorageEnum.html_file.value in self.ci.listdir(path):
+            elif StorageEnum.html_file.value in ci.listdir(path):
                 valid_path = path
         except Exception as e:
             logging.debug(f"An error occurred while validating the path: {e}")
         return valid_path
 
     def _read_html(self, path: str) -> str:
+        ci = get_cloud_interface()
         if self._html_file is None:
-            with self.ci.open(path, 'r') as file:
+            with ci.open(path, 'r') as file:
                 self._html_file = file.read()
         return self._html_file
 

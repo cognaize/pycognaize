@@ -1,5 +1,6 @@
 import json
 import os
+import pickle
 import shutil
 import tempfile
 import unittest
@@ -90,7 +91,7 @@ class TestDocument(unittest.TestCase):
         #                      for page_n, page in self.document.pages.items()}))
         self.assertDictEqual(result["metadata"], OrderedDict(self.document.metadata))
         self.assertDictEqual(result["output_fields"], OrderedDict({name: [field.to_dict() for field in fields]
-                                                                  for name, fields in self.document.y.items()}))
+                                                                   for name, fields in self.document.y.items()}))
 
     def test_from_dict(self):
         document = Document.from_dict(self.data, data_path=self.snap_path)
@@ -161,6 +162,15 @@ class TestDocument(unittest.TestCase):
         self.assertEqual(tied_tags, tag)
         first_tied_tag = self.document.get_first_tied_tag(tag)[1]
         self.assertEqual(first_tied_tag, tag)
+
+    def test_serialization_and_deserialization(self):
+        doc_bytes = pickle.dumps(self.document)
+
+        doc = pickle.loads(doc_bytes)
+
+        assert doc.html is not None
+
+        self.assertEqual(len(doc.pages), 7)
 
     @classmethod
     def tearDownClass(cls) -> None:

@@ -3,17 +3,17 @@ import logging
 import os
 import re
 from typing import Optional, List, Iterable, Union
+
 import numpy as np
 
-from pycognaize.login import Login
+import pycognaize.common
+from pycognaize.common.cloud_interface import get_cloud_interface
 from pycognaize.common.decorators import module_not_found
-
 from pycognaize.common.enums import (
     StorageEnum,
     OCR_DATA_EXTENSION,
     IMG_EXTENSION
 )
-import pycognaize.common
 from pycognaize.common.utils import (
     infer_rows_from_words,
     clean_ocr_data,
@@ -22,10 +22,10 @@ from pycognaize.common.utils import (
     compute_intersection_area,
     stick_word_boxes,
     preview_img,
-    image_string_to_array,
-    cloud_interface_login
+    image_string_to_array
 )
 from pycognaize.document.tag import ExtractionTag
+from pycognaize.login import Login
 
 
 class Page:
@@ -50,7 +50,6 @@ class Page:
         self._page_number = int(page_number)
         self._document_id = document_id
         self._login_instance = Login()
-        self.ci = cloud_interface_login(self._login_instance)
         self._path = path
         self._ocr_raw = None
         self._ocr = None
@@ -90,8 +89,9 @@ class Page:
         """Converts image of page in bytes"""
         uri = os.path.join(self.path, StorageEnum.image_folder.value,
                            f"image_{self._page_number}.{IMG_EXTENSION}")
+        ci = get_cloud_interface()
         try:
-            with self.ci.open(uri, 'rb') as f:
+            with ci.open(uri, 'rb') as f:
                 image_bytes = f.read()
         except FileNotFoundError as e:
             logging.debug(
@@ -122,8 +122,10 @@ class Page:
             raise ValueError("No path defined for getting the images")
         uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
                            f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
+
+        ci = get_cloud_interface()
         try:
-            with self.ci.open(uri, 'r') as f:
+            with ci.open(uri, 'r') as f:
                 # Using loads instead of load as a workaround for CI
                 page_data = json.loads(f.read())
                 self._image_height = int(page_data['image']['height'])
@@ -164,8 +166,9 @@ class Page:
             raise ValueError("No path defined for getting the images")
         uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
                            f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
+        ci = get_cloud_interface()
         try:
-            with self.ci.open(uri, 'r') as f:
+            with ci.open(uri, 'r') as f:
                 ocr_raw = json.loads(f.read())
                 ocr_raw['page']['height'] = float(ocr_raw['page']['height'])
                 ocr_raw['page']['width'] = float(ocr_raw['page']['width'])

@@ -2,16 +2,16 @@
 in the snapshot
 """
 import logging
+import os
+from collections.abc import Mapping
 from typing import Optional
 
 from bson import json_util
-import os
-from collections.abc import Mapping
 
-from pycognaize.login import Login
+from pycognaize.common.cloud_interface import get_cloud_interface
 from pycognaize.common.enums import StorageEnum
-from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document import Document
+from pycognaize.login import Login
 
 
 class LazyDocumentDict(Mapping):
@@ -21,14 +21,14 @@ class LazyDocumentDict(Mapping):
     def __init__(self, doc_path: str,
                  data_path: str):
         self._login_instance = Login()
-        self.ci = cloud_interface_login(self._login_instance)
         self._doc_path = doc_path
         self._data_path = data_path
+        ci = get_cloud_interface()
         self._ids = sorted([os.path.basename(os.path.dirname(i))
-                           for i in self.ci.listdir(doc_path,
-                                                    include_files=False)
-                           if self.ci.isfile(os.path.join(doc_path,
-                            i, self.document_filename))])
+                            for i in ci.listdir(doc_path,
+                                                include_files=False)
+                            if ci.isfile(os.path.join(doc_path,
+                                                      i, self.document_filename))])
 
     @property
     def doc_path(self) -> str:
@@ -45,14 +45,15 @@ class LazyDocumentDict(Mapping):
 
         Note: Path can be both local and remote
         """
+        ci = get_cloud_interface()
         try:
             path = os.path.join(self.doc_path, doc_id,
                                 f"{self.document_filename}")
-            if self.ci.is_local_path(path):
+            if ci.is_local_path(path):
                 with open(path, 'r', encoding='utf8') as f:
                     doc_dict = json_util.loads(f.read())
             else:
-                with self.ci.open(path, 'r') as f:
+                with ci.open(path, 'r') as f:
                     doc_dict = json_util.loads(f.read())
             return Document.from_dict(raw=doc_dict,
                                       data_path=os.path.join(self.data_path,

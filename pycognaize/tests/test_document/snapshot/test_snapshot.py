@@ -1,4 +1,5 @@
 import json
+import multiprocessing
 import os
 import shutil
 import tempfile
@@ -10,10 +11,13 @@ from typing import Dict
 from bson import json_util
 
 from pycognaize.common.enums import StorageEnum, EnvConfigEnum
-
 from pycognaize.common.utils import load_bson_by_path
 from pycognaize.document.snapshot import Snapshot
 from pycognaize.tests.resources import RESOURCE_FOLDER
+
+
+def get_doc_html(doc):
+    return doc.html
 
 
 class TestSnapshot(unittest.TestCase):
@@ -68,12 +72,12 @@ class TestSnapshot(unittest.TestCase):
         os.environ[EnvConfigEnum.SNAPSHOT_ID.value] = self.snapshot_id
 
         # local prepositioning
-        doc_id = str(self.doc_data['metadata']['id'])
+        doc_id = str(self.doc_data['metadata']['document_id'])
         self.snap_path = os.path.join(self.SNAPSHOT_PATH, self.snapshot_id)
         self.create_document(document_dict=self.doc_data,
                              path=os.path.join(self.snap_path, doc_id))
         self.doc_data_2 = deepcopy(self.doc_data)
-        self.doc_data_2['metadata']['id'] = '5defa06ff91e70001dfdcb3a'
+        self.doc_data_2['metadata']['document_id'] = '5defa06ff91e70001dfdcb3a'
         self.snapshot = Snapshot.get()
 
     def test_documents(self):
@@ -82,12 +86,22 @@ class TestSnapshot(unittest.TestCase):
     def test_get(self):
         self.create_document(document_dict=self.doc_data_2,
                              path=os.path.join(self.snap_path,
-                                               self.doc_data_2['metadata']['id']))
+                                               self.doc_data_2['metadata']['document_id']))
         snap = Snapshot.get()
         self.assertIsInstance(snap, Snapshot)
         self.assertEqual(len(snap.documents), 2)
 
         shutil.rmtree(os.path.join(self.SNAPSHOT_PATH, 'sample_snapshot_1'))
+
+    def test_multiprocessing(self):
+        self.create_document(document_dict=self.doc_data_2,
+                             path=os.path.join(self.snap_path,
+                                               self.doc_data_2['metadata']['document_id']))
+        snapshot = Snapshot.get()
+
+        with multiprocessing.Pool() as pool:
+            results = pool.map(get_doc_html, snapshot.documents.values())
+            self.assertEqual(len(results), 2)
 
     def tearDown(self) -> None:
         shutil.rmtree(self.SNAPSHOT_PATH)
