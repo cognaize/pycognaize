@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.24] - 2023-09-07
+- Use global CI instance in all classes
+
 ### [1.4.23] - 2023-08-17
 - Add tests for exclude options
 - Add tests for cloudstorageio hooks usage
