@@ -3,28 +3,30 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
-from requests.adapters import HTTPAdapter, Retry
-from pycognaize.common.enums import ApiConfigEnum
 import multiprocessing
 import os
 from collections import OrderedDict
 from typing import Dict, List, Tuple, Any, Optional, Callable, Union
-import requests
+
 import fitz
 import pandas as pd
+import requests
 from fitz.utils import getColor, getColorList
+from requests.adapters import HTTPAdapter, Retry
+
 from pycognaize.common.classification_labels import ClassificationLabels
-from pycognaize.document.html_info import HTML
-from pycognaize.login import Login
+from pycognaize.common.cloud_interface import get_cloud_interface
+from pycognaize.common.enums import ApiConfigEnum
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
-from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field
+from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
 from pycognaize.document.tag.tag import BoxTag, LineTag
+from pycognaize.login import Login
 
 RETRY_ADAPTER = Retry(total=3,
                       backoff_factor=10,
@@ -68,7 +70,7 @@ class Document:
         """Create a modeltask object in the database given a document
          id and recipe id"""
         url = os.environ.get('API_HOST') + \
-            ApiConfigEnum.CREATE_TASK_ENDPOINT.value
+              ApiConfigEnum.CREATE_TASK_ENDPOINT.value
         payload = "{\"documentId\": \"%s\",\n \"recipeId\": \"%s\"\n}\n" \
                   % (document_id, recipe_id)
         headers = {'x-auth': os.environ.get('X_AUTH_TOKEN'),
@@ -561,7 +563,7 @@ class Document:
         :return: bytes object of the pdf
         """
 
-        ci = cloud_interface_login(self._login_instance)
+        ci = get_cloud_interface()
         pdf_path = os.path.join(self.pages[1].path, self.document_src) + '.pdf'
 
         with ci.open(pdf_path, 'rb') as f:

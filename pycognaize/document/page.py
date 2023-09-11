@@ -90,6 +90,7 @@ class Page:
         uri = os.path.join(self.path, StorageEnum.image_folder.value,
                            f"image_{self._page_number}.{IMG_EXTENSION}")
         ci = get_cloud_interface()
+
         try:
             with ci.open(uri, 'rb') as f:
                 image_bytes = f.read()

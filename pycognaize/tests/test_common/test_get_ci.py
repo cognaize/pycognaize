@@ -28,7 +28,6 @@ class GetCITestCase(TestCase):
 
         assert ci._kwargs['aws_access_key_id'] == 'test_key'
 
-
     @mock.patch('pycognaize.common.cloud_interface.Login')
     def test_should_return_same_instance_when_is_logged_in_and_called_several_times(self, login_mock):
         instance_mock = MagicMock()
@@ -41,3 +40,15 @@ class GetCITestCase(TestCase):
         ci_2 = get_cloud_interface()
 
         assert ci is ci_2
+
+    @mock.patch('pycognaize.common.cloud_interface.Login')
+    @mock.patch('pycognaize.common.utils.cloudstorageio.hooks.hook_registry.register')
+    def test_should_register_hook_when_cloud_interface_is_created(self, register_mock, login_mock):
+        instance_mock = MagicMock()
+        login_mock.return_value = instance_mock
+        instance_mock.logged_in = True
+        instance_mock.aws_access_key = 'test_key'
+
+        get_cloud_interface()
+
+        register_mock.assert_called()
