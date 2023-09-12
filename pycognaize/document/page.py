@@ -162,8 +162,12 @@ class Page:
         """OCR of the page"""
         if self.path is None:
             raise ValueError("No path defined for getting the images")
-        uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
-                           f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
+        if self.ci.is_s3_path(self.path):
+            uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
+                               f"page_{self._page_number}.{OCR_DATA_EXTENSION}").replace('\\', '/')
+        elif self.ci.is_local_path(self.path):
+            uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
+                               f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
         try:
             with self.ci.open(uri, 'r') as f:
                 ocr_raw = json.loads(f.read())
