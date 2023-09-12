@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.24] - 2023-08-17
+- Revert cloudstorageio version to 1.2.12
+
 ### [1.4.23] - 2023-08-17
 - Add tests for exclude options
 - Add tests for cloudstorageio hooks usage
