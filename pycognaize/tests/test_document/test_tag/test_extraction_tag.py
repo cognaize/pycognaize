@@ -21,9 +21,9 @@ class TestExtractionTag(unittest.TestCase):
 
         self.page = create_dummy_page()
 
-        with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json') as document_json:
+        with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json', encoding="utf8") as document_json:
             self.data = json.load(document_json)
-        with open(RESOURCE_FOLDER + '/snapshots/63d4486c0e3fe60011fe3a75/document.json') as document_json:
+        with open(RESOURCE_FOLDER + '/snapshots/63d4486c0e3fe60011fe3a75/document.json', encoding="utf8") as document_json:
             self.data1 = json.load(document_json)
         snapshot = Snapshot(RESOURCE_FOLDER + '/snapshots')
         doc = snapshot.documents['63d4486c0e3fe60011fe3a75']

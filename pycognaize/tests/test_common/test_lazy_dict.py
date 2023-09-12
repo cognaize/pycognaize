@@ -24,7 +24,7 @@ class TestLazyDict(unittest.TestCase):
 
         # load resource data
         with open(RESOURCE_FOLDER +
-                  '/snapshots/60f554497883ab0013d9d906/document.json')as document_json:
+                  '/snapshots/60f554497883ab0013d9d906/document.json', encoding="utf8")as document_json:
             cls.data = json.load(document_json)
         cls.snap_path = os.path.join(cls.SNAPSHOT_PATH, 'sample_snapshot_1', str(cls.data['metadata']['document_id']))
 

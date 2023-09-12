@@ -16,7 +16,7 @@ class TestSpanField(unittest.TestCase):
 
     def setUp(self):
         with open(RESOURCE_FOLDER +
-                  '/snapshots/64b1621a44acf9001017db4f/document.json') \
+                  '/snapshots/64b1621a44acf9001017db4f/document.json', encoding="utf8") \
                 as document_json:
             self.data_with_group_key = json.load(document_json)
 
