@@ -7,6 +7,7 @@ from pycognaize.common.enums import EnvConfigEnum, HASH_FILE
 from pycognaize.common.exceptions import AuthenthicationError
 from pycognaize.common.lazy_dict import LazyDocumentDict
 from pycognaize.common.utils import directory_summary_hash
+from pycognaize.document.snapshot_downloader import SnapshotDownloader
 from pycognaize.login import Login
 
 
@@ -58,9 +59,9 @@ class Snapshot:
                 exclude_pdf
             )
 
-            ci.copy_directory(snapshot_path,
-                              destination_dir,
-                              exclude=exclude)
+            downloader = SnapshotDownloader()
+
+            downloader.download(snapshot_path, destination_dir, exclude)
 
             summary_hash = directory_summary_hash(destination_dir)
             with open(os.path.join(destination_dir, HASH_FILE), 'w') as f:
