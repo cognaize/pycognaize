@@ -9,13 +9,11 @@ from itertools import groupby
 from typing import Union, List, Optional, Iterable, Dict
 
 import bson
-import cloudstorageio
 import numpy as np
 from PIL import Image
 from bson.json_util import loads as bson_loads
 from cloudstorageio import CloudInterface
 
-import pycognaize
 from pycognaize.common.decorators import soon_be_deprecated
 from pycognaize.common.enums import PythonShellEnum
 from pycognaize.login import Login
@@ -620,18 +618,6 @@ def convert_tag_coords_to_percentages(tag, w, h) -> dict:
                 bottom=tag.bottom * h / 100)
 
 
-def relogin_s3():
-    login = pycognaize.Login()
-
-    login.relogin()
-
-    return (
-        login.aws_access_key,
-        login.aws_secret_access_key,
-        login.aws_session_token
-    )
-
-
 def cloud_interface_login(login_instance: Login) -> CloudInterface:
     """Logs in to cloud interface"""
 
@@ -642,8 +628,6 @@ def cloud_interface_login(login_instance: Login) -> CloudInterface:
             aws_session_token=login_instance.aws_session_token)
     else:
         ci_instance = CloudInterface()
-
-    cloudstorageio.hooks.hook_registry.register('relogin_s3', relogin_s3)
 
     return ci_instance
 
