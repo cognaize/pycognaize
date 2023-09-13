@@ -1,0 +1,70 @@
+{
+  "input_fields": {},
+  "output_fields": {
+    "test_text_span__text_span": [
+      {
+        "_id": "64b8f4386647400011d867bc",
+        "name": "Text Span",
+        "value": "",
+        "tags": [
+          {
+            "_id": "64c79dd65b9f72b8425dd176",
+            "page": 1,
+            "left": "9.15032679738562%",
+            "top": "17.737373737373733%",
+            "height": "1.5416666666666679%",
+            "width": "45.43627450980392%",
+            "value": "Total Cash $ 3,706",
+            "ocrValue": "Total Cash $ 3,706"
+          }
+        ],
+        "dataType": "text-span",
+        "fieldType": "extraction",
+        "group": "",
+        "groupKey": "",
+        "classes": "",
+        "hasCategories": false,
+        "srcFieldId": "64b8f4386647400011d867bc",
+        "scale": 1
+      },
+      {
+        "_id": "64c79ddc5b9f72b8425dd178",
+        "name": "Text Span",
+        "value": "Table 1",
+        "tags": [],
+        "dataType": "text-span",
+        "fieldType": "extraction",
+        "group": "",
+        "groupKey": "",
+        "classes": "",
+        "hasCategories": false,
+        "srcFieldId": "64b8f4386647400011d867bc",
+        "scale": 1
+      }
+    ]
+  },
+  "metadata": {
+    "src": "f42c48d586449fda4872b58d59099a69d05f502c8fc54b44d9f2ef6cd9e9b03d",
+    "document_id": "6426b0822afefc001277df9e",
+    "recipeId": "64ba769f6647400011d90c5f",
+    "documentName": "zebit 2022 fs .pdf",
+    "numberOfPages": 2,
+    "type": "PDF",
+    "ocr": "tesseract_ocr",
+    "decimalPoint": ".",
+    "thousandsSeparator": ",",
+    "negativeSign": "multiple"
+  },
+  "pages": {
+    "1": {
+      "width": 1700,
+      "height": 2200
+    },
+    "2": {
+      "width": 1700,
+      "height": 2200
+    }
+  },
+  "fieldCategories": {},
+  "version": "7"
+}

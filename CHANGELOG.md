@@ -2,6 +2,8 @@
 
 ## [1.4]
 
+### [1.4.25] - 2023-09-13
+- Add unit test for `span_field.py`
 
 ### [1.4.24] - 2023-09-13
 - Create snapshot downloader class
