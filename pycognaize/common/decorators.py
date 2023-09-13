@@ -1,9 +1,4 @@
-import functools
 import warnings
-
-from botocore.exceptions import ClientError
-from cloudstorageio import CloudInterface
-
 import pycognaize
 
 
@@ -55,26 +50,3 @@ def soon_be_deprecated(version: str = None, stack_level: int = 2):
         return wrapper
 
     return soon_be_deprecated_custom
-
-
-def relogin_if_failed(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ClientError:
-            login = pycognaize.Login()
-
-            login.relogin()
-
-            cloud_service = args[0]
-
-            cloud_service.ci = CloudInterface(
-                aws_access_key_id=login.aws_access_key,
-                aws_secret_access_key=login.aws_secret_access_key,
-                aws_session_token=login.aws_session_token
-            )
-
-            return func(*args, **kwargs)
-
-    return wrapper

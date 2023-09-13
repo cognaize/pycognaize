@@ -2,8 +2,16 @@
 
 ## [1.4]
 
-### [1.4.21] - 2023-08-01
-- Add unit test for `span_field`
+### [1.4.23] - 2023-08-17
+- Add tests for exclude options
+- Add tests for cloudstorageio hooks usage
+- Update to cloudstorageio version 1.2.14
+
+### [1.4.22] - 2023-08-16
+- Add new method for document fetching
+
+### [1.4.21rc1] - 2023-08-08
+- Use new method from cloudstorageio for big snapshot download
 
 ### [1.4.20] - 2023-07-30
 - Add replacing text-span datatype with text_span in `from_dict` input_fields of Document object

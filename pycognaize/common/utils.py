@@ -9,12 +9,13 @@ from itertools import groupby
 from typing import Union, List, Optional, Iterable, Dict
 
 import bson
+import cloudstorageio
 import numpy as np
 from PIL import Image
 from bson.json_util import loads as bson_loads
 from cloudstorageio import CloudInterface
 
-from pycognaize.common.cloud_service import CloudService
+import pycognaize
 from pycognaize.common.decorators import soon_be_deprecated
 from pycognaize.common.enums import PythonShellEnum
 from pycognaize.login import Login
@@ -203,8 +204,8 @@ def stick_word_boxes(box_coord: List[dict], img_bytes: bytes, padding=1):
         end_point_ymax = int(round(word['bottom'])) + 2
 
         cropped_word = b_and_w_image[
-                           start_point_ymin:end_point_ymax,
-                           start_point_xmin:end_point_xmax
+                       start_point_ymin:end_point_ymax,
+                       start_point_xmin:end_point_xmax
                        ]
 
         vectors_y = np.mean(cropped_word, axis=1)
@@ -619,7 +620,19 @@ def convert_tag_coords_to_percentages(tag, w, h) -> dict:
                 bottom=tag.bottom * h / 100)
 
 
-def cloud_interface_login(login_instance: Login) -> CloudService:
+def relogin_s3():
+    login = pycognaize.Login()
+
+    login.relogin()
+
+    return (
+        login.aws_access_key,
+        login.aws_secret_access_key,
+        login.aws_session_token
+    )
+
+
+def cloud_interface_login(login_instance: Login) -> CloudInterface:
     """Logs in to cloud interface"""
 
     if login_instance.logged_in:
@@ -630,9 +643,9 @@ def cloud_interface_login(login_instance: Login) -> CloudService:
     else:
         ci_instance = CloudInterface()
 
-    cloud_service = CloudService(ci_instance)
+    cloudstorageio.hooks.hook_registry.register('relogin_s3', relogin_s3)
 
-    return cloud_service
+    return ci_instance
 
 
 def directory_summary_hash(dirname: str):
