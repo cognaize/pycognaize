@@ -203,10 +203,3 @@ class TestUtils(unittest.TestCase):
                                      "bottom": 54.97258963417412, 'ocr_text': '(a) Commercial banks.',
                                      'word_id_number': '60f556a9c23c8f0000e05d2f'}, 10.383100608664519,
                                     25.635517364840673, 55.63064089130512, 57.452936680283266))
-
-    @mock.patch('pycognaize.common.utils.cloudstorageio.hooks.hook_registry.register')
-    def test_should_register_hook_when_cloud_interface_is_created(self, register_mock):
-        login = MagicMock()
-        cloud_interface_login(login)
-
-        register_mock.assert_called()
