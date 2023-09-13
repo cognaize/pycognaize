@@ -28,15 +28,15 @@ class LazyDocumentDict(Mapping):
             self._ids = sorted([os.path.basename(os.path.dirname(i))
                                 for i in self.ci.listdir(doc_path,
                                                          include_files=False)
-                                if self.ci.isfile(os.path.join(doc_path,
-                                                               i, self.document_filename).replace('\\', '/'))])
+                                if self.ci.isfile(os.path.join(
+                    doc_path, i, self.document_filename).replace('\\', '/'))])
 
-        elif self.ci.is_local_path(doc_path):
+        else:
             self._ids = sorted([os.path.basename(os.path.dirname(i))
                                 for i in self.ci.listdir(doc_path,
                                                          include_files=False)
-                                if self.ci.isfile(os.path.join(doc_path,
-                                                               i, self.document_filename))])
+                                if self.ci.isfile(os.path.join(
+                    doc_path, i, self.document_filename))])
 
     @property
     def doc_path(self) -> str:
@@ -56,8 +56,9 @@ class LazyDocumentDict(Mapping):
         try:
             if self.ci.is_s3_path(self.doc_path):
                 path = os.path.join(self.doc_path, doc_id,
-                                    f"{self.document_filename}").replace('\\', '/')
-            elif self.ci.is_local_path(self.doc_path):
+                                    f"{self.document_filename}")\
+                    .replace('\\', '/')
+            else:
                 path = os.path.join(self.doc_path, doc_id,
                                     f"{self.document_filename}")
 

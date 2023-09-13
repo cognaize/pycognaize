@@ -88,8 +88,13 @@ class Page:
 
     def get_image(self) -> bytes:
         """Converts image of page in bytes"""
-        uri = os.path.join(self.path, StorageEnum.image_folder.value,
-                           f"image_{self._page_number}.{IMG_EXTENSION}")
+        if self.ci.is_s3_path(self.path):
+            uri = os.path.join(self.path, StorageEnum.image_folder.value,
+                           f"image_{self._page_number}.{IMG_EXTENSION}")\
+                .replace('\\', '/')
+        else:
+            uri = os.path.join(self.path, StorageEnum.image_folder.value,
+                               f"image_{self._page_number}.{IMG_EXTENSION}")
         try:
             with self.ci.open(uri, 'rb') as f:
                 image_bytes = f.read()
@@ -120,8 +125,13 @@ class Page:
         """Data of the page"""
         if self.path is None:
             raise ValueError("No path defined for getting the images")
-        uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
+        if self.ci.is_s3_path(self.path):
+            uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
                            f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
+        else:
+            uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
+                               f"page_{self._page_number}."
+                               f"{OCR_DATA_EXTENSION}").replace('\\', '/')
         try:
             with self.ci.open(uri, 'r') as f:
                 # Using loads instead of load as a workaround for CI
@@ -164,10 +174,12 @@ class Page:
             raise ValueError("No path defined for getting the images")
         if self.ci.is_s3_path(self.path):
             uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
-                               f"page_{self._page_number}.{OCR_DATA_EXTENSION}").replace('\\', '/')
-        elif self.ci.is_local_path(self.path):
+                               f"page_{self._page_number}."
+                               f"{OCR_DATA_EXTENSION}").replace('\\', '/')
+        else:
             uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
-                               f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
+                               f"page_{self._page_number}."
+                               f"{OCR_DATA_EXTENSION}")
         try:
             with self.ci.open(uri, 'r') as f:
                 ocr_raw = json.loads(f.read())
