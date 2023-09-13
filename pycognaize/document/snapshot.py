@@ -2,7 +2,6 @@ import logging
 import os
 from typing import Mapping, Tuple
 
-from pycognaize.common import utils
 from pycognaize.common.enums import EnvConfigEnum, HASH_FILE
 from pycognaize.common.exceptions import AuthenthicationError
 from pycognaize.common.lazy_dict import LazyDocumentDict
@@ -51,7 +50,6 @@ class Snapshot:
         if login_instance.logged_in:
             snapshot_path = os.path.join(login_instance.snapshot_root,
                                          snapshot_id)
-            ci = utils.cloud_interface_login(login_instance)
 
             exclude = cls._get_exclude_patterns(
                 exclude_images,
