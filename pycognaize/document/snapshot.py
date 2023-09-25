@@ -42,7 +42,9 @@ class Snapshot:
     def download(cls, snapshot_id: str, destination_dir: str,
                  exclude_images: bool = False,
                  exclude_ocr: bool = False,
-                 exclude_pdf: bool = False
+                 exclude_pdf: bool = False,
+                 exclude_html: bool = False,
+                 exclude_patterns=None
                  ) -> Tuple['Snapshot', str]:
         """Downloads snapshot to specified destination"""
         login_instance = Login()
@@ -54,7 +56,9 @@ class Snapshot:
             exclude = cls._get_exclude_patterns(
                 exclude_images,
                 exclude_ocr,
-                exclude_pdf
+                exclude_pdf,
+                exclude_html,
+                exclude_patterns
             )
 
             downloader = SnapshotDownloader()
@@ -91,8 +95,18 @@ class Snapshot:
         return snapshot_path
 
     @classmethod
-    def _get_exclude_patterns(cls, exclude_images, exclude_ocr, exclude_pdf):
-        exclude = []
+    def _get_exclude_patterns(
+            cls,
+            exclude_images,
+            exclude_ocr,
+            exclude_pdf,
+            exclude_html,
+            exclude_patterns
+    ):
+        if exclude_patterns is not None and isinstance(exclude_patterns, list):
+            exclude = exclude_patterns
+        else:
+            exclude = []
 
         if exclude_images:
             exclude.append('*/images/*.jpeg')
@@ -102,6 +116,9 @@ class Snapshot:
 
         if exclude_pdf:
             exclude.append('*.pdf')
+
+        if exclude_html:
+            exclude.append('*.html')
 
         return exclude
 

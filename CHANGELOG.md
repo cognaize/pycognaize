@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.26] - 2023-09-25
+- Add `exclude_html` and `exclude_patterns` fields to snapshot downloader
+
 ### [1.4.25] - 2023-09-13
 - Add unit test for `span_field.py`
 
