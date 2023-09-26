@@ -53,10 +53,10 @@ class Snapshot:
                                          snapshot_id)
 
             exclude = cls._get_exclude_patterns(
-                exclude_images,
-                exclude_ocr,
-                exclude_pdf,
-                exclude_html
+                exclude_images=exclude_images,
+                exclude_ocr=exclude_ocr,
+                exclude_pdf=exclude_pdf,
+                exclude_html=exclude_html
             )
 
             downloader = SnapshotDownloader()
