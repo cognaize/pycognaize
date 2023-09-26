@@ -52,7 +52,7 @@ class Snapshot:
             snapshot_path = os.path.join(login_instance.snapshot_root,
                                          snapshot_id)
 
-            exclude, include = cls._get_exclude_patterns(
+            exclude = cls._get_exclude_patterns(
                 exclude_images,
                 exclude_ocr,
                 exclude_pdf,
