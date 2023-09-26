@@ -229,6 +229,7 @@ class SnapshotDownloader:
             self,
             bucket_name: str,
             exclude: list,
+            include: list,
             page: dict,
             snapshot_path: str,
             destination_path: Path
@@ -246,6 +247,9 @@ class SnapshotDownloader:
             exclude (list): A list of file
             path patterns to
             exclude from copying.
+            include (list): A list of file
+            path patterns to
+            include even if excluded.
             page (dict): The page of S3 objects to copy.
             snapshot_path (str): The original S3 snapshot path.
             destination_path (Path): The local destination path.
@@ -266,7 +270,8 @@ class SnapshotDownloader:
         for obj in page['Contents']:
             s3_object = self._s3.Object(bucket_name, obj['Key'])
 
-            if self._should_exclude(s3_object.key, exclude):
+            if (self._matches_patterns(s3_object.key, exclude)
+                    and not self._matches_patterns(s3_object.key, include)):
                 continue
 
             self._copy_file_to_dest(s3_object, snapshot_path, destination_path)
@@ -361,34 +366,35 @@ class SnapshotDownloader:
             logging.info(f'File/folder conflict for '
                          f'{os.path.dirname(path)} path')
 
-    def _should_exclude(self, file_path: str,
-                        exclude: list):
+    def _matches_patterns(self, file_path: str,
+                          patterns: list):
         """
-        Determines whether a file path should be excluded based on patterns.
+        Determines whether a file path matches at least one of the patterns.
 
         This method checks if the provided file path matches any
-        of the patterns in the 'exclude' list.
+        of the patterns in the 'patterns' list.
         If a match is found, it returns True, indicating that the
-        file should be excluded; otherwise, it
+        file is matched; otherwise, it
         returns False.
 
         Args:
             file_path (str): The file path to be checked for exclusion.
-            exclude (list): A list of file path patterns to exclude.
+            patterns (list): A list of file path patterns to compare against.
 
         Returns:
-            bool: True if the file path should be excluded, False otherwise.
+            bool: True if the file path matches one of the patterns,
+             False otherwise.
 
         This method is used to filter out files based on
-        specified exclusion patterns.
+        specified exclusion or inclusion patterns.
 
         Raises:
             None
         """
-        if not exclude:
+        if not patterns:
             return False
 
-        for pattern in exclude:
+        for pattern in patterns:
             if fnmatch.fnmatch(file_path, pattern):
                 return True
 
@@ -399,6 +405,7 @@ class SnapshotDownloader:
             snapshot_path: str,
             destination_path: str,
             exclude=None,
+            include=None,
             continue_token: str = None
     ):
         """
@@ -416,6 +423,8 @@ class SnapshotDownloader:
                 snapshots will be saved.
             exclude (list, optional): A list of file path patterns to
                 exclude from copying.
+            include (list, optional): A list of file path patterns to
+                include even if excluded.
             continue_token (str, optional): An optional continuation token for
                 resuming downloads.
 
@@ -463,6 +472,7 @@ class SnapshotDownloader:
                 self._copy_objects_from_page(
                     bucket_name,
                     exclude,
+                    include,
                     page,
                     snapshot_path,
                     destination_path
