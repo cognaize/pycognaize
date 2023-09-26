@@ -10,8 +10,7 @@ class ExcludeOptionsTestCase(TestCase):
             True,
             False,
             False,
-            False,
-            None
+            False
         )
 
         assert len(res) == 1
@@ -22,8 +21,7 @@ class ExcludeOptionsTestCase(TestCase):
             False,
             True,
             False,
-            False,
-            None
+            False
         )
 
         assert len(res) == 1
@@ -34,8 +32,7 @@ class ExcludeOptionsTestCase(TestCase):
             False,
             False,
             True,
-            False,
-            None
+            False
         )
 
         assert len(res) == 1
@@ -46,33 +43,18 @@ class ExcludeOptionsTestCase(TestCase):
             False,
             False,
             False,
-            True,
-            None
+            True
         )
 
         assert len(res) == 1
         assert '*.html' in res
-
-    def test_should_append_to_provided_patterns_when_patterns_are_added(self):
-        res = Snapshot._get_exclude_patterns(
-            False,
-            False,
-            False,
-            True,
-            ['*.test']
-        )
-
-        assert len(res) == 2
-        assert '*.html' in res
-        assert '*.test' in res
 
     def test_should_include_all_options_when_all_are_excluded(self):
         res = Snapshot._get_exclude_patterns(
             True,
             True,
             True,
-            False,
-            None
+            False
         )
 
         assert len(res) == 3
