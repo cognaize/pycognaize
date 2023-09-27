@@ -174,7 +174,7 @@ class Page:
         uri = join_path(
             self.ci.is_s3_path(self.path),
             self.path, StorageEnum.ocr_folder.value,
-            f"page_{self._page_number}." 
+            f"page_{self._page_number}."
             f"{OCR_DATA_EXTENSION}"
         )
         try:
