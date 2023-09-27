@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.27] - 2023-09-27
+- Add support for s3 path resolution in Windows
+
 ### [1.4.26] - 2023-09-25
 - Add `exclude_html` to snapshot download
 - Add `include` option to snapshot downloader
