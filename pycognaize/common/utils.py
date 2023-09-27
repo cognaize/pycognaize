@@ -665,3 +665,12 @@ def _reduce_hash(hashlist, hash_function):
     for hash_value in sorted(hashlist):
         hasher.update(hash_value.encode("utf-8"))
     return hasher.hexdigest()
+
+
+def join_path(is_s3_path=False, *parts):
+    """ Join multiple path parts into a single path,
+    optionally converting it to an S3-style path"""
+    joined_path = os.path.join(*parts)
+    if is_s3_path:
+        joined_path = joined_path.replace(os.sep, '/')
+    return joined_path
