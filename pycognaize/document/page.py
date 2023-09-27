@@ -7,6 +7,7 @@ import numpy as np
 
 from pycognaize.login import Login
 from pycognaize.common.decorators import module_not_found
+from pycognaize.common.utils import join_path
 
 from pycognaize.common.enums import (
     StorageEnum,
@@ -88,7 +89,7 @@ class Page:
 
     def get_image(self) -> bytes:
         """Converts image of page in bytes"""
-        uri = os.path.join(self.path, StorageEnum.image_folder.value,
+        uri = join_path(self.ci.is_s3_path(self.path), self.path, StorageEnum.image_folder.value,
                            f"image_{self._page_number}.{IMG_EXTENSION}")
         try:
             with self.ci.open(uri, 'rb') as f:
@@ -120,8 +121,9 @@ class Page:
         """Data of the page"""
         if self.path is None:
             raise ValueError("No path defined for getting the images")
-        uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
-                           f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
+        uri = join_path(self.ci.is_s3_path(self.path), self.path, StorageEnum.ocr_folder.value,
+                           f"page_{self._page_number}."
+                           f"{OCR_DATA_EXTENSION}")
         try:
             with self.ci.open(uri, 'r') as f:
                 # Using loads instead of load as a workaround for CI
@@ -162,8 +164,9 @@ class Page:
         """OCR of the page"""
         if self.path is None:
             raise ValueError("No path defined for getting the images")
-        uri = os.path.join(self.path, StorageEnum.ocr_folder.value,
-                           f"page_{self._page_number}.{OCR_DATA_EXTENSION}")
+        uri = join_path(self.ci.is_s3_path(self.path), self.path, StorageEnum.ocr_folder.value,
+                           f"page_{self._page_number}."
+                           f"{OCR_DATA_EXTENSION}")
         try:
             with self.ci.open(uri, 'r') as f:
                 ocr_raw = json.loads(f.read())

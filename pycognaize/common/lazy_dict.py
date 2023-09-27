@@ -10,7 +10,7 @@ from collections.abc import Mapping
 
 from pycognaize.login import Login
 from pycognaize.common.enums import StorageEnum
-from pycognaize.common.utils import cloud_interface_login
+from pycognaize.common.utils import cloud_interface_login, join_path
 from pycognaize.document import Document
 
 
@@ -25,10 +25,10 @@ class LazyDocumentDict(Mapping):
         self._doc_path = doc_path
         self._data_path = data_path
         self._ids = sorted([os.path.basename(os.path.dirname(i))
-                           for i in self.ci.listdir(doc_path,
-                                                    include_files=False)
-                           if self.ci.isfile(os.path.join(doc_path,
-                            i, self.document_filename))])
+                            for i in self.ci.listdir(doc_path,
+                                                     include_files=False)
+                            if self.ci.isfile(join_path(self.ci.is_s3_path(doc_path),
+                doc_path, i, self.document_filename))])
 
     @property
     def doc_path(self) -> str:
@@ -46,8 +46,9 @@ class LazyDocumentDict(Mapping):
         Note: Path can be both local and remote
         """
         try:
-            path = os.path.join(self.doc_path, doc_id,
+            path = join_path(self.ci.is_s3_path(self.doc_path), self.doc_path, doc_id,
                                 f"{self.document_filename}")
+
             if self.ci.is_local_path(path):
                 with open(path, 'r', encoding='utf8') as f:
                     doc_dict = json_util.loads(f.read())

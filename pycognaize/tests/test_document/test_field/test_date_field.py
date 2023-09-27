@@ -11,10 +11,10 @@ from pycognaize.tests.resources import RESOURCE_FOLDER
 class TestDateField(unittest.TestCase):
 
     def setUp(self):
-        with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json') as document_json:
+        with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json', encoding="utf8") as document_json:
             self.data_with_group_key_1 = json.load(document_json)
 
-        with open(RESOURCE_FOLDER + '/snapshots/60f5260c7883ab0013d9c184/document.json') as document_json:
+        with open(RESOURCE_FOLDER + '/snapshots/60f5260c7883ab0013d9c184/document.json', encoding="utf8") as document_json:
             self.data_with_group_key_2 = json.load(document_json)
 
         # add groupKey value to test in test_to_dict

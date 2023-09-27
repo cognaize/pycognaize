@@ -14,7 +14,7 @@ from pycognaize.tests.resources import RESOURCE_FOLDER
 class TestTextField(unittest.TestCase):
 
     def setUp(self):
-        with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json') as document_json:
+        with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json', encoding="utf8") as document_json:
             self.data_with_group_key = json.load(document_json)
 
         self.html = HTML(path=(

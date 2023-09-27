@@ -17,9 +17,9 @@ from pycognaize import Snapshot
 class TestNumericField(unittest.TestCase):
 
     def setUp(self):
-        with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json') as document_json:
+        with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json', encoding="utf8") as document_json:
             self.data_with_group_key = json.load(document_json)
-        with open(RESOURCE_FOLDER + '/snapshots/63d4486c0e3fe60011fe3a75/document.json') as document_json:
+        with open(RESOURCE_FOLDER + '/snapshots/63d4486c0e3fe60011fe3a75/document.json', encoding="utf8") as document_json:
             self.data_with_scale = json.load(document_json)
             self.numeric_parser = numeric_parser.NumericParser
         # add groupKey value to test in test_to_dict
