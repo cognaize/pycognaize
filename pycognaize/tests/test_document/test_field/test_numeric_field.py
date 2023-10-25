@@ -147,5 +147,5 @@ class TestNumericField(unittest.TestCase):
 
     def check_keys(self, test_dict):
         to_dict_keys = [IqFieldKeyEnum.name.value, IqFieldKeyEnum.data_type.value, ID,
-                        IqFieldKeyEnum.tags.value, IqFieldKeyEnum.group_key.value, IqFieldKeyEnum.value.value]
+                        IqFieldKeyEnum.tags.value, IqFieldKeyEnum.group_key.value, IqFieldKeyEnum.value.value, IqFieldKeyEnum.data_type.scale.value]
         self.assertEqual(sorted(test_dict.keys()), sorted(to_dict_keys))
