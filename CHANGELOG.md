@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.28] - 2023-10-25
+- Add support for scale output
+
 ### [1.4.27] - 2023-09-27
 - Add support for s3 path resolution in Windows
 
