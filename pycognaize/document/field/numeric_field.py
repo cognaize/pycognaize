@@ -122,7 +122,7 @@ class NumericField(Field):
         field_dict[
             IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.number.value
 
-        field_dict[IqFieldKeyEnum.data_type.scale] = self.scale
+        field_dict[IqFieldKeyEnum.data_type.scale.value] = self.scale
         return field_dict
 
     def __repr__(self):
