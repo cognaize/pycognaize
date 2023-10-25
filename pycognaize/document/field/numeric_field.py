@@ -2,7 +2,6 @@ import logging
 import math
 from typing import List, Optional, Dict, Type
 
-
 from pycognaize.common.enums import (
     IqDocumentKeysEnum,
     ID,
@@ -122,6 +121,8 @@ class NumericField(Field):
         field_dict[IqFieldKeyEnum.value.value] = self.value
         field_dict[
             IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.number.value
+
+        field_dict[IqFieldKeyEnum.data_type.scale] = self.scale
         return field_dict
 
     def __repr__(self):
