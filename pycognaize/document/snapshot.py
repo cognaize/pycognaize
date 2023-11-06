@@ -30,7 +30,7 @@ class Snapshot:
         login_instance = Login()
         if login_instance.logged_in:
             snapshot_dir = login_instance.snapshot_root
-            snapshot_path = os.path.join(snapshot_dir, snapshot_id)
+            snapshot_path = snapshot_dir + "/" + snapshot_id
             return cls(path=snapshot_path)
         else:
             snapshot_dir = os.environ[EnvConfigEnum.SNAPSHOT_PATH.value]
@@ -49,8 +49,7 @@ class Snapshot:
         login_instance = Login()
 
         if login_instance.logged_in:
-            snapshot_path = os.path.join(login_instance.snapshot_root,
-                                         snapshot_id)
+            snapshot_path = login_instance.snapshot_root + "/" + snapshot_id
 
             exclude = cls._get_exclude_patterns(
                 exclude_images=exclude_images,
@@ -85,7 +84,7 @@ class Snapshot:
         if login_instance.logged_in:
             snapshot_dir = login_instance.snapshot_root
             snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
-            snapshot_path = os.path.join(snapshot_dir, snapshot_id)
+            snapshot_path = snapshot_dir + "/" + snapshot_id
         else:
             snapshot_dir = os.environ[EnvConfigEnum.SNAPSHOT_PATH.value]
             snapshot_id = os.environ[EnvConfigEnum.SNAPSHOT_ID.value]
