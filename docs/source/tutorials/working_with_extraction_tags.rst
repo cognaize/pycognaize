@@ -147,7 +147,7 @@ to ``document.y`` (``document.x`` and``document.y`` are part of :term:`AI Interf
     >>> document.y['company_name'].append(table_name_field)
     >>> document.y['table_type'].append(table_type_field)
     >>> document.y
-    FieldCollection([('company_name', [<TextField: table_name: Test>]), ('table_type', [<TextField: table_type: (unaudited)>])])
+    FieldCollection([('company_name', [<TextField: table_name: field value - : tag value - Test>]), ('table_type', [<TextField: table_type: field value - : tag value - (unaudited)>])])
 
 After extraction tags have been added to the document output, we can create a pdf with
 annotated fields by specifying them in ``to_pdf`` method.

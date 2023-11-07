@@ -101,8 +101,35 @@ class TextField(Field):
         return field_dict
 
     def __repr__(self):
-        return (f"<{self.__class__.__name__}: {self.name}:"
-                f" {'|'.join([i.raw_value for i in self.tags])}>")
+        """Return a string representation of the object.
+
+        Returns:
+            str: A string containing the representation of the object,
+                 which includes the class name, object's name, and a
+                 concatenation of its tags separated by '|'. If a tag's
+                 raw value is None, it will be represented as an empty string.
+        """
+        tag_str = '|'.join(
+            [i.raw_value if i.raw_value is not None else '' for i in self.tags]
+        )
+        tag_value = "tag value"
+        field_str = self.raw_value
+        field_value = "field value"
+        repr_string = (f"<{self.__class__.__name__}: {self.name}: "
+                       f"{field_value} - {field_str}: {tag_value} - "
+                       f"{tag_str}>")
+        return repr_string
 
     def __str__(self):
-        return f"{'|'.join([i.raw_value for i in self.tags])}"
+        """Return a string representation of the object.
+
+        Returns:
+            str: A string containing the representation of the object's tags
+                 as a concatenation, separated by '|'. If a tag's raw value
+                 is None, it will be represented as an empty string in the
+                  output.
+        """
+        value_str = '|'.join(
+            [i.raw_value if i.raw_value is not None else '' for i in self.tags]
+        )
+        return value_str
