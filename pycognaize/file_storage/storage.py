@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Union
 
 from cloudpathlib import CloudPath
 from cloudpathlib.exceptions import InvalidPrefixError
@@ -15,18 +15,23 @@ def get_path_from_string(path: str) -> Path:
 
 class Storage(ABC):
     @abstractmethod
-    def is_dir(self, path: str | Path) -> bool:
+    def is_dir(self, path: Union[str, Path]) -> bool:
         pass
 
     @abstractmethod
-    def is_file(self, path: str | Path) -> bool:
+    def is_file(self, path: Union[str, Path]) -> bool:
         pass
 
     @abstractmethod
-    def _list_dir(self, path: str | Path) -> Iterable[Path]:
+    def _list_dir(self, path: Union[str, Path]) -> Iterable[Path]:
         pass
 
-    def list_dir(self, path: str | Path, include_files=True, exclude_folders=True) -> Iterable[Path]:
+    def list_dir(
+            self,
+            path: Union[str, Path],
+            include_files=True,
+            exclude_folders=True
+    ) -> Iterable[Path]:
         if isinstance(path, str):
             path = get_path_from_string(path)
 
@@ -41,5 +46,5 @@ class Storage(ABC):
             yield file_path
 
     @abstractmethod
-    def open(self, path: str | Path, *args, **kwargs):
+    def open(self, path: Union[str, Path], *args, **kwargs):
         pass
