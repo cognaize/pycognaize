@@ -2,18 +2,15 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Iterable, Union
 
-from cloudpathlib import CloudPath
-from cloudpathlib.exceptions import InvalidPrefixError
-
-
-def get_path_from_string(path: str) -> Path:
-    try:
-        return CloudPath(path)
-    except InvalidPrefixError:
-        return Path(path)
+from pycognaize.file_storage.path_type_checker import is_local_path, is_s3_path, get_path_from_string
 
 
 class Storage(ABC):
+
+    @abstractmethod
+    def __init__(self, config=None):
+        pass
+
     @abstractmethod
     def is_dir(self, path: Union[str, Path]) -> bool:
         pass
@@ -48,3 +45,9 @@ class Storage(ABC):
     @abstractmethod
     def open(self, path: Union[str, Path], *args, **kwargs):
         pass
+
+    def is_local_path(self, path: Union[str, Path]) -> bool:
+        return is_local_path(path)
+
+    def is_s3_path(self, path: Union[str, Path]) -> bool:
+        return is_s3_path(path)

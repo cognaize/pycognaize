@@ -6,6 +6,9 @@ from pycognaize.file_storage.storage import Storage
 
 
 class LocalStorage(Storage):
+    def __init__(self, config=None):
+        pass
+
     def is_dir(self, path: Union[str, Path]) -> bool:
         path = Path(path)
         return path.is_dir()
