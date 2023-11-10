@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Iterable
 from unittest import TestCase
 
-from pycognaize.file_storage import local_storage
+from pycognaize.file_storage import get_storage
 
 
 class ListDirTestCase(TestCase):
@@ -17,6 +17,8 @@ class ListDirTestCase(TestCase):
     def test_should_raise_exception_when_directory_does_not_exist(self):
         dir_path = self.dir_path / 'directory'
 
+        local_storage = get_storage(dir_path)
+
         with self.assertRaises(NotADirectoryError):
             list(local_storage.list_dir(dir_path))
 
@@ -27,6 +29,8 @@ class ListDirTestCase(TestCase):
         dir_path = self.dir_path / 'directory'
         try:
             dir_path.mkdir()
+
+            local_storage = get_storage(dir_path)
 
             res = local_storage.list_dir(dir_path)
 
@@ -47,6 +51,8 @@ class ListDirTestCase(TestCase):
 
             file_path.touch()
             file1_path.touch()
+
+            local_storage = get_storage(dir_path)
 
             res = local_storage.list_dir(dir_path)
 
@@ -69,6 +75,8 @@ class ListDirTestCase(TestCase):
             file_path.touch()
             dir1_path.mkdir()
 
+            local_storage = get_storage(dir_path)
+
             res = local_storage.list_dir(dir_path)
 
             assert isinstance(res, Iterable)
@@ -90,6 +98,8 @@ class ListDirTestCase(TestCase):
             file_path.touch()
             dir1_path.mkdir()
 
+            local_storage = get_storage(dir_path)
+
             res = local_storage.list_dir(dir_path, exclude_folders=False)
 
             assert isinstance(res, Iterable)
@@ -110,6 +120,8 @@ class ListDirTestCase(TestCase):
 
             file_path.touch()
             dir1_path.mkdir()
+
+            local_storage = get_storage(dir_path)
 
             res = local_storage.list_dir(dir_path, include_files=False)
 

@@ -2,7 +2,12 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Iterable, Union
 
-from pycognaize.file_storage.path_type_checker import is_local_path, is_s3_path, get_path_from_string
+from pycognaize.file_storage.path_type_checker \
+    import (
+        is_local_path,
+        is_s3_path,
+        get_path_from_string
+    )
 
 
 class Storage(ABC):

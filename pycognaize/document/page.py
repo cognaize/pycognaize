@@ -5,6 +5,7 @@ import re
 from typing import Optional, List, Iterable, Union
 import numpy as np
 
+from pycognaize.file_storage import get_storage
 from pycognaize.login import Login
 from pycognaize.common.decorators import module_not_found
 from pycognaize.common.utils import join_path
@@ -50,8 +51,8 @@ class Page:
         """
         self._page_number = int(page_number)
         self._document_id = document_id
-        self._login_instance = Login()
-        self.ci = cloud_interface_login(self._login_instance)
+        # self._login_instance = Login()
+        # self.ci = cloud_interface_login(self._login_instance)
         self._path = path
         self._ocr_raw = None
         self._ocr = None
@@ -89,14 +90,17 @@ class Page:
 
     def get_image(self) -> bytes:
         """Converts image of page in bytes"""
+
+        storage = get_storage(self.path)
+
         uri = join_path(
-            self.ci.is_s3_path(self.path),
+            storage.is_s3_path(self.path),
             self.path,
             StorageEnum.image_folder.value,
             f"image_{self._page_number}.{IMG_EXTENSION}"
         )
         try:
-            with self.ci.open(uri, 'rb') as f:
+            with storage.open(uri, 'rb') as f:
                 image_bytes = f.read()
         except FileNotFoundError as e:
             logging.debug(
@@ -125,14 +129,17 @@ class Page:
         """Data of the page"""
         if self.path is None:
             raise ValueError("No path defined for getting the images")
+
+        storage = get_storage(self.path)
+
         uri = join_path(
-            self.ci.is_s3_path(self.path),
+            storage.is_s3_path(self.path),
             self.path,
             StorageEnum.ocr_folder.value,
             f"page_{self._page_number}." f"{OCR_DATA_EXTENSION}"
         )
         try:
-            with self.ci.open(uri, 'r') as f:
+            with storage.open(uri, 'r') as f:
                 # Using loads instead of load as a workaround for CI
                 page_data = json.loads(f.read())
                 self._image_height = int(page_data['image']['height'])
@@ -171,14 +178,17 @@ class Page:
         """OCR of the page"""
         if self.path is None:
             raise ValueError("No path defined for getting the images")
+
+        storage = get_storage(self.path)
+
         uri = join_path(
-            self.ci.is_s3_path(self.path),
+            storage.is_s3_path(self.path),
             self.path, StorageEnum.ocr_folder.value,
             f"page_{self._page_number}."
             f"{OCR_DATA_EXTENSION}"
         )
         try:
-            with self.ci.open(uri, 'r') as f:
+            with storage.open(uri, 'r') as f:
                 ocr_raw = json.loads(f.read())
                 ocr_raw['page']['height'] = float(ocr_raw['page']['height'])
                 ocr_raw['page']['width'] = float(ocr_raw['page']['width'])
