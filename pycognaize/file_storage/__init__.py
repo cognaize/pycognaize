@@ -42,5 +42,7 @@ def get_storage(path: Union[str, Path], config=None) -> Storage:
     if is_s3_path(path):
         return get_or_create('s3', config)
 
+    raise ValueError('Path should be local or S3.')
+
 
 __all__ = ['get_storage']
