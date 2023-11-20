@@ -63,29 +63,6 @@ class ListDirTestCase(TestCase):
         finally:
             shutil.rmtree(dir_path)
 
-    def test_should_exclude_folders_when_no_option_provided(self):
-        dir_path = self.dir_path / 'directory'
-
-        try:
-            dir_path.mkdir()
-
-            file_path = dir_path / 'file.txt'
-            dir1_path = dir_path / 'directory1'
-
-            file_path.touch()
-            dir1_path.mkdir()
-
-            local_storage = get_storage(dir_path)
-
-            res = local_storage.list_dir(dir_path)
-
-            assert isinstance(res, Iterable)
-            res = list(res)
-            assert len(res) == 1
-            assert isinstance(res[0], Path)
-        finally:
-            shutil.rmtree(dir_path)
-
     def test_should_include_folders_when_option_provided(self):
         dir_path = self.dir_path / 'directory'
 
@@ -127,7 +104,31 @@ class ListDirTestCase(TestCase):
 
             assert isinstance(res, Iterable)
             res = list(res)
-            assert len(res) == 0
+            assert len(res) == 1
+        finally:
+            shutil.rmtree(dir_path)
+
+    def test_should_return_recursive_results_when_option_provided(self):
+        dir_path = self.dir_path / 'directory'
+
+        try:
+            dir_path.mkdir()
+
+            file_path = dir_path / 'file.txt'
+            dir1_path = dir_path / 'directory1'
+            file2_path = dir1_path / 'file2.txt'
+
+            file_path.touch()
+            dir1_path.mkdir()
+            file2_path.touch()
+
+            local_storage = get_storage(dir_path)
+
+            res = local_storage.list_dir(dir_path, recursive=True)
+
+            assert isinstance(res, Iterable)
+            res = list(res)
+            assert len(res) == 3
         finally:
             shutil.rmtree(dir_path)
 

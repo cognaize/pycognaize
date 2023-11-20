@@ -56,29 +56,6 @@ class ListDirTestCase(TestCase):
         finally:
             dir_path.rmtree()
 
-    def test_should_exclude_folders_when_no_option_provided(self):
-        dir_path = self.dir_path / 'directory'
-
-        try:
-            dir_path.mkdir()
-
-            file_path = dir_path / 'file.txt'
-            dir1_path = dir_path / 'directory1'
-
-            file_path.touch()
-            dir1_path.mkdir()
-
-            s3_storage = get_storage(dir_path)
-
-            res = s3_storage.list_dir(dir_path)
-
-            assert isinstance(res, Iterable)
-            res = list(res)
-            assert len(res) == 1
-            assert isinstance(res[0], LocalS3Path)
-        finally:
-            dir_path.rmtree()
-
     def test_should_include_folders_when_option_provided(self):
         dir_path = self.dir_path / 'directory'
 
@@ -97,7 +74,7 @@ class ListDirTestCase(TestCase):
 
             assert isinstance(res, Iterable)
             res = list(res)
-            assert len(res) == 3
+            assert len(res) == 2
         finally:
             dir_path.rmtree()
 
@@ -120,5 +97,27 @@ class ListDirTestCase(TestCase):
             assert isinstance(res, Iterable)
             res = list(res)
             assert len(res) == 0
+        finally:
+            dir_path.rmtree()
+
+    def test_should_include_files_in_subfolders_when_recursive(self):
+        dir_path = self.dir_path / 'directory'
+
+        try:
+            dir_path.mkdir()
+
+            file_path = dir_path / 'file.txt'
+            file1_path = dir_path / 'test' / 'file1.txt'
+
+            file_path.touch()
+            file1_path.touch()
+
+            s3_storage = get_storage(dir_path)
+
+            res = s3_storage.list_dir(dir_path, recursive=True)
+
+            assert isinstance(res, Iterable)
+            res = list(res)
+            assert len(res) == 3
         finally:
             dir_path.rmtree()

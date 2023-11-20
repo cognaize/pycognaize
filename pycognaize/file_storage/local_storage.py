@@ -17,12 +17,17 @@ class LocalStorage(Storage):
         path = Path(path)
         return path.is_file()
 
-    def _list_dir(self, path: Union[str, Path]) -> Iterable[Path]:
+    def _list_dir_recursive(self, path: Union[str, Path]) -> Iterable[Path]:
         for root, directories, files in os.walk(path):
             for file in files:
                 yield Path(os.path.join(root, file))
             for directory in directories:
                 yield Path(os.path.join(root, directory))
+
+    def _list_dir(self, path: Union[str, Path]):
+        path = Path(path)
+
+        yield from path.iterdir()
 
     def open(self, path: Union[str, Path], *args, **kwargs):
         path = Path(path)

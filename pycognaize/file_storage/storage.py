@@ -28,11 +28,16 @@ class Storage(ABC):
     def _list_dir(self, path: Union[str, Path]) -> Iterable[Path]:
         pass
 
+    @abstractmethod
+    def _list_dir_recursive(self, path: Union[str, Path]):
+        pass
+
     def list_dir(
             self,
             path: Union[str, Path],
+            recursive=False,
             include_files=True,
-            exclude_folders=True
+            exclude_folders=False
     ) -> Iterable[Path]:
         if isinstance(path, str):
             path = get_path_from_string(path)
@@ -40,7 +45,12 @@ class Storage(ABC):
         if not path.is_dir():
             raise NotADirectoryError()
 
-        for file_path in self._list_dir(path):
+        if recursive:
+            list_dir = self._list_dir_recursive(path)
+        else:
+            list_dir = self._list_dir(path)
+
+        for file_path in list_dir:
             if not include_files and file_path.is_file():
                 continue
             if exclude_folders and file_path.is_dir():

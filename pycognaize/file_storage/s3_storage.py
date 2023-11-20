@@ -31,6 +31,11 @@ class S3Storage(Storage):
     def _list_dir(self, path: Union[str, Path]) -> Iterable[Path]:
         path = CloudPath(path)
 
+        yield from path.iterdir()
+
+    def _list_dir_recursive(self, path: Union[str, Path]):
+        path = CloudPath(path)
+
         yield from path.rglob('*')
 
     def open(self, path: Union[str, Path], *args, **kwargs):

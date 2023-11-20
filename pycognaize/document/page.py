@@ -24,8 +24,7 @@ from pycognaize.common.utils import (
     compute_intersection_area,
     stick_word_boxes,
     preview_img,
-    image_string_to_array,
-    cloud_interface_login
+    image_string_to_array
 )
 from pycognaize.document.tag import ExtractionTag
 
@@ -51,8 +50,18 @@ class Page:
         """
         self._page_number = int(page_number)
         self._document_id = document_id
-        # self._login_instance = Login()
-        # self.ci = cloud_interface_login(self._login_instance)
+        login_instance = Login()
+
+        if login_instance.logged_in:
+            self._storage_config = {
+                'aws_access_key_id': login_instance.aws_access_key,
+                'aws_session_token': login_instance.aws_session_token,
+                'aws_secret_access_key': login_instance.aws_secret_access_key
+            }
+
+        else:
+            self._storage_config = None
+
         self._path = path
         self._ocr_raw = None
         self._ocr = None
@@ -91,7 +100,10 @@ class Page:
     def get_image(self) -> bytes:
         """Converts image of page in bytes"""
 
-        storage = get_storage(self.path)
+        if not self.path:
+            raise ValueError('Path should be specified.')
+
+        storage = get_storage(self.path, config=self._storage_config)
 
         uri = join_path(
             storage.is_s3_path(self.path),
@@ -130,7 +142,7 @@ class Page:
         if self.path is None:
             raise ValueError("No path defined for getting the images")
 
-        storage = get_storage(self.path)
+        storage = get_storage(self.path, config=self._storage_config)
 
         uri = join_path(
             storage.is_s3_path(self.path),
@@ -176,10 +188,10 @@ class Page:
 
     def get_ocr(self) -> Optional[dict]:
         """OCR of the page"""
-        if self.path is None:
+        if not self.path:
             raise ValueError("No path defined for getting the images")
 
-        storage = get_storage(self.path)
+        storage = get_storage(self.path, config=self._storage_config)
 
         uri = join_path(
             storage.is_s3_path(self.path),
