@@ -73,7 +73,8 @@ class HTML:
                     in storage.list_dir(joined_path, exclude_folders=True)
             ):
                 valid_path = str(joined_path)
-            elif snapshot_path / StorageEnum.html_file.value in storage.list_dir(path):
+            elif (snapshot_path / StorageEnum.html_file.value
+                  in storage.list_dir(path)):
                 valid_path = path
         except Exception as e:
             logging.debug(f"An error occurred while validating the path: {e}")

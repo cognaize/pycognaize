@@ -69,7 +69,7 @@ class Document:
         """Create a modeltask object in the database given a document
          id and recipe id"""
         url = os.environ.get('API_HOST') + \
-              ApiConfigEnum.CREATE_TASK_ENDPOINT.value
+            ApiConfigEnum.CREATE_TASK_ENDPOINT.value
         payload = "{\"documentId\": \"%s\",\n \"recipeId\": \"%s\"\n}\n" \
                   % (document_id, recipe_id)
         headers = {'x-auth': os.environ.get('X_AUTH_TOKEN'),
