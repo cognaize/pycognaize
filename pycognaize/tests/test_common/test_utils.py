@@ -11,7 +11,7 @@ from pycognaize.common.utils import (
     stick_word_boxes,
     image_bytes_to_array,
     img_to_black_and_white,
-    group_sequence, ConfusionMatrix, cloud_interface_login
+    group_sequence, ConfusionMatrix
 )
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
