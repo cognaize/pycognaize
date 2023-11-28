@@ -66,3 +66,6 @@ class Storage(ABC):
 
     def is_s3_path(self, path: Union[str, Path]) -> bool:
         return is_s3_path(path)
+
+    def get_path_from_string(self, path: str) -> Path:
+        return get_path_from_string(path)

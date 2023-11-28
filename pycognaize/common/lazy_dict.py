@@ -37,13 +37,13 @@ class LazyDocumentDict(Mapping):
         self._data_path = data_path
         storage = get_storage(self._doc_path, config=self._storage_config)
 
-        id = []
+        ids = []
 
         for directory in storage.list_dir(doc_path, include_files=False):
             if storage.is_file(directory / self.document_filename):
-                id.append(directory.name)
+                ids.append(directory.name)
 
-        self._ids = sorted(id)
+        self._ids = sorted(ids)
 
     @property
     def doc_path(self) -> str:
@@ -79,6 +79,8 @@ class LazyDocumentDict(Mapping):
             return Document.from_dict(raw=doc_dict,
                                       data_path=os.path.join(self.data_path,
                                                              doc_id))
+        except FileNotFoundError:
+            logging.error(f'Document at path {path} is not found.')
         except Exception as e:
             logging.error(f'Failed reading document {doc_id}: {e}')
 
