@@ -13,4 +13,4 @@ SQLAlchemy
 click
 anytree
 tabulate
-cloudpathlib~=0.16.0
+cloudpathlib[s3]~=0.16.0
