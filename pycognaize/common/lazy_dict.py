@@ -2,16 +2,17 @@
 in the snapshot
 """
 import logging
+import os
+from collections.abc import Mapping
 from typing import Optional
 
 from bson import json_util
-import os
-from collections.abc import Mapping
 
-from pycognaize.login import Login
 from pycognaize.common.enums import StorageEnum
-from pycognaize.common.utils import cloud_interface_login, join_path
+from pycognaize.common.utils import join_path
 from pycognaize.document import Document
+from pycognaize.file_storage import get_storage
+from pycognaize.login import Login
 
 
 class LazyDocumentDict(Mapping):
@@ -20,17 +21,29 @@ class LazyDocumentDict(Mapping):
 
     def __init__(self, doc_path: str,
                  data_path: str):
-        self._login_instance = Login()
-        self.ci = cloud_interface_login(self._login_instance)
+        login_instance = Login()
+
+        if login_instance.logged_in:
+            self._storage_config = {
+                'aws_access_key_id': login_instance.aws_access_key,
+                'aws_session_token': login_instance.aws_session_token,
+                'aws_secret_access_key': login_instance.aws_secret_access_key
+            }
+
+        else:
+            self._storage_config = None
+
         self._doc_path = doc_path
         self._data_path = data_path
-        self._ids = sorted(
-            [os.path.basename(os.path.dirname(i))
-             for i in self.ci.listdir(doc_path, include_files=False)
-             if self.ci.isfile(join_path(self.ci.is_s3_path(doc_path),
-                                         doc_path, i,
-                                         self.document_filename))]
-        )
+        storage = get_storage(self._doc_path, config=self._storage_config)
+
+        ids = []
+
+        for directory in storage.list_dir(doc_path, include_files=False):
+            if storage.is_file(directory / self.document_filename):
+                ids.append(directory.name)
+
+        self._ids = sorted(ids)
 
     @property
     def doc_path(self) -> str:
@@ -47,23 +60,27 @@ class LazyDocumentDict(Mapping):
 
         Note: Path can be both local and remote
         """
+
+        storage = get_storage(self.doc_path, config=self._storage_config)
         try:
             path = join_path(
-                self.ci.is_s3_path(self.doc_path),
+                storage.is_s3_path(self.doc_path),
                 self.doc_path,
                 doc_id,
                 f"{self.document_filename}"
             )
 
-            if self.ci.is_local_path(path):
+            if storage.is_local_path(path):
                 with open(path, 'r', encoding='utf8') as f:
                     doc_dict = json_util.loads(f.read())
             else:
-                with self.ci.open(path, 'r') as f:
+                with storage.open(path, 'r') as f:
                     doc_dict = json_util.loads(f.read())
             return Document.from_dict(raw=doc_dict,
                                       data_path=os.path.join(self.data_path,
                                                              doc_id))
+        except FileNotFoundError:
+            logging.error(f'Document at path {path} is not found.')
         except Exception as e:
             logging.error(f'Failed reading document {doc_id}: {e}')
 

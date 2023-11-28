@@ -3,28 +3,30 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
-from requests.adapters import HTTPAdapter, Retry
-from pycognaize.common.enums import ApiConfigEnum
 import multiprocessing
 import os
 from collections import OrderedDict
 from typing import Dict, List, Tuple, Any, Optional, Callable, Union
-import requests
+
 import fitz
 import pandas as pd
+import requests
 from fitz.utils import getColor, getColorList
+from requests.adapters import HTTPAdapter, Retry
+
 from pycognaize.common.classification_labels import ClassificationLabels
-from pycognaize.document.html_info import HTML
-from pycognaize.login import Login
+from pycognaize.common.enums import ApiConfigEnum
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
-from pycognaize.common.utils import cloud_interface_login
 from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field
+from pycognaize.document.html_info import HTML
 from pycognaize.document.page import Page
 from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
 from pycognaize.document.tag.tag import BoxTag, LineTag
+from pycognaize.file_storage import get_storage
+from pycognaize.login import Login
 
 RETRY_ADAPTER = Retry(total=3,
                       backoff_factor=10,
@@ -42,7 +44,6 @@ class Document:
                  classification_labels: Dict[str, ClassificationLabels],
                  html_info: HTML,
                  metadata: Dict[str, Any]):
-        self._login_instance = Login()
         self._metadata = metadata
         self._pages: Dict[int, Page] = pages if pages else None
         self._classification_labels = classification_labels
@@ -560,11 +561,22 @@ class Document:
             of the output field
         :return: bytes object of the pdf
         """
+        login_instance = Login()
+        if login_instance.logged_in:
+            storage_config = {
+                'aws_access_key_id': login_instance.aws_access_key,
+                'aws_session_token': login_instance.aws_session_token,
+                'aws_secret_access_key': login_instance.aws_secret_access_key
+            }
 
-        ci = cloud_interface_login(self._login_instance)
+        else:
+            storage_config = None
+
         pdf_path = os.path.join(self.pages[1].path, self.document_src) + '.pdf'
 
-        with ci.open(pdf_path, 'rb') as f:
+        storage = get_storage(pdf_path, config=storage_config)
+
+        with storage.open(pdf_path, 'rb') as f:
             pdf_bytes = f.read()
         doc_fitz = fitz.open('pdf', pdf_bytes)
 

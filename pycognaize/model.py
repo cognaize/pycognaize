@@ -4,7 +4,6 @@ from typing import Tuple, List, Union
 
 import requests
 import simplejson as json
-from cloudstorageio import CloudInterface
 from requests.adapters import HTTPAdapter, Retry
 
 from pycognaize.common.utils import (
@@ -26,7 +25,6 @@ class Model(metaclass=abc.ABCMeta):
 
     The model inputs and outputs are available from the document attribute.
     """
-    CI = CloudInterface()
     DEFAULT_TIMEOUT = 600
     RETRIES = Retry(total=3,
                     backoff_factor=10,

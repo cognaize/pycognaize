@@ -7,7 +7,6 @@ from copy import deepcopy
 import requests
 from unittest.mock import Mock, patch, create_autospec
 from bson import json_util
-from cloudstorageio import CloudInterface
 from urllib.parse import urljoin
 from pycognaize import Model
 from pycognaize.common.enums import EnvConfigEnum, IqDocumentKeysEnum, StorageEnum
@@ -72,8 +71,6 @@ class TestModel(unittest.TestCase):
     ORIGINAL_IQ_DOCUMENTS_STORAGE_PATH = os.environ.get(EnvConfigEnum.IQ_DOCUMENTS_STORAGE_PATH.value)
     ORIGINAL_IQ_SNAP_STORAGE_PATH = os.environ.get(EnvConfigEnum.IQ_SNAP_STORAGE_PATH.value)
     ORIGINAL_SNAPSHOT_PATH = os.environ.get(EnvConfigEnum.SNAPSHOT_PATH.value)
-
-    CI = CloudInterface()
 
     @classmethod
     def setUpClass(cls) -> None:

@@ -3,20 +3,31 @@ import os
 
 from bs4 import BeautifulSoup
 
-from pycognaize.login import Login
 from pycognaize.common.enums import StorageEnum
-from pycognaize.common.utils import cloud_interface_login
+from pycognaize.file_storage import get_storage
+from pycognaize.login import Login
 
 
 class HTML:
     """Represents html of a xbrl document in pycognaize"""
+
     def __init__(self, path: str, document_id: str) -> None:
         """
         :param path: Local or remote path to the document folder,
             which includes the html file
         """
-        self._login_instance = Login()
-        self.ci = cloud_interface_login(self._login_instance)
+        login_instance = Login()
+
+        if login_instance.logged_in:
+            self._storage_config = {
+                'aws_access_key_id': login_instance.aws_access_key,
+                'aws_session_token': login_instance.aws_session_token,
+                'aws_secret_access_key': login_instance.aws_secret_access_key
+            }
+
+        else:
+            self._storage_config = None
+
         self._path = self._validate_path(path, document_id)
         self._html_file = None
         self._html_soup = None
@@ -50,23 +61,30 @@ class HTML:
             corresponding to the document id
         """
         valid_path = ''
+
+        storage = get_storage(path, config=self._storage_config)
+
         try:
-            joined_path = os.path.join(path, document_id)
+            snapshot_path = storage.get_path_from_string(path)
+            joined_path = snapshot_path / document_id
             if (
-                    self.ci.isdir(joined_path)
-                    and StorageEnum.html_file.value
-                    in self.ci.listdir(joined_path, exclude_folders=True)
+                    storage.is_dir(joined_path)
+                    and joined_path / StorageEnum.html_file.value
+                    in storage.list_dir(joined_path, exclude_folders=True)
             ):
-                valid_path = joined_path
-            elif StorageEnum.html_file.value in self.ci.listdir(path):
+                valid_path = str(joined_path)
+            elif (snapshot_path / StorageEnum.html_file.value
+                  in storage.list_dir(path)):
                 valid_path = path
         except Exception as e:
             logging.debug(f"An error occurred while validating the path: {e}")
         return valid_path
 
     def _read_html(self, path: str) -> str:
+        storage = get_storage(path, config=self._storage_config)
+
         if self._html_file is None:
-            with self.ci.open(path, 'r') as file:
+            with storage.open(path, 'r') as file:
                 self._html_file = file.read()
         return self._html_file
 
