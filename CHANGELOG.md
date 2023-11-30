@@ -2,6 +2,8 @@
 
 ## [1.4]
 
+### [1.4.30] - 2023-11-30
+- Remove `cloudstorageio` from the SDK
 
 ### [1.4.29] - 2023-11-06
 - Changes os.path.join for s3 paths
