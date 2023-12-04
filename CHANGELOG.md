@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.31] - 2023-12-04
+- Add `classes` property to fields
+
 ### [1.4.30] - 2023-11-30
 - Remove `cloudstorageio` from the SDK
 

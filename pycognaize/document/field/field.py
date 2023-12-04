@@ -39,6 +39,8 @@ class Field(metaclass=abc.ABCMeta):
         self._field_id = field_id
         self._classification_labels = classification_labels
 
+        self._classes = None
+
     @property
     def raw_value(self):
         return self._raw_value
@@ -70,6 +72,10 @@ class Field(metaclass=abc.ABCMeta):
     @property
     def classification_labels(self):
         return self._classification_labels
+
+    @property
+    def classes(self):
+        return self._classes
 
     @group_key.setter
     def group_key(self, value):

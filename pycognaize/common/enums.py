@@ -63,6 +63,7 @@ class IqDatasetTypeEnum(enum.Enum):
 
 
 class IqDocumentKeysEnum(enum.Enum):
+    classes = 'classes'
     collection_id = 'collectionId'
     data_type = 'dataType'
     table = 'table'
