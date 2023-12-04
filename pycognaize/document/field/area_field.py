@@ -11,8 +11,8 @@ from pycognaize.common.enums import (
 )
 from pycognaize.document.field import Field
 from pycognaize.document.html_info import HTML
-from pycognaize.document.tag import ExtractionTag
 from pycognaize.document.page import Page
+from pycognaize.document.tag import ExtractionTag
 from pycognaize.document.tag.html_tag import HTMLTag
 
 
@@ -52,7 +52,7 @@ class AreaField(Field):
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
                            html: Optional[HTML] = None,
-                           labels: ClassificationLabels = None)\
+                           labels: ClassificationLabels = None) \
             -> 'AreaField':
         """Create AreaField object from dictionary"""
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
@@ -63,13 +63,24 @@ class AreaField(Field):
                     raw=i, page=pages[i['page']]))
             except Exception as e:
                 logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
-        return cls(name=raw[IqDocumentKeysEnum.name.value],
-                   value=raw[IqTagKeyEnum.value.value],
-                   tags=tags,
-                   field_id=str(raw[ID]),
-                   group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
-                   group_name=raw.get(IqFieldKeyEnum.group.value, ''),
-                   classification_labels=labels)
+
+        try:
+            classes_from_raw = raw[IqDocumentKeysEnum.classes.value]
+        except KeyError:
+            classes = None
+        else:
+            classes = classes_from_raw.split(';') if classes_from_raw else None
+
+        new_object = cls(name=raw[IqDocumentKeysEnum.name.value],
+                         value=raw[IqTagKeyEnum.value.value],
+                         tags=tags,
+                         field_id=str(raw[ID]),
+                         group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
+                         group_name=raw.get(IqFieldKeyEnum.group.value, ''),
+                         classification_labels=labels)
+
+        new_object._classes = classes
+        return new_object
 
     def to_dict(self) -> dict:
         """Converts AreaField object to dictionary"""
