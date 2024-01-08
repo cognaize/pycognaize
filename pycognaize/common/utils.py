@@ -324,23 +324,9 @@ def infer_rows_from_words(box, class_ocr_data, auto_thresh=True, thresh=12,
         previous_bottom = row_bottom
         previous_top = row_top
 
-    # Remove rows that overlap with the previous one
-    word_groups_without_rows_included_in_previous_row = []
-    rows_included_in_previous_row = []
-    previous_bottom = 0
-
-    for index, row in enumerate(word_groups):
-        if index == 0:
-            word_groups_without_rows_included_in_previous_row.append(row)
-        else:
-            bottom = max(i['bottom'] for i in row) - box['top']
-
-            if bottom <= previous_bottom:
-                rows_included_in_previous_row.append(row)
-            else:
-                word_groups_without_rows_included_in_previous_row.append(row)
-
-        previous_bottom = max(i['bottom'] for i in row) - box['top']
+    (rows_included_in_previous_row,
+     word_groups_without_rows_included_in_previous_row) = (
+        _separate_rows_contained_in_previous(box, word_groups))
 
     # Construct row boxes from row groups
     aggregated_rows = []
@@ -354,7 +340,30 @@ def infer_rows_from_words(box, class_ocr_data, auto_thresh=True, thresh=12,
         if (temp_d['bottom'] - temp_d['top'] > min_width
                 and temp_d['right'] - temp_d['left'] > min_height):
             aggregated_rows.append(temp_d)
-    return aggregated_rows, word_groups_without_rows_included_in_previous_row, rows_included_in_previous_row
+    return (aggregated_rows,
+            word_groups_without_rows_included_in_previous_row,
+            rows_included_in_previous_row)
+
+
+def _separate_rows_contained_in_previous(box, word_groups):
+    # Remove rows that overlap with the previous one
+    word_groups_without_rows_included_in_previous_row = []
+    rows_included_in_previous_row = []
+    previous_bottom = 0
+    for index, row in enumerate(word_groups):
+        if index == 0:
+            word_groups_without_rows_included_in_previous_row.append(row)
+        else:
+            bottom = max(i['bottom'] for i in row) - box['top']
+
+            if bottom <= previous_bottom:
+                rows_included_in_previous_row.append(row)
+            else:
+                word_groups_without_rows_included_in_previous_row.append(row)
+
+        previous_bottom = max(i['bottom'] for i in row) - box['top']
+    return (rows_included_in_previous_row,
+            word_groups_without_rows_included_in_previous_row)
 
 
 def clean_ocr_data(ocr_data: dict, thresh: float = 4.0) -> dict:
