@@ -321,7 +321,7 @@ class Page:
         converted to tag
         """
         words_tags = []
-        rows_inf, self._row_word_groups = infer_rows_from_words(
+        rows_inf, self._row_word_groups, _ = infer_rows_from_words(
             box=dict(left=0, top=0, right=1, bottom=1),
             class_ocr_data=clean_ocr_data(self.ocr)['words'])
         rows: list = [
