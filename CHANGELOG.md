@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.31] - 2024-08-01
+- Fix page `_create_lines` issue with rows containing others
+
 ### [1.4.31] - 2023-12-04
 - Add `classes` property to fields
 
