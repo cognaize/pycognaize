@@ -417,7 +417,9 @@ class Document:
 
         pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
         pages = pool.map(_get_page, self.pages.values())
-        self._pages = OrderedDict({page.page_number: page for page in pages})
+        for page, populated_page in zip(self.pages.values(), pages):
+            page._image_arr = populated_page._image_arr
+            page._image_bytes = populated_page._image_bytes
 
     def load_page_ocr(self, page_filter: Callable = lambda x: True) -> None:
         """Get all OCR of the pages in the document
@@ -426,12 +428,15 @@ class Document:
 
         def _get_page(page, filter_pages: Callable = page_filter):
             if filter_pages(page):
-                _ = page.ocr
+                _ = page.lines
             return page
 
         pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
         pages = pool.map(_get_page, self.pages.values())
-        self._pages = OrderedDict({page.page_number: page for page in pages})
+        for page, populated_page in zip(self.pages.values(), pages):
+            page._ocr = populated_page._ocr
+            page._ocr_raw = populated_page._ocr_raw
+            page._lines = populated_page._lines
 
     def to_dict(self) -> dict:
         """Converts Document object to dict"""
