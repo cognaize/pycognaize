@@ -3,6 +3,7 @@
 ## [1.4]
 
 ### [1.4.33] - 2024-01-16
+- Remove support for python 3.8 and lower. Add support for 3.10, 3.11 and 3.12
 - Use `map` instead of `applymap` in `DataFrame` objects
 
 ### [1.4.32] - 2024-01-10
