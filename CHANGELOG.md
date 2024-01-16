@@ -2,7 +2,10 @@
 
 ## [1.4]
 
-### [1.4.32] - 2023-01-10
+### [1.4.33] - 2024-01-16
+- Use `map` instead of `applymap` in `DataFrame` objects
+
+### [1.4.32] - 2024-01-10
 - Fix load_page_ocr and load_page_images
 
 ### [1.4.31] - 2023-12-04
