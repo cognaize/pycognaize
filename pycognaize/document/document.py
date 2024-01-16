@@ -400,7 +400,7 @@ class Document:
             names passing the filter will be considered
         :return: Dataframe of the TableTag
         """
-        return table_tag.raw_df.applymap(
+        return table_tag.raw_df.map(
             lambda x: self.get_first_tied_field_value(
                 x,
                 pn_filter=pn_filter))

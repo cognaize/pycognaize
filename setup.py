@@ -23,7 +23,7 @@ def find_version(*file_paths):
 
 setup_options = dict(
     license="Apache License 2.0",
-    python_requires=">= 3.7",
+    python_requires=">= 3.9",
     entry_points='''
         [console_scripts]
         cognaize=pycognaize.cli:cognaize''',
