@@ -2,6 +2,11 @@
 
 ## [1.4]
 
+### [1.4.34] - 2024-01-23
+- Fix create_lines function in Page class
+- Update docs/requirements.txt
+- Update python_versions.svg
+
 ### [1.4.33] - 2024-01-16
 - Remove support for python 3.8 and lower. Add support for 3.10, 3.11 and 3.12
 - Use `map` instead of `applymap` in `DataFrame` objects
