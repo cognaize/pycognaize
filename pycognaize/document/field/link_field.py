@@ -7,7 +7,7 @@
 >>> link_field.name
 'URL'
 >>> link_field.value
-'LinkField'
+'https://LinkField'
 >>> link_field.tags
 []
 """

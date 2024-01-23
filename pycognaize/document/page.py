@@ -327,7 +327,7 @@ class Page:
         rows: list = [
             int(round(abs(rows_inf[row_n + 1]['top'] + row['bottom']) / 2))
             for row_n, row in enumerate(rows_inf[:-1])]
-        bottom_coord = [int(rows_inf[-1]['bottom'])] if rows_inf else []
+        bottom_coord = [int(max(rows_inf, key=lambda d: d['bottom'])['bottom'])] if rows_inf else []
         self._row_word_groups: list = [
             i for _, i in sorted(
                 zip(rows + bottom_coord, self._row_word_groups),
