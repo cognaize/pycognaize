@@ -50,6 +50,7 @@ class TestPage(unittest.TestCase):
         self.page6 = Page(page_number=6, document_id='60f554497883ab0013d9d906', path=self.snap_path)
         self.page3 = create_dummy_page(page_n=3, path=self.snap_path)
         self.no_path_page = create_dummy_page(page_n=100, path="")
+        self.empty_res = dict(words=[], paragraphs=[])
 
     def test_page_number(self):
         self.assertEqual(self.page6.page_number, 6)
@@ -78,6 +79,10 @@ class TestPage(unittest.TestCase):
         self.assertEqual(len(self.page3.line_tags), 44)
         self.assertEqual(len(self.page3.line_tags[0]), 20)
         self.assertEqual(self.page6.line_tags[1][0].left, 11.0397946084724)
+
+    def test_get_page_data(self):
+        with self.assertRaises(ValueError):
+            self.no_path_page.get_page_data()
 
     def test_get_image(self):
         with self.assertRaises(ValueError):
@@ -115,8 +120,14 @@ class TestPage(unittest.TestCase):
         self.assertEqual(len(self.page6.lines[0]), 19)
         self.assertEqual(self.page6.lines[1][0]['ocr_text'], 'scope')
 
+    def test_create_lines(self):
+        no_tags = self.page6._create_lines(return_tags=True)
+        self.assertIsInstance(no_tags[0][0], pycognaize.document.tag.extraction_tag.ExtractionTag)
+
     def test_search_text(self):
         area_dict = {'top': 1000, 'bottom': 1500, 'left': 200, 'right': 500}
+        return_tags = self.page6.search_text(text='a', return_tags=True)
+        self.assertIsInstance(return_tags[0][0], pycognaize.document.tag.extraction_tag.ExtractionTag)
         self.assertEqual(self.page6.search_text('Federal Deposit Insurance Act')[0]['top'], 2241)
         self.assertEqual(len(self.page6.search_text('WIRE TRANSFER')), 0)
         self.assertEqual(self.page3.search_text('Hi'), [])

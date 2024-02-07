@@ -139,7 +139,7 @@ class Page:
 
     def get_page_data(self) -> None:
         """Data of the page"""
-        if self.path is None:
+        if not self.path:
             raise ValueError("No path defined for getting the images")
 
         storage = get_storage(self.path, config=self._storage_config)
