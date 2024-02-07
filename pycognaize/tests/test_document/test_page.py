@@ -122,13 +122,19 @@ class TestPage(unittest.TestCase):
         self.assertEqual(self.page6.lines[1][0]['ocr_text'], 'scope')
 
     def test_create_lines(self):
-        return_tags = self.page6._create_lines(return_tags=True)
-        self.assertIsInstance(return_tags[0][0], pycognaize.document.tag.extraction_tag.ExtractionTag)
+        self.assertIsInstance(
+            self.page6._create_lines(
+                return_tags=True)[0][0],
+            pycognaize.document.tag.extraction_tag.ExtractionTag
+        )
 
     def test_search_text(self):
         area_dict = {'top': 1000, 'bottom': 1500, 'left': 200, 'right': 500}
-        return_tags = self.page6.search_text(text='a', return_tags=True)
-        self.assertIsInstance(return_tags[0][0], pycognaize.document.tag.extraction_tag.ExtractionTag)
+        self.assertIsInstance(
+            self.page6.search_text(
+                text='a', return_tags=True)[0][0],
+            pycognaize.document.tag.extraction_tag.ExtractionTag
+        )
         self.assertEqual(self.page6.search_text('Federal Deposit Insurance Act')[0]['top'], 2241)
         self.assertEqual(len(self.page6.search_text('WIRE TRANSFER')), 0)
         self.assertEqual(self.page3.search_text('Hi'), [])
@@ -140,6 +146,12 @@ class TestPage(unittest.TestCase):
         self.assertEqual(self.page3.search_text('has the menaning', area=area_dict), [])
 
     def test_extract_area_words(self):
+        self.assertIsInstance(
+            self.page6.extract_area_words(
+                left=200, right=560, top=1, bottom=1100, threshold=0.5,
+                return_tags=True)[0],
+            pycognaize.document.tag.extraction_tag.ExtractionTag
+        )
         with self.assertRaises(ValueError):
             self.page6.extract_area_words(left=200, right=560, top=69, bottom=110, threshold=5)
         with self.assertRaises(ValueError):
@@ -179,8 +191,11 @@ class TestPage(unittest.TestCase):
     def test_get_ocr_formatted(self):
         formatted_ocr = self.page6.get_ocr_formatted()
         formatted_ocr_stuck = self.page6.get_ocr_formatted(stick_coords=True)
-        return_tags = self.page6.get_ocr_formatted(return_tags=True)
-        self.assertIsInstance(return_tags[0], pycognaize.document.tag.extraction_tag.ExtractionTag)
+        self.assertIsInstance(
+            self.page6.get_ocr_formatted(
+                return_tags=True)[0],
+            pycognaize.document.tag.extraction_tag.ExtractionTag
+        )
         self.assertEqual(formatted_ocr['words'][86]['ocr_text'], '188.')
         self.assertEqual(formatted_ocr['words'][86]['bottom'], 375)
         self.assertEqual(formatted_ocr['words'][86]['top'], 341)
@@ -200,6 +215,12 @@ class TestPage(unittest.TestCase):
         self.assertEqual(img_size1.size, img_size2.size)
         with self.assertRaises(ValueError):
             page.draw(preview=False, size=-1)
+
+    def test_draw_ocr_boxes(self):
+        self.assertIsInstance(self.page6.draw_ocr_boxes(img=None), np.ndarray)
+
+    def test_draw_ocr_text(self):
+        self.assertIsInstance(self.page6.draw_ocr_text(img=None), np.ndarray)
 
     def test_free_form_text(self):
         self.assertEqual(len(self.page6.free_form_text()), 3543)
