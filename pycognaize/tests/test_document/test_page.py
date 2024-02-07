@@ -50,6 +50,7 @@ class TestPage(unittest.TestCase):
         self.page6 = Page(page_number=6, document_id='60f554497883ab0013d9d906', path=self.snap_path)
         self.page3 = create_dummy_page(page_n=3, path=self.snap_path)
         self.no_path_page = create_dummy_page(page_n=100, path="")
+        self.none_path_page = Page(page_number=6, document_id='60f554497883ab0013d9d906', path=None)
         self.empty_res = dict(words=[], paragraphs=[])
 
     def test_page_number(self):
@@ -82,7 +83,7 @@ class TestPage(unittest.TestCase):
 
     def test_get_page_data(self):
         with self.assertRaises(ValueError):
-            self.no_path_page.get_page_data()
+            self.none_path_page.get_page_data()
 
     def test_get_image(self):
         with self.assertRaises(ValueError):
