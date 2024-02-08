@@ -48,10 +48,12 @@ class TestPage(unittest.TestCase):
 
     def setUp(self) -> None:
         self.page6 = Page(page_number=6, document_id='60f554497883ab0013d9d906', path=self.snap_path)
+        self.page2 = Page(page_number=6, document_id='60f554497883ab0013d9d906', path=self.snap_path,
+                          image_height=1, image_width=2)
         self.page3 = create_dummy_page(page_n=3, path=self.snap_path)
         self.no_path_page = create_dummy_page(page_n=100, path="")
         self.none_path_page = Page(page_number=6, document_id='60f554497883ab0013d9d906', path=None)
-        self.empty_res = dict(words=[], paragraphs=[])
+        self.empty_page = Page(page_number=1, document_id='60f554497883ab0013d9d906', path=self.SNAPSHOT_PATH)
 
     def test_page_number(self):
         self.assertEqual(self.page6.page_number, 6)
@@ -191,11 +193,15 @@ class TestPage(unittest.TestCase):
     def test_get_ocr_formatted(self):
         formatted_ocr = self.page6.get_ocr_formatted()
         formatted_ocr_stuck = self.page6.get_ocr_formatted(stick_coords=True)
+        formatted_ocr_w_h = self.page2.get_ocr_formatted()
+        formatted_ocr_empty = self.empty_page.get_ocr_formatted()
+
         self.assertIsInstance(
             self.page6.get_ocr_formatted(
                 return_tags=True)[0],
             pycognaize.document.tag.extraction_tag.ExtractionTag
         )
+
         self.assertEqual(formatted_ocr['words'][86]['ocr_text'], '188.')
         self.assertEqual(formatted_ocr['words'][86]['bottom'], 375)
         self.assertEqual(formatted_ocr['words'][86]['top'], 341)
@@ -203,6 +209,10 @@ class TestPage(unittest.TestCase):
         self.assertEqual(formatted_ocr_stuck['words'][0]['ocr_text'], '“Member')
         self.assertEqual(formatted_ocr_stuck['words'][0]['bottom'], 34)
         self.assertEqual(formatted_ocr_stuck['words'][0]['top'], 9)
+
+        self.assertEqual(formatted_ocr_w_h['words'][0]['ocr_text'], '“Member')
+        self.assertEqual(formatted_ocr_w_h['words'][0]['bottom'], 1)
+        self.assertEqual(formatted_ocr_w_h['words'][0]['top'], 0)
 
     def test_draw(self):
         img_path = os.path.join(self.images_folder_path, 'draw_sample_img.png')
