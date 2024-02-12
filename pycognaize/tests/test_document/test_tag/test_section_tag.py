@@ -22,25 +22,19 @@ class TestSectionTag(unittest.TestCase):
                                    self.ext_tag_dict["height"],
                                    self.ext_tag_dict["width"],
                                    self.ext_tag_dict["page"],
-                                   "ExtractionTag")  # clarify number
+                                   "ExtractionTag")
         self.tag = self.tag_dict.construct_from_raw(self.ext_tag_dict,
                                                     self.page,
-                                                    "ExtractionTag")  # clarify number
+                                                    "ExtractionTag")
 
     def test_construct_from_raw(self):
         constructed_tag = self.tag.construct_from_raw(self.ext_tag_dict,
                                                       self.page,
-                                                      "ExtractionTag")  # clarify number
+                                                      "ExtractionTag")
         self.assertAlmostEqual(constructed_tag._height, 1.16424453184715)
         self.assertAlmostEqual(constructed_tag._width, 2.1482277121374866)
         self.assertAlmostEqual(constructed_tag._top, 26.42328894018314)
         self.assertAlmostEqual(constructed_tag._left, 10.812746151092016)
-
-    # def test_vshift(self):
-    #     tag = self.tag.vshift(3.3)
-    #
-    # def test_vertical_shift(self):
-    #     tag = self.tag.vertical_shift(3.3)
 
     def test_confidence(self):
         self.assertEqual(len(self.tag.confidence.confidences), 0)

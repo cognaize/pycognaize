@@ -74,20 +74,6 @@ class TestHTMLCell(unittest.TestCase):
     def test_left_indentation(self):
         self.assertEqual(self.html_cell.left_indentation, "0")
 
-    def test_construct_from_raw(self):
-        ...
-        # html_cell_from_raw = self.html_cell.construct_from_raw(self.raw)
-
-        # self.assertEqual(html_cell_from_raw.row_index, 1)
-        # self.assertEqual(html_cell_from_raw.col_index, 1)
-        # self.assertEqual(html_cell_from_raw.col_span, 1)
-        # self.assertEqual(html_cell_from_raw.row_span, 1)
-        # self.assertEqual(html_cell_from_raw.html_id, ["20a65cb6-01cb-40c1-8bdf-25771dc59f72"])
-        # self.assertEqual(html_cell_from_raw.xpath, "/html/body/div[1]/table/tr[1]/td[0]")
-        # self.assertEqual(html_cell_from_raw.raw_value, "")
-        # self.assertFalse(html_cell_from_raw.is_bold)
-        # self.assertEqual(html_cell_from_raw.left_indentation, "0")
-
     def test_to_dict(self):
         cell_dict = self.html_cell.to_dict()
 
