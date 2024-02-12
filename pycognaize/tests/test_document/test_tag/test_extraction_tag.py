@@ -5,11 +5,11 @@ from copy import deepcopy
 
 from pycognaize.document.page import create_dummy_page
 from pycognaize.document.tag import ExtractionTag
-from pycognaize.tests.resources import RESOURCE_FOLDER
-from pycognaize.tests.resources.field_and_tag_samples import raw_date_tag, invalid_raw_value_tag, \
-    invalid_raw_text_tag
+from pycognaize.tests.resources.field_and_tag_samples import (
+    raw_date_tag, invalid_raw_value_tag, invalid_raw_text_tag)
 from pycognaize.tests.resources import RESOURCE_FOLDER
 from pycognaize import Snapshot
+
 
 class TestExtractionTag(unittest.TestCase):
 
@@ -115,6 +115,19 @@ class TestExtractionTag(unittest.TestCase):
         self.invalid_numeric_ext_tag = ExtractionTag(left=11.1, right=13.1, top=10, bottom=13,
                                                      page=copy.deepcopy(self.page),
                                                      raw_value='100.1%', raw_ocr_value=None)
+        self.invalid_raw_numeric_ext_tag = ExtractionTag(left=11.1, right=13.1, top=10,
+                                                         bottom=13,
+                                                         page=copy.deepcopy(self.page),
+                                                         raw_value='99.9', raw_ocr_value="1O")
+        self.invalid_raw_and_value_numeric_ext_tag = ExtractionTag(left=11.1, right=13.1, top=10,
+                                                                   bottom=13,
+                                                                   page=copy.deepcopy(self.page),
+                                                                   raw_value='101.9%', raw_ocr_value="1O0")
+        self.date_ext_ext_tag_1 = ExtractionTag(left=11.1, right=13.1, top=10,
+                                                bottom=13,
+                                                page=create_dummy_page(),
+                                                raw_value='2020-04-14-17.36.21',
+                                                raw_ocr_value='Dec 20 2020')
         self.date_ext_ext_tag_1 = ExtractionTag(left=11.1, right=13.1, top=10, bottom=13,
                                                 page=create_dummy_page(),
                                                 raw_value='2020-04-14-17.36.21', raw_ocr_value='Dec 20 2020'
@@ -159,6 +172,17 @@ class TestExtractionTag(unittest.TestCase):
         self.assertTrue(self.invalid_numeric_ext_tag.has_value_exception)
         self.assertFalse(self.invalid_numeric_ext_tag.has_raw_value_exception)
 
+        self.invalid_raw_numeric_ext_tag._validate_numeric()
+        self.assertTrue(
+            self.invalid_raw_numeric_ext_tag.has_raw_value_exception)
+        self.assertFalse(self.invalid_raw_numeric_ext_tag.has_value_exception)
+
+        self.invalid_raw_and_value_numeric_ext_tag._validate_numeric()
+        self.assertTrue(
+            self.invalid_raw_and_value_numeric_ext_tag.has_raw_value_exception)
+        self.assertTrue(
+            self.invalid_raw_and_value_numeric_ext_tag.has_value_exception)
+
     def test__construct_from_raw(self):
         ExtractionTag.construct_from_raw(raw=self.ext_tag_dict_2, page=self.page)
         with self.assertRaises(KeyError):
@@ -167,6 +191,42 @@ class TestExtractionTag(unittest.TestCase):
 
         with self.assertRaises(KeyError):
             ExtractionTag.construct_from_raw(raw=self.invalid_raw_text_tag, page=self.page)
+
+    def test_horizontal_shift(self):
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(0.1).left,
+                               10.912746151092016)
+        self.assertAlmostEqual(self.ext_tag_1.horizontal_shift(0.1).right,
+                               13.060973863229503)
+        self.assertAlmostEqual(
+            self.ext_tag_1.horizontal_shift(89).left, 99.81274615109201)
+        self.assertAlmostEqual(
+            self.ext_tag_1.horizontal_shift(89).right, 100)
+        self.assertAlmostEqual(
+            self.ext_tag_1.horizontal_shift(-.1).left, 10.712746151092016)
+        self.assertAlmostEqual(
+            self.ext_tag_1.horizontal_shift(-.1).right, 12.860973863229503)
+        self.assertAlmostEqual(
+            self.ext_tag_1.horizontal_shift(-15).left, 0)
+        self.assertAlmostEqual(
+            self.ext_tag_1.horizontal_shift(-15).right, 0)
+
+    def test_vertical_shift(self):
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(2).top,
+                               28.42328894018314)
+        self.assertAlmostEqual(
+            self.ext_tag_1.vertical_shift(2).bottom, 29.58753347203029)
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(91).top,
+                               100)
+        self.assertAlmostEqual(
+            self.ext_tag_1.vertical_shift(91).bottom, 100)
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(-1).top,
+                               25.42328894018314)
+        self.assertAlmostEqual(
+            self.ext_tag_1.vertical_shift(-1).bottom, 26.58753347203029)
+        self.assertAlmostEqual(self.ext_tag_1.vertical_shift(-30).top,
+                               0)
+        self.assertAlmostEqual(
+            self.ext_tag_1.vertical_shift(-30).bottom, 0)
 
     def test_to_dict(self):
         num_dict = self.ext_tag_1.to_dict()
@@ -210,7 +270,6 @@ class TestExtractionTag(unittest.TestCase):
         self.assertAlmostEqual(self.ext_tag_15.shift(10, -37).right, 100)
         self.assertAlmostEqual(self.ext_tag_15.shift(10, -37).top, 0)
         self.assertAlmostEqual(self.ext_tag_15.shift(10, -37).bottom, 2.33121744544502)
-
 
     def test___contains__(self):
         self.assertTrue(self.ext_tag_1 in self.ext_tag_2)
@@ -257,9 +316,9 @@ class TestExtractionTag(unittest.TestCase):
         self.assertAlmostEqual((self.ext_tag_1 + self.ext_tag_2).right,  92.15896885069819)
         self.assertAlmostEqual((self.ext_tag_1 + self.ext_tag_2).top, 25.765237683052145)
         self.assertAlmostEqual((self.ext_tag_1 + self.ext_tag_2).bottom, 32.092653617004046)
-        self.assertAlmostEqual((self.ext_tag_27 + self.ext_tag_28).left,12.3525)
+        self.assertAlmostEqual((self.ext_tag_27 + self.ext_tag_28).left, 12.3525)
         self.assertEqual((self.ext_tag_27 + self.ext_tag_27).raw_ocr_value, '11,916')
-        self.assertEqual((self.ext_tag_27 + self.ext_tag_28).raw_ocr_value,'Interest on loans with Group undertakings 21,776 Fair value gain on derivatives - interest rate swaps 11,916')
+        self.assertEqual((self.ext_tag_27 + self.ext_tag_28).raw_ocr_value, 'Interest on loans with Group undertakings 21,776 Fair value gain on derivatives - interest rate swaps 11,916')
         with self.assertRaises(ValueError):
             self.ext_tag_1 + self.ext_tag_3
 

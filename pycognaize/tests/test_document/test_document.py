@@ -7,6 +7,7 @@ import uuid
 from collections import OrderedDict
 from copy import deepcopy
 
+import pycognaize
 from pycognaize.common.enums import EnvConfigEnum, FieldTypeEnum
 from pycognaize.document import Page, Document
 from pycognaize.document.field.field import Field
@@ -145,9 +146,20 @@ class TestDocument(unittest.TestCase):
         pname_tied_field = list(self.document.get_tied_fields(tag).items())[0]
         pname_tied_field = pname_tied_field[0], pname_tied_field[1][0]
         self.assertEqual(len(self.document.get_tied_fields(tag)), 2)
-        self.assertEqual(len(self.document.get_tied_fields(tag, field_type=FieldTypeEnum.OUTPUT_FIELD.value)), 0)
+        self.assertEqual(len(self.document.get_tied_fields(
+            tag, field_type=FieldTypeEnum.INPUT_FIELD.value)), 2)
+        self.assertEqual(len(self.document.get_tied_fields(
+            tag, field_type=FieldTypeEnum.INPUT_FIELD.value,
+            pn_filter=lambda x: x == 'source_date')), 0)
+        self.assertEqual(len(self.document.get_tied_fields(
+            tag, field_type=FieldTypeEnum.OUTPUT_FIELD.value)), 0)
+        with self.assertRaises(ValueError):
+            self.document.get_tied_fields(
+                tag, field_type='random_field_type')
         self.assertEqual(tied_field_real, tied_field)
         self.assertEqual(self.document.get_first_tied_field(tag), pname_tied_field)
+        first_tied_field = self.document.get_first_tied_field(tag)[1]
+        self.assertEqual(first_tied_field, tied_field_real)
 
     def test_get_tied_tags(self):
         # print(self.document.x['source_date'][0].tags[0])
@@ -156,11 +168,49 @@ class TestDocument(unittest.TestCase):
 
         tied_tags = self.document.get_tied_tags(tag)
         self.assertEqual(len(tied_tags), 1)
+        self.assertEqual(len(self.document.get_tied_tags(tag=tag, field_type=FieldTypeEnum.INPUT_FIELD.value)), 1)
+        self.assertEqual(len(self.document.get_tied_tags(tag=tag, field_type=FieldTypeEnum.OUTPUT_FIELD.value)), 0)
+        with self.assertRaises(ValueError):
+            self.document.get_tied_tags(
+                tag, field_type='random_field_type')
+        self.assertEqual(len(self.document.get_tied_tags(
+            tag, field_type=FieldTypeEnum.INPUT_FIELD.value,
+            pn_filter=lambda x: x == 'source_date')), 0)
         tied_tags = list(self.document.get_tied_tags(
             tag, threshold=0.002).values())[0][0]
         self.assertEqual(tied_tags, tag)
         first_tied_tag = self.document.get_first_tied_tag(tag)[1]
         self.assertEqual(first_tied_tag, tag)
+
+    def test_is_xbrl(self):
+        is_xbrl = self.document.is_xbrl
+        self.assertFalse(is_xbrl)
+
+    def test_html(self):
+        html = self.document.html
+        self.assertIsInstance(html, pycognaize.document.html_info.HTML)
+
+    def test_get_table_cell_overlap(self):
+        snap_path = RESOURCE_FOLDER + '/snapshots/5eb8ee1c6623f200192a0651/document.json'
+        with open(snap_path, encoding="utf8") as document_json:
+            data = json.load(document_json)
+        document = Document.from_dict(data, data_path=snap_path)
+
+        self.assertFalse(document.get_table_cell_overlap(
+            source_field='table', one_to_one=True))
+        self.assertFalse(document.get_table_cell_overlap(
+            source_field='table', one_to_one=False))
+        self.assertEqual(len(document.get_table_cell_overlap(
+            source_field='mmas_current_assets_v_1_4_1__'
+                         'total_assets__current_value',
+            one_to_one=True)), 1)
+        self.assertEqual(len(document.get_table_cell_overlap(
+            source_field='mmas_current_assets_v_1_4_1__'
+                         'total_assets__current_value',
+            one_to_one=False)), 2)
+        self.assertFalse(document.get_table_cell_overlap(
+            source_field='random_field',
+            one_to_one=False))
 
     @classmethod
     def tearDownClass(cls) -> None:
