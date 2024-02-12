@@ -88,7 +88,7 @@ collection of multiple Document objects
 .. doctest::
 
     >>> snapshot.documents._ids[:4]
-    ['60215310dbf28200120e6afa', '60b76b3d6f3f980019105dac', '60f5260c7883ab0013d9c184', '60f53e967883ab0013d9c6f9']
+    ['5eb8ee1c6623f200192a0651', '60215310dbf28200120e6afa', '60b76b3d6f3f980019105dac', '60f5260c7883ab0013d9c184']
 
 As we can see our Snapshot consists of 5 documents,
 let's choose one them and have a look at documents structure

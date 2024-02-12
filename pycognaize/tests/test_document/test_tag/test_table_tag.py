@@ -102,6 +102,18 @@ class TestTable(unittest.TestCase):
         self.assertTrue(df[0][0].bottom > df[0][0].top)
         self.assertTrue(df[0][0].right > df[0][0].left)
 
+        width_height_tbl_tag = deepcopy(self.tbl_tag)
+
+        width_height_tbl_tag.page._image_width = self.tbl_tag.page.image_height
+        width_height_tbl_tag.page._image_height = self.tbl_tag.page.image_width
+        df = width_height_tbl_tag._build_df()
+        self.assertEqual(df.shape, (27, 3))
+        self.assertEqual(df[0][1].page.page_number, 3)
+        self.assertEqual(df[1][5].raw_ocr_value, '11.6')
+        self.assertEqual(df[0][4].left, 8.6)
+        self.assertTrue(df[0][0].bottom > df[0][0].top)
+        self.assertTrue(df[0][0].right > df[0][0].left)
+
     def test_df(self):
         self.assertEqual(self.tbl_tag.df.shape, (27, 3))
         self.assertEqual(self.tbl_tag.df[2][3], '')
@@ -115,3 +127,48 @@ class TestTable(unittest.TestCase):
     def test_split_excel_letters_numbers(self):
         self.assertEqual(self.tbl_tag.split_excel_letters_numbers('ABs12310'), ('ABs', 12310))
         self.assertIsNone(self.tbl_tag.split_excel_letters_numbers('123ABs'))
+
+    def test_getitem(self):
+        self.assertAlmostEqual(self.tbl_tag[(1, 4)].right,
+                                        61.800000000000004)
+
+        self.assertAlmostEqual(self.tbl_tag[(1, 4)].left, 8.6)
+        with self.assertRaises(TypeError) as context:  # clarify this
+            self.tbl_tag[1]
+        self.assertEqual("object of type 'int' has no len()",
+                              str(context.exception))
+        with self.assertRaises(ValueError) as context:
+            self.tbl_tag[1, 1, 1]
+        self.assertEqual("Invalid argument (1, 1, 1)",
+                              str(context.exception))
+        with self.assertRaises(IndexError) as context:
+            self.tbl_tag[100, 100]
+        self.assertEqual(
+            "No cell with the following index in the table: (100, 100)",
+            str(context.exception))
+        with self.assertRaises(NotImplementedError) as context:
+            self.tbl_tag[10:100, 1:2]
+        self.assertEqual("Slice lookup not implemented",
+                         str(context.exception))
+
+    def test__extract_raw_ocr(self):
+        raw_ocr_value = TableTag._extract_raw_ocr(self.tbl_tag.raw_df[1][1])
+
+        self.assertEqual(raw_ocr_value, "BaJjUBzdGmf")
+        self.assertEqual("", TableTag._extract_raw_ocr([]))
+
+    def test_to_string(self):
+        # df already has None check
+        # none_df_tbl_tag = deepcopy(self.tbl_tag)
+        # none_df_tbl_tag._df = None
+        # none_df_tbl_tag._raw_df = None
+        # self.assertEqual(none_df_tbl_tag.to_string(), "")
+        self.assertEqual(len(self.tbl_tag.to_string()), 2634)
+
+    def test_repr(self):
+        self.assertEqual(repr(self.tbl_tag),
+                         "<TableTag: left: 8.6, right: "
+                         "92.69999999999999, top: 12.0, bottom: 64.0998>")
+
+    # def test_vshift(self):
+        # self.assertEqual(self.tbl_tag.hshift(10), )
