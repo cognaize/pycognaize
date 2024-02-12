@@ -56,10 +56,11 @@ class TestLazyDict(unittest.TestCase):
              '60f53e967883ab0013d9c6f9', '60f5260c7883ab0013d9c184',
              '60215310dbf28200120e6afa', '62eb8e6b28d7ca0012ec8288',
              '62eb8e6b28d7ca0012ec8288_error', '632c61fc86d52800197d03f3',
-             '6405fdd7420ed0001184e4f3','63d4486c0e3fe60011fe3a75',
-             '64b1621a44acf9001017db4f','6426b0822afefc001277df9e'])
+             '6405fdd7420ed0001184e4f3', '63d4486c0e3fe60011fe3a75',
+             '64b1621a44acf9001017db4f', '6426b0822afefc001277df9e',
+             '5eb8ee1c6623f200192a0651'])
         for i, value in enumerate(self.docs):
             self.assertEqual(doc_list[i], value)
 
     def test___len__(self):
-        self.assertEqual(self.docs.__len__(), 12)
+        self.assertEqual(self.docs.__len__(), 13)
