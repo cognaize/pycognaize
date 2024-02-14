@@ -14,8 +14,7 @@ class Genie:
 
     def __init__(self, model, x_auth, base_url):
 
-        self.model_class = model
-        self.model = model()
+        self.model = model
         self.x_auth = x_auth
         self.base_url = base_url.strip('/') + '/'
 
@@ -38,24 +37,24 @@ class Genie:
                                recipe_id: str) -> requests.Response:
         url = self.base_url + self.CREATE_TASK_ENDPOINT
         payload = {'documentId': document_id, 'recipeId': recipe_id}
-        headers = {'x-auth': X_AUTH_TOKEN, 'content-type': "application/json"}
+        headers = {'x-auth': self.x_auth, 'content-type': "application/json"}
         response = requests.request("POST", url, json=payload,
                                     headers=headers)
         response.raise_for_status()
         return response
 
     def run_model(self, model: Type[Model], task_id: str) -> requests.Response:
-        url = BASE_URL + self.RUN_MODEL_ENDPOINT
+        url = self.base_url + self.RUN_MODEL_ENDPOINT
         response = model.execute_genie_v2(task_id=task_id,
-                                          token=X_AUTH_TOKEN,
+                                          token=self.x_auth,
                                           url=url)
         response.raise_for_status()
         return response
 
     def digest_results(self, task_id: str) -> requests.Response:
-        url = BASE_URL + self.DIGEST_ENDPOINT
+        url = self.base_url + self.DIGEST_ENDPOINT
         payload = {'taskId': task_id}
-        headers = {'x-auth': X_AUTH_TOKEN, 'content-type': "application/json"}
+        headers = {'x-auth': self.x_auth, 'content-type': "application/json"}
         response = requests.request("POST", url, data=payload,
                                     headers=headers)
         response.raise_for_status()
