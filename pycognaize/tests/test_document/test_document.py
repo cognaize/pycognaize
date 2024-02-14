@@ -7,6 +7,8 @@ import uuid
 from collections import OrderedDict
 from copy import deepcopy
 
+import pandas as pd
+
 import pycognaize
 from pycognaize.common.enums import EnvConfigEnum, FieldTypeEnum
 from pycognaize.document import Page, Document
@@ -29,6 +31,9 @@ class TestDocument(unittest.TestCase):
         with open(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/document.json', encoding="utf8") as document_json:
             cls.data = json.load(document_json)
 
+        with open(RESOURCE_FOLDER + '/snapshots/5eb8ee1c6623f200192a0651/document.json', encoding="utf8") as document_json:
+            cls.data2 = json.load(document_json)
+
         cls.snap_path = os.path.join(cls.SNAPSHOT_PATH, 'sample_snapshot_1', str(cls.data['metadata']['document_id']))
 
         shutil.copytree(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/', cls.snap_path)
@@ -39,6 +44,14 @@ class TestDocument(unittest.TestCase):
         self.doc_src = self.data['metadata']['src']
         self.recipe_x = self.data['input_fields'].keys()
         self.recipe_y = self.data['output_fields'].keys()
+        input_fields = next(iter(self.data2))
+        table = next(iter(self.data2[input_fields]))
+        self.data2[input_fields] = {
+            table: self.data2[input_fields][table]
+        }
+        self.document2 = Document.from_dict(
+            self.data2,
+            data_path=RESOURCE_FOLDER + '/snapshots/5eb8ee1c6623f200192a0651')
 
     def test_x(self):
         for k, v in self.document.x.items():
@@ -116,6 +129,8 @@ class TestDocument(unittest.TestCase):
         invalid_document_dict['metadata'] = invalid_document_dict['metadata'].pop('src')
         with self.assertRaises(TypeError):
             Document.from_dict(invalid_document_dict, data_path=self.snap_path)
+        with self.assertRaises(TypeError):
+            Document.from_dict(raw=[], data_path=self.snap_path)
 
     def test_to_pdf(self):
         document = Document.from_dict(self.data, data_path=self.snap_path)
@@ -141,11 +156,13 @@ class TestDocument(unittest.TestCase):
 
     def test_get_tied_fields(self):
         tag = self.document.x['paragraph'][0].tags[0]
+        table_tag = self.document2.x['table'][0].tags[0]
         tied_field_real = self.document.x['paragraph'][0]
         tied_field = list(self.document.get_tied_fields(tag).values())[0][0]
         first_tied_field = self.document.get_first_tied_field(tag)[1]
         first_tied_field_value = self.document.get_first_tied_field_value(tag)
-        first_tied_field_fvalue = self.document.get_first_tied_field_value(tag=12.3)
+        first_tied_field_fvalue = self.document.get_first_tied_field_value(
+            tag=12.3)
         pname_tied_field = list(self.document.get_tied_fields(tag).items())[0]
         pname_tied_field = pname_tied_field[0], pname_tied_field[1][0]
 
@@ -165,10 +182,13 @@ class TestDocument(unittest.TestCase):
         self.assertEqual(first_tied_field, tied_field_real)
         self.assertEqual(len(first_tied_field_value), 399)
         self.assertEqual(first_tied_field_fvalue, '')
+        with self.assertRaises(AttributeError):
+            self.document2.get_first_tied_field_value(table_tag)
 
     def test_get_tied_tags(self):
         # print(self.document.x['source_date'][0].tags[0])
         tag = self.document.x['paragraph'][0].tags[0]
+        table_tag = self.document2.x['table'][0].tags[0]
         other_tag = self.document.x['ref'][0].tags[0]
 
         tied_tags = self.document.get_tied_tags(tag)
@@ -186,6 +206,13 @@ class TestDocument(unittest.TestCase):
         self.assertEqual(tied_tags, tag)
         first_tied_tag = self.document.get_first_tied_tag(tag)[1]
         self.assertEqual(first_tied_tag, tag)
+        first_tied_tag_value = self.document.get_first_tied_tag_value(tag)
+        self.assertEqual(len(first_tied_tag_value), 399)
+        with self.assertRaises(AttributeError):
+            self.document2.get_first_tied_tag_value(table_tag)
+        df_with_tied_field_values = (self.document2.
+                                     get_df_with_tied_field_values(table_tag))
+        self.assertIsInstance(df_with_tied_field_values, pd.DataFrame)
 
     def test_is_xbrl(self):
         is_xbrl = self.document.is_xbrl

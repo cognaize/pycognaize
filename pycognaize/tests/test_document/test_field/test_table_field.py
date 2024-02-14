@@ -68,6 +68,14 @@ class TestTableField(unittest.TestCase):
         self.tbl_field = TableField.construct_from_raw(
             self.raw_table_with_group_key, pages=self.pages)
 
+        with open(os.path.join(RESOURCE_FOLDER, 'xbrl_snapshot',
+                               '63fd387178232c6001119a41a',
+                               'document.json')) as document_json:
+            self.html_data = json.load(document_json)
+        self.raw_html_table = self.html_data["input_fields"][table_key][0]
+        self.html_table_field = TableField.construct_from_raw(
+            self.raw_html_table, pages=self.pages)
+
     def test___repr__(self):
         self.assertEqual(repr(self.tbl_field),
                          f"<{self.tbl_field.__class__.__name__}:"
@@ -132,6 +140,12 @@ class TestTableField(unittest.TestCase):
             self.tbl_field.group_key = True
         with self.assertRaises(TypeError):
             self.tbl_field.group_key = ['abc']
+
+    def test_get_table_title(self):
+        title = self.tbl_field.get_table_title()
+        self.assertEqual(title, '')
+        # title = self.html_table_field.get_table_title()
+        # self.assertEqual(title, '')
 
     @classmethod
     def tearDownClass(cls) -> None:
