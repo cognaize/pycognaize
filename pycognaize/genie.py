@@ -14,7 +14,8 @@ class Genie:
 
     def __init__(self, model, x_auth, base_url):
 
-        self.model = model
+        self.model_class = model
+        self.model = model()
         self.x_auth = x_auth
         self.base_url = base_url.strip('/') + '/'
 
@@ -26,8 +27,9 @@ class Genie:
         task_id = task_id_response.json()['taskId']
         logger.info(f"Running the model on task {task_id}")
         start = time.time()
-        self.run_model(model=GenieModel, task_id=task_id)
-        logger.info(f"Model finished in {time.time() - start}")
+        self.run_model(model=self.model, task_id=task_id)
+        duration = time.time() - start
+        logger.info(f"Model finished in {duration}")
         if digest:
             logger.info(f"Digesting model results")
             self.digest_results(task_id=task_id)
@@ -44,9 +46,10 @@ class Genie:
 
     def run_model(self, model: Type[Model], task_id: str) -> requests.Response:
         url = BASE_URL + self.RUN_MODEL_ENDPOINT
-        response = model().execute_genie_v2(task_id=task_id,
-                                            token=X_AUTH_TOKEN,
-                                            url=url)
+        response = model.execute_genie_v2(task_id=task_id,
+                                          token=X_AUTH_TOKEN,
+                                          url=url)
+        response.raise_for_status()
         return response
 
     def digest_results(self, task_id: str) -> requests.Response:
