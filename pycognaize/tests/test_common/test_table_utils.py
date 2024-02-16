@@ -17,8 +17,6 @@ from pycognaize.document.document import Document
 class TestTableUtils(unittest.TestCase):
     snap_path = '/snapshots/5eb8ee1c6623f200192a0651'
     xbrl_snap_path = '/snapshots/63dfb66b7861050010cd64b5'
-    ORIGINAL_SNAPSHOT_PATH = os.environ.get(EnvConfigEnum.SNAPSHOT_PATH.value)
-    SNAPSHOT_PATH = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
 
     @classmethod
     def setUpClass(cls) -> None:
