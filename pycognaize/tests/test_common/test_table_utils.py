@@ -1,10 +1,6 @@
-import tempfile
 import unittest
-import os
 import json
-import uuid
 
-from pycognaize.common.enums import EnvConfigEnum
 from pycognaize.common.table_utils import (
     filter_out_invalid_tables,
     _sort_table_horizontally,
@@ -20,7 +16,6 @@ class TestTableUtils(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-
         with open(
                 RESOURCE_FOLDER + cls.snap_path + '/document.json',
                 encoding="utf8") as document_json:
@@ -33,10 +28,10 @@ class TestTableUtils(unittest.TestCase):
     def setUp(self):
         self.document = Document.from_dict(
             self.data,
-            data_path=RESOURCE_FOLDER + '/snapshots/5eb8ee1c6623f200192a0651')
+            data_path=RESOURCE_FOLDER + self.snap_path)
         self.xbrl_document = Document.from_dict(
             self.data_xbrl,
-            data_path=RESOURCE_FOLDER + '/snapshots/63dfb66b7861050010cd64b5')
+            data_path=RESOURCE_FOLDER + self.xbrl_snap_path)
         self.tables = self.document.x['table']
         self.table_with_no_tags = [self.tables[-1]]
         self.tables_with_tags = self.tables[:4]
