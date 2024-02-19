@@ -120,6 +120,10 @@ class TestSpanTag(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             self.ext_tag_5.__contains__('5')
 
+    def test___get_item__(self):
+        tag = self.ext_tag_1[1:3]
+        self.assertEqual(tag.raw_value, 'oe')
+
 
 if __name__ == '__main__':
     unittest.main()
