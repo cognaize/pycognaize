@@ -12,6 +12,7 @@ from bson import json_util
 from pycognaize.common.enums import StorageEnum, EnvConfigEnum
 
 from pycognaize.common.utils import load_bson_by_path
+from pycognaize.common.exceptions import AuthenthicationError
 from pycognaize.document.snapshot import Snapshot
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
@@ -88,6 +89,16 @@ class TestSnapshot(unittest.TestCase):
         self.assertEqual(len(snap.documents), 2)
 
         shutil.rmtree(os.path.join(self.SNAPSHOT_PATH, 'sample_snapshot_1'))
+
+    def test_download(self):
+        snapshot_id = '60cc8738efddad00005fc638'
+        destination_dir = 's3://cognaize-elements/snapshots/'
+        with self.assertRaises(AuthenthicationError):
+            self.snapshot.download(snapshot_id, destination_dir)
+
+    def test_get_by_id(self):
+        snapshot_id = '61430b35d302800000303bd5'
+        self.assertIsInstance(self.snapshot.get_by_id(snapshot_id), Snapshot)
 
     def tearDown(self) -> None:
         shutil.rmtree(self.SNAPSHOT_PATH)
