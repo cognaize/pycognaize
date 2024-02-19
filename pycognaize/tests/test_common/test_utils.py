@@ -9,9 +9,13 @@ from pycognaize.common.utils import (
     intersects,
     is_float, convert_coord_to_num,
     stick_word_boxes,
+    bytes_to_array,
+    string_to_array,
     image_bytes_to_array,
     img_to_black_and_white,
-    group_sequence, ConfusionMatrix
+    group_sequence, ConfusionMatrix,
+    filter_out_nested_lines,
+    directory_summary_hash,
 )
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
@@ -203,3 +207,20 @@ class TestUtils(unittest.TestCase):
                                      "bottom": 54.97258963417412, 'ocr_text': '(a) Commercial banks.',
                                      'word_id_number': '60f556a9c23c8f0000e05d2f'}, 10.383100608664519,
                                     25.635517364840673, 55.63064089130512, 57.452936680283266))
+
+    def test_bytes_to_array(self):
+        with self.assertWarns(DeprecationWarning):
+            bytes_to_array(img_str=self.page_image_bytes)
+
+    def test_string_to_array(self):
+        with self.assertWarns(DeprecationWarning):
+            string_to_array(img_str=self.page_image_bytes)
+
+    def test_filter_out_nested_lines(self):
+        lines = ['lines', 'next lines']
+        nested_lines = filter_out_nested_lines(lines)
+        self.assertEqual(nested_lines, [lines[1]])
+
+    def test_directory_summary_hash(self):
+        dir_sum_hash = directory_summary_hash(dirname=RESOURCE_FOLDER)
+        self.assertEqual(dir_sum_hash, '15341a1ba9a1ed009133adc5dc53fb13')

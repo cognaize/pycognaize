@@ -143,6 +143,9 @@ class TestPage(unittest.TestCase):
             pycognaize.document.tag.extraction_tag.ExtractionTag
         )
         self.assertEqual(self.page6.search_text('Federal Deposit Insurance Act')[0]['top'], 2241)
+        self.assertEqual(self.page6.search_text('Federal Deposit Insurance Act',
+                                                sort=True,
+                                                clean=False)[0]['top'], 2241)
         self.assertEqual(len(self.page6.search_text('WIRE TRANSFER')), 0)
         self.assertEqual(self.page3.search_text('Hi'), [])
         self.assertEqual(self.page3.search_text('Board', area=area_dict), self.page3.search_text('Board', area=None))

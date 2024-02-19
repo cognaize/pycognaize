@@ -244,6 +244,9 @@ class TestDocument(unittest.TestCase):
             source_field='random_field',
             one_to_one=False))
 
+    def test_load_page_images(self):
+        self.assertIsNone(self.document.load_page_images())
+
     @classmethod
     def tearDownClass(cls) -> None:
 
