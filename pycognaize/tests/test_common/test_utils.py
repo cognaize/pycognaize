@@ -233,7 +233,7 @@ class TestUtils(unittest.TestCase):
         hash_value3 = directory_summary_hash(dirname=test_dir)
         os.rmdir(test_dir)
 
-        self.assertNotEquals(hash_value1, hash_value2)
+        self.assertNotEqual(hash_value1, hash_value2)
         self.assertEqual(hash_value1, hash_value3)
         with self.assertRaises(TypeError):
             directory_summary_hash(dirname=random_path)
