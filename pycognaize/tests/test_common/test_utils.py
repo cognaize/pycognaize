@@ -222,5 +222,18 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(nested_lines, [lines[1]])
 
     def test_directory_summary_hash(self):
-        dir_sum_hash = directory_summary_hash(dirname=RESOURCE_FOLDER)
-        self.assertIsInstance(dir_sum_hash, str)
+        test_dir = os.path.join(RESOURCE_FOLDER, 'hash_test_dir')
+        os.makedirs(test_dir)
+        random_path = 'random/path'
+        hash_value1 = directory_summary_hash(dirname=test_dir)
+        dir_to_delete = os.path.join(test_dir, "dir_to_delete")
+        os.makedirs(dir_to_delete)
+        hash_value2 = directory_summary_hash(dirname=test_dir)
+        os.rmdir(dir_to_delete)
+        hash_value3 = directory_summary_hash(dirname=test_dir)
+        os.rmdir(test_dir)
+
+        self.assertNotEquals(hash_value1, hash_value2)
+        self.assertEqual(hash_value1, hash_value3)
+        with self.assertRaises(TypeError):
+            directory_summary_hash(dirname=random_path)
