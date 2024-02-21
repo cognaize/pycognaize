@@ -400,10 +400,16 @@ class Document:
             names passing the filter will be considered
         :return: Dataframe of the TableTag
         """
-        return table_tag.raw_df.map(
-            lambda x: self.get_first_tied_field_value(
-                x,
-                pn_filter=pn_filter))
+        if "map" not in dir(table_tag.raw_df):
+            return table_tag.raw_df.applymap(
+                lambda x: self.get_first_tied_field_value(
+                    x,
+                    pn_filter=pn_filter))
+        else:
+            return table_tag.raw_df.map(
+                lambda x: self.get_first_tied_field_value(
+                    x,
+                    pn_filter=pn_filter))
 
     def load_page_images(self, page_filter: Callable = lambda x: True) -> None:
         """Get all images of the pages in the document
@@ -415,7 +421,8 @@ class Document:
                 _ = page.image_bytes
             return page
 
-        pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
+        ctx = multiprocessing.get_context('fork')
+        pool = ctx.Pool(min(multiprocessing.cpu_count() * 2, 16))
         pages = pool.map(_get_page, self.pages.values())
         for page, populated_page in zip(self.pages.values(), pages):
             page._image_arr = populated_page._image_arr
@@ -431,7 +438,8 @@ class Document:
                 _ = page.lines
             return page
 
-        pool = multiprocessing.Pool(min(multiprocessing.cpu_count() * 2, 16))
+        ctx = multiprocessing.get_context('fork')
+        pool = ctx.Pool(min(multiprocessing.cpu_count() * 2, 16))
         pages = pool.map(_get_page, self.pages.values())
         for page, populated_page in zip(self.pages.values(), pages):
             page._ocr = populated_page._ocr

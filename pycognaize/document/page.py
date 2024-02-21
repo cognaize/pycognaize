@@ -115,7 +115,7 @@ class Page:
             with storage.open(uri, 'rb') as f:
                 image_bytes = f.read()
         except FileNotFoundError as e:
-            logging.debug(
+            logging.warning(
                 f"Unable to get the image for page {self.page_number}: {e}")
             with open(os.path.join(
                     os.path.dirname(pycognaize.common.__file__),
@@ -158,7 +158,7 @@ class Page:
                 self._image_width = int(page_data['image']['width'])
 
         except FileNotFoundError as e:
-            logging.debug(
+            logging.warning(
                 f"Unable to get the json data for page "
                 f"{self.page_number}: {e}")
             self._image_width = 1
@@ -210,7 +210,7 @@ class Page:
                     word['w'] = float(word['w'])
                     word['h'] = float(word['h'])
         except FileNotFoundError as e:
-            logging.debug(
+            logging.warning(
                 f"Unable to get the ocr for page {self.page_number}: {e}")
             ocr_raw = {
                 "page": {"number": self.page_number,

@@ -2,6 +2,11 @@
 
 ## [1.4]
 
+### [1.4.36] - 2024-02-21
+- Handle pandas warnings and 1.2.0 compatibility issues.
+- Handle M series Mac incompatibility issues.
+- Warn for missing page image/ocr information.
+
 ### [1.4.35] - 2024-02-21
 - Optimize `pycognaize.common.utils.img_to_black_and_white`
 - Test coverage 85%
