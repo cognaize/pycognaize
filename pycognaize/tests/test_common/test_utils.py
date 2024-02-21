@@ -223,7 +223,7 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(nested_lines, [lines[1]])
 
     def test_directory_summary_hash(self):
-        temp_dir = tempfile.mkdtemp(dir=RESOURCE_FOLDER)
+        temp_dir = tempfile.mkdtemp()
         random_path = 'random/path'
         hash_value1 = directory_summary_hash(dirname=temp_dir)
         dir_to_delete = os.path.join(temp_dir, "dir_to_delete")
