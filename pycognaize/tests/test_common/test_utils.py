@@ -23,6 +23,10 @@ from pycognaize.tests.resources import RESOURCE_FOLDER
 
 
 class TestUtils(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.temp_dir = tempfile.mkdtemp()
+
     def setUp(self) -> None:
         page_images_folder_path = os.path.join(RESOURCE_FOLDER, StorageEnum.image_folder.value)
         page_image_path = os.path.join(page_images_folder_path, "image_1.jpeg")
@@ -224,9 +228,8 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(nested_lines, [lines[1]])
 
     def test_directory_summary_hash(self):
-        temp_dir = tempfile.mkdtemp()
-        dir1 = os.path.join(temp_dir, "dir1")
-        dir2 = os.path.join(temp_dir, "dir2")
+        dir1 = os.path.join(self.temp_dir, "dir1")
+        dir2 = os.path.join(self.temp_dir, "dir2")
         dir3 = os.path.join(dir1, "dir3")
         os.makedirs(dir1)
         os.makedirs(dir2)
@@ -235,7 +238,7 @@ class TestUtils(unittest.TestCase):
         text2 = "This is the content of the second text file."
         text3 = "This is the content of the third text file."
         text4 = "This is the content of the fourth text file."
-        with open(os.path.join(temp_dir, "file1.txt"), "w") as file1:
+        with open(os.path.join(self.temp_dir, "file1.txt"), "w") as file1:
             file1.write(text1)
         with open(os.path.join(dir1, "file2.txt"), "w") as file2:
             file2.write(text2)
@@ -244,14 +247,17 @@ class TestUtils(unittest.TestCase):
         with open(os.path.join(dir2, "file4.txt"), "w") as file4:
             file4.write(text4)
         random_path = 'random/path'
-        hash_value1 = directory_summary_hash(dirname=temp_dir)
-        dir_to_delete = os.path.join(temp_dir, "dir_to_delete")
+        hash_value1 = directory_summary_hash(dirname=self.temp_dir)
+        dir_to_delete = os.path.join(self.temp_dir, "dir_to_delete")
         os.makedirs(dir_to_delete)
-        hash_value2 = directory_summary_hash(dirname=temp_dir)
+        hash_value2 = directory_summary_hash(dirname=self.temp_dir)
         os.rmdir(dir_to_delete)
-        hash_value3 = directory_summary_hash(dirname=temp_dir)
-        shutil.rmtree(temp_dir)
+        hash_value3 = directory_summary_hash(dirname=self.temp_dir)
         self.assertNotEqual(hash_value1, hash_value2)
         self.assertEqual(hash_value1, hash_value3)
         with self.assertRaises(TypeError):
             directory_summary_hash(dirname=random_path)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        shutil.rmtree(cls.temp_dir)
