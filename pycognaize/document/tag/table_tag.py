@@ -67,7 +67,12 @@ class TableTag(BoxTag):
     @property
     def df(self) -> pd.DataFrame:
         if self._df is None:
-            self._df = self.raw_df.map(lambda x: self._extract_raw_ocr(x))
+            if "map" not in dir(self.raw_df):
+                self._df = self.raw_df.applymap(
+                    lambda x: self._extract_raw_ocr(x))
+            else:
+                self._df = self.raw_df.map(
+                    lambda x: self._extract_raw_ocr(x))
         return self._df
 
     @staticmethod
@@ -208,7 +213,7 @@ class TableTag(BoxTag):
                         raise ValueError(
                             "table_tag provides multiple values"
                             " for the same cell.")
-                    df[col_n][row_n] = df[col_n][row_n] = ExtractionTag(
+                    df.loc[row_n, col_n] = ExtractionTag(
                         left=cell_.left, right=cell_.right,
                         top=cell_.top, bottom=cell_.bottom,
                         page=self.page,

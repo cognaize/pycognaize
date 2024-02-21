@@ -14,3 +14,4 @@ click
 anytree
 tabulate
 cloudpathlib[s3]~=0.16.0
+pyarrow
