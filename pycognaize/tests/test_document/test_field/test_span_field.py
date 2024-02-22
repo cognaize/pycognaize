@@ -64,6 +64,9 @@ class TestSpanField(unittest.TestCase):
         self.assertEqual(self.span_field_1.name, self.raw_field_1['name'])
         self.assertEqual(self.span_field_2.name, self.raw_field_2['name'])
         self.assertEqual(self.span_field_3.name, self.raw_field_3['name'])
+        self.assertEqual(
+            repr(self.span_field_1),
+            f"<{self.span_field_1.__class__.__name__}: {self.span_field_1.name}>")
 
     def test__field_id(self):
         self.assertEqual(self.span_field_1._field_id, self.raw_field_1['_id'])
@@ -88,6 +91,11 @@ class TestSpanField(unittest.TestCase):
                                                   " than the time specified in such "
                                                   "draw down notice,")
         self.assertEqual(self.span_field_3.value, 'Total Cash $ 3,706')
+
+    def test_line_values(self):
+        self.assertEqual(self.span_field_1.line_values[0], "Does the Subscriber control, or is the Subscriber controlled by or under common control")
+        self.assertEqual(self.span_field_2.line_values[0], "All Capital Contributions payable to the Partnership, in accordance with the terms of the")
+        self.assertEqual(self.span_field_2.line_values[1], "Partnership Agreement, are payable in full by wire transfer of readily available funds to")
 
     def test__construct_from_raw(self):
         self.assertNotEqual(self.span_field_3.tags[0].left, 12.4)
@@ -132,6 +140,9 @@ class TestSpanField(unittest.TestCase):
             self.span_field_1.group_key = True
         with self.assertRaises(TypeError):
             self.span_field_1.group_key = ['abc']
+
+    def test__str__(self):
+        self.assertEqual(str(self.span_field_1), repr(self.span_field_1))
 
     def check_keys(self, test_dict):
         to_dict_keys = [IqFieldKeyEnum.name.value,

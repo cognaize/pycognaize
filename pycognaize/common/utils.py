@@ -138,14 +138,9 @@ def img_to_black_and_white(img_array):
 
     :return:
     """
-
-    def grayscale2bw(x, threshold_value):
-        return 255 if x < threshold_value else 0
-
-    vectorized_converter = np.vectorize(grayscale2bw)
     grayscale = np.dot(img_array[..., :3], [0.299, 0.587, 0.114])
     threshold = compute_otsu_threshold(img_array)
-    return vectorized_converter(grayscale, threshold)
+    return np.where(grayscale < threshold, 255, 0)
 
 
 def group_sequence(list_of_integers):

@@ -168,7 +168,8 @@ class TestHTMLTableTag(unittest.TestCase):
 
     def test_replace_nans_with_empty_html_tags(self):
         raw_df = self.tbl_tag._build_df()
-        raw_df[1][1] = None
+        raw_df.loc[1, 1] = None
+        # raw_df[1][1] = None
         df = self.tbl_tag.replace_nans_with_empty_html_tags(raw_df)
         self.assertEqual(raw_df[1][1].raw_value, '')
         self.assertEqual(raw_df[1][1].field_id, '')

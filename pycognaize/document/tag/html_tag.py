@@ -99,8 +99,12 @@ class HTMLTableTag(HTMLTagABC):
     @property
     def df(self) -> pd.DataFrame:
         if self._df is None:
-            self._df = self.raw_df.map(
-                lambda x: self._extract_value(x))
+            if "map" not in dir(self.raw_df):
+                self._df = self.raw_df.applymap(
+                    lambda x: self._extract_value(x))
+            else:
+                self._df = self.raw_df.map(
+                    lambda x: self._extract_value(x))
         return self._df
 
     @staticmethod
@@ -198,15 +202,16 @@ class HTMLTableTag(HTMLTagABC):
             col_index = cell_.col_index - 1
             for col_n in range(col_index, col_index + cell_.col_span):
                 for row_n in range(row_index, row_index + cell_.row_span):
-                    df[col_n][row_n] = HTMLTag(is_table=False,
-                                               html_id=cell_.html_id,
-                                               xpath=cell_.xpath,
-                                               raw_value=cell_.raw_value,
-                                               raw_ocr_value=cell_.raw_value,
-                                               field_id='',
-                                               tag_id=self.tag_id,
-                                               row_index=row_index,
-                                               col_index=col_index)
+                    df.loc[row_n, col_n] = HTMLTag(
+                        is_table=False,
+                        html_id=cell_.html_id,
+                        xpath=cell_.xpath,
+                        raw_value=cell_.raw_value,
+                        raw_ocr_value=cell_.raw_value,
+                        field_id='',
+                        tag_id=self.tag_id,
+                        row_index=row_index,
+                        col_index=col_index)
         df = self.replace_nans_with_empty_html_tags(df)
         return df
 

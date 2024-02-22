@@ -10,6 +10,7 @@ from pycognaize.common.enums import StorageEnum, EnvConfigEnum, IqFieldKeyEnum, 
 from pycognaize.document.field import TableField
 from pycognaize.document.page import create_dummy_page
 from pycognaize.document.tag import TableTag
+from pycognaize.document.html_info import HTML
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
 
@@ -54,6 +55,7 @@ class TestTableField(unittest.TestCase):
 
     def setUp(self):
         self.doc_id = '60b76b3d6f3f980019105dac'
+        self.xbrl_doc_id = '63dfb66b7861050010cd64b5'
         table_key = 'table'
         with open(os.path.join(RESOURCE_FOLDER,'snapshots', self.doc_id,
                                'document.json')) as document_json:
@@ -67,6 +69,17 @@ class TestTableField(unittest.TestCase):
                                                 path=self.snap_storage_path)}
         self.tbl_field = TableField.construct_from_raw(
             self.raw_table_with_group_key, pages=self.pages)
+        self.xbrl_doc_path = os.path.join(
+            RESOURCE_FOLDER, 'snapshots', self.xbrl_doc_id)
+        self.html = HTML(self.xbrl_doc_path,
+                         document_id=self.xbrl_doc_id)
+
+        with open(os.path.join(self.xbrl_doc_path,
+                               'document.json')) as document_json:
+            self.html_data = json.load(document_json)
+        self.raw_html_table = self.html_data["input_fields"][table_key][0]
+        self.html_table_field = TableField.construct_from_raw(
+            self.raw_html_table, pages=None, html=self.html)
 
     def test___repr__(self):
         self.assertEqual(repr(self.tbl_field),
@@ -132,6 +145,13 @@ class TestTableField(unittest.TestCase):
             self.tbl_field.group_key = True
         with self.assertRaises(TypeError):
             self.tbl_field.group_key = ['abc']
+
+    def test_get_table_title(self):
+        title = self.tbl_field.get_table_title()
+        self.assertEqual(title, '')
+        title = self.html_table_field.get_table_title()
+        self.assertEqual(title, '(exact\nname of registrant as '
+                                'specified in its charter)')
 
     @classmethod
     def tearDownClass(cls) -> None:

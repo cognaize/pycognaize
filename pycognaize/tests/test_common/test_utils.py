@@ -1,6 +1,8 @@
 import json
 import os
+import shutil
 import unittest
+import tempfile
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -9,14 +11,22 @@ from pycognaize.common.utils import (
     intersects,
     is_float, convert_coord_to_num,
     stick_word_boxes,
+    bytes_to_array,
+    string_to_array,
     image_bytes_to_array,
     img_to_black_and_white,
-    group_sequence, ConfusionMatrix
+    group_sequence, ConfusionMatrix,
+    filter_out_nested_lines,
+    directory_summary_hash,
 )
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
 
 class TestUtils(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.temp_dir = tempfile.mkdtemp()
+
     def setUp(self) -> None:
         page_images_folder_path = os.path.join(RESOURCE_FOLDER, StorageEnum.image_folder.value)
         page_image_path = os.path.join(page_images_folder_path, "image_1.jpeg")
@@ -203,3 +213,51 @@ class TestUtils(unittest.TestCase):
                                      "bottom": 54.97258963417412, 'ocr_text': '(a) Commercial banks.',
                                      'word_id_number': '60f556a9c23c8f0000e05d2f'}, 10.383100608664519,
                                     25.635517364840673, 55.63064089130512, 57.452936680283266))
+
+    def test_bytes_to_array(self):
+        with self.assertWarns(DeprecationWarning):
+            bytes_to_array(img_str=self.page_image_bytes)
+
+    def test_string_to_array(self):
+        with self.assertWarns(DeprecationWarning):
+            string_to_array(img_str=self.page_image_bytes)
+
+    def test_filter_out_nested_lines(self):
+        lines = ['lines', 'next lines']
+        nested_lines = filter_out_nested_lines(lines)
+        self.assertEqual(nested_lines, [lines[1]])
+
+    def test_directory_summary_hash(self):
+        dir1 = os.path.join(self.temp_dir, "dir1")
+        dir2 = os.path.join(self.temp_dir, "dir2")
+        dir3 = os.path.join(dir1, "dir3")
+        os.makedirs(dir1)
+        os.makedirs(dir2)
+        os.makedirs(dir3)
+        text1 = "This is the content of the first text file."
+        text2 = "This is the content of the second text file."
+        text3 = "This is the content of the third text file."
+        text4 = "This is the content of the fourth text file."
+        with open(os.path.join(self.temp_dir, "file1.txt"), "w") as file1:
+            file1.write(text1)
+        with open(os.path.join(dir1, "file2.txt"), "w") as file2:
+            file2.write(text2)
+        with open(os.path.join(dir2, "file3.txt"), "w") as file3:
+            file3.write(text3)
+        with open(os.path.join(dir2, "file4.txt"), "w") as file4:
+            file4.write(text4)
+        random_path = 'random/path'
+        hash_value1 = directory_summary_hash(dirname=self.temp_dir)
+        dir_to_delete = os.path.join(self.temp_dir, "dir_to_delete")
+        os.makedirs(dir_to_delete)
+        hash_value2 = directory_summary_hash(dirname=self.temp_dir)
+        os.rmdir(dir_to_delete)
+        hash_value3 = directory_summary_hash(dirname=self.temp_dir)
+        self.assertNotEqual(hash_value1, hash_value2)
+        self.assertEqual(hash_value1, hash_value3)
+        with self.assertRaises(TypeError):
+            directory_summary_hash(dirname=random_path)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        shutil.rmtree(cls.temp_dir)
