@@ -1,10 +1,15 @@
-import argparse
 import time
-from typing import Type, Optional
+from typing import Optional
 
 import requests
-from loguru import logger
 from pycognaize import Model
+
+try:
+    # noinspection PyPackageRequirements
+    from loguru import logger
+except ImportError:
+    from logging import getLogger
+    logger = getLogger(__name__)
 
 
 class Genie:
@@ -43,7 +48,7 @@ class Genie:
         response.raise_for_status()
         return response
 
-    def run_model(self, model: Type[Model], task_id: str) -> requests.Response:
+    def run_model(self, model: Model, task_id: str) -> requests.Response:
         url = self.base_url + self.RUN_MODEL_ENDPOINT
         response = model.execute_genie_v2(task_id=task_id,
                                           token=self.x_auth,

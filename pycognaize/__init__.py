@@ -4,11 +4,12 @@
 
 __version__ = "1.4.34"
 
-__all__ = ['Login', 'Model', 'Snapshot']
+__all__ = ['Login', 'Model', 'Snapshot', 'Genie']
 
 import os
 from .model import Model
 from .login import Login
 from .document import Snapshot
+from .genie import Genie
 
 name = os.path.basename(os.path.dirname(__file__))
