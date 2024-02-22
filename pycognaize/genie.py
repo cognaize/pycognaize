@@ -35,7 +35,7 @@ class Genie:
         duration = time.time() - start
         logger.info(f"Model finished in {duration}")
         if digest:
-            logger.info(f"Digesting model results")
+            logger.info("Digesting model results")
             self.digest_results(task_id=task_id)
 
     def create_and_get_task_id(self, document_id: str,
