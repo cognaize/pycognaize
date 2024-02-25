@@ -3,11 +3,12 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
+import logging
 import multiprocessing
 import os
 import platform
 from collections import OrderedDict
-from typing import Dict, List, Tuple, Any, Optional, Callable, Union
+from typing import Dict, List, Tuple, Any, Optional, Callable, Union, Literal
 
 import fitz
 import pandas as pd
@@ -619,6 +620,92 @@ class Document:
                     color=output_color,
                     opacity=output_opacity)
         return pdf_bytes
+
+    @staticmethod
+    def _get_page_text_from_layout_info(layout_fields_on_page: list[Field]) -> str:
+        text = ""
+        for field in layout_fields_on_page:
+            if not field.tags:
+                continue
+            area_tag: ExtractionTag = sum(field.tags)
+            area_tag.page.extract_area_words(left=area_tag.left,
+                                             top=area_tag.top,
+                                             right=area_tag.right,
+                                             bottom=area_tag.bottom,
+                                             return_tags=True)
+            text += area_tag.raw_ocr_value + "\n"
+        return text
+
+    @classmethod
+    def _get_document_text_from_layout_info(
+            cls,
+            layout_fields_on_page: dict[int, list[Field]]) -> str:
+        layout_fields_on_page = sorted(layout_fields_on_page.items(),
+                                       key=lambda item: item[0])
+        return "\n\n".join([cls._get_page_text_from_layout_info(page_fields)
+                            for page_n, page_fields in layout_fields_on_page])
+
+    def _get_layout_fields_for_page(
+            self,
+            page: Page,
+            field_type: Literal["input", "output", "both"],
+            field_filter: Callable,
+            sorting_function: Optional[Callable] = None
+    ) -> list[Field]:
+        layout_fields = []
+        if field_type == "input":
+            fields_by_python_name = self.x.items()
+        elif field_type == "output":
+            fields_by_python_name = self.y.items()
+        elif field_type == "both":
+            fields_by_python_name = itertools.chain(self.x.items(), self.y.items())
+        else:
+            raise ValueError(f"Unknown field type {field_type}")
+        for python_name, fields in fields_by_python_name:
+            for field in fields:
+                if not field.tags or not field_filter(field):
+                    continue
+                if len(field.tags) > 1:
+                    logging.warning(
+                        f"Skipping field. A layout field should not have more than"
+                        f" one tag (python name: {python_name}, field name:"
+                        f" {field.name}, tags: {field.tags})")
+                    continue
+                if field.tags[0].page.page_number != page.page_number:
+                    continue
+                layout_fields.append(field)
+        if sorting_function:
+            layout_fields = sorted(layout_fields, key=sorting_function)
+        return layout_fields
+
+    def get_layout_fields(
+            self,
+            field_type: Literal["input", "output", "both"],
+            field_filter: Callable = lambda x: x.name not in (
+                    'table', 'tables__table'),
+            sorting_function: Optional[Callable] = None):
+        return {
+            page_n: self._get_layout_fields_for_page(
+                page,
+                field_type=field_type,
+                field_filter=field_filter,
+                sorting_function=sorting_function
+            )
+            for page_n, page in self.pages.items()
+        }
+
+    def get_layout_text(
+            self,
+            field_type: Literal["input", "output", "both"],
+            field_filter: Callable = lambda x: x.name not in (
+                    'table', 'tables__table'),
+            sorting_function: Optional[Callable] = None):
+        return self._get_document_text_from_layout_info(
+            layout_fields_on_page=self.get_layout_fields(
+                field_type=field_type,
+                field_filter=field_filter,
+                sorting_function=sorting_function)
+        )
 
 
 def annotate_pdf(doc: fitz.Document,
