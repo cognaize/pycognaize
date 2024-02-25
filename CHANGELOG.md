@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.37] - 2024-02-23
+- Add `Genie` for easy model testing
+
 ### [1.4.36] - 2024-02-21
 - Handle pandas warnings and 1.2.0 compatibility issues.
 - Handle M series Mac incompatibility issues.
@@ -111,7 +114,7 @@
 - Add replace_nans_with_empty_html_tags functionality in HTMLTableTag build df
 
 ### [1.4.5] - 2023-06-12
-- Add relogin when AWS token is expired
+- Add re-login when AWS token is expired
 
 ### [1.4.4] - 2023-05-31
 - Add `anytree` to setup-requires in `setup.cfg`
@@ -181,7 +184,7 @@ in HTML._validate_path()
 - Add tag_id attribute to HTMLTag
 
 ### [1.3.1] - 2023-02-14
-- Update install requirementst in `setup.cfg`
+- Update install requirements in `setup.cfg`
 - Rename environment variable `COGNAIZE_HOST` to `API_HOST`
 - Raise error when trying to log in without `API_HOST` environment variable
 - Add documentation and make cosmetic changes in `login.py`
@@ -288,7 +291,7 @@ in HTML._validate_path()
   output fields of document
 
 ### [0.3.62] - 2022-07-20
-- Update github workflow to publish documentation on release
+- Update GitHub workflow to publish documentation on release
 
 ### [0.3.61] - 2022-07-13
 - Read image width and height from document.json instead of loading actual images for that
@@ -309,7 +312,7 @@ in HTML._validate_path()
 - Remove OpenCV from main requirements (now in model-requirements)
 - Add deprecation and module not found warning decorators
 - Get rid of opencv dependencies
-- Update github workflow to use model-requirements
+- Update GitHub workflow to use model-requirements
 
 ### [0.3.55] - 2022-06-18
 - Set logging level to debug for missing OCR or image files
@@ -334,7 +337,7 @@ in HTML._validate_path()
 - Update documentation (logo, badges, etc.)) 
 
 ### [0.3.49] - 2022-06-06
-- Add names to Github actions 
+- Add names to GitHub actions 
 
 ### [0.3.48] - 2022-06-06
 - Remove redundant information from README.md 
@@ -349,7 +352,7 @@ in HTML._validate_path()
 
 ### [0.3.45] - 2022-06-03
 - Obfuscate data in pycognaize tests
-- Update names in github actions
+- Update names in GitHub actions
 
 ### [0.3.44] - 2022-05-31
 - Create tutorial about leveraging tables in cognaize SDK
@@ -366,16 +369,16 @@ in HTML._validate_path()
 ### [0.3.42] - 2022-05-27
 - Add badge generating script to show in Readme
 - Update Readme to show badge, documentation and tutorials
-- Add sphinx doctests to github actions
+- Add sphinx doctests to GitHub actions
 
 ### [0.3.41] - 2022-05-25
 - Updated homepage of the documentation
-- Added versioning to RTD. (NOT FINAL. CHECKS VERSIONS FROM GIT WHICH… 
+- Added versioning to RTD. (NOT FINAL. CHECKS VERSIONS FROM GIT WHICH…)
 - Added blank tutorial pages
 - Updated sidebar toc tree structure 
-- Added doctests to quicktutorial
+- Added doctests to quick tutorial
 - dded sphinx.ext.doctest
-- Updated create_docs to include new _autosummary directory and create doctest
+- Updated create_docs to include new `_autosummary` directory and create doctest
 
 ### [0.3.40] - 2022-05-20
 - Fix styling and refactor in order to pass flake8 checks
@@ -391,11 +394,11 @@ in HTML._validate_path()
 - Change Markdown parser to myst-parser
 - Add `quickstart.rst`
 - Add reading `.md` files for changelog
-- Seperate `installation.rst`
+- Separate `installation.rst`
 
 ### [0.3.38] - 2022-05-19
 - Configure sphinx for generating proper API reference
-- Create general docs outline, add generated autosummary rst files in ignore files
+- Create general docs outline, add generated `autosummary` rst files in ignore files
 
 ### [0.3.37] - 2022-05-16
 - Added docstrings and type hints to modules
@@ -506,7 +509,7 @@ in HTML._validate_path()
 - Fixed the issue of local running the tests
 
 ### [0.3.9a23] - 2021-09-01
-- LаzyDict.__getitem__ returns None, if reading the document fails
+- `LаzyDict.__getitem__` returns None, if reading the document fails
 - Define the return value type 
 
 ### [0.3.9a22] - 2021-08-31
@@ -544,13 +547,13 @@ search_text, extract_area_words of Page
 - Add tests for Page (90% coverage)
 
 ### [0.3.9a12] - 2021-08-20
-- Correct tag euclidean distance method by changing the private variables into public
+- Correct tag Euclidean distance method by changing the private variables into public
 
 ### [0.3.9a11] - 2021-08-18
 - Added missing test methods for Tag, utils, Cell, AreaField, Document, and Field (89% coverage). 
 
 ### [0.3.9a10] - 2021-08-16
-- Fix tag euclidean distance method
+- Fix tag Euclidean distance method
 
 ### [0.3.9a9] - 2021-08-13
 - Added area argument to page.search_text() to specify scope
@@ -581,7 +584,7 @@ search_text, extract_area_words of Page
 
 ### [0.3.9a2] - 2021-08-08
 - page.search_text() did not find certain substrings present in page.free_form_text(). Found two reasons for this behavior.
-  * The list of ocr-data passed to find_frirst_word_coord was page.ocr('words'), which has the entries sorted by word_id. This makes the sort flag of the function obsolete, and second it leads to cases in which the coordinates of sub-strings from page.free_form_text() cannot be found using the function the order of the words in page.free_form_text() is unrelated to word_id. 
+  * The list of ocr-data passed to `find_frirst_word_coord` was page.ocr('words'), which has the entries sorted by word_id. This makes the sort flag of the function obsolete, and second it leads to cases in which the coordinates of sub-strings from page.free_form_text() cannot be found using the function the order of the words in page.free_form_text() is unrelated to word_id. 
     For example a sub-string of page.free_form_text() might be “brown fox” with the word_id of “brown” being equal to 3 and “fox” being equal to 8. In this case find_first_word_coords would not find the coordinates, as it would break the for-loop as the word with word_id 4 is not “fox”.
     This behavior was fixed by passing the ocr data in the same order as in page.free_form_text(), still giving the option to sort it by word_id using the sort-flag.
   * Inside the find_first_word_coord function the words of the sub-string were always put through a cleanup regex before being compared to the ocr_text (which was not cleaned up if the clean-flag was set to false). This leads to cases in which a sub-string such as “Phone: 12345” would not be found as “Phone:” would be cleaned up to “Phone”. 
@@ -611,7 +614,7 @@ search_text, extract_area_words of Page
 - AreaField will raise a warning if the input value field is not a string and set it to empty string (if the field has no tags)
 
 ### [0.3.7a8] - 2021-05-30
-- Fix AreaField.value
+- Fix `AreaField.value`
 
 ### [0.3.7a7] - 2021-05-26
 - Fix get item in lazy_dict (required path)
@@ -632,7 +635,7 @@ search_text, extract_area_words of Page
 - Add execute_genie_v2 for executing genie with airflow
 
 ### [0.3.7a1] - 2021-05-08
-- Page object uses absolute path and allows lazyloading from cloud (all tests pass)
+- Page object uses absolute path and allows lazy-loading from cloud (all tests pass)
 - Adjust all filename conventions to work with original image/ocr storage name conventions
 
 ### [0.3.6] - 2021-03-29
@@ -643,9 +646,9 @@ search_text, extract_area_words of Page
 
 ### [0.3.6a3] - 2021-03-05
 - Add margin to table cells in TableTag._build_cell
-- Fix ordering information in digestor
+- Fix ordering information in digester
 - Fix typing annotation for OrderedDict output
-- Change document.x and document.y into OrderedDict, use global ordering in digestor
+- Change document.x and document.y into OrderedDict, use global ordering in digester
 
 ### [0.3.6a2] - 2021-02-24
 - Add tests for Tag/ExtractionTag (coverage 87%)
@@ -668,10 +671,10 @@ search_text, extract_area_words of Page
 - Update tests for storage
 
 ### [0.3.1a4] - 2021-02-03
-- Add threading to SnaphotBuilder
+- Add threading to `SnaphotBuilder`
 
 ### [0.3.1a3] - 2021-02-02
-- Fix test_digestor.py to work with the correct document bson file
+- Fix `test_digestor.py` to work with the correct document bson file
 - All tests pass (82% coverage)
 
 ### [0.3.1a2] - 2021-02-02
@@ -684,7 +687,7 @@ search_text, extract_area_words of Page
 
 ### [0.3.1a0] - 2021-01-28
 - Add unittest for Document.from_dict
-- Optimize digestor output_fields lookup
+- Optimize digester output_fields lookup
 - Add stick_coords option to Page.get_ocr_formatted
 - Add opencv requirement
 
@@ -692,10 +695,10 @@ search_text, extract_area_words of Page
 - Assign document in `execute_genie` when calling `model.predict`
 
 ### [0.3.0b19] - 2021-01-12
-- Assigning recipe output fields in digestor for better performance
+- Assigning recipe output fields in digester for better performance
 
 ### [0.3.0b18] - 2021-01-06
-- Update digestor to set id-s of the original fields from the blueprint 
+- Update digester to set id-s of the original fields from the blueprint 
 - Change `document.tag` imports to relative
 
 ### [0.3.0b17] - 2021-01-03
@@ -750,7 +753,7 @@ search_text, extract_area_words of Page
 - Fix SnapshotBuilder to work with new Snapshot class
 - Remove FieldMapping from DocumentBuilder, use a separate module instead
 - Snapshot uses lazy_dict for reading individual documents
-- Use tempfile module in model.py
+- Use `tempfile` module in model.py
 - Add doc_file (document.json) to SnapStorageEnum
 - Add AreaField to `field.__init__`
 - Add to_dict and from_dict methods to Document class
@@ -770,7 +773,7 @@ search_text, extract_area_words of Page
 
 ### [0.3.0b3] - 2020-12-28
 - Add script for building sphinx docs
-- Minor docstring changes to Tag hshift and vshift methods
+- Minor docstring changes to Tag `hshift` and `vshift` methods
 - SnapshotBuilder.DB added only on function call, to speed up module imports
 - Add a single doctest to TextField constructor
 - Add simplejson to requirements 
@@ -813,7 +816,7 @@ search_text, extract_area_words of Page
 - Fix srcFieldId log in Document.get_fields_by_id to print field id instead of the whole field
 
 ### [0.2.3] - 2020-11-27
-- Fix src_field_id issue in digestor.py
+- Fix src_field_id issue in `digestor.py`
 
 ### [0.2.2.a7] - 2020-11-27
 - All tests are fixed and running
@@ -862,7 +865,7 @@ search_text, extract_area_words of Page
 - Always remove snapshot zip before creating a new one
 
 ### [0.2.0.a11] - 2020-09-06
-- Update digestor template check
+- Update digester template check
 
 ### [0.2.0.a10] - 2020-08-20
 - Use proper relative_path in populate_pages
@@ -908,8 +911,8 @@ search_text, extract_area_words of Page
 - Add digest_results function
 - Add Storage abstract class
 - Add to_dict methods in ExtractionTag and TextField
-- Add IqFieldKeyEnum and add to_dict abstractmethods in Tag and Field abstract classes
-- Update readme to use nosetests command
+- Add IqFieldKeyEnum and add to_dict `abstractmethods` in Tag and Field abstract classes
+- Update readme to use `nosetests` command
 - Add abstract method decorators to methods in Tag, Field and Model abstract classes
 - Make package exclusion dynamic in setup.py
 
@@ -974,12 +977,12 @@ search_text, extract_area_words of Page
 - Improve log format
 - Redefine Snapshot, return traceback if rest.app fails
 - Store images and ocr with snapshot
-- Change pymongo to pymongo[srv] in requirements, fix DB name splitting in iq.__init__
+- Change pymongo to pymongo[srv] in requirements, fix DB name splitting in `iq.__init__`
 - Remove db dependency from documents
 - Rename Snapshot to DataSnapshot, Pipeline to DataPipeline, Recipe to DataRecipe
 - Add test for DocumentDataclass
 - add load_bson_by_path in utils
-- Add document and recipe bsons to test resources
+- Add document and recipe `bsons` to test resources
 
 ### [0.1.2.alpha] - 2020-06-10
  - Use rest endpoint for get_data in DataSnap
@@ -1008,7 +1011,7 @@ search_text, extract_area_words of Page
 - Add DATASET_TYPE to DataSnap
 
 ### [0.1.0] - 2020-05-28
-- Allow to import dataset types from pycognaize.datasets
+- Allow to import dataset types from `pycognaize.datasets`
 - Add DataSnap
 - Refactor the package structure
 
