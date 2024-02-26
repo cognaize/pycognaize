@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+## [1.4.38] - 2024-02-25
+- Add `Document.get_layout_text` method
+
 ### [1.4.37] - 2024-02-23
 - Add `Genie` for easy model testing
 
