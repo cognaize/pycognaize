@@ -593,7 +593,8 @@ class Document:
         else:
             storage_config = None
 
-        pdf_path = os.path.join(self.pages[1].path, self.document_src) + '.pdf'
+        pdf_path = os.path.join(self.pages[1].path,
+                                self.document_src) + '.pdf'
 
         storage = get_storage(pdf_path, config=storage_config)
 
@@ -622,7 +623,8 @@ class Document:
         return pdf_bytes
 
     @staticmethod
-    def _get_page_text_from_layout_info(layout_fields_on_page: list[Field]) -> str:
+    def _get_page_text_from_layout_info(
+            layout_fields_on_page: list[Field]) -> str:
         text = ""
         for field in layout_fields_on_page:
             if not field.tags:
@@ -658,7 +660,8 @@ class Document:
         elif field_type == "output":
             fields_by_python_name = self.y.items()
         elif field_type == "both":
-            fields_by_python_name = itertools.chain(self.x.items(), self.y.items())
+            fields_by_python_name = itertools.chain(
+                self.x.items(), self.y.items())
         else:
             raise ValueError(f"Unknown field type {field_type}")
         for python_name, fields in fields_by_python_name:
@@ -667,9 +670,9 @@ class Document:
                     continue
                 if len(field.tags) > 1:
                     logging.warning(
-                        f"Skipping field. A layout field should not have more than"
-                        f" one tag (python name: {python_name}, field name:"
-                        f" {field.name}, tags: {field.tags})")
+                        f"Skipping field. A layout field should not have more"
+                        f" than one tag (python name: {python_name}, field"
+                        f" name: {field.name}, tags: {field.tags})")
                     continue
                 if field.tags[0].page.page_number != page.page_number:
                     continue
