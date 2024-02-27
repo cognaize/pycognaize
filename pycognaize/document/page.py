@@ -449,12 +449,30 @@ class Page:
             raise ValueError(
                 f"Top ({top}) cannot be equal to bottom ({bottom})")
 
+    @staticmethod
+    def extract_words_in_tag_area(area_tag,
+                                  return_tags: bool = False,
+                                  line_by_line: bool = True) -> Optional[list]:
+        page = area_tag.page
+        left = area_tag.left * page.image_width / 100
+        right = area_tag.right * page.image_width / 100
+        top = area_tag.top * page.image_height / 100
+        bottom = area_tag.bottom * page.image_height / 100
+        return page.extract_area_words(left=left,
+                                       top=top,
+                                       right=right,
+                                       bottom=bottom,
+                                       return_tags=return_tags,
+                                       line_by_line=line_by_line)
+
     def extract_area_words(self, left: [int, float],
                            right: [int, float],
                            top: [int, float],
                            bottom: [int, float],
                            threshold: float = 0.5,
-                           return_tags: bool = False) -> Optional[list]:
+                           return_tags: bool = False,
+                           line_by_line: bool = False,
+                           ) -> Optional[list]:
         """Finds the words on the page which are included in the area
             resulted from given coordinates.
 
@@ -466,6 +484,8 @@ class Page:
         :param bottom: bottom coordinate
         :param return_tags: if True, returns tags of the words
             embedded in given area
+        :param line_by_line: if True, returns a list of lists,
+            where each nested list is a line
         :return: list of words, each element in the list is dictionary
             representing the coordinates, ocr_text of word, and word_id_number
         """
@@ -474,26 +494,33 @@ class Page:
         self._validate_box_coordinates(
             left=left, right=right, top=top, bottom=bottom)
         word_list = []
-        ocr_words = [word for line in self.lines for word in line]
-        for word in ocr_words:
-            if intersects(word,
-                          left=left,
-                          right=right,
-                          top=top,
-                          bottom=bottom):
-                intersect_area = compute_intersection_area(word,
-                                                           left=left,
-                                                           right=right,
-                                                           top=top,
-                                                           bottom=bottom)
-                word_area = (word['right'] - word['left']
-                             ) * (word['bottom'] - word['top'])
-                ratio = float(intersect_area / word_area)
-                if ratio > threshold:
-                    if return_tags:
-                        word_list.append(self.word_to_extraction_tag(word))
-                    else:
-                        word_list.append(word)
+        for line in self.lines:
+            line_list = []
+            for word in line:
+                if intersects(word,
+                              left=left,
+                              right=right,
+                              top=top,
+                              bottom=bottom):
+                    intersect_area = compute_intersection_area(
+                        word,
+                        left=left,
+                        right=right,
+                        top=top,
+                        bottom=bottom)
+                    word_area = (word['right'] - word['left']
+                                 ) * (word['bottom'] - word['top'])
+                    ratio = float(intersect_area / word_area)
+                    if ratio > threshold:
+                        if return_tags:
+                            line_list.append(
+                                self.word_to_extraction_tag(word))
+                        else:
+                            line_list.append(word)
+            if line_by_line:
+                word_list.append(line_list)
+            else:
+                word_list.extend(line_list)
         return word_list
 
     @staticmethod

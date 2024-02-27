@@ -1,7 +1,11 @@
+import sys
 import itertools
 import unicodedata
 from typing import Optional, Dict, List, Type, Union
-
+if sys.version_info < (3, 11):
+    from typing_extensions import Self
+else:
+    from typing import Self
 import logging
 
 
@@ -125,6 +129,15 @@ class TableField(Field):
             IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.table.value
         field_dict[IqFieldKeyEnum.value.value] = ''
         return field_dict
+
+    @classmethod
+    def parse_table(cls, table_field: Self):
+        df = table_field.tags[0].df
+        new_header = df.iloc[0]  # grab the first row for the header
+        df = df[1:]  # take the data less the header row
+        df.columns = new_header  # set the header row as the df header
+        df_text = df.to_markdown(index=False)
+        return df_text
 
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.name}>"
