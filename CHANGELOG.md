@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+## [1.4.39] - 2024-02-27
+- Handle tables in `Document.get_layout_text`
+
 ## [1.4.38] - 2024-02-25
 - Add `Document.get_layout_text` method
 

@@ -624,28 +624,40 @@ class Document:
 
     @staticmethod
     def _get_page_text_from_layout_info(
-            layout_fields_on_page: list[Field]) -> str:
+            layout_fields_on_page: list[Field],
+            table_parser: Callable
+    ) -> str:
         text = ""
         for field in layout_fields_on_page:
             if not field.tags:
                 continue
-            area_tag: ExtractionTag = sum(field.tags)
-            area_tag.page.extract_area_words(left=area_tag.left,
-                                             top=area_tag.top,
-                                             right=area_tag.right,
-                                             bottom=area_tag.bottom,
-                                             return_tags=True)
-            text += area_tag.raw_ocr_value + "\n"
+            if isinstance(field, TableField):
+                text += table_parser(field)
+            else:
+                area_tag: ExtractionTag = sum(field.tags)
+                lines = area_tag.page.extract_words_in_tag_area(
+                    area_tag=area_tag,
+                    return_tags=False, line_by_line=True)
+                for line in lines:
+                    if not line:
+                        continue
+                    for word in line:
+                        text += " " + word['ocr_text']
+                    text += "\n"
         return text
 
     @classmethod
     def _get_document_text_from_layout_info(
             cls,
-            layout_fields_on_page: dict[int, list[Field]]) -> str:
+            layout_fields_on_page: dict[int, list[Field]],
+            table_parser: Callable
+    ) -> list[str]:
         layout_fields_on_page = sorted(layout_fields_on_page.items(),
                                        key=lambda item: item[0])
-        return "\n\n".join([cls._get_page_text_from_layout_info(page_fields)
-                            for page_n, page_fields in layout_fields_on_page])
+        return [
+            cls._get_page_text_from_layout_info(page_fields,
+                                                table_parser=table_parser)
+            for page_n, page_fields in layout_fields_on_page]
 
     def _get_layout_fields_for_page(
             self,
@@ -666,7 +678,7 @@ class Document:
             raise ValueError(f"Unknown field type {field_type}")
         for python_name, fields in fields_by_python_name:
             for field in fields:
-                if not field.tags or not field_filter(field):
+                if not field.tags or not field_filter(python_name, field):
                     continue
                 if len(field.tags) > 1:
                     logging.warning(
@@ -684,8 +696,7 @@ class Document:
     def get_layout_fields(
             self,
             field_type: Literal["input", "output", "both"],
-            field_filter: Callable = lambda x: x.name not in (
-                    'table', 'tables__table'),
+            field_filter: Callable = lambda pname, field: True,
             sorting_function: Optional[Callable] = None):
         return {
             page_n: self._get_layout_fields_for_page(
@@ -700,14 +711,41 @@ class Document:
     def get_layout_text(
             self,
             field_type: Literal["input", "output", "both"],
-            field_filter: Callable = lambda x: x.name not in (
-                    'table', 'tables__table'),
-            sorting_function: Optional[Callable] = None):
+            field_filter: Callable = lambda pname, field: True,
+            sorting_function: Optional[Callable] = None,
+            table_parser: Callable = TableField.parse_table
+    ) -> list[str]:
+        """
+        Sample usage:
+        ```
+            doc = Document.fetch_document(recipe_id="649a7c0180d898001055a354",
+                                  doc_id="65db38f7dc54d400119ae1f3")
+
+            def parse_table(table_field: TableField) -> str:
+                df = table_field.tags[0].df
+                new_header = df.iloc[0]
+                df = df[1:]
+                df.columns = new_header
+                df_text = df.to_markdown(index=False)
+                return df_text
+
+            doc_text = doc.get_layout_text(
+                field_type="both",
+                field_filter=lambda pname, field: pname != 'table',
+                sorting_function=lambda x: (x.tags[0].top, x.tags[0].left),
+                table_parser=parse_table)
+
+            for page_number, page_text in enumerate(doc_text, start=1):
+                print(f"---------PAGE {page_number}---------------\n")
+                print(page_text)
+        ```
+        """
         return self._get_document_text_from_layout_info(
             layout_fields_on_page=self.get_layout_fields(
                 field_type=field_type,
                 field_filter=field_filter,
-                sorting_function=sorting_function)
+                sorting_function=sorting_function),
+            table_parser=table_parser
         )
 
 
