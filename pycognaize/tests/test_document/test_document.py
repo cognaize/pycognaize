@@ -7,18 +7,23 @@ import uuid
 from collections import OrderedDict
 from copy import deepcopy
 
+import bs4.element
 import pandas as pd
 
 import pycognaize
 from pycognaize.common.enums import EnvConfigEnum, FieldTypeEnum
 from pycognaize.document import Page, Document
 from pycognaize.document.field.field import Field
+from pycognaize.document.tag.html_tag import HTMLTag
+from pycognaize.document.html_info import HTML
 from pycognaize.tests.resources import RESOURCE_FOLDER
 
 
 class TestDocument(unittest.TestCase):
     ORIGINAL_SNAPSHOT_PATH = os.environ.get(EnvConfigEnum.SNAPSHOT_PATH.value)
     SNAPSHOT_PATH = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
+    XBRL_SNAPSHOT_PATH = os.path.join(RESOURCE_FOLDER, 'snapshots')
+    XBRL_SNAPSHOT_ID = '63dfb66b7861050010cd64b5'
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -34,12 +39,20 @@ class TestDocument(unittest.TestCase):
         with open(RESOURCE_FOLDER + '/snapshots/5eb8ee1c6623f200192a0651/document.json', encoding="utf8") as document_json:
             cls.data2 = json.load(document_json)
 
+        with open(os.path.join(cls.XBRL_SNAPSHOT_PATH, cls.XBRL_SNAPSHOT_ID, 'document.json')) as document_json:
+            cls.data3 = json.load(document_json)
+
+        cls.html = HTML(path=cls.XBRL_SNAPSHOT_PATH, document_id=cls.XBRL_SNAPSHOT_ID)
+
         cls.snap_path = os.path.join(cls.SNAPSHOT_PATH, 'sample_snapshot_1', str(cls.data['metadata']['document_id']))
 
         shutil.copytree(RESOURCE_FOLDER + '/snapshots/60f554497883ab0013d9d906/', cls.snap_path)
 
     def setUp(self) -> None:
         self.document = Document.from_dict(self.data, data_path=self.snap_path)
+        self.xbrl_document = Document.from_dict(
+            self.data3, data_path=os.path.join(self.XBRL_SNAPSHOT_PATH, self.XBRL_SNAPSHOT_ID)
+        )
         self.Field = Field
         self.doc_src = self.data['metadata']['src']
         self.recipe_x = self.data['input_fields'].keys()
@@ -49,6 +62,12 @@ class TestDocument(unittest.TestCase):
         self.data2[input_fields] = {
             table: self.data2[input_fields][table]
         }
+        self.html_tag_dict = deepcopy(
+            self.data3['output_fields']['v_lease_right_of_use_asset_bs__previous'][0]['tags'][0]
+        )
+
+        self.html_tag = HTMLTag.construct_from_raw(self.html_tag_dict, html=self.html)
+
         self.document2 = Document.from_dict(
             self.data2,
             data_path=RESOURCE_FOLDER + '/snapshots/5eb8ee1c6623f200192a0651')
@@ -246,6 +265,11 @@ class TestDocument(unittest.TestCase):
 
     def test_load_page_images(self):
         self.assertIsNone(self.document.load_page_images())
+
+    def test_find_html_elements(self):
+        els = self.xbrl_document.find_html_elements(tag=self.html_tag)
+        for e in els:
+            self.assertIsInstance(e, bs4.element.Tag)
 
     @classmethod
     def tearDownClass(cls) -> None:
