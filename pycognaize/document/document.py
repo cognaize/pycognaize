@@ -9,6 +9,7 @@ import os
 import platform
 from collections import OrderedDict
 from typing import Dict, List, Tuple, Any, Optional, Callable, Union, Literal
+import bs4
 
 import fitz
 import pandas as pd
@@ -23,6 +24,7 @@ from pycognaize.common.field_collection import FieldCollection
 from pycognaize.document.field import FieldMapping, TableField
 from pycognaize.document.field.field import Field
 from pycognaize.document.html_info import HTML
+from pycognaize.document.tag.html_tag import HTMLTag
 from pycognaize.document.page import Page
 from pycognaize.document.tag import TableTag, ExtractionTag
 from pycognaize.document.tag.cell import Cell
@@ -747,6 +749,15 @@ class Document:
                 sorting_function=sorting_function),
             table_parser=table_parser
         )
+
+    def find_html_elements(self, tag: HTMLTag) -> list[bs4.element.Tag]:
+        """
+        Finds HTML elements based on tag IDs.
+
+        :param tag: HTMLTag object representing the tag IDs.
+        :return: list[bs4.element.Tag]: List of BeautifulSoup Tag elements.
+        """
+        return [self.html.html_soup.find('td', attrs={"id": i}) for i in tag.html_id]
 
 
 def annotate_pdf(doc: fitz.Document,
