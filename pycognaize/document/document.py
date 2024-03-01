@@ -757,7 +757,8 @@ class Document:
         :param tag: HTMLTag object representing the tag IDs.
         :return: list[bs4.element.Tag]: List of BeautifulSoup Tag elements.
         """
-        return [self.html.html_soup.find('td', attrs={"id": i}) for i in tag.html_id]
+        return [self.html.html_soup.find(
+            'td', attrs={"id": i}) for i in tag.html_id]
 
 
 def annotate_pdf(doc: fitz.Document,
