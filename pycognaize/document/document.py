@@ -761,7 +761,8 @@ class Document:
             return [self.html.html_soup.find(
                 'td', attrs={"id": i}) for i in tag.html_id]
         else:
-            logger.warning('The document should be XBRL. Returning an empty list')
+            logger.warning('The document should be XBRL. Returning an empty '
+                           'list')
             return []
 
 
