@@ -15,3 +15,4 @@ anytree
 tabulate
 cloudpathlib[s3]~=0.16.0
 pyarrow
+loguru==0.7.2
