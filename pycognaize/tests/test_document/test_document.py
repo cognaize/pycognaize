@@ -268,8 +268,10 @@ class TestDocument(unittest.TestCase):
 
     def test_find_html_elements(self):
         els = self.xbrl_document.find_html_elements(tag=self.html_tag)
+        empty_ls = self.document.find_html_elements(tag=self.html_tag)
         for e in els:
             self.assertIsInstance(e, bs4.element.Tag)
+        self.assertEqual(empty_ls, [])
 
     @classmethod
     def tearDownClass(cls) -> None:

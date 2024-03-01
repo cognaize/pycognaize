@@ -10,7 +10,7 @@ import platform
 from collections import OrderedDict
 from typing import Dict, List, Tuple, Any, Optional, Callable, Union, Literal
 import bs4
-
+from loguru import logger
 import fitz
 import pandas as pd
 import requests
@@ -757,8 +757,12 @@ class Document:
         :param tag: HTMLTag object representing the tag IDs.
         :return: list[bs4.element.Tag]: List of BeautifulSoup Tag elements.
         """
-        return [self.html.html_soup.find(
-            'td', attrs={"id": i}) for i in tag.html_id]
+        if self.is_xbrl:
+            return [self.html.html_soup.find(
+                'td', attrs={"id": i}) for i in tag.html_id]
+        else:
+            logger.warning('The document should be XBRL. Returning an empty list')
+            return []
 
 
 def annotate_pdf(doc: fitz.Document,
