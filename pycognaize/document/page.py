@@ -602,16 +602,25 @@ class Page:
             img = self.draw_ocr_boxes(img=img)
         if draw_ocr_text:
             img = self.draw_ocr_text(img=img)
-
-        draw_on_image = img if draw_on_image else None
         if size <= 0:
             raise ValueError(
                 f"`size` argument must have a positive integer value,"
                 f" got: {size}")
+        w = self.image_width
+        h = self.image_height
         for field in fields:
             for tag in field.tags:
-                if self.page_number == tag.page_number:
-                    img = tag.draw(draw_on_image)
+                if self.page_number != tag.page.page_number:
+                    continue
+                left = tag.left * w / 100
+                right = tag.right * w / 100
+                top = tag.top * h / 100
+                bottom = tag.bottom * h / 100
+                img = self.draw_rectangle(img,
+                                          left=left,
+                                          top=top,
+                                          right=right,
+                                          bottom=bottom)
         if preview:
             preview_img(img, size=size)
         if save:

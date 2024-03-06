@@ -41,6 +41,7 @@ class EnvConfigEnum(enum.Enum):
     SNAPSHOT_ID = 'SNAPSHOT_ID'
     SNAPSHOT_PATH = "SNAPSHOT_PATH"  # Images, OCR and snap.json
     HOST = "API_HOST"
+    X_AUTH = "X_AUTH_TOKEN"
 
 
 class IqCollectionEnum(enum.Enum):

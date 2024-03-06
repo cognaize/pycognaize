@@ -17,7 +17,7 @@ from fitz.utils import getColor, getColorList
 from requests.adapters import HTTPAdapter, Retry
 
 from pycognaize.common.classification_labels import ClassificationLabels
-from pycognaize.common.enums import ApiConfigEnum
+from pycognaize.common.enums import ApiConfigEnum, EnvConfigEnum
 from pycognaize.common.enums import IqDocumentKeysEnum, FieldTypeEnum
 from pycognaize.common.field_collection import FieldCollection
 from pycognaize.document.field import FieldMapping, TableField
@@ -67,27 +67,34 @@ class Document:
         return self._y
 
     @staticmethod
-    def __create_and_get_task_id(document_id: str, recipe_id: str) -> str:
+    def __create_and_get_task_id(document_id: str, recipe_id: str,
+                                 api_host: str, x_auth: str) -> str:
         """Create a modeltask object in the database given a document
          id and recipe id"""
-        url = os.environ.get('API_HOST') + \
-            ApiConfigEnum.CREATE_TASK_ENDPOINT.value
+        url = api_host + ApiConfigEnum.CREATE_TASK_ENDPOINT.value
         payload = "{\"documentId\": \"%s\",\n \"recipeId\": \"%s\"\n}\n" \
                   % (document_id, recipe_id)
-        headers = {'x-auth': os.environ.get('X_AUTH_TOKEN'),
+        headers = {'x-auth': x_auth,
                    'content-type': "application/json"}
-        return requests.request("POST", url, data=payload,
-                                headers=headers).json()['taskId']
+        response = requests.request("POST", url, data=payload,
+                                    headers=headers)
+        response.raise_for_status()
+        response_json = response.json()
+        if 'taskId' not in response_json:
+            raise ValueError(f"No task ID found in response: {response_json}"
+                             f" (url: {url})")
+        return response_json['taskId']
 
     @staticmethod
-    def __get_document_by_task_id(task_id: str):
+    def __get_document_by_task_id(task_id: str,
+                                  api_host: str, x_auth: str):
         """Given a task, return a document object"""
         session = requests.Session()
         session.mount('http://', HTTPAdapter(max_retries=RETRY_ADAPTER))
         session.mount('https://', HTTPAdapter(max_retries=RETRY_ADAPTER))
-        session.headers = {'x-auth': os.environ.get('X_AUTH_TOKEN')}
+        session.headers = {'x-auth': x_auth}
         get_response: requests.Response = \
-            session.get(os.environ.get('API_HOST') +
+            session.get(api_host +
                         ApiConfigEnum.RUN_MODEL_ENDPOINT.value +
                         '/' + task_id, verify=False,
                         timeout=ApiConfigEnum.DEFAULT_TIMEOUT.value)
@@ -129,12 +136,37 @@ class Document:
         return self._html_info
 
     @classmethod
-    def fetch_document(cls, recipe_id, doc_id):
-        """Get the document object, given a document id and recipe id"""
+    def fetch_document(cls, recipe_id, doc_id,
+                       api_host: Optional[str] = None,
+                       x_auth: Optional[str] = None):
+        """
+        Get the document object, given a document id and recipe id
+
+        :param recipe_id: ID of the document AI
+            (the second ID in the url)
+        :param doc_id: ID of the document
+            (the ID in the annotation view URL of the document)
+        :param api_host: https://<ENVIRONMENT NAME>-api.cognaize.com.
+            If not provided will default to the environment variable "API_HOST"
+        :param x_auth: X-Authorization token
+            If not provided will default to the environment variable "X_AUTH_TOKEN"
+        """
+        api_host = api_host or os.environ[EnvConfigEnum.HOST.value]
+        x_auth = x_auth or os.environ[EnvConfigEnum.X_AUTH.value]
+        if api_host is None:
+            raise ValueError('No API host provided')
+        if x_auth is None:
+            raise ValueError('No X-Authorization token provided')
+        api_host = api_host.rstrip('/')
         task_id = cls.__create_and_get_task_id(document_id=doc_id,
-                                               recipe_id=recipe_id)
-        doc_data_path, document_json = \
-            cls.__get_document_by_task_id(task_id=task_id)
+                                               recipe_id=recipe_id,
+                                               api_host=api_host,
+                                               x_auth=x_auth,
+                                               )
+        doc_data_path, document_json = cls.__get_document_by_task_id(
+            task_id=task_id,
+            api_host=api_host,
+            x_auth=x_auth)
         document = Document.from_dict(document_json,
                                       data_path=doc_data_path)
         return document
