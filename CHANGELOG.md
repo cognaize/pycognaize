@@ -2,6 +2,14 @@
 
 ## [1.4]
 
+## [1.4.40] - 2024-03-6
+- Improve `Document.fetch_document`
+  - Add option to provide token and api url as parameters
+  - Raise if env variables are missing
+  - Raise if response is invalid
+  - Handle trailing forward slashes in url
+- Fix `Page.draw`
+
 ## [1.4.39] - 2024-02-27
 - Handle tables in `Document.get_layout_text`
 
