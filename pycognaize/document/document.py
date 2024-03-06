@@ -147,9 +147,11 @@ class Document:
         :param doc_id: ID of the document
             (the ID in the annotation view URL of the document)
         :param api_host: https://<ENVIRONMENT NAME>-api.cognaize.com.
-            If not provided will default to the environment variable "API_HOST"
+            If not provided will default to the environment variable
+             "API_HOST"
         :param x_auth: X-Authorization token
-            If not provided will default to the environment variable "X_AUTH_TOKEN"
+            If not provided will default to the environment variable
+             "X_AUTH_TOKEN"
         """
         api_host = api_host or os.environ[EnvConfigEnum.HOST.value]
         x_auth = x_auth or os.environ[EnvConfigEnum.X_AUTH.value]
