@@ -23,6 +23,7 @@ class TestSectionField(unittest.TestCase):
         self.pages = {page_n: create_dummy_page(page_n=page_n,
                                                 path=self.snap_storage_path)}
         self.section_field = SectionField.construct_from_raw(self.raw_section, self.pages)
+        self.section_field_without_tags = SectionField(name="field")
 
     def test_construct_from_raw(self):
         self.assertEqual(self.section_field.name, 'Section')
@@ -42,6 +43,7 @@ class TestSectionField(unittest.TestCase):
         self.assertAlmostEqual(start._left, 0.0)
         self.assertAlmostEqual(start._height, 0.15)
         self.assertAlmostEqual(start._width, 100.0)
+        self.assertIsNone(self.section_field_without_tags.start)
 
     def test_end(self):
         end = self.section_field.end
@@ -49,6 +51,7 @@ class TestSectionField(unittest.TestCase):
         self.assertAlmostEqual(end._left, 0.0)
         self.assertAlmostEqual(end._height, 0.15)
         self.assertAlmostEqual(end._width, 100.0)
+        self.assertIsNone(self.section_field_without_tags.end)
 
     def test___repr__(self):
         self.assertEqual(repr(self.section_field),
