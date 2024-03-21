@@ -1,3 +1,6 @@
+"""
+|This code provides a foundation for handling numeric fields
+"""
 import logging
 import math
 from typing import List, Optional, Dict, Type
@@ -32,6 +35,20 @@ class NumericField(Field):
                  group_name: str = None,
                  scale: int = None
                  ):
+        """
+        Initialize a NumericField object.
+
+        :param name: Name of the field.
+        :param value: Value of the field.
+        :param calculated_value: Calculated value of the field.
+        :param tags: List of tag objects defining the boundaries of the field.
+        :param field_id: The unique identifier of the field.
+        :param group_key: Key used for grouping related fields.
+        :param confidence: Confidence level associated with the extracted data.
+        :param group_name: Name of the group to which the field belongs.
+        :param scale: Scale of the numeric value.
+        """
+        
         super().__init__(name=name, tags=tags, value=value,
                          group_key=group_key, confidence=confidence,
                          group_name=group_name)
@@ -77,7 +94,16 @@ class NumericField(Field):
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
                            html: Optional[HTML] = None,
                            labels=None) -> 'NumericField':
-        """Create NumericField object from dictionary"""
+                               
+        """Create NumericField object from dictionary
+
+        :param raw: Dictionary containing raw data for the NumericField.
+        :param pages: Dictionary containing Page objects.
+        :param html: Optional HTML object containing HTML information.
+        :param labels: Optional classification labels associated with the field.
+        :return: NumericField object.
+        """
+    
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:
@@ -106,7 +132,11 @@ class NumericField(Field):
 
     @staticmethod
     def convert_to_numeric(value):
-        """converts string value to numeric"""
+        """converts string value to numeric
+        
+        :param value: String value to convert.
+        :return: Numeric value.
+        """
         # noinspection PyBroadException
         try:
             value = float(value)
@@ -115,7 +145,10 @@ class NumericField(Field):
         return value
 
     def to_dict(self) -> dict:
-        """Converts NumericField object to dictionary"""
+        """Converts NumericField object to dictionary
+        
+        :return: Dictionary representing the NumericField object.
+        """
         field_dict = super().to_dict()
         field_dict[ID] = self._field_id
         field_dict[IqFieldKeyEnum.value.value] = self.value
