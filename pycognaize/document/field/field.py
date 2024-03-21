@@ -22,6 +22,19 @@ class Field(metaclass=abc.ABCMeta):
                  group_name: Optional[str] = None,
                  classification_labels: Optional[ClassificationLabels] = None
                  ):
+        """
+        Initialize a Field object.
+
+        :param name: Name of the field.
+        :param value: Value of the field.
+        :param tags: List of tag objects defining the boundaries of the field.
+        :param field_id: The unique identifier of the field.
+        :param group_key: Key used for grouping related fields.
+        :param confidence: Confidence level associated with the extracted data.
+        :param group_name: Name of the group to which the field belongs.
+        :param classification_labels: Optional classification labels associated with the field.
+        """
+        # Initialize field properties             
         self._raw_value = value
         self._confidence = confidence
         if group_key is None:
@@ -39,8 +52,10 @@ class Field(metaclass=abc.ABCMeta):
         self._field_id = field_id
         self._classification_labels = classification_labels
 
+        # Initialize classes property
         self._classes = None
-
+                     
+    # Properties to access field attributes
     @property
     def raw_value(self):
         return self._raw_value
@@ -99,12 +114,23 @@ class Field(metaclass=abc.ABCMeta):
                            html: Optional[HTML] = None,
                            labels: ClassificationLabels = None)\
             -> 'Field':
-        """Use raw dictionary in order to recreate the Field python object"""
+        """
+        Use raw dictionary in order to recreate the Field python object
+        
+        :param raw: Dictionary containing raw data for the Field.
+        :param pages: Dictionary containing Page objects.
+        :param html: Optional HTML object containing HTML information.
+        :param labels: Optional ClassificationLabels object.
+        :return: Field object.
+        """
         pass
 
     @abc.abstractmethod
     def to_dict(self) -> dict:
-        """Return a dictionary representing the field object"""
+        """
+        Convert the Field object to a dictionary
+        Return a dictionary representing the field object
+        """
         field_dict = dict()
         field_dict[IqFieldKeyEnum.name.value] = self.name
         if self._group_key:
@@ -113,4 +139,5 @@ class Field(metaclass=abc.ABCMeta):
             field_dict[IqFieldKeyEnum.group.value] = self._group_name
         field_dict[IqFieldKeyEnum.tags.value] = [
             i.to_dict() for i in self.tags]
+        #Return a dictionary representing the field object
         return field_dict
