@@ -27,6 +27,17 @@ class DateField(Field):
                  confidence: Optional[float] = -1.0,
                  group_name: str = None
                  ):
+        """
+        Create a DateField object.
+
+        :param name: Name of the field.
+        :param value: Value of the field.
+        :param tags: List of tag objects defining the boundaries of the field.
+        :param field_id: The unique identifier of the field.
+        :param group_key: Key used for grouping related fields.
+        :param confidence: Confidence level associated with the extracted data.
+        :param group_name: Name of the group to which the field belongs.
+        """
         super().__init__(name=name, value=value, tags=tags,
                          group_key=group_key, confidence=confidence,
                          group_name=group_name)
@@ -47,7 +58,17 @@ class DateField(Field):
             cls, raw: dict, pages: Dict[int, Page],
             html: Optional[HTML] = None,
             labels=None) -> 'DateField':
-        """Create DateField object from dictionary"""
+                
+        """
+        Create DateField object from dictionary.
+
+        :param raw: Dictionary containing raw data for the DateField.
+        :param pages: Dictionary containing Page objects.
+        :param html: HTML object containing HTML information.
+        :param labels: Optional ClassificationLabels object.
+        :return: DateField object.
+        """
+                
         tag_dicts: List[dict] = raw[IqDocumentKeysEnum.tags.value]
         tags = []
         for i in tag_dicts:
@@ -63,6 +84,7 @@ class DateField(Field):
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                    group_name=raw.get(IqFieldKeyEnum.group.value, '')
                    )
+                
 
     def to_dict(self) -> dict:
         """Converts DateField object to dictionary"""
