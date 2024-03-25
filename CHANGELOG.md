@@ -2,6 +2,12 @@
 
 ## [1.4]
 
+## [1.4.41] - 2024-03-25
+
+- Improve `Snapshot.download`
+  - Download snapshot without login required
+
+
 ## [1.4.40] - 2024-03-6
 - Improve `Document.fetch_document`
   - Add option to provide token and api url as parameters
