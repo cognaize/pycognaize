@@ -50,7 +50,7 @@ class Snapshot:
         """Downloads snapshot to specified destination"""
         if require_login:
             if snapshot_root:
-                raise ValueError('The Snaphshot root must not be specified seperately')
+                raise ValueError('The Snaphshot root must not be specified separately')
             login_instance = Login()
             if not login_instance.logged_in:
                 raise AuthenthicationError()
