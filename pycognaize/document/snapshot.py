@@ -49,7 +49,7 @@ class Snapshot:
                  ) -> Tuple['Snapshot', str]:
         """Downloads snapshot to specified destination"""
         if require_login:
-            if snapshot_root:
+            if snapshot_root is not None:
                 raise ValueError('The Snaphshot root must not be specified separately')
             login_instance = Login()
             if not login_instance.logged_in:
