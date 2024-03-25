@@ -50,7 +50,7 @@ class Snapshot:
         """Downloads snapshot to specified destination"""
         if require_login:
             if snapshot_root is not None:
-                raise ValueError('The Snaphshot root must not be specified separately')
+                raise ValueError("The Snapshot root must not be specified")
             login_instance = Login()
             if not login_instance.logged_in:
                 raise AuthenthicationError()
@@ -58,7 +58,9 @@ class Snapshot:
             snapshot_path = login_instance.snapshot_root + "/" + snapshot_id
         else:
             if snapshot_root is None:
-                raise ValueError("Snapshot_root must be provided if you want to download the snapshot without logging "
+                raise ValueError("Snapshot_root must be provided "
+                                 "if you want to download the "
+                                 "snapshot without logging "
                                  "in")
             snapshot_path = snapshot_root + "/" + snapshot_id
         exclude = cls._get_exclude_patterns(
