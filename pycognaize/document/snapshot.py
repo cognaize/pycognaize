@@ -43,39 +43,43 @@ class Snapshot:
                  exclude_images: bool = False,
                  exclude_ocr: bool = False,
                  exclude_pdf: bool = False,
-                 exclude_html: bool = False
+                 exclude_html: bool = False,
+                 require_login: bool = True,
+                 snapshot_root: str = None
                  ) -> Tuple['Snapshot', str]:
         """Downloads snapshot to specified destination"""
-        login_instance = Login()
-
-        if login_instance.logged_in:
+        if require_login:
+            if snapshot_root:
+                raise ValueError('The snaphshot root must not be specified seperately')
+            login_instance = Login()
+            if not login_instance.logged_in:
+                raise AuthenthicationError()
+            # Use snapshot_root from login_instance if provided
             snapshot_path = login_instance.snapshot_root + "/" + snapshot_id
-
-            exclude = cls._get_exclude_patterns(
-                exclude_images=exclude_images,
-                exclude_ocr=exclude_ocr,
-                exclude_pdf=exclude_pdf,
-                exclude_html=exclude_html
-            )
-
-            downloader = SnapshotDownloader()
-
-            downloader.download(snapshot_path, destination_dir, exclude)
-
-            summary_hash = directory_summary_hash(destination_dir)
-            with open(os.path.join(destination_dir, HASH_FILE), 'w') as f:
-                f.write(summary_hash)
-
-            logging.info(f"Snapshot {snapshot_id} downloaded to "
-                         f"{destination_dir}. To use the snapshot, check our "
-                         f"documentation at: ",
-                         "http://pycognaize-docs.com."
-                         "s3-website.us-east-2.amazonaws.com")
-
-            return cls(path=snapshot_path), \
-                os.path.join(destination_dir, snapshot_id),
         else:
-            raise AuthenthicationError()
+            if snapshot_root is None:
+                raise ValueError("snapshot_root must be provided if you want to download the snapshot without logging in")
+            snapshot_path = snapshot_root + "/" + snapshot_id
+
+        exclude = cls._get_exclude_patterns(
+            exclude_images=exclude_images,
+            exclude_ocr=exclude_ocr,
+            exclude_pdf=exclude_pdf,
+            exclude_html=exclude_html
+        )
+        downloader = SnapshotDownloader()
+        downloader.download(snapshot_path, destination_dir, exclude)
+        summary_hash = directory_summary_hash(destination_dir)
+        with open(os.path.join(destination_dir, HASH_FILE), 'w') as f:
+            f.write(summary_hash)
+        logging.info(f"Snapshot {snapshot_id} downloaded to "
+                     f"{destination_dir}. To use the snapshot, check our "
+                     f"documentation at: "
+                     "http://pycognaize-docs.com."
+                     "s3-website.us-east-2.amazonaws.com")
+
+        return cls(path=snapshot_path), \
+            os.path.join(destination_dir, snapshot_id)
 
     @classmethod
     def _snapshot_path(cls) -> str:
@@ -119,3 +123,4 @@ class Snapshot:
     def get(cls) -> 'Snapshot':
         """Read the snapshot object from local storage and return it"""
         return cls(path=cls._snapshot_path())
+
