@@ -123,4 +123,3 @@ class Snapshot:
     def get(cls) -> 'Snapshot':
         """Read the snapshot object from local storage and return it"""
         return cls(path=cls._snapshot_path())
-
