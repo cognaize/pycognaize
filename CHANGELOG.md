@@ -3,7 +3,6 @@
 ## [1.4]
 
 ## [1.4.41] - 2024-03-25
-
 - Improve `Snapshot.download`
   - Download snapshot without login required
 
