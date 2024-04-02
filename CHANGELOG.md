@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+## [1.4.42] - 2024-04-02
+- Improve `cloudpathlib` integration to support Azure and Google Cloud
+
 ## [1.4.41] - 2024-03-25
 - Improve `Snapshot.download`
   - Download snapshot without login required
