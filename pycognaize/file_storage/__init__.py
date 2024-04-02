@@ -2,7 +2,6 @@ from pathlib import Path
 from typing import Union, Type
 
 from pycognaize.file_storage.path_type_checker import (
-    is_local_path,
     is_s3_path
 )
 from pycognaize.file_storage.s3_storage import S3Storage
