@@ -153,6 +153,23 @@ class Document:
             If not provided will default to the environment variable
              "X_AUTH_TOKEN"
         """
+        doc_data_path, document_json = cls._get_document_dict(
+            recipe_id=recipe_id,
+            doc_id=doc_id,
+            api_host=api_host,
+            x_auth=x_auth)
+        document = Document.from_dict(document_json,
+                                      data_path=doc_data_path)
+        return document
+
+    @classmethod
+    def _get_document_dict(
+            cls,
+            recipe_id,
+            doc_id,
+            api_host: Optional[str] = None,
+            x_auth: Optional[str] = None
+    ) -> Tuple[str, dict]:
         api_host = api_host or os.environ[EnvConfigEnum.HOST.value]
         x_auth = x_auth or os.environ[EnvConfigEnum.X_AUTH.value]
         if api_host is None:
@@ -169,9 +186,7 @@ class Document:
             task_id=task_id,
             api_host=api_host,
             x_auth=x_auth)
-        document = Document.from_dict(document_json,
-                                      data_path=doc_data_path)
-        return document
+        return doc_data_path, document_json
 
     @staticmethod
     def get_matching_table_cells_for_tag(
@@ -452,6 +467,7 @@ class Document:
          (Using multiprocessing)"""
         global _get_page
 
+        # noinspection PyRedeclaration
         def _get_page(page, filter_pages: Callable = page_filter):
             if filter_pages(page):
                 _ = page.image_bytes
@@ -472,6 +488,7 @@ class Document:
            (Using multiprocessing)"""
         global _get_page
 
+        # noinspection PyRedeclaration
         def _get_page(page, filter_pages: Callable = page_filter):
             if filter_pages(page):
                 _ = page.lines

@@ -62,20 +62,15 @@ class LazyDocumentDict(Mapping):
         """
 
         storage = get_storage(self.doc_path, config=self._storage_config)
+        path = join_path(
+            storage.is_s3_path(self.doc_path),
+            self.doc_path,
+            doc_id,
+            f"{self.document_filename}"
+        )
         try:
-            path = join_path(
-                storage.is_s3_path(self.doc_path),
-                self.doc_path,
-                doc_id,
-                f"{self.document_filename}"
-            )
-
-            if storage.is_local_path(path):
-                with open(path, 'r', encoding='utf8') as f:
-                    doc_dict = json_util.loads(f.read())
-            else:
-                with storage.open(path, 'r') as f:
-                    doc_dict = json_util.loads(f.read())
+            with storage.open(path, 'r', encoding='utf8') as f:
+                doc_dict = json_util.loads(f.read())
             return Document.from_dict(raw=doc_dict,
                                       data_path=os.path.join(self.data_path,
                                                              doc_id))
