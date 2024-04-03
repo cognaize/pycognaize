@@ -13,5 +13,5 @@ SQLAlchemy
 click
 anytree
 tabulate
-cloudpathlib[s3]~=0.16.0
+cloudpathlib[s3,azure,gs]~=0.16.0
 pyarrow
