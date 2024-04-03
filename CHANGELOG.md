@@ -2,14 +2,17 @@
 
 ## [1.4]
 
-## [1.4.42] - 2024-04-02
+### [1.4.43] - 2024-04-03
+- Add requirement `cloudpathlib[s3,azure,gs]~=0.16.0`
+
+### [1.4.42] - 2024-04-02
 - Improve `cloudpathlib` integration to support Azure and Google Cloud
 
-## [1.4.41] - 2024-03-25
+### [1.4.41] - 2024-03-25
 - Improve `Snapshot.download`
   - Download snapshot without login required
 
-## [1.4.40] - 2024-03-6
+### [1.4.40] - 2024-03-6
 - Improve `Document.fetch_document`
   - Add option to provide token and api url as parameters
   - Raise if env variables are missing
@@ -17,10 +20,10 @@
   - Handle trailing forward slashes in url
 - Fix `Page.draw`
 
-## [1.4.39] - 2024-02-27
+### [1.4.39] - 2024-02-27
 - Handle tables in `Document.get_layout_text`
 
-## [1.4.38] - 2024-02-25
+### [1.4.38] - 2024-02-25
 - Add `Document.get_layout_text` method
 
 ### [1.4.37] - 2024-02-23
