@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.45] - 2024-04-04
+- Add calculated values to `NumericField` serializer method
+
 ### [1.4.43] - 2024-04-03
 - Add requirement `cloudpathlib[s3,azure,gs]~=0.16.0`
 
