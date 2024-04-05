@@ -26,7 +26,8 @@ class SectionField(Field):
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
-                 group_name: str = None
+                 group_name: str = None,
+                 mapping: Optional[List[Dict[str, str]]] = None
                  ):
         """ Create a SectionField object
 
@@ -38,7 +39,7 @@ class SectionField(Field):
         """
         super().__init__(name=name, tags=tags,
                          group_key=group_key, confidence=confidence,
-                         group_name=group_name)
+                         group_name=group_name, mapping=mapping)
         self._field_id = field_id
         self._value = value
         self._ocr_value = ocr_value
@@ -80,7 +81,8 @@ class SectionField(Field):
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
-                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
+                   group_name=raw.get(IqFieldKeyEnum.group.value, ''),
+                   mapping=raw.get(IqFieldKeyEnum.mapping.value, []),
                    )
 
     def to_dict(self) -> dict:

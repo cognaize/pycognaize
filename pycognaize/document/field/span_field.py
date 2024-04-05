@@ -27,11 +27,12 @@ class SpanField(Field):
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
                  group_name: str = None,
+                 mapping: Optional[List[Dict[str, str]]] = None
                  ):
         tags = [] if tags is None else tags
         super().__init__(name=name, tags=tags,
                          group_key=group_key, confidence=confidence,
-                         group_name=group_name, value=value)
+                         group_name=group_name, value=value, mapping=mapping)
 
         self._field_id = field_id
         self._value = value
@@ -68,6 +69,7 @@ class SpanField(Field):
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                    group_name=raw.get(IqFieldKeyEnum.group.value, ''),
+                   mapping=raw.get(IqFieldKeyEnum.mapping.value, []),
                    )
 
     def to_dict(self) -> dict:

@@ -25,11 +25,12 @@ class DateField(Field):
                  field_id: Optional[str] = None,
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
-                 group_name: str = None
+                 group_name: str = None,
+                 mapping: Optional[List[Dict[str, str]]] = None
                  ):
         super().__init__(name=name, value=value, tags=tags,
                          group_key=group_key, confidence=confidence,
-                         group_name=group_name)
+                         group_name=group_name, mapping=mapping)
         self._field_id = field_id
         self._value = '; '.join([i.raw_value
                                  for i in self.tags]) if self.tags else value
@@ -61,7 +62,8 @@ class DateField(Field):
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
-                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
+                   group_name=raw.get(IqFieldKeyEnum.group.value, ''),
+                   mapping=raw.get(IqFieldKeyEnum.mapping.value, []),
                    )
 
     def to_dict(self) -> dict:
