@@ -82,6 +82,7 @@ class SpanField(Field):
         field_dict[IqFieldKeyEnum.value.value] = \
             '' if self.tags else self.value
         field_dict[IqFieldKeyEnum.group_key.value] = self._group_key
+        field_dict[IqFieldKeyEnum.mapping.value] = self._mapping
         field_dict[IqFieldKeyEnum.tags.value] = []
         if self.tags:
             for tag in self.tags:

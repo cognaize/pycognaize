@@ -92,6 +92,7 @@ class SectionField(Field):
         field_dict[ID] = self.field_id
         field_dict[IqFieldKeyEnum.group_key.value] = self._group_key
         field_dict[IqFieldKeyEnum.group.value] = self._group_name
+        field_dict[IqFieldKeyEnum.mapping.value] = self._mapping
         field_dict[IqFieldKeyEnum.value.value] = ''
         field_dict[IqFieldKeyEnum.data_type.value] =\
             IqDataTypesEnum.section.value
