@@ -43,7 +43,8 @@ class TableField(Field):
                  ):
         tags = [] if tag is None else [tag]
         super().__init__(name=name, tags=tags, group_key=group_key,
-                         confidence=confidence, group_name=group_name, mapping=mapping)
+                         confidence=confidence, group_name=group_name,
+                         mapping=mapping)
         self._field_id = field_id
 
     def get_table_title(self, n_lines_above=8, margin=10) -> str:
