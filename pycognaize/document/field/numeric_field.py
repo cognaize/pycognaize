@@ -30,11 +30,12 @@ class NumericField(Field):
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
                  group_name: str = None,
-                 scale: int = None
+                 scale: int = None,
+                 mapping: Optional[List[Dict[str, str]]] = None
                  ):
         super().__init__(name=name, tags=tags, value=value,
                          group_key=group_key, confidence=confidence,
-                         group_name=group_name)
+                         group_name=group_name, mapping=mapping)
         self.scale = scale
         self._field_id = field_id
         self._raw_field_value = value
@@ -101,7 +102,8 @@ class NumericField(Field):
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                    group_name=raw.get(IqFieldKeyEnum.group.value, ''),
-                   scale=raw.get(IqFieldKeyEnum.scale.value, '')
+                   scale=raw.get(IqFieldKeyEnum.scale.value, ''),
+                   mapping=raw.get(IqFieldKeyEnum.mapping.value, [])
                    )
 
     @staticmethod

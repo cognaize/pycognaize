@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.44] - 2024-04-05
+- Add attribute mapping in Field object
+
 ### [1.4.43] - 2024-04-03
 - Add requirement `cloudpathlib[s3,azure,gs]~=0.16.0`
 

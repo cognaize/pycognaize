@@ -39,10 +39,12 @@ class TableField(Field):
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
                  group_name: str = None,
+                 mapping: Optional[List[Dict[str, str]]] = None
                  ):
         tags = [] if tag is None else [tag]
         super().__init__(name=name, tags=tags, group_key=group_key,
-                         confidence=confidence, group_name=group_name)
+                         confidence=confidence, group_name=group_name,
+                         mapping=mapping)
         self._field_id = field_id
 
     def get_table_title(self, n_lines_above=8, margin=10) -> str:
@@ -118,7 +120,8 @@ class TableField(Field):
                    tag=tags[0] if tags else None,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
-                   group_name=raw.get(IqFieldKeyEnum.group.value, '')
+                   group_name=raw.get(IqFieldKeyEnum.group.value, ''),
+                   mapping=raw.get(IqFieldKeyEnum.mapping.value, [])
                    )
 
     def to_dict(self) -> dict:
