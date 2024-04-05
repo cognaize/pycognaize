@@ -111,7 +111,7 @@ class TestAreaField(unittest.TestCase):
     def test_mapping(self):
         self.assertEqual(len(self.area_field_without_tags.mapping), 0)
         self.area_field_with_mapping.mapping[0]['value'] = "https://www.cognaize.com/ontologies/Test2"
-        self.assertEqual(self.area_field_with_mapping.mapping[0]['key'], 'Label')
+        self.assertEqual(self.area_field_with_mapping.mapping[0]['value'], 'https://www.cognaize.com/ontologies/Test2')
 
         with self.assertRaises(TypeError):
             self.area_field_with_mapping.mapping['key'] = 1
