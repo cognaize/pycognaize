@@ -23,6 +23,7 @@ class TestAreaField(unittest.TestCase):
         self.data_with_mapping = deepcopy(self.data)
         self.data_with_mapping["input_fields"]["table_area"][0]['mapping'] = \
             [{
+                    "_id": "5ea6cf4a09cb89a5b1704917",
                     "key": "Label",
                     "value": "https://www.cognaize.com/Test"
             }]
