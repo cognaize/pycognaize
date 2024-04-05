@@ -24,7 +24,7 @@ class TestAreaField(unittest.TestCase):
         self.data_with_mapping["input_fields"]["table_area"][0]['mapping'] = \
             [{
                     "key": "Label",
-                    "value": "https://www.cognaize.com/ontologies/Test"
+                    "value": "https://www.cognaize.com/Test"
             }]
         self.raw_area_field_with_mapping = deepcopy(self.data_with_mapping["input_fields"]["table_area"][0])
         self.raw_area_field_no_group_key = deepcopy(self.data["input_fields"]["table_area"][1])
@@ -110,8 +110,8 @@ class TestAreaField(unittest.TestCase):
 
     def test_mapping(self):
         self.assertEqual(len(self.area_field_without_tags.mapping), 0)
-        self.area_field_with_mapping.mapping[0]['value'] = "https://www.cognaize.com/ontologies/Test2"
-        self.assertEqual(self.area_field_with_mapping.mapping[0]['value'], 'https://www.cognaize.com/ontologies/Test2')
+        self.area_field_with_mapping.mapping[0]['value'] = "https://www.cognaize.com/Test2"
+        self.assertEqual(self.area_field_with_mapping.mapping[0]['value'], "https://www.cognaize.com/Test2")
 
         with self.assertRaises(TypeError):
             self.area_field_with_mapping.mapping['key'] = 1
