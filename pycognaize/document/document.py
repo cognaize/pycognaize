@@ -483,7 +483,9 @@ class Document:
             page._image_arr = populated_page._image_arr
             page._image_bytes = populated_page._image_bytes
 
-    def load_page_ocr(self, page_filter: Callable = lambda x: True) -> None:
+    def load_page_ocr(self,
+                      stick_coords: bool = False,
+                      page_filter: Callable = lambda x: True) -> None:
         """Get all OCR of the pages in the document
            (Using multiprocessing)"""
         global _get_page
@@ -491,6 +493,7 @@ class Document:
         # noinspection PyRedeclaration
         def _get_page(page, filter_pages: Callable = page_filter):
             if filter_pages(page):
+                page._ocr = page.get_ocr_formatted(stick_coords=stick_coords)
                 _ = page.lines
             return page
         if platform.machine() in ["arm64", "aarch64"]:
