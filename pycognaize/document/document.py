@@ -484,8 +484,8 @@ class Document:
             page._image_bytes = populated_page._image_bytes
 
     def load_page_ocr(self,
-                      stick_coords: bool = False,
-                      page_filter: Callable = lambda x: True) -> None:
+                      page_filter: Callable = lambda x: True,
+                      stick_coords: bool = False,) -> None:
         """Get all OCR of the pages in the document
            (Using multiprocessing)"""
         global _get_page
