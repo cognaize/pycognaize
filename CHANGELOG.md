@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.45] - 2024-05-13
+- Add `stick_coords` argument to `Page().load_page_ocr` function
+
 ### [1.4.44] - 2024-04-05
 - Add attribute mapping in Field object
 
