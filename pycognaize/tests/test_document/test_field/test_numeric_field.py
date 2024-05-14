@@ -149,3 +149,12 @@ class TestNumericField(unittest.TestCase):
         to_dict_keys = [IqFieldKeyEnum.name.value, IqFieldKeyEnum.data_type.value, ID,
                         IqFieldKeyEnum.tags.value, IqFieldKeyEnum.group_key.value, IqFieldKeyEnum.value.value, IqFieldKeyEnum.data_type.scale.value]
         self.assertEqual(sorted(test_dict.keys()), sorted(to_dict_keys))
+
+    def test_is_calculated(self):
+        field = NumericField(name='test', is_calculated=True)
+        self.assertTrue(field.is_calculated)  # Assert that is_calculated returns True
+
+        field = NumericField(name='test', is_calculated=False)
+        self.assertFalse(field.is_calculated)  # Assert that is_calculated returns False
+
+

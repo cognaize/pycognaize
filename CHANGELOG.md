@@ -2,6 +2,10 @@
 
 ## [1.4]
 
+### [1.4.46] - 2024-05-15
+- Add `is_calculated` property to `NumericField` class
+- Add unit tests for `NumericField` class
+
 ### [1.4.45] - 2024-05-13
 - Add `stick_coords` argument to `Page().load_page_ocr` function
 
