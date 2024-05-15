@@ -2,6 +2,11 @@
 
 ## [1.4]
 
+### [1.4.47] - 2024-05-15
+- Add `Document.load_ocr` as a substitute for `Document.load_page_ocr`
+- `Document.load_ocr` gets the ocr data from a single json file
+- Deprecate `Document.load_page_ocr` in favor of `Document.load_ocr`
+
 ### [1.4.46] - 2024-05-15
 - Add `is_calculated` property to `NumericField` class
 - Add unit tests for `NumericField` class
