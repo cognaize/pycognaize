@@ -2,8 +2,24 @@
 
 ## [1.4]
 
-### [1.4.45] - 2024-04-04
+### [1.4.48] - 2024-05-15
 - Add calculated values to `NumericField` serializer method
+
+### [1.4.47] - 2024-05-15
+- Add `Document.load_ocr` as a substitute for `Document.load_page_ocr`
+- `Document.load_ocr` gets the ocr data from a single json file
+- Deprecate `Document.load_page_ocr` in favor of `Document.load_ocr`
+- Add `data_path` property to `Document` class
+
+### [1.4.46] - 2024-05-15
+- Add `is_calculated` property to `NumericField` class
+- Add unit tests for `NumericField` class
+
+### [1.4.45] - 2024-05-13
+- Add `stick_coords` argument to `Page().load_page_ocr` function
+
+### [1.4.44] - 2024-04-05
+- Add attribute mapping in Field object
 
 ### [1.4.43] - 2024-04-03
 - Add requirement `cloudpathlib[s3,azure,gs]~=0.16.0`

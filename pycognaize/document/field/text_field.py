@@ -42,7 +42,8 @@ class TextField(Field):
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
                  group_name: str = None,
-                 classification_labels: Optional[ClassificationLabels] = None
+                 classification_labels: Optional[ClassificationLabels] = None,
+                 mapping: Optional[List[Dict[str, str]]] = None
                  ):
         """ Create a TextField object
 
@@ -54,7 +55,7 @@ class TextField(Field):
         """
         super().__init__(name=name, tags=tags, value=value,
                          group_key=group_key, confidence=confidence,
-                         group_name=group_name)
+                         group_name=group_name, mapping=mapping)
         self._classification_labels = classification_labels
         self._field_id = field_id
         self._value = '; '.join([i.raw_value
@@ -98,7 +99,8 @@ class TextField(Field):
                          field_id=str(raw[ID]),
                          group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                          group_name=raw.get(IqFieldKeyEnum.group.value, ''),
-                         classification_labels=labels)
+                         classification_labels=labels,
+                         mapping=raw.get(IqFieldKeyEnum.mapping.value, []))
 
         new_object._classes = classes
 

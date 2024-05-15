@@ -3,6 +3,7 @@ which includes the input and output fields for the model,
 as well as the OCR data and page images of the document"""
 import copy
 import itertools
+import json
 import logging
 import multiprocessing
 import os
@@ -15,6 +16,7 @@ import pandas as pd
 import requests
 from fitz.utils import getColor, getColorList
 from requests.adapters import HTTPAdapter, Retry
+from typing_extensions import deprecated
 
 from pycognaize.common.classification_labels import ClassificationLabels
 from pycognaize.common.enums import ApiConfigEnum, EnvConfigEnum
@@ -45,7 +47,9 @@ class Document:
                  pages: Dict[int, Page],
                  classification_labels: Dict[str, ClassificationLabels],
                  html_info: HTML,
-                 metadata: Dict[str, Any]):
+                 metadata: Dict[str, Any],
+                 data_path: Optional[str] = None,
+                 ):
         self._metadata = metadata
         self._pages: Dict[int, Page] = pages if pages else None
         self._classification_labels = classification_labels
@@ -53,6 +57,7 @@ class Document:
         self._html_info: HTML = html_info
         self._x: FieldCollection[str, List[Field]] = input_fields
         self._y: FieldCollection[str, List[Field]] = output_fields
+        self._data_path = data_path
 
     @property
     def x(self) -> 'FieldCollection[str, List[Field]]':
@@ -103,6 +108,13 @@ class Document:
         doc_data_path: str = get_response_dict['documentRootPath']
         document_json: dict = get_response_dict['inputDocument']
         return doc_data_path, document_json
+
+    @property
+    def data_path(self) -> Optional[str]:
+        """Returns the path to the document data"""
+        if self._data_path is None:
+            self._data_path = next(iter(self.pages.values())).path
+        return self._data_path
 
     @property
     def metadata(self) -> Dict[str, Any]:
@@ -483,7 +495,11 @@ class Document:
             page._image_arr = populated_page._image_arr
             page._image_bytes = populated_page._image_bytes
 
-    def load_page_ocr(self, page_filter: Callable = lambda x: True) -> None:
+    @deprecated("Use `load_ocr` instead. It should be faster and more stable")
+    def load_page_ocr(self,
+                      page_filter: Callable = lambda x: True,
+                      stick_coords: bool = False,
+                      ) -> None:
         """Get all OCR of the pages in the document
            (Using multiprocessing)"""
         global _get_page
@@ -491,6 +507,7 @@ class Document:
         # noinspection PyRedeclaration
         def _get_page(page, filter_pages: Callable = page_filter):
             if filter_pages(page):
+                page._ocr = page.get_ocr_formatted(stick_coords=stick_coords)
                 _ = page.lines
             return page
         if platform.machine() in ["arm64", "aarch64"]:
@@ -504,6 +521,33 @@ class Document:
             page._ocr = populated_page._ocr
             page._ocr_raw = populated_page._ocr_raw
             page._lines = populated_page._lines
+
+    def load_ocr(self, stick_coords: bool = False) -> None:
+        ocr_path = os.path.join(self.data_path, f"{self.document_src}.json")
+        login_instance = Login()
+        if login_instance.logged_in:
+            storage_config = {
+                'aws_access_key_id': login_instance.aws_access_key,
+                'aws_session_token': login_instance.aws_session_token,
+                'aws_secret_access_key': login_instance.aws_secret_access_key
+            }
+        else:
+            storage_config = None
+        storage = get_storage(ocr_path, config=storage_config)
+        with storage.open(ocr_path, 'r') as f:
+            ocr_data = json.loads(f.read())
+        for raw_ocr in ocr_data:
+            page_number = raw_ocr['page']['number']
+            for word in raw_ocr['data']:
+                word['x'] = float(word['x'])
+                word['y'] = float(word['y'])
+                word['w'] = float(word['w'])
+                word['h'] = float(word['h'])
+            raw_ocr['page']['width'] = float(raw_ocr['page']['width'])
+            raw_ocr['page']['height'] = float(raw_ocr['page']['height'])
+            self.pages[page_number]._ocr_raw = raw_ocr
+            self.pages[page_number]._ocr = self.pages[
+                page_number].get_ocr_formatted(stick_coords=stick_coords)
 
     def to_dict(self) -> dict:
         """Converts Document object to dict"""
@@ -579,7 +623,9 @@ class Document:
                    output_fields=output_fields,
                    pages=pages, html_info=html_info,
                    metadata=metadata,
-                   classification_labels=classification_labels)
+                   classification_labels=classification_labels,
+                   data_path=data_path
+                   )
 
     def _collect_all_tags_for_fields(self,
                                      field_names: List[str],
@@ -644,7 +690,7 @@ class Document:
         else:
             storage_config = None
 
-        pdf_path = os.path.join(self.pages[1].path,
+        pdf_path = os.path.join(self.data_path,
                                 self.document_src) + '.pdf'
 
         storage = get_storage(pdf_path, config=storage_config)

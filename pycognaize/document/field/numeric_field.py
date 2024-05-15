@@ -30,11 +30,13 @@ class NumericField(Field):
                  group_key: str = None,
                  confidence: Optional[float] = -1.0,
                  group_name: str = None,
-                 scale: int = None
+                 scale: int = None,
+                 mapping: Optional[List[Dict[str, str]]] = None,
+                 is_calculated: bool = None
                  ):
         super().__init__(name=name, tags=tags, value=value,
                          group_key=group_key, confidence=confidence,
-                         group_name=group_name)
+                         group_name=group_name, mapping=mapping)
         self.scale = scale
         self._field_id = field_id
         self._raw_field_value = value
@@ -48,6 +50,7 @@ class NumericField(Field):
             self._value = sum([self.convert_to_numeric(i.raw_value)
                                for i in self.tags])
             self._tag_value = self._value
+        self._is_calculated = is_calculated
 
     @property
     def name(self):
@@ -73,6 +76,10 @@ class NumericField(Field):
     def raw_field_value(self):
         return self._raw_field_value
 
+    @property
+    def is_calculated(self):
+        return self._is_calculated
+
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
                            html: Optional[HTML] = None,
@@ -95,14 +102,20 @@ class NumericField(Field):
         field_value = raw[IqFieldKeyEnum.value.value]
         field_value = (tags[0].raw_value if (html.path and tags)
                        else field_value)
+        is_calculated = raw.get(
+            IqFieldKeyEnum.field_type.value, ''
+        ) == "extraction and computation"
+
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    value=field_value,
+                   is_calculated=is_calculated,
                    calculated_value=calculated_value,
                    tags=tags,
                    field_id=str(raw[ID]),
                    group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
                    group_name=raw.get(IqFieldKeyEnum.group.value, ''),
-                   scale=raw.get(IqFieldKeyEnum.scale.value)
+                   scale=raw.get(IqFieldKeyEnum.scale.value, ''),
+                   mapping=raw.get(IqFieldKeyEnum.mapping.value, [])
                    )
 
     @staticmethod

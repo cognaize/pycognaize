@@ -149,5 +149,6 @@ class TestSpanField(unittest.TestCase):
                         IqFieldKeyEnum.data_type.value, ID,
                         IqFieldKeyEnum.tags.value,
                         IqFieldKeyEnum.group_key.value,
-                        IqFieldKeyEnum.value.value]
+                        IqFieldKeyEnum.value.value,
+                        IqFieldKeyEnum.mapping.value]
         self.assertEqual(sorted(test_dict.keys()), sorted(to_dict_keys))

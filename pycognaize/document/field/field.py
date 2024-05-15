@@ -20,7 +20,8 @@ class Field(metaclass=abc.ABCMeta):
                  group_key: Optional[str] = None,
                  confidence: Optional[float] = -1.0,
                  group_name: Optional[str] = None,
-                 classification_labels: Optional[ClassificationLabels] = None
+                 classification_labels: Optional[ClassificationLabels] = None,
+                 mapping: Optional[List[Dict[str, str]]] = None
                  ):
         self._raw_value = value
         self._confidence = confidence
@@ -38,7 +39,9 @@ class Field(metaclass=abc.ABCMeta):
         self._value = value
         self._field_id = field_id
         self._classification_labels = classification_labels
-
+        if mapping is None:
+            mapping = []
+        self._mapping = mapping
         self._classes = None
 
     @property
@@ -87,6 +90,10 @@ class Field(metaclass=abc.ABCMeta):
     def confidence(self):
         return self._confidence
 
+    @property
+    def mapping(self):
+        return self._mapping
+
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.name}>"
 
@@ -111,6 +118,8 @@ class Field(metaclass=abc.ABCMeta):
             field_dict[IqFieldKeyEnum.group_key.value] = self._group_key
         if self._group_name:
             field_dict[IqFieldKeyEnum.group.value] = self._group_name
+        if self._mapping:
+            field_dict[IqFieldKeyEnum.mapping.value] = self._mapping
         field_dict[IqFieldKeyEnum.tags.value] = [
             i.to_dict() for i in self.tags]
         return field_dict

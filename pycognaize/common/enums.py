@@ -106,6 +106,7 @@ class IqFieldKeyEnum(enum.Enum):
     repeat_parent = 'repeatParent'
     section = 'section'
     scale = "scale"
+    mapping = 'mapping'
 
 
 class IqTagKeyEnum(enum.Enum):

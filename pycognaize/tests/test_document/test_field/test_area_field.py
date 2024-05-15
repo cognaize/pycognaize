@@ -20,6 +20,14 @@ class TestAreaField(unittest.TestCase):
         self.data_with_group_key["input_fields"]["table_area"][0]['groupKey'] = 'test_group_key'
         self.raw_area_field_with_group_key = deepcopy(self.data_with_group_key["input_fields"]["table_area"][0])
 
+        self.data_with_mapping = deepcopy(self.data)
+        self.data_with_mapping["input_fields"]["table_area"][0]['mapping'] = \
+            [{
+                    "_id": "5ea6cf4a09cb89a5b1704917",
+                    "key": "Label",
+                    "value": "https://www.cognaize.com/Test"
+            }]
+        self.raw_area_field_with_mapping = deepcopy(self.data_with_mapping["input_fields"]["table_area"][0])
         self.raw_area_field_no_group_key = deepcopy(self.data["input_fields"]["table_area"][1])
         self.pages = {1: create_dummy_page(1), 2: create_dummy_page(2)}
 
@@ -32,6 +40,9 @@ class TestAreaField(unittest.TestCase):
         self.area_field_with_invalid_value = AreaField(
             name=self.raw_area_field_no_group_key[IqDocumentKeysEnum.name.value],
             value=['Invalid Value Type'])
+
+        self.area_field_with_mapping = AreaField.construct_from_raw(self.raw_area_field_with_mapping,
+                                                                    self.pages)
 
     def test_value(self):
         self.assertIsInstance(self.area_field_without_tags._value, str)
@@ -48,6 +59,7 @@ class TestAreaField(unittest.TestCase):
 
         self.assertEqual(self.area_field_without_tags.name, 'Table')
         self.assertEqual(len(self.area_field_without_tags.tags), 0)
+        self.assertEqual(len(self.area_field_with_tags.mapping), 0)
 
         # invalid raw area
         self.invalid_raw_1 = deepcopy(self.raw_area_field_with_group_key)
@@ -96,6 +108,16 @@ class TestAreaField(unittest.TestCase):
             self.area_field_with_tags.group_key = True
         with self.assertRaises(TypeError):
             self.area_field_with_tags.group_key = ['abc']
+
+    def test_mapping(self):
+        self.assertEqual(len(self.area_field_without_tags.mapping), 0)
+        self.area_field_with_mapping.mapping[0]['value'] = "https://www.cognaize.com/Test2"
+        self.assertEqual(self.area_field_with_mapping.mapping[0]['value'], "https://www.cognaize.com/Test2")
+
+        with self.assertRaises(TypeError):
+            self.area_field_with_mapping.mapping['key'] = 1
+        with self.assertRaises(TypeError):
+            self.area_field_with_mapping.mapping['value'] = 1
 
     def test___repr__(self):
         self.assertEqual(self.area_field_with_tags.__repr__(), '<AreaField: Table: selection on page 2>')
