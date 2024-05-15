@@ -101,7 +101,9 @@ class NumericField(Field):
         field_value = raw[IqFieldKeyEnum.value.value]
         field_value = (tags[0].raw_value if (html.path and tags)
                        else field_value)
-        is_calculated = raw.get(IqFieldKeyEnum.field_type.value, '') == "extraction and computation"
+        is_calculated = raw.get(
+            IqFieldKeyEnum.field_type.value, ''
+        ) == "extraction and computation"
 
         return cls(name=raw[IqDocumentKeysEnum.name.value],
                    value=field_value,
