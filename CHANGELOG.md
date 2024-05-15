@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.48] - 2024-05-15
+- Add calculated values to `NumericField` serializer method
+
 ### [1.4.47] - 2024-05-15
 - Add `Document.load_ocr` as a substitute for `Document.load_page_ocr`
 - `Document.load_ocr` gets the ocr data from a single json file

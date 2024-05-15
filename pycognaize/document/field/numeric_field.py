@@ -96,7 +96,8 @@ class NumericField(Field):
                     tags.append(cls.html_tag_class.construct_from_raw(
                         raw=i, html=html))
             except Exception as e:
-                logging.debug(f"Failed creating tag for field {raw[ID]}: {e}")
+                logging.debug(f"Failed creating tag for numeric field"
+                              f" {raw[ID]}: {e}")
         calculated_value = raw.get(IqFieldKeyEnum.calculated_value.value, '')
         field_value = raw[IqFieldKeyEnum.value.value]
         field_value = (tags[0].raw_value if (html.path and tags)
@@ -134,7 +135,10 @@ class NumericField(Field):
         field_dict[IqFieldKeyEnum.value.value] = self.value
         field_dict[
             IqFieldKeyEnum.data_type.value] = IqDataTypesEnum.number.value
-
+        if (self.calculated_value is not None
+                and not math.isnan(self.calculated_value)):
+            field_dict[
+                IqFieldKeyEnum.calculated_value.value] = self.calculated_value
         field_dict[IqFieldKeyEnum.data_type.scale.value] = self.scale
         return field_dict
 
