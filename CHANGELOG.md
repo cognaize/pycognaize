@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.48] - 2024-05-16
+- Loosen `pymupdf` requirements
+
 ### [1.4.47] - 2024-05-15
 - Add calculated values to `NumericField` serializer method
 - Add `Document.load_ocr` as a substitute for `Document.load_page_ocr`
