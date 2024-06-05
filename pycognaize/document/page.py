@@ -308,9 +308,9 @@ class Page:
             lines_list.append(page_line_list)
         return lines_list
 
-        def _create_lines(
-            self,
-            return_tags: bool = False
+    def _create_lines(
+        self,
+        return_tags: bool = False
     ) -> List[List[Union[dict, ExtractionTag]]]:
         """Detects lines of the page
 
