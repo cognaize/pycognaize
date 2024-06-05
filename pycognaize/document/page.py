@@ -308,7 +308,7 @@ class Page:
             lines_list.append(page_line_list)
         return lines_list
 
-    def _create_lines(
+        def _create_lines(
             self,
             return_tags: bool = False
     ) -> List[List[Union[dict, ExtractionTag]]]:
@@ -324,31 +324,37 @@ class Page:
         rows_inf, self._row_word_groups = infer_rows_from_words(
             box=dict(left=0, top=0, right=1, bottom=1),
             class_ocr_data=clean_ocr_data(self.ocr)['words'])
-        rows: list = [
-            int(round(abs(rows_inf[row_n + 1]['top'] + row['bottom']) / 2))
-            for row_n, row in enumerate(rows_inf[:-1])]
-        bottom_coord = [
-            int(max(rows_inf, key=lambda d: d['bottom'])['bottom'])
-        ] if rows_inf else []
 
-        self._row_word_groups: list = [
+        if not rows_inf:
+            return []
+
+        rows = [
+            int(round(abs(rows_inf[row_n + 1]['top'] + row['bottom']) / 2))
+            for row_n, row in enumerate(rows_inf[:-1])
+        ]
+        last_row_bottom = int(rows_inf[-1]['bottom'])
+        rows.append(last_row_bottom)
+
+        self._row_word_groups = [
             i for _, i in sorted(
-                zip(rows + bottom_coord, self._row_word_groups),
-                key=lambda pair: pair[0])]
-        rows.sort()
+                zip(rows, self._row_word_groups),
+                key=lambda pair: pair[0])
+        ]
+
         temp_rows = []
-        for i, (row, group) in enumerate(zip(rows + bottom_coord,
-                                             self._row_word_groups)):
+        for i, (row, group) in enumerate(zip(rows, self._row_word_groups)):
             if row in temp_rows:
                 rows[i] = None
                 orig_idx = rows.index(row)
                 self._row_word_groups[orig_idx] += self._row_word_groups[i]
                 self._row_word_groups[i] = None
             temp_rows.append(row)
+
         self._row_word_groups = [i for i in self._row_word_groups if i]
         self._row_word_groups = [
             sorted(i, key=lambda x: (x['left'], x['right']))
             for i in self._row_word_groups]
+
         if return_tags:
             for line in self._row_word_groups:
                 new_line_tags = []
@@ -356,6 +362,7 @@ class Page:
                     new_line_tags.append(self.word_to_extraction_tag(word))
                 words_tags.append(new_line_tags)
             return words_tags
+
         return self._row_word_groups
 
     def search_text(self, text: str,
