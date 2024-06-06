@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.50] - 2024-06-06
+- Fix infer_rows_from_words function in common/utils.py affecting last line bug page.py
+
 ### [1.4.49] - 2024-06-06
 - Fix page last line absence in page.line bug
 

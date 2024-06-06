@@ -319,8 +319,9 @@ def infer_rows_from_words(box, class_ocr_data, auto_thresh=True, thresh=12,
         previous_bottom = row_bottom
         previous_top = row_top
     aggregated_rows = []
+    row_ids_to_delete = []
     # Construct row boxes from row groups
-    for row in word_groups:
+    for idx, row in enumerate(word_groups):
         temp_d = dict(left=min(i['left'] for i in row) - box['left'],
                       right=max(i['right'] for i in row) - box['left'],
                       top=min(i['top'] for i in row) - box['top'],
@@ -330,6 +331,10 @@ def infer_rows_from_words(box, class_ocr_data, auto_thresh=True, thresh=12,
         if (temp_d['bottom'] - temp_d['top'] > min_width
                 and temp_d['right'] - temp_d['left'] > min_height):
             aggregated_rows.append(temp_d)
+        else:
+            row_ids_to_delete.append(idx)
+    word_groups = [row for row_idx, row in enumerate(word_groups)
+                   if row_idx not in row_ids_to_delete]
     return aggregated_rows, word_groups
 
 
