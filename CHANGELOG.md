@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.49] - 2024-06-06
+- Fix page last line absence in page.line bug
+
 ### [1.4.48] - 2024-05-16
 - Loosen `pymupdf` requirements
 
