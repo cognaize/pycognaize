@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.51] - 2024-06-19
+- Add `duplicate_text_for_spanned_cells` option in `TableTag._build_df`
+
 ### [1.4.50] - 2024-06-06
 - Fix infer_rows_from_words function in common/utils.py affecting last line bug page.py
 
