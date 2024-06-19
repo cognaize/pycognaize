@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.52] - 2024-06-19
+- Fix `duplicate_text_for_spanned_cells=False` case
+
 ### [1.4.51] - 2024-06-19
 - Add `duplicate_text_for_spanned_cells` option in `TableTag._build_df`
 
