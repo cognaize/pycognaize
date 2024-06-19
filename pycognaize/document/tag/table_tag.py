@@ -163,14 +163,18 @@ class TableTag(BoxTag):
             row_span=cell_dict[IqCellKeyEnum.row_span.value]
         )
 
-    def _build_df(self, use_ocr_text: bool = False) -> pd.DataFrame:
+    def _build_df(self, use_ocr_text: bool = False,
+                  duplicate_text_for_spanned_cells: bool = True
+                  ) -> pd.DataFrame:
         """Build pandas data frame using `TableTag` Cells
 
         :param use_ocr_text: If true, the raw OCR data will be used for
-            the content of the cells
-        :return: DataFrame object,where each cell contains an ExtractionTag
+            the content of the cells.
+        :param duplicate_text_for_spanned_cells: If true, the text will be
+            duplicated for spanned cells.
+        :return: DataFrame object, where each cell contains an ExtractionTag
             object with the coordinates and values from the annotated
-            document
+            document.
         """
         cols = set()
         rows = set()
@@ -213,6 +217,12 @@ class TableTag(BoxTag):
                         raise ValueError(
                             "table_tag provides multiple values"
                             " for the same cell.")
+                    if (
+                            not duplicate_text_for_spanned_cells
+                            and col_n > left_index
+                            and row_n > top_index
+                    ):
+                        text = ''
                     df.loc[row_n, col_n] = ExtractionTag(
                         left=cell_.left, right=cell_.right,
                         top=cell_.top, bottom=cell_.bottom,
