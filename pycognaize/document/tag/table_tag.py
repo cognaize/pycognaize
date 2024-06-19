@@ -218,9 +218,11 @@ class TableTag(BoxTag):
                             "table_tag provides multiple values"
                             " for the same cell.")
                     if (
-                            not duplicate_text_for_spanned_cells
-                            and col_n > left_index
-                            and row_n > top_index
+                        not duplicate_text_for_spanned_cells
+                        and (
+                            col_n > left_index
+                            or row_n > top_index
+                            )
                     ):
                         text = ''
                     df.loc[row_n, col_n] = ExtractionTag(
