@@ -1,6 +1,7 @@
 """Defines NumericParser for parsing a number string into a float values"""
 import re
 from typing import Union
+from math import copysign
 
 
 class NumericParser:
@@ -147,11 +148,13 @@ class NumericParser:
         elif len(self._separated_digits[-1]) < 3:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
+            dec_part = copysign(dec_part, int_part)
             return int_part + dec_part
         elif len(self._separators) > 1 and self._separators[0] != \
                 self._separators[-1] and len(self._separated_digits[-1]) < 3:
             int_part = int(''.join(self._separated_digits[:-1]))
             dec_part = float('0.' + self._separated_digits[-1])
+            dec_part = copysign(dec_part, int_part)
             return int_part + dec_part
         else:
             return int(''.join(self._separated_digits))

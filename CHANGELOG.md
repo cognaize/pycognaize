@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.53] - 2024-09-11
+- Fix parse_raw_numeric function handle negative sign with multimple delimiters
+
 ### [1.4.52] - 2024-06-19
 - Fix `duplicate_text_for_spanned_cells=False` case
 
