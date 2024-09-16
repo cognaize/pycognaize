@@ -8,6 +8,7 @@ from collections import OrderedDict
 from copy import deepcopy
 
 import pandas as pd
+import numpy as np
 
 import pycognaize
 from pycognaize.common.enums import EnvConfigEnum, FieldTypeEnum
@@ -245,7 +246,24 @@ class TestDocument(unittest.TestCase):
             one_to_one=False))
 
     def test_load_page_images(self):
-        self.assertIsNone(self.document.load_page_images())
+        for page_num, page in self.document.pages.items():
+            self.assertIsNone(page._image_arr)
+            self.assertIsNone(page._image_bytes)
+
+        self.document.load_page_images()
+        for page_num, page in self.document.pages.items():
+            self.assertIsInstance(page._image_arr, np.ndarray)
+            self.assertIsInstance(page._image_bytes, bytes)
+
+    def test_load_page_ocr(self):
+        for page_num, page in self.document.pages.items():
+            self.assertIsNone(page._ocr_raw)
+            self.assertIsNone(page._lines)
+
+        self.document.load_page_ocr()
+        for page_num, page in self.document.pages.items():
+            self.assertIsInstance(page._ocr_raw, dict)
+            self.assertIsInstance(page._lines, list)
 
     @classmethod
     def tearDownClass(cls) -> None:
