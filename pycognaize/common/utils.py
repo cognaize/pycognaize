@@ -16,7 +16,7 @@ from bson.json_util import loads as bson_loads
 from pycognaize.common.decorators import soon_be_deprecated
 from pycognaize.common.enums import PythonShellEnum
 
-REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z\d)\[\](-.,]')
+REGEX_NO_ALPHANUM_CHARS = re.compile(r'^[\W\s]+|[\W\s]+$')
 
 
 def is_float(str_number: str) -> bool:
@@ -352,65 +352,131 @@ def clean_ocr_data(ocr_data: dict, thresh: float = 4.0) -> dict:
     return ocr_data
 
 
-def find_first_word_coords(text: str, ocr_data: list,
-                           case_sensitive: bool = False, sort: bool = False,
-                           clean: bool = True,
-                           cleanup_regex=REGEX_NO_ALPHANUM_CHARS
-                           ) -> Optional[dict]:
+def cleanup_text(text: str, cleanup_regex=REGEX_NO_ALPHANUM_CHARS) -> str:
     """
-    Detect the coordinates of the first occurrence
-        of `text` in `ocr_data` if any.
-    If the `text` is not found in `ocr_data` return None
-    :param text:
-    :param ocr_data: List of dictionaries.
-    Each dictionary contains information about a single word.
-    Each word dictionary has the following keys: `confidence`, `right`,
-        `left`, `top`, `bottom`, `ocr_text`, `word_id_number`
+    Remove non-alphanumeric characters from text.
+
+    :param text: Input text to be cleaned
+    :param cleanup_regex: Provide the regex for cleanup to be used
+    :return: Cleaned text
+    """
+    return cleanup_regex.sub('', text)
+
+
+def preprocess_words(words: List[str], clean: bool,
+                     cleanup_regex=REGEX_NO_ALPHANUM_CHARS) -> List[str]:
+    """
+    Preprocess a list of words by cleaning and lowercasing if needed.
+
+    :param words: List of words to be preprocessed
+    :param clean: If True, non-alphanumeric characters will be cleaned
+    :param cleanup_regex: Provide the regex for cleanup to be used
+    :return: List of preprocessed words
+    """
+    preprocessed_words = []
+    for word in words:
+        if clean:
+            cleaned_word = cleanup_text(word, cleanup_regex)
+            preprocessed_words.append(cleaned_word)
+        else:
+            preprocessed_words.append(word)
+    return preprocessed_words
+
+
+def find_matched_words(text: str, ocr_data: List[Dict[str, any]],
+                       case_sensitive: bool,
+                       clean: bool,
+                       cleanup_regex=REGEX_NO_ALPHANUM_CHARS
+                       ) -> List[Dict[str, any]]:
+    """
+    Find and return a list of dictionaries with matched words.
+
+    :param text: Text to search for in OCR data
+    :param ocr_data: List of dictionaries containing OCR word information
     :param case_sensitive: If True, the search will be case-sensitive
-    :param sort: If True, ocr_data will be ordered by `word_id_number`
-        key before searching
-    :param clean: If true, disregard all non-alphanumeric character
-        from the search
-    :param re._pattern_type cleanup_regex: Optional.
-        Provide the regex for cleanup to be used
-        (has effect only if `clean=True`)
-    :return: Dictionary with word coordinates
-        (keys: `left`, `right`, `top`, `bottom`, `matched_words`.
-        `matched_words` includes the original word coordinate data
-        for the matched words)
+    :param clean: If True, non-alphanumeric characters will be cleaned
+    :param cleanup_regex: Provide the regex for cleanup to be used
+    :return: List of matched word dictionaries
     """
     matched_words = []
-    if sort:
-        ocr_data = sorted(ocr_data, key=lambda x: float(x['word_id_number']))
-    if not case_sensitive:
-        text = text.lower()
-    words = text.split(' ')
-    idx = 0
-    for ocr_d in ocr_data:
+    preprocessed_text = text if case_sensitive else text.lower()
+    words = preprocessed_text.split(' ')
+    preprocessed_words = preprocess_words(words, clean, cleanup_regex)
+
+    word_idx = 0
+    ocr_idx = 0
+    while ocr_idx < len(ocr_data):
+        ocr_d = ocr_data[ocr_idx]
         ocr_word = ocr_d['ocr_text']
-        if clean:
-            ocr_word = cleanup_regex.sub('', ocr_word)
-            word = cleanup_regex.sub('', words[idx])
-        else:
-            word = words[idx]
-        ocr_word = ocr_word.strip()
+
+        preprocessed_ocr_word = cleanup_text(ocr_word.strip(),
+                                             cleanup_regex)
         if not case_sensitive:
-            ocr_word = ocr_word.lower()
-        if ocr_word == word:
-            idx += 1
+            preprocessed_ocr_word = preprocessed_ocr_word.lower()
+
+        if preprocessed_ocr_word == preprocessed_words[word_idx]:
+            word_idx += 1
+            ocr_idx += 1
             matched_words.append(ocr_d)
-            if idx >= len(words):
+            if word_idx >= len(preprocessed_words):
                 break
+
+        elif word_idx >= 1:
+            ocr_idx -= word_idx-1
+            word_idx = 0
+            matched_words = []
+
         else:
             matched_words = []
-            idx = 0
-    else:
-        return
-    return dict(top=min(matched_words, key=lambda x: x['top'])['top'],
-                bottom=max(matched_words, key=lambda x: x['bottom'])['bottom'],
-                left=min(matched_words, key=lambda x: x['left'])['left'],
-                right=max(matched_words, key=lambda x: x['right'])['right'],
-                matched_words=matched_words)
+            word_idx = 0
+            ocr_idx += 1
+
+    return matched_words
+
+
+def find_first_word_coords(text: str, ocr_data: List[Dict[str, any]],
+                           case_sensitive: bool = False,
+                           sort: bool = False,
+                           clean: bool = True,
+                           cleanup_regex=REGEX_NO_ALPHANUM_CHARS
+                           ) -> Optional[Dict[str, any]]:
+    """
+    Detect the coordinates of the first occurrence
+    of `text` in `ocr_data` if any.
+    If the `text` is not found in `ocr_data`, return None.
+
+    :param text: Text to search for in OCR data
+    :param ocr_data: List of dictionaries containing OCR word information
+    :param case_sensitive: If True, the search will be case-sensitive
+    :param sort: If True, ocr_data will be ordered
+                 by `word_id_number` before searching
+    :param clean: If True, non-alphanumeric characters will be cleaned
+    :param cleanup_regex: Provide the regex for cleanup to be used
+                          (if `clean` is True)
+    :return: Dictionary with word coordinates and matched words information
+    """
+    if sort:
+        ocr_data = sorted(ocr_data, key=lambda x: float(x['word_id_number']))
+
+    matched_words = find_matched_words(text, ocr_data,
+                                       case_sensitive,
+                                       clean, cleanup_regex)
+
+    if not matched_words:
+        return None
+
+    top = min(matched_words, key=lambda x: x['top'])['top']
+    bottom = max(matched_words, key=lambda x: x['bottom'])['bottom']
+    left = min(matched_words, key=lambda x: x['left'])['left']
+    right = max(matched_words, key=lambda x: x['right'])['right']
+
+    return {
+        'top': top,
+        'bottom': bottom,
+        'left': left,
+        'right': right,
+        'matched_words': matched_words
+    }
 
 
 def intersects(word: dict,
