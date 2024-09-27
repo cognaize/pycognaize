@@ -537,7 +537,7 @@ class Document:
         with storage.open(ocr_path, 'r') as f:
             ocr_data = json.loads(f.read())
         for raw_ocr in ocr_data:
-            page_number = raw_ocr['page']['number']
+            page_number = int(raw_ocr['page']['number'])
             for word in raw_ocr['data']:
                 word['x'] = float(word['x'])
                 word['y'] = float(word['y'])
