@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.54] - 2024-09-27
+- Fix load ocr for gulfim, handle string page number
+
 ### [1.4.53] - 2024-09-11
 - Fix parse_raw_numeric function handle negative sign with multimple delimiters
 
