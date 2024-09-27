@@ -1,0 +1,15 @@
+name: fury-Deployment
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/**'
+      - '**'
+    branches:
+      - main
+jobs:
+  fury-deploy-azure:
+    name: 'fury-deploy'
+    uses: ./.github/workflows/fury-deploy.yaml
+    secrets: inherit
