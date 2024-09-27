@@ -1,0 +1,57 @@
+name: Deploy Package to Fury
+
+permissions:
+  id-token: write
+  contents: read
+  issues: read
+  checks: write
+  pull-requests: write
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+
+      - name: Login to Fury repository
+        env:
+          FURY_AUTH: ${{ secrets.FURY_AUTH }}
+        run: |
+          poetry config http-basic.fury $FURY_AUTH $FURY_AUTH
+
+      - name: Publish to Fury repository
+        env:
+          FURY_AUTH: ${{ secrets.FURY_AUTH }}
+        id: publish_step
+        run: |
+          poetry publish --build --repository fury >> ./publish_output.log 2>&1
+
+      - name: Send Slack Notification
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          export changelog=$(head -n 15 CHANGELOG.md)
+          if [ "${{ job.status }}" == "success" ]; then
+            emoji=":white_check_mark:"  # Green check mark
+            message="Poetry publish succeeded! :tada:"
+          else
+            emoji=":x:"  # Red cross mark
+            message="Poetry publish failed! :cry:"
+          fi
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"${emoji}${emoji}${emoji}${emoji}${emoji} $message\nOutput:\n\`\`\`$(cat ./publish_output.log)\n\n\n\n$changelog\`\`\`\"}" $SLACK_WEBHOOK_URL
