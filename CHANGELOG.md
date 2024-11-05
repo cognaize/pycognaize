@@ -2,6 +2,11 @@
 
 ## [1.4]
 
+### [1.4.55] - 2024-11-05
+- Updated `cloudpathlib` to version `~0.18.0`
+- Remove `transformers` and `langchain` from `model-requirements.txt`
+- Add a development guide to the `README.md`
+
 ### [1.4.54] - 2024-09-27
 - Fix load ocr for gulfim, handle string page number
 

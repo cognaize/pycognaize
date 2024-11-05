@@ -29,5 +29,17 @@ Cognaize SDK can be installed using pip:
 pip install pycognaize
 ```
 
+## Development
+### Steps
+The following steps should be followed after making changes to the codebase:
+1. Update `pycognaize/__init__.py` with the new version number.
+2. Update `CHANGELOG.md` with the new version number and a description of the changes.
+3. Run `python scripts/update_badges.py` to update the badges in `README.md`.
+4. Create docs by running the following commands:
+    ```
+    cd docs
+    ./create_docs.sh
+    ```
+
 Have a look at the [quick tutorial](http://pycognaize-docs.com.s3-website.us-east-2.amazonaws.com/tutorials/quick_tutorial.html) 
 for understanding main concepts of the SDK.
