@@ -14,7 +14,8 @@ class NumericParser:
                r"|[1-9][0-9]+)([,.][0-9]*)?[\]\)]*$)")
     delimiters = r"[.,]"
     REGEX_NO_ALPHANUM_CHARS = re.compile(
-        r"[^\u4e00-\u9fffa-zA-Z\d\s:\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u00C0-\u00FF\)\[\](-.,]"
+        r"[^\u4e00-\u9fffa-zA-Z\d\s:\u0600-\u06FF\u3040-"
+        r"\u309F\u30A0-\u30FF\u00C0-\u00FF\)\[\](-.,]"
     )
 
     brackets = r"[\[\]\(\)]"
