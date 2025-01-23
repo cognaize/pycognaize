@@ -13,7 +13,9 @@ class NumericParser:
     numeric = (r"(^0+$|^[\\[\\(+-]*(([1-9][0-9]{0,2}([.,][0-9]{3})*)|[0-9]"
                r"|[1-9][0-9]+)([,.][0-9]*)?[\]\)]*$)")
     delimiters = r"[.,]"
-    REGEX_NO_ALPHANUM_CHARS = re.compile(r'[^a-zA-Z0-9)\[\](-.,]')
+    REGEX_NO_ALPHANUM_CHARS = re.compile(
+        r"[^\u4e00-\u9fffa-zA-Z\d\s:\u0600-\u06FF\u3040-\u309F\u30A0-\u30FF\u00C0-\u00FF\)\[\](-.,]"
+    )
 
     brackets = r"[\[\]\(\)]"
     # match a pattern with whitespace followed by either a single comma

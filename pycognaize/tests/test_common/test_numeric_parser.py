@@ -52,6 +52,7 @@ class TestNumericParser(unittest.TestCase):
         'A, 13': float('nan'),
         '^, 13': float('nan'),
         '., 13': float('nan'),
+        '资 产 2': float('nan'),
     }
 
     def test_parse_numeric(self):
