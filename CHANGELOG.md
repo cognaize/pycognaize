@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.56] - 2024-11-05
+- Update `REGEX_NO_ALPHANUM_CHARS` regex to better handle non latin characters
+
 ### [1.4.55] - 2024-11-05
 - Updated `cloudpathlib` to version `~0.18.0`
 - Remove `transformers` and `langchain` from `model-requirements.txt`
