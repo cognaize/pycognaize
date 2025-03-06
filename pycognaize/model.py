@@ -371,20 +371,27 @@ class Model(metaclass=abc.ABCMeta):
     @staticmethod
     def matches(act_tag: Union['ExtractionTag', 'HTMLTag', 'HTMLTableTag'],
                 pred_tag: Union['ExtractionTag', 'HTMLTag', 'HTMLTableTag'],
-                threshold: float = 0.6) -> bool:
+                threshold: float = 0.6, match_html_value: bool = False) -> bool:
+
         """ If tags are HTMLTag checks that two tags have the same html_id,
             otherwise detects if there is a match between two extraction tags
             having the same page number. Returns true if
-        intersection is greater than the threshold"""
+            intersection is greater than the threshold
+        """
         is_match = False
         if isinstance(act_tag, HTMLTag) and isinstance(pred_tag, HTMLTag):
             cell_xpath = max(act_tag.xpath, pred_tag.xpath, key=len)
             field_xpath = min(act_tag.xpath, pred_tag.xpath, key=len)
-            is_match = field_xpath in cell_xpath \
-                and act_tag.col_index == pred_tag.col_index\
-                and act_tag.row_index == pred_tag.row_index
+            base_match = field_xpath in cell_xpath \
+                         and act_tag.col_index == pred_tag.col_index \
+                         and act_tag.row_index == pred_tag.row_index
+            if match_html_value:
+                is_match = (base_match and
+                            act_tag.raw_ocr_value == pred_tag.raw_ocr_value)
+            else:
+                is_match = base_match
         elif ((isinstance(act_tag, HTMLTag)
-              and isinstance(pred_tag, HTMLTableTag)) or
+               and isinstance(pred_tag, HTMLTableTag)) or
               (isinstance(act_tag, HTMLTableTag)
                and isinstance(pred_tag, HTMLTag))):
             is_match = act_tag.tag_id == pred_tag.tag_id
@@ -392,7 +399,7 @@ class Model(metaclass=abc.ABCMeta):
             is_match = (
                     act_tag.page.page_number == pred_tag.page.page_number
                     and ((act_tag & pred_tag) / min(act_tag, pred_tag,
-                         key=lambda x: x.area).area >= threshold)
+                          key=lambda x: x.area).area >= threshold)
             )
         return is_match
 

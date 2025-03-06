@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.57] - 2024-11-05
+- Add `match_html_value` parameter in matches function
+
 ### [1.4.56] - 2024-11-05
 - Update `REGEX_NO_ALPHANUM_CHARS` regex to better handle non latin characters
 
