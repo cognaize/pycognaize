@@ -2,6 +2,9 @@
 
 ## [1.4]
 
+### [1.4.57] - 2025-05-05
+- Add classification values to `TextField` serializer method
+
 ### [1.4.56] - 2024-11-05
 - Update `REGEX_NO_ALPHANUM_CHARS` regex to better handle non latin characters
 
