@@ -63,7 +63,6 @@ class TextField(Field):
                                  for i in self.tags]) if self.tags else value
         self._class_value = class_value
 
-
     @property
     def value(self):
         return self._value
