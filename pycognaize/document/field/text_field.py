@@ -37,6 +37,7 @@ class TextField(Field):
     def __init__(self,
                  name: str,
                  value: str = '',
+                 class_value: str = None,
                  tags: Optional[List[ExtractionTag]] = None,
                  field_id: Optional[str] = None,
                  group_key: str = None,
@@ -60,10 +61,16 @@ class TextField(Field):
         self._field_id = field_id
         self._value = '; '.join([i.raw_value
                                  for i in self.tags]) if self.tags else value
+        self._class_value = class_value
+
 
     @property
     def value(self):
         return self._value
+
+    @property
+    def class_value(self):
+        return self._class_value
 
     @classmethod
     def construct_from_raw(cls, raw: dict, pages: Dict[int, Page],
@@ -93,8 +100,14 @@ class TextField(Field):
         else:
             classes = classes_from_raw.split(';') if classes_from_raw else None
 
+        if classes and (raw["value"] in classes or raw["value"] == ""):
+            class_value = raw["value"]
+        else:
+            class_value = None
+
         new_object = cls(name=raw[IqDocumentKeysEnum.name.value],
                          value=value,
+                         class_value=class_value,
                          tags=tags,
                          field_id=str(raw[ID]),
                          group_key=raw.get(IqFieldKeyEnum.group_key.value, ''),
