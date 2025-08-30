@@ -1,6 +1,6 @@
 [project]
 name = "pycognaize"
-version = "1.4.58"
+version = "1.4.59"
 description = "Powerful Python API for creating ML/DL models using pycognaize application"
 authors = [{ name = "Cognaize", email = "" }]
 readme = "README.md"
