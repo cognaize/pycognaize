@@ -1,0 +1,80 @@
+[project]
+name = "pycognaize"
+version = "1.4.57"
+description = "Powerful Python API for creating ML/DL models using pycognaize application"
+authors = [{ name = "Cognaize", email = "" }]
+readme = "README.md"
+license = { text = "Apache License 2.0" }
+requires-python = ">=3.9,<3.13"
+dependencies = [
+    "pandas",
+    "numpy",
+    "pymongo",
+    "requests",
+    "simplejson",
+    "pillow",
+    "pymupdf",
+    "urllib3",
+    "beautifulsoup4==4.11.2",
+    "lxml",
+    "PyYAML",
+    "SQLAlchemy",
+    "click",
+    "anytree",
+    "tabulate",
+    "cloudpathlib[s3,azure,gs]~=0.18.0",
+    "pyarrow",
+    "s3pypi>=2.0.1",
+]
+
+[project.scripts]
+cognaize = "pycognaize.cli:cognaize"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+    "mypy>=1.7.0",
+    "ruff>=0.1.5",
+    "toml>=0.10.2",
+    "seaborn",
+    "opencv-python",
+]
+
+[project.urls]
+Source = "https://github.com/cognaize/pycognaize"
+Reference = "https://pycognaize.readthedocs.io/en/latest/"
+Changelog = "https://github.com/cognaize/pycognaize/blob/master/CHANGELOG.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pycognaize"]
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["pycognaize/tests"]
+python_files = "test_*.py"
+addopts = "--verbose"
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

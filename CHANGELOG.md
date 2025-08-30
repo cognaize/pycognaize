@@ -1012,7 +1012,7 @@ search_text, extract_area_words of Page
 ### [0.1.8.alpha] - 2020-07-15
 - Update make_snap endpoint to work with SnapshotProcessor, add fetch_document_zip endpoint
 - Add SnapshotProcessor
-- Add instruction for pushing to fury and pip install
+- Add instruction for pushing to ecr and pip install
 - Minor cosmetic changes in ocr.py
 - Remove source_id from Document object constructor
 - Make tag parameter optional in TableField
