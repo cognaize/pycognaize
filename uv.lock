@@ -1733,7 +1733,7 @@ wheels = [
 
 [[package]]
 name = "pycognaize"
-version = "1.4.57"
+version = "1.4.58"
 source = { editable = "." }
 dependencies = [
     { name = "anytree", version = "2.12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9.2'" },
