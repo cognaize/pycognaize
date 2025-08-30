@@ -168,8 +168,8 @@ fi
 # Create and sync environment using uv
 echo "Setting up uv environment..."
 
-# We specifically want to use Python 3.11
-uv python pin 3.11
+# We specifically want to use Python 3.9
+uv python pin 3.9
 
 if [ "$DEV_MODE" = true ]; then
     # Development mode installation
